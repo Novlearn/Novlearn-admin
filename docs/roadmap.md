@@ -28,6 +28,11 @@ La roadmap décrit la cible du CDC ; documenter un lot ne signifie pas qu'il est
 
 ## Travaux documentaires sans risque
 
+Le [rapprochement par empreintes](lot-1a-hash-reconciliation.md) affine le Lot 1A
+en lecture seule : sept fichiers ont un candidat distant après normalisation
+documentée ; 25 entrées n'ont pas de SQL archivé. Aucun historique n'est réparé
+et aucune équivalence de leurs effets n'est annoncée.
+
 Le composant de [saisie MathLive](math-input.md) est préparé et exercé dans un
 banc navigateur local indépendant. Il ne vaut pas livraison du Creator ou des
 tests Engine, et n'ouvre aucune route ni écriture métier.

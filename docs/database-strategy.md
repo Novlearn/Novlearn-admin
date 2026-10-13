@@ -1,5 +1,9 @@
 # Stratégie de bases et migrations
 
+Le [complément de rapprochement](lot-1a-hash-reconciliation.md) compare maintenant
+les empreintes des statements archivés : sept candidats, 25 entrées sans SQL.
+Il ne remplace pas la réconciliation sémantique ou l'accord d'application.
+
 État vérifié le 13 octobre 2026, en lecture seule. Ce rapport établit un point de départ ; ce n'est pas un plan d'exécution de migration.
 
 ## Modèle validé et distinction structure / contenu

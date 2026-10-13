@@ -1,5 +1,11 @@
 # Lot 1A — dossier technique de réconciliation et sécurisation SQL
 
+Le [complément par empreintes SQL](lot-1a-hash-reconciliation.md) apporte
+désormais sept correspondances candidates et identifie 25 entrées sans
+statements archivés. Il ne répare pas l'historique. La description ci-dessous
+reste le relevé initial ; le volet Auth et MathLive est préparé localement
+selon D02, avec activation bloquée, dans [le suivi actuel](progress.md).
+
 Préparation réalisée le 13 octobre 2026. Les relevés sont exclusivement en lecture. La réconciliation des historiques, les correctifs SQL et leur déploiement restent **non réalisés et non autorisés dans cette mission**. Aucune migration exécutable corrective n'est créée dans Admin ; aucun client Auth/Production ou lot fonctionnel ne commence.
 
 ## Livrables disponibles

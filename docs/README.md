@@ -9,6 +9,8 @@ les tests, les blocages et le point de reprise.
 
 [Saisie MathLive préparée](math-input.md) : composant contrôlé, clavier scientifique et banc navigateur local.
 
+[Rapprochement des migrations par empreintes](lot-1a-hash-reconciliation.md) : relevé en lecture seule, sept candidats et historique partiellement dépourvu de SQL.
+
 | Document                                                     | Objet                                                                          |
 | ------------------------------------------------------------ | ------------------------------------------------------------------------------ |
 | [Architecture](architecture.md)                              | Applications de l'écosystème, frontières et cible technique                    |

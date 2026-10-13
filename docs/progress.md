@@ -151,3 +151,33 @@ effectuée. L'accord de modification des repositories voisins reste requis.
 Ce travail ne réceptionne pas les lots 3/4 : Creator, sauvegarde, génération et
 correction restent à réaliser après les prérequis. Les limites et autorisations
 du point de reprise SQL précédent restent inchangées.
+
+## Rapprochement en lecture seule des migrations
+
+État de reprise : commit Admin `8e81ccf`, seule modification locale préexistante
+de `.env.example`. Le tour MathLive a livré du code testé, des observations et
+un commit : progression réelle. L'accord de modification NovLearn reste absent.
+
+Les statements archivés sont comparés uniquement par hashes, sans exporter leur
+contenu ou les identités d'acteurs. Deux SELECT sur les projets connus relèvent
+70 entrées chacun, avec listes identiques dans le périmètre sélectionné. Les
+versions `001` à `025` ont leurs statements NULL ; les 45 autres entrées gardent
+65 statements. Les 45 fichiers locaux suivis sont relus dans un dossier de
+migrations Git propre, au commit source `07a1764`.
+
+Sept correspondances candidates sont établies après normalisation LF et trim
+extérieur documenté ; aucun match LF strict, aucun historique réparé. Les
+résultats détaillés et limites sont dans `lot-1a-hash-reconciliation.md`, le
+SELECT dans `lot-1a-migration-hashes-readonly.sql` et les métadonnées dans
+`lot-1a-migration-hashes.json`. Ces preuves affinent les prochains rapprochements
+sans autoriser une migration ou conclure à l'équivalence des effets.
+
+Le goal reste incomplet. L'examen sémantique des SQL et les correctifs doivent
+être conduits avec le propriétaire dans NovLearn après accord explicite ; les
+25 statements manquants demandent une preuve historique externe. Aucune base,
+permission, donnée Production, repository voisin ou CDC n'est modifié.
+Les 45 empreintes locales et leurs 45 lignes de comparaison sont revérifiées
+par une assertion Node sur les fichiers actuels et le rapport capturé : PASS.
+Le format et le diff sont vérifiés ; les contrôles applicatifs restent ceux
+du socle Auth/MathLive, pas des preuves de RLS ou de migrations correctives.
+Commit local : `docs: reconcile recorded migration hashes`.
