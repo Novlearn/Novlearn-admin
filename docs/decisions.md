@@ -1,5 +1,24 @@
 # Décisions et arbitrages
 
+## D06 — Cible Engine Linux bornée
+
+**Source : réponse explicite de l'utilisateur le 14 octobre 2026.**
+« Linux avec cgroup v2 borné, testé dans Docker local ».
+Retenir ce profil pour la certification locale du runtime et de l'archive
+Engine réellement installée. Conserver tous les critères, quotas et preuves
+d'échecs Windows ; aucune protection Windows ni base distante n'est modifiée.
+Cette décision ne vaut pas adoption applicative, déploiement ou réception du
+Lot 1A. Voir [certification locale](lot-1a-engine-linux-certification.md).
+
+## D05 — Corrections locales et certification Engine autorisées
+
+**Source : réponse explicite de l'utilisateur le 13 octobre 2026.**
+« Oui, autoriser les corrections locales et la certification Engine. »
+Cette autorisation complète D04 pour corriger le timeout Windows reproduit
+dans `Novlearn-Engine`, puis exécuter sa certification. Les délais et critères
+de validation restent inchangés ; aucun environnement distant n'est modifié.
+Les portes SQL et applicatives du Lot 1A restent obligatoires.
+
 ## D04 — Finalisation locale du Lot 1A dans NovLearn
 
 **Source : autorisation explicite de l'utilisateur le 13 octobre 2026.**

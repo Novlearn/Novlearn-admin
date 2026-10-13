@@ -1,18 +1,25 @@
 # Progression du goal NovLearn Admin
 
-## Point d'arrêt courant — objectif incomplet
+## Certification Engine locale validée — objectif incomplet
+
+La [certification locale Linux](lot-1a-engine-linux-certification.md) est validée
+sur l'archive exacte choisie après D06 : sept opérations publiques, rejeu privé,
+projection et arrêt des workers, avec cgroup v2 borné. La suite source passe
+**1 534 tests sans skip** ; les 12 contrôles OS Linux, 8 parcours historiques,
+13 tests Python/FastAPI et le dernier smoke de package passent.
+**Le Lot 1A reste incomplet**, avec compatibilité des anciens consommateurs et
+portes SQL restantes. Les refus Windows antérieurs restent documentés ; aucune
+protection Windows ni environnement distant n'est modifié.
 
 Les correctifs SQL indépendants autorisés localement sont testés jusqu'à
 51 migrations et 69 assertions après restauration. Les anciens lecteurs et
-verdicts d'exercices attendent la correction/qualification Engine. La même
-absence d'autorisation distincte de modifier ses sources est vérifiée depuis
-la reprise D04 et les continuations restauration/profils, RPC, puis statistiques.
-L'autorisation demandée reste en attente ; aucune continuation ne l'accorde.
+verdicts d'exercices attendent la transition vers l'Engine qualifié. L'utilisateur
+autorise maintenant explicitement les corrections locales Engine et leur
+certification ([D05](decisions.md#d05--corrections-locales-et-certification-engine-autorisées)).
 
-Le goal est bloqué sur ce chemin critique, pas terminé. L'objectif complet
-reste inchangé. Pour reprendre le développement dépendant : autoriser les
-corrections Engine locales, réussir sa certification sans assouplir les
-critères, puis traiter les lecteurs officiels et les autres portes de 1A.
+L'objectif complet reste inchangé et incomplet. Le travail reprend sur la
+compatibilité des lecteurs officiels et sur les autres portes de 1A. La porte
+Engine locale Linux est franchie sans assouplir ses critères.
 Les applications distantes, publication, push et déploiement gardent leurs
 autorisations séparées. Aucun lot suivant n'est ouvert pour contourner 1A.
 
@@ -24,8 +31,9 @@ de statistiques/récompenses. **51 migrations passent et 69 assertions passent
 après restauration**, avec toutes les 53 précédentes conservées. Les
 [empreintes finales](lot-1a-local-statistics-proof.json) sont vérifiées.
 Les compteurs ne deviennent pas pour autant fiables sur les anciens verdicts
-clients : cette transition et la certification Engine restent bloquantes.
-L'autorisation distincte Engine reste en attente, l'Auth est désactivée et
+clients : leur transition vers la correction officielle reste bloquante.
+La certification locale Engine Linux est maintenant validée par D06.
+L'autorisation Engine est accordée par D05, l'Auth est désactivée et
 aucun lot dépendant n'est ouvert.
 
 ## État courant — RPC privilégiés et namespace
