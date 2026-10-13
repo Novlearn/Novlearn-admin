@@ -1,5 +1,12 @@
 # Lot 1A — corrections et validation locales du 13 octobre 2026
 
+**Complément courant :** le [rejeu Auth complet, la restauration et la
+confidentialité des profils](lot-1a-local-restore-and-privacy.md) apportent
+désormais 49 migrations et 35 assertions après restauration. Le tableau
+ci-dessous reste la preuve datée de la première intervention, avant cette
+nouvelle migration. Les lectures privées d'exercices et la certification
+Engine demeurent des portes ouvertes.
+
 Le Lot 1A reste **incomplet**. Les corrections locales et les contrôles SQL
 ci-dessous sont réalisés ; la certification Engine complète et les prérequis
 d'application distante ne sont pas validés. L'Auth Admin reste désactivée.

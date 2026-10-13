@@ -1,5 +1,30 @@
 # Progression du goal NovLearn Admin
 
+## État courant — restauration et profils privés
+
+Le [complément de validation](lot-1a-local-restore-and-privacy.md) dépasse le
+relevé de 48 migrations ci-dessous : **49 migrations** passent avec le bootstrap
+officiel Supabase Auth 2.197.0, dans une nouvelle instance sans réseau.
+La nouvelle migration 24 ferme les profils privés d'autrui, expose une
+projection minimale des noms/avatars et sécurise deux RPC historiques.
+Les lecteurs duel/feedback sont adaptés et les types, lint et 183 tests frontend
+passent, avec les 9 todo préexistants inchangés.
+
+Une archive logique est restaurée sur une autre instance neuve : intégrité
+des données, schéma, ACL, rôles et séquences vérifiée, **35 assertions de
+sécurité après restauration** et **11 tests du comparateur** passent. Les
+différences brutes d'ordre ACL et de trous d'ordinal Auth sont conservées.
+Les fixtures utilisent une définition canonique et une instance produites
+par l'API publique Engine ; aucune donnée réelle ou environnement distant
+n'est modifié. Les [empreintes finales](lot-1a-local-restore-proof.json) sont
+archivées, les volumes de test conservés et les conteneurs arrêtés.
+
+Le Lot 1A reste incomplet : certification Engine Windows, fermeture des anciens
+lecteurs d'exercices, réconciliation distante, sauvegarde/PITR réelle et droits
+de publication restent à valider. Une autorisation distincte de modification
+Engine est demandée et demeure en attente ; aucun accord n'est présumé. Les
+lots dépendants et l'Auth Admin restent fermés.
+
 ## État courant — reprise locale du Lot 1A autorisée
 
 L'autorisation utilisateur D04 remplace le blocage de permission des relevés

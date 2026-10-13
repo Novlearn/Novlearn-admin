@@ -1,5 +1,13 @@
 # Stratégie de bases et migrations
 
+**État local courant D04 :** les corrections NovLearn sont autorisées, avec
+une source canonique de 49 migrations testée sur une instance neuve avec le
+bootstrap officiel Auth. Une [restauration logique sur fixtures synthétiques](lot-1a-local-restore-and-privacy.md)
+est démontrée, avec contrôles de données, schéma et permissions. Les relevés
+distants historiques ci-dessous ne sont pas une réconciliation complète et
+n'autorisent aucune application distante. Les sauvegardes/PITR des projets
+réels restent à qualifier séparément.
+
 Le [complément de rapprochement](lot-1a-hash-reconciliation.md) compare maintenant
 les empreintes des statements archivés : sept candidats, 25 entrées sans SQL.
 Il ne remplace pas la réconciliation sémantique ou l'accord d'application.

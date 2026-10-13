@@ -1,5 +1,10 @@
 # Roadmap
 
+**Complément local :** [49 migrations avec Auth officiel et restauration
+vérifiée](lot-1a-local-restore-and-privacy.md), fermeture des profils privés
+préparée et testée, 35 assertions après restauration. Cela ne réceptionne pas
+le Lot 1A : Engine et prérequis distants restent non validés.
+
 **Mise à jour D04 :** corrections locales du Lot 1A désormais autorisées et
 appliquées. Le [bilan local](lot-1a-local-validation.md) apporte un rejeu
 PostgreSQL des 48 migrations et des tests RLS/ACL réels. La certification
