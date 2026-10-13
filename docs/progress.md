@@ -1,5 +1,33 @@
 # Progression du goal NovLearn Admin
 
+## Point d'arrêt courant — objectif incomplet
+
+Les correctifs SQL indépendants autorisés localement sont testés jusqu'à
+51 migrations et 69 assertions après restauration. Les anciens lecteurs et
+verdicts d'exercices attendent la correction/qualification Engine. La même
+absence d'autorisation distincte de modifier ses sources est vérifiée depuis
+la reprise D04 et les continuations restauration/profils, RPC, puis statistiques.
+L'autorisation demandée reste en attente ; aucune continuation ne l'accorde.
+
+Le goal est bloqué sur ce chemin critique, pas terminé. L'objectif complet
+reste inchangé. Pour reprendre le développement dépendant : autoriser les
+corrections Engine locales, réussir sa certification sans assouplir les
+critères, puis traiter les lecteurs officiels et les autres portes de 1A.
+Les applications distantes, publication, push et déploiement gardent leurs
+autorisations séparées. Aucun lot suivant n'est ouvert pour contourner 1A.
+
+## État courant — écritures de statistiques protégées
+
+La [migration locale 26](lot-1a-local-statistics-guard.md) protège les quatre
+compteurs dérivés de profils et ferme les mutations clients de quatre tables
+de statistiques/récompenses. **51 migrations passent et 69 assertions passent
+après restauration**, avec toutes les 53 précédentes conservées. Les
+[empreintes finales](lot-1a-local-statistics-proof.json) sont vérifiées.
+Les compteurs ne deviennent pas pour autant fiables sur les anciens verdicts
+clients : cette transition et la certification Engine restent bloquantes.
+L'autorisation distincte Engine reste en attente, l'Auth est désactivée et
+aucun lot dépendant n'est ouvert.
+
 ## État courant — RPC privilégiés et namespace
 
 La [revue locale des RPC](lot-1a-local-rpc-review.md) ajoute le correctif 25 :

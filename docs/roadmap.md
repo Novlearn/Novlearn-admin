@@ -1,5 +1,10 @@
 # Roadmap
 
+**Dernier contrôle local :** [51 migrations et 69 assertions après
+restauration](lot-1a-local-statistics-guard.md), avec écritures de compteurs
+réservées au serveur. Lot 1A toujours incomplet ; anciens verdicts, Engine et
+portes distantes restent à valider.
+
 **Dernier contrôle local :** [50 migrations et 53 assertions après
 restauration](lot-1a-local-rpc-review.md), avec permissions des RPC privilégiés
 durcies. Lot 1A toujours incomplet ; aucun lot dépendant n'est ouvert.
