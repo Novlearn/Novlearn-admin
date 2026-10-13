@@ -1,5 +1,17 @@
 # Progression du goal NovLearn Admin
 
+## État courant — RPC privilégiés et namespace
+
+La [revue locale des RPC](lot-1a-local-rpc-review.md) ajoute le correctif 25 :
+récompenses réservées au serveur, identité NULL/croisée refusée pour la
+progression, helpers et triggers avec namespace fixe. Le consommateur serveur
+des récompenses existant conserve son fonctionnement et son idempotence.
+**50 migrations passent et 53 assertions de sécurité passent après restauration**,
+avec les 35 assertions précédentes conservées. Les [empreintes finales](lot-1a-local-rpc-proof.json)
+sont archivées ; aucun environnement distant ou donnée réelle n'est modifié.
+L'Engine et les portes restantes du Lot 1A restent non validés ; l'autorisation
+distincte de correction Engine est toujours en attente.
+
 ## État courant — restauration et profils privés
 
 Le [complément de validation](lot-1a-local-restore-and-privacy.md) dépasse le

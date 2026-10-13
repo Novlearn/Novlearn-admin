@@ -1,5 +1,12 @@
 # Authentification, autorisations et accès Production
 
+**État local courant D04 :** [rôles et profils](lot-1a-local-restore-and-privacy.md),
+[RPC privilégiés](lot-1a-local-rpc-review.md) et restauration sur fixtures sont
+préparés et testés dans NovLearn : 50 migrations et 53 assertions après
+restauration. Les relevés distants ci-dessous restent des constats historiques,
+pas la preuve que ces correctifs y sont appliqués. L'Engine et la transition des
+lecteurs d'exercices demeurent des portes ouvertes ; l'Auth reste désactivée.
+
 Le [volet Auth local](auth.md) est désormais préparé et testé avec doubles,
 mais désactivé. Les risques SQL ci-dessous restent bloquants. Le tableau des
 variables décrivant le socle vide est le relevé historique du Lot 0 bis ; voir

@@ -1,5 +1,9 @@
 # Roadmap
 
+**Dernier contrôle local :** [50 migrations et 53 assertions après
+restauration](lot-1a-local-rpc-review.md), avec permissions des RPC privilégiés
+durcies. Lot 1A toujours incomplet ; aucun lot dépendant n'est ouvert.
+
 **Complément local :** [49 migrations avec Auth officiel et restauration
 vérifiée](lot-1a-local-restore-and-privacy.md), fermeture des profils privés
 préparée et testée, 35 assertions après restauration. Cela ne réceptionne pas
