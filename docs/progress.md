@@ -123,3 +123,31 @@ Un rebuild est resté sans nouvelle sortie plusieurs minutes puis a réussi.
 Les serveurs QA sont arrêtés avant les rebuilds suivants pour éviter les
 concurrences d'accès aux artefacts standalone sous Windows ; la cause exacte
 de l'attente n'est pas établie.
+
+## Préparation indépendante de MathLive
+
+Continuation du goal : l'accord de modification NovLearn n'est pas reçu et
+l'arbre Admin reste au commit `cd20e8d` avant ce travail (seul `.env.example`
+préexistant est modifié). Le tour précédent a livré du code, des tests, des
+preuves navigateur et un commit : il constitue une progression.
+
+Une partie indépendante est préparée dans Admin : champ React MathLive réel,
+clavier scientifique français, valeurs contrôlées sans boucle, lecture seule,
+fallback annoncé et polices locales. Le banc de test est hors routes Next et
+utilise seulement des fixtures synthétiques ; aucun accès DB/Engine n'est activé.
+Voir `math-input.md` et la capture machine `tests/fixtures/mathlive-observed.json`.
+Les 61 tests unitaires passent (54 Auth + 7 liaisons du champ) ; types, lint,
+format, build et smoke HTTP passent. Le smoke confirme aussi les polices
+MathLive et la licence présentes dans le standalone. Le clavier mobile est
+inspecté à 390 × 844 sans débordement, avec une largeur de page de 375 px.
+Commit local de ce travail : `feat(ui): prepare scientific MathLive input`.
+
+Les prérequis sont revalidés par un SELECT de métadonnées Staging :
+`exercise_versions` reste absente, Auth compte zéro utilisateur, et la policy
+profil `ALL PERMISSIVE NOT is_guest()` reste présente. Aucun correctif ou
+provisionnement distant n'est constaté dans ce relevé, aucune écriture n'est
+effectuée. L'accord de modification des repositories voisins reste requis.
+
+Ce travail ne réceptionne pas les lots 3/4 : Creator, sauvegarde, génération et
+correction restent à réaliser après les prérequis. Les limites et autorisations
+du point de reprise SQL précédent restent inchangées.

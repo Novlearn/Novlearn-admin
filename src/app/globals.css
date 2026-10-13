@@ -22,8 +22,35 @@ body {
   margin: 0;
   background: rgb(var(--background));
   color: rgb(var(--foreground));
-  font-family: var(--font-inter), Arial, Helvetica, sans-serif;
+  font-family: var(--font-inter, Arial), Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
+  --keyboard-accent-color: #2563eb;
+  --keyboard-toolbar-background: #f8fafc;
+  --keycap-background: #fff;
+  --keycap-text: #0f172a;
+  --keyboard-zindex: 1000;
+  --keycap-width: min(80px, calc((100vw - 64px) / 6));
+  --keycap-height: 44px;
+  --keycap-font-size: 18px;
+}
+
+.math-input math-field {
+  display: block;
+  width: 100%;
+  min-height: 3rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.5rem;
+  background: white;
+  padding: 0.5rem;
+  font-size: 1.125rem;
+}
+
+.math-input math-field[aria-invalid='true'] {
+  border-color: #b91c1c;
+}
+
+.math-input math-field::part(menu-toggle) {
+  display: none;
 }
 
 :focus-visible {

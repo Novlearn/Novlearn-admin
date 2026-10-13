@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Banc local MathLive — NovLearn Admin</title>
+    <style>
+      :root {
+        --font-inter: 'Inter Variable';
+      }
+      main {
+        max-width: 48rem;
+        margin: auto;
+        padding: 1.5rem;
+      }
+      main > * {
+        margin-bottom: 1rem;
+      }
+      h1 {
+        font-size: 1.5rem;
+        font-weight: 600;
+      }
+      main > div {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+      main > div.math-input {
+        display: block;
+      }
+      main > div > button {
+        padding: 0.5rem;
+        border: 1px solid #e2e8f0;
+        border-radius: 0.5rem;
+        background: white;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/tests/browser/math-input.tsx"></script>
+  </body>
+</html>

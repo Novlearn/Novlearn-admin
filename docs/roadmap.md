@@ -28,4 +28,8 @@ La roadmap décrit la cible du CDC ; documenter un lot ne signifie pas qu'il est
 
 ## Travaux documentaires sans risque
 
+Le composant de [saisie MathLive](math-input.md) est préparé et exercé dans un
+banc navigateur local indépendant. Il ne vaut pas livraison du Creator ou des
+tests Engine, et n'ouvre aucune route ni écriture métier.
+
 Le [dossier Lot 1A](lot-1a-preparation.md), son manifeste et ses requêtes de lecture sont disponibles. La sécurisation SQL, les tests locaux des correctifs et leur application restent à autoriser/réaliser. La séparation structure/contenu permet des migrations de compatibilité des autres tables sans jamais synchroniser leurs données. La décision D01 autorise seulement la mise à jour ciblée du CDC ; elle ne démarre pas le Lot 1B ni un autre lot fonctionnel.

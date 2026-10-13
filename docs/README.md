@@ -7,6 +7,8 @@ les tests, les blocages et le point de reprise.
 
 [Identité visuelle appliquée](visual-implementation.md) : polices locales, couleurs et variantes SVG, selon [system-design.md](system-design.md).
 
+[Saisie MathLive préparée](math-input.md) : composant contrôlé, clavier scientifique et banc navigateur local.
+
 | Document                                                     | Objet                                                                          |
 | ------------------------------------------------------------ | ------------------------------------------------------------------------------ |
 | [Architecture](architecture.md)                              | Applications de l'écosystème, frontières et cible technique                    |

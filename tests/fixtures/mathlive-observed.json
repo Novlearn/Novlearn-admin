@@ -1,0 +1,44 @@
+{
+  "observed_on": "2026-10-13",
+  "library": "mathlive@0.111.1",
+  "environment": "Brave/Chromium Windows; local Vite harness; French locale",
+  "scope": "UI serialization only; no Engine calculation or grading",
+  "local_fonts": {
+    "method": "document.fonts after rendering the fraction; same-origin absolute font directory",
+    "katex_font_faces": 20,
+    "all_statuses": "loaded"
+  },
+  "programmatic_samples": [
+    { "label": "Fraction", "latex": "\\frac{1}{2}" },
+    { "label": "Puissance", "latex": "x^{2}" },
+    { "label": "Racine", "latex": "\\sqrt{2}" },
+    { "label": "Logarithme", "latex": "\\ln(2)" },
+    { "label": "Exponentielle", "latex": "e^{2}" },
+    { "label": "Trigonométrie", "latex": "\\sin(x)" },
+    { "label": "Infini", "latex": "-\\infty" },
+    { "label": "Intervalle", "latex": "\\rbrack0;1\\lbrack" },
+    { "label": "Ensemble", "latex": "\\lbrace1;2\\rbrace" },
+    { "label": "Équation", "latex": "x+1=2" },
+    { "label": "Décimal", "latex": "1{,}25" },
+    { "label": "Incomplet", "latex": "2^{\\placeholder{}}" }
+  ],
+  "programmatic_input_event_count_before": 4,
+  "programmatic_input_event_count_after": 4,
+  "keyboard_decimal": {
+    "actions": "press 1, comma, 2, 5 on math-field host using browser automation",
+    "react_latex": "1{,}25",
+    "mathlive_latex": "1{,}25",
+    "input_events": 4
+  },
+  "scientific_fraction": {
+    "actions": "click fraction key; press 1, Tab, 2 using browser automation",
+    "react_latex": "\\frac12",
+    "mathlive_latex": "\\frac12",
+    "cumulative_input_events": 7
+  },
+  "read_only_attempt": {
+    "actions": "enable read-only; press x; capture library serialization",
+    "mathlive_latex_after": "\\frac12",
+    "cumulative_input_events_after": 7
+  }
+}

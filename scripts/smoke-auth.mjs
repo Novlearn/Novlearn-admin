@@ -62,6 +62,15 @@ try {
   assert(fonts.length >= 2, 'Inter and Fredoka must be served locally');
   for (const font of fonts)
     assert.equal((await fetch(new URL(font[1], origin))).status, 200);
+  const mathFont = await fetch(
+    `${origin}/mathlive/fonts/KaTeX_Main-Regular.woff2`,
+  );
+  assert.equal(mathFont.status, 200);
+  assert(
+    (await mathFont.arrayBuffer()).byteLength > 0,
+    'MathLive font is empty',
+  );
+  assert.equal((await fetch(`${origin}/mathlive/LICENSE.txt`)).status, 200);
   const admin = await fetch(`${origin}/admin`, {
     redirect: 'manual',
     headers: { cookie: 'role=admin' },

@@ -28,6 +28,10 @@ Les commandes `npm.cmd` évitent le blocage fréquent de `npm.ps1` par la politi
 
 ## Conventions et structure
 
+`npm.cmd run test:math-input:browser` lance le banc local de saisie décrit dans
+[MathLive](math-input.md), uniquement sur 127.0.0.1:3138, sans base ni correcteur.
+Les polices du champ sont préparées automatiquement avant `dev` et `build`.
+
 - TypeScript strict ; App Router dans `src/app/`.
 - Alias `@/*` vers `src/*`.
 - Server Components par défaut ; ajouter du code client seulement quand un besoin d'interaction l'exige.
