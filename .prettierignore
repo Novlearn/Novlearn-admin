@@ -1,0 +1,6 @@
+CDC_reference.md
+.next/
+node_modules/
+.npm-cache/
+package-lock.json
+next-env.d.ts
