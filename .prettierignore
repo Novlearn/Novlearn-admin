@@ -2,6 +2,7 @@ CDC_reference.md
 .next/
 node_modules/
 .npm-cache/
+.local/lot1a/
 package-lock.json
 next-env.d.ts
 public/logo/

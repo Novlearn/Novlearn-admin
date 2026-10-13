@@ -1,5 +1,28 @@
 # Progression du goal NovLearn Admin
 
+## État courant — reprise locale du Lot 1A autorisée
+
+L'autorisation utilisateur D04 remplace le blocage de permission des relevés
+historiques ci-dessous. Des corrections sont appliquées localement dans
+NovLearn ; aucun environnement distant ni source Engine n'est modifié.
+Le [bilan détaillé](lot-1a-local-validation.md) et le
+[manifeste des 48 SQL rejoués](lot-1a-local-replay-manifest.json) décrivent
+les sources, responsabilités, commandes et limites des preuves.
+
+Les 48 migrations passent sur une instance Supabase PostgreSQL neuve, sans
+réseau ; les bancs réels locaux passent 30 + 26 assertions, avec fixtures
+annulées. PGlite passe 57 assertions avec pgcrypto réel et les URL de tests
+sont verrouillées sur loopback (9 tests). Types/lint et suites NovLearn passent
+avec le runner backend isolé existant ; les 9 todo frontend restent visibles.
+
+La certification Engine reste bloquée : deux `check` complets donnent chacun
+1532 PASS / 1 FAIL (timeout Windows du host réel), malgré 40 tests ciblés,
+package et 13 tests Python réussis. Aucun skip ni limite n'est assoupli.
+Les lectures privées historiques, la réconciliation distante complète,
+backup/restauration et les droits de publication demeurent des portes ouvertes.
+Le Lot 1A et le goal complet restent incomplets ; aucun lot dépendant ni
+activation Auth n'est ouvert automatiquement.
+
 ## Mission du 13 octobre 2026
 
 La demande `/goal` jointe autorise le développement local par lots, les tests,

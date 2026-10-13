@@ -1,5 +1,22 @@
 # Décisions et arbitrages
 
+## D04 — Finalisation locale du Lot 1A dans NovLearn
+
+**Source : autorisation explicite de l'utilisateur le 13 octobre 2026.**
+Appliquer les corrections de code et migrations SQL locales à partir des
+propositions existantes, conserver les données et exécuter les vérifications
+disponibles, notamment Engine. Ne modifier aucun environnement distant et ne
+pas déclarer le Lot 1A terminé avant validation des prérequis SQL et de la
+certification Engine. Aucun test ni critère ne doit être contourné ou assoupli.
+Les interventions locales routinières n'exigent pas une validation à chaque étape.
+
+Cette décision autorise le travail local dans NovLearn et remplace le blocage
+d'autorisation documenté au tour précédent. Elle n'autorise pas la modification
+des sources Engine, le déploiement, une application distante ou l'activation
+Auth Admin avant ses portes de sécurité. Le [bilan local](lot-1a-local-validation.md)
+donne les corrections, preuves et blocages actuels ; la migration locale 23 et
+ses nouveaux tests y sont attribués explicitement à cette intervention.
+
 ## D03 — Référence visuelle et logos fournis
 
 **Source : instruction utilisateur pendant le goal, le 13 octobre 2026.**
