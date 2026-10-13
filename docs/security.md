@@ -1,5 +1,10 @@
 # Authentification, autorisations et accès Production
 
+Le [volet Auth local](auth.md) est désormais préparé et testé avec doubles,
+mais désactivé. Les risques SQL ci-dessous restent bloquants. Le tableau des
+variables décrivant le socle vide est le relevé historique du Lot 0 bis ; voir
+Auth pour leurs consommateurs actuels et les verrous d'activation.
+
 État Supabase lu le 13 octobre 2026, complété par les ACL, privilèges effectifs et fonctions d'autorisation pendant la préparation du Lot 1A. Cette revue n'a changé aucune politique.
 
 ## Auth Admin

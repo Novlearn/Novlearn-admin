@@ -1,5 +1,12 @@
 # Environnements et configuration
 
+Le volet Auth préparé lit désormais les variables Staging et les deux verrous
+serveur décrits dans [Auth](auth.md). Sans activation après revue, aucun appel
+Supabase n'est effectué par l'application. `.env.example` préexistant est
+préservé ; `.env.auth.example` ajoute l'activation false et la référence de revue.
+Les descriptions du socle sans consommateurs de variables ci-dessous sont
+historiques ; aucun accès Production n'a été ajouté.
+
 ## Staging
 
 Staging est l'environnement de travail de l'Admin. La cible prévoit que Supabase Auth de Staging authentifie les administrateurs ; les opérations éditoriales (brouillons, validations, chapitres, compétences et flashcards) s'y dérouleront. Les comptes Auth Production ne sont pas supposés identiques. Les rôles et permissions doivent être vérifiés côté serveur et les politiques RLS auditées avant d'activer l'accès.

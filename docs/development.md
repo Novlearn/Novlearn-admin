@@ -2,7 +2,7 @@
 
 ## Prérequis et installation
 
-Node.js 20 ou supérieur et npm. Le frontend NovLearn observé utilise Node 20+ ; l'Engine demande Node 24.19.x et npm 11.17.x. Pour aligner tout l'écosystème, Node 24.19.x et npm 11.17.x sont recommandés.
+Node.js 24.19.x et npm 11.17.x pour l'Admin courant, alignés sur le runtime de l'Engine. Le frontend NovLearn observé déclare encore Node 20+ ; ce dépôt ne le modifie pas.
 
 ```powershell
 npm.cmd ci
@@ -24,7 +24,7 @@ Les commandes `npm.cmd` évitent le blocage fréquent de `npm.ps1` par la politi
 | `npm.cmd run format:check` | Vérifie le format sans modifier les fichiers    |
 | `npm.cmd run check`        | Typecheck, lint, format et build successivement |
 
-Aucun runner de tests n'est retenu pour le socle vide. Les fonctionnalités futures devront apporter des tests pertinents avec leur infrastructure.
+`npm.cmd run test` exécute Vitest (permissions, routes directes, adaptateur Auth et cookies SSR). `check` commence par ces tests puis types, lint, format, build et `test:smoke`. Le smoke lance un standalone temporaire sur 127.0.0.1:3137 avec Auth explicitement désactivé ; il vérifie les refus HTTP, la redirection, les headers et la disponibilité du CSS, puis arrête le serveur. `postbuild` copie les assets statiques nécessaires au standalone. Les doubles ne constituent pas une preuve de droits SQL ou de connexion distante. Voir [Auth](auth.md) pour les tests nécessaires avant activation.
 
 ## Conventions et structure
 

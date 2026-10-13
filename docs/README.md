@@ -1,5 +1,12 @@
 # Documentation NovLearn Admin
 
+Le [suivi du goal](progress.md) contient l'audit actuel, les lots autorisés,
+les tests, les blocages et le point de reprise.
+
+[Authentification préparée](auth.md) : contrôle serveur, tests locaux et conditions d'activation Staging.
+
+[Identité visuelle appliquée](visual-implementation.md) : polices locales, couleurs et variantes SVG, selon [system-design.md](system-design.md).
+
 | Document                                                     | Objet                                                                          |
 | ------------------------------------------------------------ | ------------------------------------------------------------------------------ |
 | [Architecture](architecture.md)                              | Applications de l'écosystème, frontières et cible technique                    |

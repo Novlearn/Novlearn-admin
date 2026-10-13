@@ -4,3 +4,5 @@ node_modules/
 .npm-cache/
 package-lock.json
 next-env.d.ts
+public/logo/
+docs/system-design.md

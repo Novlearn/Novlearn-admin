@@ -1,5 +1,10 @@
 # Architecture cible et audit du Lot 0 bis
 
+Ce rapport conserve les constats du Lot 0 bis. Depuis D02, le code Auth et le
+layout sont préparés localement, avec accès Staging désactivé. L'état courant
+et ses preuves sont dans [Auth](auth.md) et [progression](progress.md) ; les
+paragraphes décrivant le socle vide correspondent au relevé initial.
+
 État au 13 octobre 2026. Ce document distingue les faits vérifiés dans les dépôts et métadonnées accessibles, les déclarations du CDC et les recommandations à valider. Aucun changement fonctionnel n'est implémenté ici.
 
 ## Architecture recommandée

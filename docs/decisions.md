@@ -1,5 +1,28 @@
 # Décisions et arbitrages
 
+## D03 — Référence visuelle et logos fournis
+
+**Source : instruction utilisateur pendant le goal, le 13 octobre 2026.**
+Appliquer `docs/system-design.md` à l'Admin et utiliser les logos SVG avec et
+sans écriture dans `public/logo/`. Choix d'implémentation : Inter locale pour
+l'administration, Fredoka pour la marque, palette claire et bleu primaire
+#2563EB. Les variantes cadrées conservent les originaux. Cette instruction ne
+modifie pas le CDC, les prérequis SQL ou les portes de mise en service. Voir
+[identité appliquée](visual-implementation.md).
+
+## D02 — Développement local autonome autorisé
+
+**Source : demande `/goal` jointe le 13 octobre 2026.** Le développement dans
+Admin, les tests, la documentation et les commits locaux par lots sont autorisés.
+Le passage automatique aux lots indépendants remplace la restriction de la
+mission documentaire antérieure. Les prérequis techniques de sécurité restent
+obligatoires : aucune activation distante sur un rôle modifiable, aucun schéma
+inventé, aucun moteur concurrent. Les travaux avec doubles sont préparatoires.
+Les points d'arrêt de la demande (migrations/RLS distantes, modifications des
+repos voisins, secrets privilégiés Production, première publication réelle,
+déploiement public) demandent un accord distinct. Aucun push autorisé.
+Voir [progression](progress.md) pour les preuves et le plan d'exécution.
+
 Registre mis à jour le 13 octobre 2026 après validation explicite du modèle et préparation du Lot 1A. Les recommandations encore ouvertes sont distinguées des décisions utilisateur confirmées.
 
 ## Décisions établies par le CDC / socle
@@ -10,7 +33,7 @@ Registre mis à jour le 13 octobre 2026 après validation explicite du modèle e
 - `novlearn-exercise-engine` est la source canonique des contrats et calculs ; MathLive sert à la saisie.
 - La V1 sélectionne uniquement le contenu métier approuvé de `public.exercises` et `public.exercise_versions`. Aucune réplication intégrale, aucun brouillon et aucune autre table ne sont synchronisés.
 - L'identité d'exercice reste stable, les révisions publiées sont immuables, les tentatives historiques ne sont pas écrasées.
-- La présente mission est lecture/analyse/documentation. Aucune base, permission, migration ou repository voisin n'a été modifié.
+- La mission Lot 0 bis était lecture/analyse/documentation. D02 ouvre le développement local Admin ; aucune base, permission, migration ou repository voisin n'est modifié par ce goal.
 
 ## D01 — Modèle et publication validés, arbitrages clos
 
