@@ -4,9 +4,9 @@ NovLearn Admin sera l'application privée d'administration de NovLearn : gestion
 
 ## État du projet
 
-Le Lot 0 pose uniquement le socle technique et la documentation. **Aucune fonctionnalité métier n'est implémentée** : il n'y a ni authentification, ni connexion à Supabase, ni dashboard, ni gestion de contenu. La page d'accueil confirme seulement l'initialisation.
+Le Lot 0 pose le socle technique ; le Lot 0 bis documente l'audit d'architecture. Le modèle `public.exercises` (identité stable) + `public.exercise_versions` (révisions) et la publication de leur contenu métier approuvé sont désormais validés. Le [Lot 1A](docs/lot-1a-preparation.md) est préparé en lecture seule. **Aucune fonctionnalité métier ni migration n'est implémentée** : il n'y a ni authentification, ni client Supabase fonctionnel, ni dashboard, ni gestion de contenu. La page d'accueil confirme seulement l'initialisation.
 
-Le cahier des charges officiel est [CDC_reference.md](CDC_reference.md). Il fait foi pour la cible fonctionnelle et ne doit pas être modifié silencieusement. Le [sommaire documentaire](docs/README.md) donne accès aux documents d'architecture, d'environnements, de données, de workflow, de décisions et de développement.
+Le cahier des charges officiel est [CDC_reference.md](CDC_reference.md). Il fait foi pour la cible fonctionnelle et ne doit pas être modifié silencieusement. Le [sommaire documentaire](docs/README.md) donne accès à l'audit, à la stratégie DB, au modèle de versions, à la publication, à la sécurité et aux documents de fonctionnement.
 
 ## Architecture technique retenue
 
@@ -44,4 +44,4 @@ npm.cmd run build
 
 ## Périmètre et suite
 
-Le Lot 0 est le seul lot déclaré terminé par cette initialisation. Le premier lot fonctionnel recommandé est le Lot 1 (authentification Staging et socle Admin), après validation des permissions, RLS et procédure de provisionnement du compte administrateur. Aucun travail de ce lot suivant n'est inclus ici.
+Les lots 0 et 0 bis sont terminés. La préparation du Lot 1A apporte un inventaire de migrations, une requête de métadonnées et un plan de sécurisation SQL. Sa réconciliation corrective et son application ne sont pas réalisées. Le volet fonctionnel 1B (Auth Admin) attend la correction validée des politiques/ACL et le provisionnement Admin décrits dans [la roadmap](docs/roadmap.md). Aucun lot fonctionnel ne commence automatiquement.

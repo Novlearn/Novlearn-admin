@@ -15,7 +15,7 @@ Ce parcours décrit une cible fonctionnelle. Aucun de ses écrans, accès au mot
 9. Générer des instances destinées aux élèves depuis une version publiée.
 10. Corriger les tentatives côté serveur et conserver les éléments nécessaires à leur reprise et audit.
 
-La publication ne copie pas la base. En V1, seule la table métier `public.exercises` est prévue pour la synchronisation de contenu. Les tentatives, profils, chapitres, compétences, flashcards et autres tables sont exclues. Si le versionnement nécessite de nouvelles tables, leur rôle lors de la publication doit être tranché avant développement.
+La publication sélectionne le contenu métier approuvé de `public.exercises` (identité stable) et `public.exercise_versions` (révisions), conformément à la décision utilisateur du 13 octobre 2026. Elle ne copie pas intégralement les lignes, les brouillons ou les autres tables. Les tentatives, duels, profils/Auth, statistiques, chapitres, compétences, flashcards, feedbacks et `exercises_claude` sont exclus. Les migrations de compatibilité des autres tables sont distinctes de cette synchronisation de contenu ; voir [publication](publication.md).
 
 ## Concepts à distinguer
 
@@ -24,4 +24,4 @@ La publication ne copie pas la base. En V1, seule la table métier `public.exerc
 - **Instance générée** : valeurs concrètes obtenues en générant une version avec une seed ; elle peut contenir des attendus privés.
 - **Tentative élève** : réponses soumises pour une instance, corrigées par le moteur côté serveur et rattachées à la version pertinente.
 
-L'ID bigint historique de `exercises` ne doit pas être copié aveuglément entre bases. La correspondance d'identité, la conservation des anciennes tentatives, les snapshots et le modèle SQL des versions restent des décisions ouvertes.
+L'ID bigint historique de `exercises` ne doit pas être copié aveuglément entre bases. Le choix des deux tables est clos ; la correspondance interbases, les contraintes SQL détaillées et le stockage des instances restent à finaliser. Les nouvelles tentatives devront retrouver leur version et instance ; les anciennes sans version connue ne sont jamais rattachées arbitrairement au contenu courant.

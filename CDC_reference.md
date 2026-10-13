@@ -545,9 +545,13 @@ La validation humaine porte sur une version précise de la définition.
 
 Un exercice possède une identité pédagogique stable et plusieurs révisions possibles.
 
+Le modèle validé sépare cette identité dans `public.exercises` et ses révisions dans une nouvelle table `public.exercise_versions`.
+
 Une version publiée doit être immuable.
 
 Les modifications futures créent une nouvelle révision.
+
+Les nouvelles définitions des révisions utilisent le contrat canonique compatible avec `novlearn-exercise-engine`.
 
 ## 10.2 Génération pour les élèves
 
@@ -555,13 +559,15 @@ Le versionnement ne fige pas les valeurs des variables.
 
 Une même version publiée peut générer de nombreuses instances différentes.
 
-Chaque tentative peut disposer :
-- D'une seed.
-- De valeurs générées différentes.
-- D'un snapshot privé.
-- D'une référence à la version publiée.
+Les nouvelles tentatives doivent pouvoir référencer leur version et retrouver l'instance réellement utilisée, notamment grâce à :
+- Une seed.
+- Des valeurs générées différentes.
+- Un snapshot privé.
+- Une référence à la version publiée.
 
 Une tentative reprise doit retrouver son instance initiale.
+
+Les tentatives historiques dépourvues de référence de version restent explicitement sans version connue. Aucune version ne leur est attribuée arbitrairement à partir du contenu courant.
 
 Les duels peuvent partager une instance commune entre participants.
 
@@ -582,7 +588,9 @@ Il faudra étudier précisément :
 - Snapshots des tentatives.
 - Compatibilité du format canonique.
 
-Le choix entre une table dédiée aux révisions et des lignes versionnées dans `exercises` doit être arbitré avant la migration.
+Le choix du modèle est définitif : `public.exercises` porte l'identité stable et `public.exercise_versions` porte ses révisions. L'ancien arbitrage entre des lignes versionnées dans `exercises` et une table dédiée est clos.
+
+La structure SQL détaillée, les contraintes d'immuabilité, la référence de version active, la correspondance des identifiants entre bases et le stockage des instances restent à préparer avant une migration autorisée. La création de `exercise_versions` n'est pas réputée déjà réalisée.
 
 ---
 
@@ -590,7 +598,9 @@ Le choix entre une table dédiée aux révisions et des lignes versionnées dans
 
 ## 11.1 Règle fondamentale
 
-**Seule la table métier `public.exercises` doit faire l'objet d'une synchronisation de contenu entre Staging et Production dans la V1.**
+**La publication Staging → Production peut transférer uniquement le contenu métier approuvé de `public.exercises` et `public.exercise_versions` dans la V1.**
+
+Ce périmètre ne constitue pas une réplication intégrale des lignes de ces tables. Seuls les exercices et révisions approuvés sont sélectionnés ; les brouillons, états éditoriaux internes, données de test et champs non autorisés ne sont pas copiés.
 
 Les autres tables ne sont pas copiées.
 
@@ -611,7 +621,7 @@ En particulier, exclure :
 - `exercises_claude`.
 - Toute donnée personnelle ou de test.
 
-Si le futur versionnement introduit des tables nécessaires à la conservation des versions, leur traitement devra être conçu explicitement, sans élargir silencieusement cette règle de synchronisation.
+Toute autre table non explicitement autorisée reste exclue. La table `public.exercise_versions` est expressément autorisée par la décision validée du 13 octobre 2026 ; l'ancien arbitrage de publication sur une ou deux tables est clos.
 
 ## 11.2 Publication d'un exercice
 
@@ -668,6 +678,8 @@ La synchronisation d'exercices est indépendante du déploiement du code.
 Le code NovLearn suit son processus GitHub staging → main → production.
 
 Les évolutions SQL suivent des migrations versionnées.
+
+Les migrations de structure peuvent faire évoluer d'autres tables, notamment les tentatives et les duels, lorsque leur compatibilité l'exige. Ces évolutions ne constituent pas une synchronisation de leurs données entre Staging et Production et nécessitent leur propre procédure de validation et d'application. L'autorisation de publier le contenu des deux tables n'autorise pas implicitement une migration.
 
 La publication d'un exercice ne doit pas déclencher implicitement une migration SQL ou un déploiement de code.
 
@@ -993,10 +1005,12 @@ Elle ne doit PAS :
 
 # 20. Décisions à valider avant les lots concernés
 
-Certaines décisions ne bloquent pas l'initialisation, mais devront être résolues avant leur implémentation :
+Le 13 octobre 2026, l'utilisateur a explicitement validé le modèle `public.exercises` (identité stable) + `public.exercise_versions` (révisions) et la publication sélective du contenu métier approuvé de ces deux tables uniquement. Cette modification ciblée du CDC est expressément autorisée et clôt les deux anciens arbitrages ; toutes les autres exigences restent applicables.
 
-1. Structure SQL exacte du versionnement des exercices.
-2. Stratégie de conservation des anciennes tentatives.
+Les détails techniques suivants restent à résoudre avant leur implémentation :
+
+1. Structure SQL détaillée du modèle à deux tables validé, contraintes et transitions compatibles.
+2. Stockage/rejeu des nouvelles tentatives et conservation des anciennes sans attribution arbitraire de version.
 3. Règles d'identification des exercices entre Staging et Production.
 4. Gestion des références aux chapitres et compétences non synchronisés.
 5. Référencement des ressources externes éventuelles des exercices.
