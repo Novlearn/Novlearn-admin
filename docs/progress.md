@@ -181,3 +181,30 @@ par une assertion Node sur les fichiers actuels et le rapport capturé : PASS.
 Le format et le diff sont vérifiés ; les contrôles applicatifs restent ceux
 du socle Auth/MathLive, pas des preuves de RLS ou de migrations correctives.
 Commit local : `docs: reconcile recorded migration hashes`.
+
+## Audit du blocage — accord humain requis
+
+Reprise au commit `33a0c10` : aucun accord de modification NovLearn n'est reçu.
+Le même point d'arrêt demeure depuis la demande initiale et les continuations
+MathLive, rapprochement SQL, puis cette revalidation (au moins trois tours
+consécutifs avec le même blocage). Les deux tours précédents ont produit une
+progression réelle ; ce relevé ne livre aucune nouvelle fonctionnalité.
+
+La dernière lecture Staging confirme zéro compte Auth, `exercise_versions`
+absente et la policy profil ALL permissive toujours présente. Le rapport
+Engine courant reste non qualifié pour intégration pilote sur Windows. Les
+lots fonctionnels dépendants ne peuvent pas être ouverts ou réceptionnés en
+respectant leurs prérequis ; les prepared components et hashes ne remplacent
+pas la sécurisation SQL, les droits réels ou la certification.
+
+Le goal est marqué **bloqué**, pas terminé. L'objectif complet reste inchangé.
+Pour reprendre : obtenir l'accord explicite de travailler localement dans
+NovLearn sur le Lot 1A, en partant de ses propositions existantes (historique,
+protection du rôle, RLS/grants/RPC et tests SQL isolés). Cette autorisation doit
+être distincte de toute application distante ou publication. Les migrations
+distantes, modification Engine, secrets privilégiés Production, première
+publication réelle et déploiement conservent leurs validations séparées.
+
+Ce point d'arrêt provient de la règle du goal : « Toute modification du
+repository NovLearn » exige une validation humaine préalable. Aucune permission
+n'est déduite des continuations automatiques du goal.
