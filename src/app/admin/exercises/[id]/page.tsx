@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import type { ExerciseDefinition } from 'novlearn-exercise-engine';
 import { CatalogueAction } from '@/components/catalogue-action';
 import { DraftMetadataForm } from '@/components/draft-metadata-form';
+import { ExercisePreview } from '@/components/exercise-preview';
 import { EditorialBadge } from '@/components/catalogue-list';
 import {
   draftEnvelope,
@@ -112,6 +113,14 @@ export default async function ExercisePage({
               action="duplicate"
               exerciseId={id}
               versionId={version.id}
+            />
+          )}
+          {version && canonical && !editable && (
+            <ExercisePreview
+              key={
+                'preview-' + version.id + version.approval_fingerprint_sha256
+              }
+              definition={version.definition as ExerciseDefinition}
             />
           )}
           <CatalogueAction

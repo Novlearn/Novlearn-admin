@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 5,
+  "kind": "composed",
+  "id": "preview-local-fixture",
+  "revision": "1",
+  "title": "Calcul littéral",
+  "generation": {
+    "schemaVersion": 5,
+    "definitions": [
+      { "name": "a", "kind": "integer", "min": 2, "max": 8, "exclusions": [] }
+    ],
+    "constraints": [],
+    "maxAttempts": 100,
+    "maxDraws": 1000
+  },
+  "variables": [],
+  "elements": [
+    {
+      "id": "intro",
+      "type": "text",
+      "text": "Calculez la somme suivante, puis justifiez votre réponse."
+    },
+    { "id": "expression", "type": "expression", "latex": "a+1" },
+    {
+      "id": "q",
+      "type": "question",
+      "text": "Quelle est la valeur de cette expression ?",
+      "points": 1,
+      "response": { "format": "latex", "kind": "rational" },
+      "expectedLatex": "a+1",
+      "policy": { "domain": "rational", "form": "value-only" }
+    },
+    {
+      "id": "values",
+      "type": "value-table",
+      "columns": ["Paramètre", "Expression"],
+      "rows": [
+        [
+          { "kind": "number", "value": { "latex": "a" } },
+          { "kind": "math", "latex": "a+1" }
+        ]
+      ]
+    },
+    {
+      "id": "private-hint",
+      "type": "hint",
+      "questionId": "q",
+      "content": [{ "type": "text", "text": "PRIVATE_HINT_SENTINEL" }]
+    }
+  ],
+  "extensions": { "privateSentinel": "PRIVATE_EXTENSION_SENTINEL" }
+}

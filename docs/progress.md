@@ -1,5 +1,20 @@
 # Progression du goal NovLearn Admin
 
+## Aperçu et tests Engine locaux — objectif incomplet
+
+Le [parcours d’aperçu](preview.md) utilise des snapshots privés temporaires
+associés à l’Admin serveur, la projection élève officielle et la correction
+native. Les rapports multi-seeds contrôlent le rejeu, les attendus, les formats
+invalides et les cas incorrects obligatoires. **184 tests Admin passent.**
+Brave exerce une génération et une correction réelles via Docker borné, avec
+propriétaire synthétique et sans Auth/base distante. Le build neuf et le smoke
+standalone passent après archivage d’un artefact incrémental incomplet.
+
+Restent les rapports persistés, la relecture/approbation, la publication sélective,
+les courbes et la réception des rendus avancés, ainsi que la récupération des
+sorties non annulables. Aucun verdict de test ne change un statut éditorial.
+Les accès distants restent fermés et l’objectif global reste incomplet.
+
 ## Creator canonique et runtime local — objectif incomplet
 
 Le [Creator](creator.md) ajoute les cinq familles de variables, les 20 types

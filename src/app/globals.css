@@ -53,6 +53,49 @@ body {
   display: none;
 }
 
+.math-display .label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+.math-display .math-input > button {
+  display: none;
+}
+.math-display math-field {
+  min-height: 1.5rem;
+  width: max-content;
+  max-width: 100%;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+  background: transparent;
+}
+.math-display math-field::part(virtual-keyboard-toggle) {
+  display: none;
+}
+.preview-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center;
+}
+.preview-table th,
+.preview-table td {
+  border: 1px solid #e2e8f0;
+  padding: 0.75rem;
+  min-width: 4rem;
+}
+.preview-table th {
+  background: #f8fafc;
+  font-weight: 600;
+}
+.preview-table caption {
+  margin-bottom: 0.75rem;
+  text-align: left;
+  font-weight: 600;
+}
+
 :focus-visible {
   outline: 3px solid rgb(var(--primary));
   outline-offset: 3px;

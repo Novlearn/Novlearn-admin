@@ -5,6 +5,7 @@ import type { ExerciseDefinition } from 'novlearn-exercise-engine';
 import { newDraft } from '@/lib/catalogue';
 import { CreatorFields } from './creator-fields';
 import { bindEditorNavigation } from '@/lib/editor-navigation';
+import { ExercisePreview } from './exercise-preview';
 
 type Props = {
   exerciseId?: string;
@@ -289,6 +290,7 @@ export function DraftMetadataForm(props: Props) {
           </div>
         )}
       </section>
+      <ExercisePreview definition={clean(definition, skills)} disabled={busy} />
       <div className="flex flex-wrap items-center gap-4">
         <button className="button" type="submit" disabled={busy}>
           {busy

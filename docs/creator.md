@@ -1,5 +1,10 @@
 # Creator canonique — état local du 14 octobre 2026
 
+**Complément :** l’[aperçu et les tests Engine](preview.md) ajoutent maintenant
+génération, projection élève, inspection privée et correction natives, ainsi que
+les tests multi-seeds. Les preuves ci-dessous conservent le checkpoint initial
+du Creator ; les nouveaux résultats et critères restants sont documentés séparément.
+
 L’éditeur Staging ajoute les champs canoniques au formulaire de brouillon du
 catalogue. Il utilise Inter, Fredoka et les couleurs du design existant. Aucun
 accès distant n’est activé, aucune donnée existante n’est supprimée. Le périmètre
