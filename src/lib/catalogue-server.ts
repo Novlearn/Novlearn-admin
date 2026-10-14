@@ -42,4 +42,4 @@ export async function loadCatalogue(
   return data as CataloguePage;
 }
 export const versionColumns =
-  'id,exercise_id,revision,definition,editorial_status,approval_fingerprint_sha256,engine_contract,generation_version,updated_at';
+  'id,exercise_id,revision,definition,editorial_status,approval_fingerprint_sha256,engine_contract,generation_version,test_epoch,updated_at';

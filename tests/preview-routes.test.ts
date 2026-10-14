@@ -2,6 +2,8 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { NextRequest, NextResponse } from 'next/server';
 import { STAGING_PROJECT_REF } from '@/lib/auth/config';
 import { newDraft } from '@/lib/catalogue';
+import { createHmac } from 'node:crypto';
+vi.mock('server-only', () => ({}));
 const fake = vi.hoisted(() => ({
   auth: {
     getVerifiedUser: vi.fn(),
@@ -16,6 +18,9 @@ const fake = vi.hoisted(() => ({
   test: vi.fn(),
   acquire: vi.fn(),
   release: vi.fn(),
+  from: vi.fn(),
+  load: vi.fn(),
+  rpc: vi.fn(),
 }));
 vi.mock('@/lib/auth/supabase', () => ({
   createRouteAuth: fake.create,
@@ -61,6 +66,8 @@ beforeEach(() => {
     'sb_publishable_test_only',
   );
   vi.stubEnv('APP_BASE_URL', 'http://localhost:3000');
+  vi.stubEnv('ADMIN_TEST_SIGNING_KEY_ID', '');
+  vi.stubEnv('ADMIN_TEST_SIGNING_KEY', '');
   fake.auth.getVerifiedUser.mockResolvedValue({
     id: 'alice',
     isAnonymous: false,
@@ -69,14 +76,156 @@ beforeEach(() => {
   fake.create.mockReturnValue({
     gateway: fake.auth,
     response: NextResponse.next(),
+    client: { from: fake.from, rpc: fake.rpc },
   });
   fake.acquire.mockReturnValue(fake.release);
   fake.generate.mockResolvedValue({ previewId: reference });
   fake.inspect.mockReturnValue({ values: {} });
   fake.grade.mockResolvedValue({ state: 'correct' });
-  fake.test.mockResolvedValue({ passed: false });
+  fake.test.mockResolvedValue({
+    definitionDigest: 'b'.repeat(64),
+    engineVersion: '0.1.0',
+    passed: false,
+    complete: true,
+    seeds: [0, 42].map((seed) => ({
+      seed,
+      passed: false,
+      reproducible: false,
+      publicProjectionSafe: false,
+      diagnostics: [
+        { path: '/elements', code: 'value', message: 'Incomplete fixture' },
+      ],
+      checks: [],
+    })),
+  });
+  const chain = { select: vi.fn(), eq: vi.fn(), maybeSingle: fake.load };
+  chain.select.mockReturnValue(chain);
+  chain.eq.mockReturnValue(chain);
+  fake.from.mockReturnValue(chain);
+  fake.load.mockResolvedValue({
+    data: {
+      id: reference,
+      definition: newDraft('Stored authoritative'),
+      approval_fingerprint_sha256: 'a'.repeat(64),
+      test_epoch: 2,
+    },
+    error: null,
+  });
+  fake.rpc.mockImplementation(async (_name, args) => ({
+    data: {
+      receiptId: JSON.parse(args.p_payload).receiptId,
+      recorded: true,
+      passed: JSON.parse(args.p_payload).report.passed,
+    },
+    error: null,
+  }));
 });
 describe('aperçu serveur protégé', () => {
+  const savedRequest = () =>
+    request({
+      action: 'test_saved',
+      versionId: reference,
+      fingerprint: 'a'.repeat(64),
+      epoch: 2,
+      seeds: [0, 42],
+      cases: [],
+    });
+  const signer = () => {
+    vi.stubEnv(
+      'ADMIN_TEST_SIGNING_KEY_ID',
+      '10000000-0000-4000-8000-000000000001',
+    );
+    vi.stubEnv('ADMIN_TEST_SIGNING_KEY', '42'.repeat(32));
+    fake.auth.getVerifiedUser.mockResolvedValue({
+      id: '20000000-0000-4000-8000-000000000001',
+      isAnonymous: false,
+    });
+  };
+  it('ne consigne rien sans signature serveur configurée', async () => {
+    expect((await POST(savedRequest())).status).toBe(503);
+    expect(fake.load).not.toHaveBeenCalled();
+    expect(fake.rpc).not.toHaveBeenCalled();
+  });
+  it('relit la définition DB et signe un vrai résultat serveur plutôt qu’un résultat du navigateur', async () => {
+    signer();
+    const response = await POST(savedRequest());
+    expect(response.status).toBe(200);
+    expect(fake.test).toHaveBeenCalledWith(
+      newDraft('Stored authoritative'),
+      [0, 42],
+      [],
+      expect.any(AbortSignal),
+    );
+    const [name, args] = fake.rpc.mock.calls[0];
+    expect(name).toBe('admin_record_exercise_test');
+    const body = JSON.parse(args.p_payload);
+    expect(body.actorId).toBe('20000000-0000-4000-8000-000000000001');
+    expect(body.epoch).toBe(2);
+    expect(body.fingerprint).toBe('a'.repeat(64));
+    expect(args.p_signature).toBe(
+      createHmac('sha256', Buffer.from('42'.repeat(32), 'hex'))
+        .update(args.p_payload, 'utf8')
+        .digest('hex'),
+    );
+    const output = await response.text();
+    expect(output).not.toContain('signature');
+    expect(output).not.toContain('42'.repeat(32));
+    expect(fake.auth.getProfileRole).toHaveBeenCalledTimes(2);
+  });
+  it('refuse une révision modifiée avant le calcul', async () => {
+    signer();
+    fake.load.mockResolvedValue({
+      data: {
+        id: reference,
+        definition: newDraft('Changed'),
+        approval_fingerprint_sha256: 'b'.repeat(64),
+        test_epoch: 3,
+      },
+      error: null,
+    });
+    expect((await POST(savedRequest())).status).toBe(409);
+    expect(fake.test).not.toHaveBeenCalled();
+    expect(fake.rpc).not.toHaveBeenCalled();
+  });
+  it('ne signe pas après une révocation survenue pendant les calculs', async () => {
+    signer();
+    fake.auth.getProfileRole
+      .mockResolvedValueOnce('admin')
+      .mockResolvedValueOnce('user');
+    expect((await POST(savedRequest())).status).toBe(403);
+    expect(fake.rpc).not.toHaveBeenCalled();
+  });
+  it('ne déclare aucun enregistrement après conflit SQL ou résultat non confirmé', async () => {
+    signer();
+    fake.rpc.mockResolvedValueOnce({ data: null, error: { code: '40001' } });
+    expect((await POST(savedRequest())).status).toBe(409);
+    fake.rpc.mockResolvedValueOnce({ data: { recorded: false }, error: null });
+    expect((await POST(savedRequest())).status).toBe(503);
+  });
+  it('refuse définition, acteur et verdict client dans la requête de révision', async () => {
+    signer();
+    for (const extra of [
+      { definition: newDraft('Forged') },
+      { actorId: 'bob' },
+      { report: { passed: true } },
+    ])
+      expect(
+        (
+          await POST(
+            request({
+              action: 'test_saved',
+              versionId: reference,
+              fingerprint: 'a'.repeat(64),
+              epoch: 2,
+              seeds: [0],
+              cases: [],
+              ...extra,
+            }),
+          )
+        ).status,
+      ).toBe(400);
+    expect(fake.rpc).not.toHaveBeenCalled();
+  });
   it.each(['ADMIN_STAGING_AUTH_ENABLED', 'ADMIN_ENGINE_ENABLED'])(
     'reste fermé sans %s avant tout calcul',
     async (flag) => {

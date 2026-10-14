@@ -6,7 +6,7 @@ out/
 build/
 coverage/
 *.tsbuildinfo
-.local/lot1a/
+.local/
 
 .env
 .env.*

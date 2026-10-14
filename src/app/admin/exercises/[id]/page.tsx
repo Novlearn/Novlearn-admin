@@ -4,6 +4,7 @@ import type { ExerciseDefinition } from 'novlearn-exercise-engine';
 import { CatalogueAction } from '@/components/catalogue-action';
 import { DraftMetadataForm } from '@/components/draft-metadata-form';
 import { ExercisePreview } from '@/components/exercise-preview';
+import { TestHistory } from '@/components/test-history';
 import { EditorialBadge } from '@/components/catalogue-list';
 import {
   draftEnvelope,
@@ -64,6 +65,15 @@ export default async function ExercisePage({
   const editable =
     version?.editorial_status === 'draft' && !parent.admin_archived_at;
   const canonical = version && draftEnvelope(version.definition);
+  const testHistory = version
+    ? await client
+        .from('admin_exercise_test_runs')
+        .select('id,recorded_at,fingerprint,test_epoch,passed,payload')
+        .eq('version_id', version.id)
+        .order('recorded_at', { ascending: false })
+        .order('id', { ascending: false })
+        .limit(10)
+    : null;
   let comparison: ReturnType<typeof revisionDiff> | null = null;
   if (typeof query.compare === 'string') {
     if (!isUuid(query.compare) || !version) notFound();
@@ -121,6 +131,11 @@ export default async function ExercisePage({
                 'preview-' + version.id + version.approval_fingerprint_sha256
               }
               definition={version.definition as ExerciseDefinition}
+              saved={{
+                id: version.id,
+                fingerprint: version.approval_fingerprint_sha256,
+                epoch: version.test_epoch,
+              }}
             />
           )}
           <CatalogueAction
@@ -160,6 +175,7 @@ export default async function ExercisePage({
               exerciseId={id}
               versionId={version.id}
               fingerprint={version.approval_fingerprint_sha256}
+              testEpoch={version.test_epoch}
               definition={version.definition as ExerciseDefinition}
             />
           ) : (
@@ -207,6 +223,14 @@ export default async function ExercisePage({
                 Elle est réservée aux administrateurs.
               </p>
             </section>
+          )}
+          {version && (
+            <TestHistory
+              runs={testHistory?.data ?? []}
+              fingerprint={version.approval_fingerprint_sha256}
+              epoch={version.test_epoch}
+              unavailable={!!testHistory?.error}
+            />
           )}
           {comparison && (
             <section className="card">

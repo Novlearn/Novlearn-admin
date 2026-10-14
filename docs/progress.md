@@ -1,5 +1,19 @@
 # Progression du goal NovLearn Admin
 
+## Reçus de tests par révision — objectif incomplet
+
+Les [rapports persistés](test-receipts.md) lient les résultats Engine réels à la
+révision relue en SQL, son empreinte, son compteur d’état et l’Admin vérifié.
+La signature serveur et le registre privé empêchent les verdicts fabriqués par
+le navigateur ; une édition suivie d’un revert ne conserve pas l’état courant.
+L’historique reste accessible aux Admins, sans modification des anciens rapports.
+
+**53 migrations, 21 assertions reçus avant/après restauration, 69 assertions
+historiques et 47 assertions catalogue après restauration ; 195 tests Admin.**
+Le parcours natif Engine/Node/SQL et la sauvegarde réelle passent localement.
+L’approbation humaine et ses contraintes SQL restent à construire avant toute
+activation ; aucun statut n’est avancé par un test, aucune action distante.
+
 ## Aperçu et tests Engine locaux — objectif incomplet
 
 Le [parcours d’aperçu](preview.md) utilise des snapshots privés temporaires

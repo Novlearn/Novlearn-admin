@@ -34,9 +34,11 @@ function Diagnostics({ items }: { items: PreviewDiagnostic[] }) {
 export function ExercisePreview({
   definition,
   disabled = false,
+  saved,
 }: {
   definition: ExerciseDefinition;
   disabled?: boolean;
+  saved?: { id: string; fingerprint: string; epoch: number };
 }) {
   const source = JSON.stringify(definition),
     latest = useRef(source);
@@ -51,11 +53,13 @@ export function ExercisePreview({
     [diagnostics, setDiagnostics] = useState<PreviewDiagnostic[]>([]),
     [cases, setCases] = useState<PreviewCase[]>([]);
   const controller = useRef<AbortController | null>(null);
+  const [receiptId, setReceiptId] = useState<string | null>(null);
   useEffect(() => {
     controller.current?.abort();
     setPreview(null);
     setDetails(null);
     setReport(null);
+    setReceiptId(null);
     setError('');
     setDiagnostics([]);
   }, [source]);
@@ -128,7 +132,7 @@ export function ExercisePreview({
       );
     } catch {}
   };
-  const test = async () => {
+  const test = async (persist = false) => {
     const list = seeds.split(',').map(numericSeed);
     if (
       !list.length ||
@@ -143,9 +147,22 @@ export function ExercisePreview({
     }
     setReport(null);
     try {
-      setReport(
-        await request({ action: 'test', definition, seeds: list, cases }),
-      );
+      setReceiptId(null);
+      if (persist && saved) {
+        const result = await request({
+          action: 'test_saved',
+          versionId: saved.id,
+          fingerprint: saved.fingerprint,
+          epoch: saved.epoch,
+          seeds: list,
+          cases,
+        });
+        setReport(result.report);
+        setReceiptId(result.receiptId);
+      } else
+        setReport(
+          await request({ action: 'test', definition, seeds: list, cases }),
+        );
     } catch {}
   };
   const submit = async (
@@ -224,7 +241,9 @@ export function ExercisePreview({
             className="rounded-lg border border-slate-300 px-4 py-3 text-sm"
             onClick={() => {
               controller.current?.abort();
-              setError('Calcul annulé. Aucun résultat positif n’est ajouté.');
+              setError(
+                'Annulation demandée. Un rapport déjà enregistré reste conservé.',
+              );
             }}
           >
             Annuler le calcul
@@ -482,10 +501,27 @@ export function ExercisePreview({
             type="button"
             className="button"
             disabled={disabled || busy}
-            onClick={test}
+            onClick={() => void test(false)}
           >
             Lancer les tests Engine
           </button>
+          {saved && (
+            <div className="space-y-3 rounded-lg border border-blue-200 bg-blue-50 p-4">
+              <p className="text-sm leading-6 text-blue-900">
+                Consigner les tests de la révision enregistrée. Enregistrez
+                toute modification du formulaire pour l’inclure ; le serveur
+                relit le contenu de cette révision avant de tester.
+              </p>
+              <button
+                type="button"
+                className="button"
+                disabled={disabled || busy}
+                onClick={() => void test(true)}
+              >
+                Tester et consigner la révision enregistrée
+              </button>
+            </div>
+          )}
           {report && (
             <div className="space-y-4" role="status">
               <p
@@ -498,6 +534,12 @@ export function ExercisePreview({
               <p className="break-all font-mono text-xs text-slate-500">
                 Empreinte de définition : {report.definitionDigest}
               </p>
+              {receiptId && (
+                <p className="break-all text-sm text-blue-800">
+                  Rapport enregistré : {receiptId}. La relecture humaine reste
+                  distincte.
+                </p>
+              )}
               {report.seeds.map((r) => (
                 <section
                   key={r.seed}

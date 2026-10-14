@@ -11,6 +11,7 @@ type Props = {
   exerciseId?: string;
   versionId?: string;
   fingerprint?: string;
+  testEpoch?: number;
   definition?: ExerciseDefinition;
   newRevision?: boolean;
 };
@@ -290,7 +291,22 @@ export function DraftMetadataForm(props: Props) {
           </div>
         )}
       </section>
-      <ExercisePreview definition={clean(definition, skills)} disabled={busy} />
+      <ExercisePreview
+        definition={clean(definition, skills)}
+        disabled={busy}
+        saved={
+          !props.newRevision &&
+          props.versionId &&
+          props.fingerprint &&
+          typeof props.testEpoch === 'number'
+            ? {
+                id: props.versionId,
+                fingerprint: props.fingerprint,
+                epoch: props.testEpoch,
+              }
+            : undefined
+        }
+      />
       <div className="flex flex-wrap items-center gap-4">
         <button className="button" type="submit" disabled={busy}>
           {busy

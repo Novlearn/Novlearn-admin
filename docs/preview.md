@@ -1,5 +1,10 @@
 # Aperçu et tests Engine — implémentation locale
 
+**Complément :** les [rapports signés par révision](test-receipts.md) ajoutent
+désormais la persistance des tests relus de SQL et leur historique. Ce document
+conserve le checkpoint de l’aperçu temporaire ; les nouvelles preuves et portes
+de relecture sont documentées séparément.
+
 Le parcours du Creator génère maintenant une instance depuis la définition
 courante et une seed entière de 0 à 4294967295. Il affiche la projection élève,
 permet une réponse MathLive, texte ou QCM, puis demande la correction au worker
