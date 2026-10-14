@@ -6,6 +6,7 @@ import '../../src/app/globals.css';
 import { requestEditorLeave } from '../../src/lib/editor-navigation';
 import { CatalogueList } from '../../src/components/catalogue-list';
 import { DraftMetadataForm } from '../../src/components/draft-metadata-form';
+import { EditorialReview } from '../../src/components/editorial-review';
 import type { CatalogueItem } from '../../src/lib/catalogue';
 
 const base: CatalogueItem = {
@@ -105,6 +106,12 @@ function Harness() {
           </div>
           <nav className="mt-8 space-y-1" aria-label="Banc visuel">
             <button
+              className="block w-full rounded-lg px-4 py-3 text-left text-sm font-semibold text-slate-600"
+              onClick={() => openView('review')}
+            >
+              Relecture synthétique
+            </button>
+            <button
               className="block w-full rounded-lg bg-blue-50 px-4 py-3 text-left text-sm font-semibold text-blue-700"
               onClick={() => openView('catalogue')}
             >
@@ -135,7 +142,19 @@ function Harness() {
             <span className="badge">Staging · aperçu synthétique</span>
           </header>
           <main className="px-6 py-9 lg:px-10">
-            {view === 'new' ? (
+            {view === 'review' ? (
+              <div className="max-w-4xl space-y-6">
+                <h1 className="text-3xl font-semibold">Relire une révision</h1>
+                <EditorialReview
+                  versionId="91000000-0000-4000-8000-000000000002"
+                  fingerprint={'a'.repeat(64)}
+                  epoch={2}
+                  status="in_review"
+                  receiptId="91000000-0000-4000-8000-000000000003"
+                  enabled
+                />
+              </div>
+            ) : view === 'new' ? (
               <div className="max-w-4xl">
                 <h1 className="mb-8 text-3xl font-semibold">
                   Créer un exercice

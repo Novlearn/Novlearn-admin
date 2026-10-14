@@ -1,0 +1,288 @@
+{
+  "recordedAt": "2026-10-14T22:00:22.535Z",
+  "scope": "Local editorial review, no remote activation or publication; synthetic identity/attestation",
+  "sql": {
+    "migration": {
+      "path": "../Novlearn/supabase/migrations/20261014215130_novlearn_admin_editorial_review.sql",
+      "sha256": "9f3426b4b16f3f8d5d8d0b658bdd92e9bbd7ddf0b9e3204baa38534c98f704e7"
+    },
+    "localCommit": "3240b7c",
+    "qualifiedTree": "Full local migration tree including preserved historical 010/022/028 edits; not a clean clone",
+    "migrationCount": 54,
+    "replayContainer": "novlearn-admin-lot1a-replay-20261014213619087",
+    "manifest": {
+      "path": "../Novlearn/.local/admin-sql-replay/novlearn-admin-lot1a-replay-20261014213619087/manifest.json",
+      "sha256": "4bf86eef7c76308e3289d011cf690ad86ee3861ee53b767b2e800041e7e69140"
+    },
+    "replayLog": {
+      "path": "../Novlearn/.local/admin-sql-replay/novlearn-admin-lot1a-replay-20261014213619087/replay.log",
+      "sha256": "a3d97f2a14e77a8421ff0976af6dfa5cdf6933e8c06a0a90c47e33d709eec8d4"
+    },
+    "reviewAssertions": 43,
+    "sourceReviewLog": {
+      "path": ".local/lot1a/.review-sql.log",
+      "sha256": "68af75ee06d711d2d233eedd21b8a1b15d301cb0e05d2850edc72b7bbfd7b831"
+    },
+    "sourceCatalogueLog": {
+      "path": ".local/lot1a/.review-source-test-catalogue-local.log",
+      "sha256": "83f314f62e5fed60d0f7ada194a1dbf950a1a72aad8ab3ff5da7e4c0e5573496"
+    },
+    "sourceReceiptLog": {
+      "path": ".local/lot1a/.review-source-test-receipts-local.log",
+      "sha256": "f6ef2a49098443bf9bc9a2e3b533fa7bd264bdd3d7393fef1f719a808b1495cc"
+    }
+  },
+  "native": {
+    "artifact": {
+      "path": ".local/lot1a/receipt-native-flow-1792014929775/proof.json",
+      "sha256": "59e672ec62ae81206a585ad89451cde64b438df37fd8b0f7c64dcedbfb938d7b"
+    },
+    "proof": {
+      "result": "PASS",
+      "scope": "Actual native Engine, Node signer, SQL receipt and review; synthetic Auth identity and fixture attestation",
+      "sourceContainer": "novlearn-admin-lot1a-replay-20261014213619087",
+      "database": "admin_receipt_native_1792014929775",
+      "versionId": "1c3c8a52-c2ed-4313-a1b5-71a2e9228713",
+      "fingerprint": "f5b125081f58cf0ed516b3a0b655d5b23552567bb797a4e7ae9daa2b0d199359",
+      "receiptId": "c70bc758-d655-4ae2-b1d3-0f1df91e01bc",
+      "report": {
+        "definitionDigest": "ffdbfcedecb8f25cfff64b41b9b766aeea09a8114519519762879d33f5f13883",
+        "engineVersion": "0.1.0",
+        "passed": true,
+        "complete": true,
+        "seeds": [
+          {
+            "seed": 0,
+            "passed": true,
+            "reproducible": true,
+            "publicProjectionSafe": true,
+            "diagnostics": [],
+            "checks": [
+              {
+                "questionId": "q",
+                "label": "Attendu officiel",
+                "expectedState": "correct",
+                "result": {
+                  "schemaVersion": 5,
+                  "instanceId": "99ea5c6d-f86b-41fc-a77b-8e185cbca9a4",
+                  "questionId": "q",
+                  "state": "correct",
+                  "value": "equal",
+                  "comparison": "exact",
+                  "form": "not-required",
+                  "domain": "not-applicable",
+                  "proof": "exact-number",
+                  "code": "numeric-equal"
+                },
+                "passed": true
+              },
+              {
+                "questionId": "q",
+                "label": "Format volontairement invalide",
+                "expectedState": "invalid",
+                "result": {
+                  "schemaVersion": 5,
+                  "instanceId": "99ea5c6d-f86b-41fc-a77b-8e185cbca9a4",
+                  "questionId": "",
+                  "state": "invalid",
+                  "value": "unknown",
+                  "comparison": "none",
+                  "form": "unknown",
+                  "domain": "not-applicable",
+                  "proof": "none",
+                  "code": "submission-contract"
+                },
+                "passed": true
+              },
+              {
+                "questionId": "q",
+                "label": "Cas administrateur",
+                "expectedState": "incorrect",
+                "result": {
+                  "schemaVersion": 5,
+                  "instanceId": "99ea5c6d-f86b-41fc-a77b-8e185cbca9a4",
+                  "questionId": "q",
+                  "state": "incorrect",
+                  "value": "different",
+                  "comparison": "exact",
+                  "form": "not-required",
+                  "domain": "not-applicable",
+                  "proof": "exact-number",
+                  "code": "numeric-different"
+                },
+                "passed": true
+              }
+            ]
+          },
+          {
+            "seed": 42,
+            "passed": true,
+            "reproducible": true,
+            "publicProjectionSafe": true,
+            "diagnostics": [],
+            "checks": [
+              {
+                "questionId": "q",
+                "label": "Attendu officiel",
+                "expectedState": "correct",
+                "result": {
+                  "schemaVersion": 5,
+                  "instanceId": "47158fb6-49b0-4907-93ac-b8cd0fc487eb",
+                  "questionId": "q",
+                  "state": "correct",
+                  "value": "equal",
+                  "comparison": "exact",
+                  "form": "not-required",
+                  "domain": "not-applicable",
+                  "proof": "exact-number",
+                  "code": "numeric-equal"
+                },
+                "passed": true
+              },
+              {
+                "questionId": "q",
+                "label": "Format volontairement invalide",
+                "expectedState": "invalid",
+                "result": {
+                  "schemaVersion": 5,
+                  "instanceId": "47158fb6-49b0-4907-93ac-b8cd0fc487eb",
+                  "questionId": "",
+                  "state": "invalid",
+                  "value": "unknown",
+                  "comparison": "none",
+                  "form": "unknown",
+                  "domain": "not-applicable",
+                  "proof": "none",
+                  "code": "submission-contract"
+                },
+                "passed": true
+              },
+              {
+                "questionId": "q",
+                "label": "Cas administrateur",
+                "expectedState": "incorrect",
+                "result": {
+                  "schemaVersion": 5,
+                  "instanceId": "47158fb6-49b0-4907-93ac-b8cd0fc487eb",
+                  "questionId": "q",
+                  "state": "incorrect",
+                  "value": "different",
+                  "comparison": "exact",
+                  "form": "not-required",
+                  "domain": "not-applicable",
+                  "proof": "exact-number",
+                  "code": "numeric-different"
+                },
+                "passed": true
+              }
+            ]
+          }
+        ]
+      },
+      "stored": {
+        "actor": "98500000-0000-4000-8000-000000000001",
+        "count": 1,
+        "epoch": 0,
+        "passed": true
+      },
+      "editorialStatus": "approved",
+      "approval": {
+        "actor": "98500000-0000-4000-8000-000000000001",
+        "status": "approved",
+        "reviews": 2,
+        "fingerprint": "f5b125081f58cf0ed516b3a0b655d5b23552567bb797a4e7ae9daa2b0d199359",
+        "activeVersion": null
+      },
+      "concurrentApproval": {
+        "accepted": 1,
+        "conflict40001": 1,
+        "sessions": 2
+      },
+      "sourceDatabaseReset": false
+    }
+  },
+  "restore": {
+    "source": "novlearn-admin-lot1a-replay-20261014213619087",
+    "restoredSecurityAssertions": 69,
+    "logicalSnapshotMatched": true,
+    "rawSnapshotMatched": false,
+    "scope": "synthetic local only; not remote backup or PITR",
+    "target": "novlearn-admin-lot1a-backup-20261014215052225",
+    "rawDifferenceSections": ["columns", "functions", "relations"],
+    "result": "PASS",
+    "archiveSha256": "cd5b81d0095a51cf5d64a5fa9d9a34f5e562c04d34eac381169d691c610ac7c1",
+    "artifact": ".local/lot1a/.local/admin-sql-backup/novlearn-admin-lot1a-backup-20261014215052225",
+    "columnPrivilegesMatched": true,
+    "columnPrivilegeCount": 12,
+    "snapshotScript": {
+      "path": ".local/lot1a/receipt-backup-tools/admin-backup-snapshot.sql",
+      "sha256": "8d7f27f06df3c083e9cf73bbf1ef3cd30b8e4f35f17a999be5b16da38646948a"
+    },
+    "comparison": {
+      "logicalMatched": true,
+      "rawMatched": false,
+      "rawDifferenceSections": ["columns", "functions", "relations"],
+      "normalization": [
+        "ACL entry order only; privileges and grant options unchanged",
+        "relative visible column order; dropped-column ordinal holes are not preserved by logical pg_dump"
+      ]
+    },
+    "reviewLog": {
+      "path": ".local/lot1a/.review-restored-test-editorial-review-local.log",
+      "sha256": "68af75ee06d711d2d233eedd21b8a1b15d301cb0e05d2850edc72b7bbfd7b831"
+    },
+    "catalogueLog": {
+      "path": ".local/lot1a/.review-restored-test-catalogue-local.log",
+      "sha256": "83f314f62e5fed60d0f7ada194a1dbf950a1a72aad8ab3ff5da7e4c0e5573496"
+    },
+    "receiptLog": {
+      "path": ".local/lot1a/.review-restored-test-receipts-local.log",
+      "sha256": "f6ef2a49098443bf9bc9a2e3b533fa7bd264bdd3d7393fef1f719a808b1495cc"
+    },
+    "comparatorTests": 11,
+    "comparatorCriteriaWeakened": false
+  },
+  "admin": {
+    "unitTests": 212,
+    "testFiles": 18,
+    "checkCommand": "npm.cmd run check",
+    "log": {
+      "path": ".local/lot1a/.review-final-check.log",
+      "sha256": "244356cb9234d653bec8e1a50411d552fde4937674bbae237a701ac0974d16d7"
+    },
+    "browser": "Brave synthetic local harness: unchecked attestations, disabled approval, explicit confirmation, conflict preserves notes/checks",
+    "screenshot": {
+      "path": "docs/editorial-review-local.png",
+      "sha256": "62edf5c543e83b21f656666d2da47a7e29a427d113ff1d1e9a580d53eda8fcff"
+    },
+    "retainedTimeouts": [
+      {
+        "path": ".local/lot1a/.review-check-parallel-timeout.log",
+        "sha256": "0e4b4913b39205f629ed7948f2ebdc7980c9dd86acca201890cb339783675d25"
+      },
+      {
+        "path": ".local/lot1a/.review-check-serial-timeout.log",
+        "sha256": "7f388761df116b035c3fa05d7fb6eec16e46694ee62f125866f66e1419ad6d22"
+      }
+    ],
+    "timeoutFix": "Cache quota test instantiates one real Engine instance instead of 35; all quota assertions and 5000ms deadline unchanged"
+  },
+  "unchanged": {
+    "envExample": true,
+    "cdc": true,
+    "systemDesign": true,
+    "originalCorpus": true,
+    "engineSource": true,
+    "historical51Migrations": true
+  },
+  "remoteChanges": false,
+  "existingDataDeleted": false,
+  "publicationEnabled": false,
+  "goalComplete": false,
+  "remaining": [
+    "Selective publication and constrained PostgreSQL capability",
+    "Creator and advanced renderer acceptance",
+    "Other Admin lots",
+    "Remote SQL reconciliation/backup-PITR/Admin and key provisioning/hosting qualification/learner compatibility"
+  ]
+}

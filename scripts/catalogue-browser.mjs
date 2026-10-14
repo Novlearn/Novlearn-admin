@@ -20,6 +20,17 @@ const server = await createServer({
     {
       name: 'synthetic-catalogue-request',
       configureServer(server) {
+        server.middlewares.use('/api/admin/review', (request, response) => {
+          request.resume();
+          response.statusCode = 409;
+          response.setHeader('content-type', 'application/json');
+          response.end(
+            JSON.stringify({
+              error:
+                'Conflit synthétique : la révision a changé. Vos notes sont conservées.',
+            }),
+          );
+        });
         server.middlewares.use('/api/admin/exercises', (request, response) => {
           request.resume();
           response.statusCode = 409;

@@ -1,5 +1,25 @@
 # Progression du goal NovLearn Admin
 
+## Relecture humaine locale — objectif incomplet
+
+La [relecture](editorial-review.md) ajoute les transitions protégées, l’attestation
+explicite, les références Staging contrôlées et l’historique. L’approbation
+directe par le rôle API est fermée. Un changement de contenu invalide la
+validation ; les tests seuls ne l’accordent jamais. La route reste désactivée.
+
+**54 migrations, 43 assertions relecture avant/après restauration, 48 catalogue,
+21 reçus et 69 contrôles historiques après restauration ; 212 tests Admin.**
+Le parcours Engine natif/signature/SQL passe, avec une seule approbation acceptée
+sur deux sessions concurrentes. Sauvegarde/restauration, types, lint, format,
+build et smoke passent. Les échecs intermédiaires et leurs corrections sont
+conservés dans les preuves ; aucun critère n’est assoupli.
+
+La publication sélective et les autres lots restent à construire. La réception
+complète du Creator et du rendu avancé reste ouverte. Aucun changement distant,
+push, déploiement ou suppression de donnée existante ; CDC, design et corpus
+Engine protégés inchangés. Le Lot 1A distant et l’objectif global ne sont pas
+déclarés terminés.
+
 ## Reçus de tests par révision — objectif incomplet
 
 Les [rapports persistés](test-receipts.md) lient les résultats Engine réels à la

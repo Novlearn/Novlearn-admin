@@ -95,8 +95,12 @@ BEGIN
   PERFORM pg_temp.catalogue_denied('TRUNCATE public.admin_content_events','42501','even Admin cannot truncate audit events');
   PERFORM pg_temp.catalogue_denied(format('INSERT INTO public.admin_content_events(actor_id,exercise_id,action) VALUES(%L,%s,''archived'')',student_id,exercise),'42501','Admin cannot impersonate another audit actor');
 
+  PERFORM pg_temp.catalogue_denied(format('UPDATE public.exercise_versions SET editorial_status=''approved'',approved_by=%L,approved_at=now() WHERE id=%L',admin_id,version),'42501','Admin cannot approve by direct column update');
+  -- Trusted owner fixture setup only; normal API approval must use the review RPC.
+  RESET ROLE;
   UPDATE public.exercise_versions SET editorial_status='approved',approved_by=admin_id,approved_at=now() WHERE id=version;
   UPDATE public.exercise_versions SET editorial_status='published' WHERE id=version;
+  SET LOCAL ROLE authenticated;
   PERFORM public.publish_exercise_version(exercise,version);
   PERFORM public.admin_archive_exercise(exercise,false,true);
   PERFORM pg_temp.catalogue_assert((SELECT active_version_id=original FROM public.exercises WHERE id=exercise),'archive preserves existing active version');

@@ -74,12 +74,15 @@ it('conserve un snapshot détaché, le borne et refuse un autre propriétaire ou
 });
 it('garde deux instantanés par Admin et trente-deux globalement sans évincer les autres propriétaires', () => {
   const store = new PreviewStore();
-  const a = store.put('alice', 'd', 1, official());
-  store.put('alice', 'd', 2, official());
-  store.put('alice', 'd', 3, official());
+  // This case tests cache quotas. Instantiate once; put() detaches every entry.
+  // Mathematical generation/replay is exercised by the separate Engine cases.
+  const snapshot = official();
+  const a = store.put('alice', 'd', 1, snapshot);
+  store.put('alice', 'd', 2, snapshot);
+  store.put('alice', 'd', 3, snapshot);
   expect(() => store.get('alice', a.previewId)).toThrow();
-  for (let i = 0; i < 30; i++) store.put('user' + i, 'd', 1, official());
-  expect(() => store.put('extra', 'd', 1, official())).toThrow(PreviewError);
+  for (let i = 0; i < 30; i++) store.put('user' + i, 'd', 1, snapshot);
+  expect(() => store.put('extra', 'd', 1, snapshot)).toThrow(PreviewError);
 });
 it('borne les travaux actifs et libère après la fin', () => {
   const a = acquirePreviewJob('a'),

@@ -5,6 +5,8 @@ import { CatalogueAction } from '@/components/catalogue-action';
 import { DraftMetadataForm } from '@/components/draft-metadata-form';
 import { ExercisePreview } from '@/components/exercise-preview';
 import { TestHistory } from '@/components/test-history';
+import { EditorialReview } from '@/components/editorial-review';
+import { ReviewHistory } from '@/components/review-history';
 import { EditorialBadge } from '@/components/catalogue-list';
 import {
   draftEnvelope,
@@ -69,6 +71,24 @@ export default async function ExercisePage({
     ? await client
         .from('admin_exercise_test_runs')
         .select('id,recorded_at,fingerprint,test_epoch,passed,payload')
+        .eq('version_id', version.id)
+        .order('recorded_at', { ascending: false })
+        .order('id', { ascending: false })
+        .limit(10)
+    : null;
+  const currentReceipt = version
+    ? testHistory?.data?.find(
+        (run) =>
+          run.fingerprint === version.approval_fingerprint_sha256 &&
+          run.test_epoch === version.test_epoch,
+      )
+    : undefined;
+  const reviewHistory = version
+    ? await client
+        .from('admin_exercise_reviews')
+        .select(
+          'id,actor_id,recorded_at,action,comment,fingerprint,test_epoch,receipt_id,checklist',
+        )
         .eq('version_id', version.id)
         .order('recorded_at', { ascending: false })
         .order('id', { ascending: false })
@@ -230,6 +250,26 @@ export default async function ExercisePage({
               fingerprint={version.approval_fingerprint_sha256}
               epoch={version.test_epoch}
               unavailable={!!testHistory?.error}
+            />
+          )}
+          {version && canonical && (
+            <EditorialReview
+              key={'review-' + version.id + '-' + version.updated_at}
+              versionId={version.id}
+              fingerprint={version.approval_fingerprint_sha256}
+              epoch={version.test_epoch}
+              status={version.editorial_status}
+              receiptId={currentReceipt?.passed ? currentReceipt.id : null}
+              enabled={process.env.ADMIN_EDITORIAL_REVIEW_ENABLED === 'true'}
+              archived={!!parent.admin_archived_at}
+            />
+          )}
+          {version && (
+            <ReviewHistory
+              reviews={reviewHistory?.data ?? []}
+              fingerprint={version.approval_fingerprint_sha256}
+              epoch={version.test_epoch}
+              unavailable={!!reviewHistory?.error}
             />
           )}
           {comparison && (

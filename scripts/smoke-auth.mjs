@@ -93,6 +93,7 @@ try {
     ['/api/admin/exercises', 'POST'],
     ['/api/admin/engine', 'POST'],
     ['/api/admin/preview', 'POST'],
+    ['/api/admin/review', 'POST'],
     ['/auth/login', 'POST'],
     ['/auth/logout', 'POST'],
   ]) {

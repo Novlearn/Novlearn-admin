@@ -97,6 +97,11 @@ const definition = JSON.parse(
     'utf8',
   ),
 );
+// Resolve existing fixture taxonomy; no taxonomy is copied by approval.
+definition.catalogue = {
+  chapter: sql('SELECT id::text FROM public.chapters ORDER BY name LIMIT 1;'),
+  skills: [],
+};
 const jwt = `SELECT set_config('request.jwt.claim.sub','${actor}',false);SELECT set_config('request.jwt.claims','{"sub":"${actor}","is_anonymous":false}',false);SET ROLE authenticated;`;
 sql(
   `INSERT INTO auth.users(id,aud,role,email,encrypted_password,email_confirmed_at,raw_app_meta_data,raw_user_meta_data,created_at,updated_at) VALUES('${actor}','authenticated','authenticated','native-receipt@local.invalid','',now(),'{"provider":"email","providers":["email"]}','{"first_name":"NATIVE FIXTURE","birth_date":"2000-01-01"}',now(),now());UPDATE public.profiles SET role='admin' WHERE id='${actor}';INSERT INTO novlearn_admin_private.test_signing_keys(id,secret) VALUES('${key}',decode(repeat('42',32),'hex'));`,
@@ -195,13 +200,90 @@ try {
     ),
     'draft',
   );
+  const checklist = {
+    mathematicsCorrect: true,
+    statementClear: true,
+    gradingChecked: true,
+    referencesChecked: true,
+  };
+  const reviewCommand = (status, action, checks) =>
+    jwt +
+    `SELECT public.admin_review_exercise_version('${version.id}','${version.fingerprint}',${version.epoch},'${status}','${action}','${recorded.receiptId}',${literal(JSON.stringify(checks))}::jsonb,'Synthetic fixture attestation only');`;
+  const review = (status, action, checks) =>
+    JSON.parse(
+      sql(reviewCommand(status, action, checks))
+        .split('\n')
+        .at(-1),
+    );
+  assert.equal(review('draft', 'request_review', {}).status, 'in_review');
+  // Two actual PostgreSQL sessions contend on the same status/fingerprint.
+  const competingApproval = () =>
+    new Promise((resolve, reject) => {
+      const child = spawn(
+        docker,
+        [
+          '--host',
+          'npipe:////./pipe/dockerDesktopLinuxEngine',
+          'exec',
+          container,
+          'psql',
+          '-qAt',
+          '-U',
+          'supabase_admin',
+          '-d',
+          database,
+          '-v',
+          'ON_ERROR_STOP=1',
+          '-v',
+          'VERBOSITY=verbose',
+          '-c',
+          reviewCommand('in_review', 'approve', checklist),
+        ],
+        {
+          windowsHide: true,
+          timeout: 30000,
+          stdio: ['ignore', 'pipe', 'pipe'],
+        },
+      );
+      let output = '',
+        errors = '';
+      child.stdout.on('data', (b) => {
+        output += b;
+      });
+      child.stderr.on('data', (b) => {
+        errors += b;
+      });
+      child.once('error', reject);
+      child.once('close', (code) => resolve({ code, output, errors }));
+    });
+  const race = await Promise.all([competingApproval(), competingApproval()]);
+  assert.equal(
+    race.filter((r) => r.code === 0).length,
+    1,
+    JSON.stringify(race),
+  );
+  assert.equal(
+    race.filter((r) => r.code !== 0 && r.errors.includes('40001')).length,
+    1,
+    JSON.stringify(race),
+  );
+  const approval = JSON.parse(
+    sql(
+      `SELECT jsonb_build_object('status',v.editorial_status,'actor',v.approved_by,'fingerprint',v.approved_fingerprint_sha256,'activeVersion',e.active_version_id,'reviews',(SELECT count(*) FROM public.admin_exercise_reviews WHERE version_id=v.id)) FROM public.exercise_versions v JOIN public.exercises e ON e.id=v.exercise_id WHERE v.id='${version.id}';`,
+    ),
+  );
+  assert.equal(approval.status, 'approved');
+  assert.equal(approval.actor, actor);
+  assert.equal(approval.fingerprint, version.fingerprint);
+  assert.equal(approval.activeVersion, null);
+  assert.equal(approval.reviews, 2);
   await writeFile(
     path.join(artifact, 'proof.json'),
     JSON.stringify(
       {
         result: 'PASS',
         scope:
-          'Actual native Engine, Node signer and SQL receipt; synthetic Auth identity',
+          'Actual native Engine, Node signer, SQL receipt and review; synthetic Auth identity and fixture attestation',
         sourceContainer: container,
         database,
         versionId: version.id,
@@ -209,7 +291,9 @@ try {
         receiptId: recorded.receiptId,
         report,
         stored,
-        editorialStatus: 'draft',
+        editorialStatus: 'approved',
+        approval,
+        concurrentApproval: { accepted: 1, conflict40001: 1, sessions: 2 },
         sourceDatabaseReset: false,
       },
       null,
@@ -217,7 +301,7 @@ try {
     ) + '\n',
   );
   console.log(
-    'PASS: native Engine -> Node HMAC -> SQL receipt; retained fixture=' +
+    'PASS: native Engine -> Node HMAC -> SQL receipt -> fixture review; retained fixture=' +
       database +
       '; proof=' +
       artifact,

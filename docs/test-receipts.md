@@ -1,5 +1,9 @@
 # Rapports Engine persistés — état local
 
+Ce relevé décrit le checkpoint de 53 migrations. La suite locale atteint
+maintenant 54 migrations avec la [relecture humaine](editorial-review.md),
+fermée par défaut et vérifiée séparément des tests.
+
 Les tests peuvent maintenant être consignés pour une révision **enregistrée**.
 Le serveur relit sa définition, vérifie l’empreinte et l’état demandés, exécute
 le banc natif, puis relit l’identité et le rôle avant de signer le résultat.
@@ -91,10 +95,9 @@ l’historique distant. Le nouveau commit SQL n’inclut que la nouvelle migrati
 
 ## Travail restant
 
-**La relecture/approbation n’est pas encore ouverte.** Son contrôle SQL doit exiger
-un rapport positif adapté à la version, valider les références pédagogiques,
-enregistrer l’attestation humaine et fermer les anciens chemins qui permettraient
-une approbation directe sans tests. Aucun reçu ne change un statut éditorial.
+**La relecture/approbation reste fermée par défaut.** Son
+[contrôle SQL et son interface](editorial-review.md) sont désormais construits
+et vérifiés localement. Aucun reçu seul ne change un statut éditorial.
 La publication sélective reste à construire ensuite, sans copier ces rapports,
 acteurs, clés ou autres données internes en Production.
 
