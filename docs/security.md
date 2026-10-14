@@ -1,5 +1,21 @@
 # Authentification, autorisations et accès Production
 
+## Catalogue Admin local — D07
+
+Le [catalogue](catalogue.md) utilise des RPC invoker, RLS et la session réelle
+Admin Staging. Les refus sont vérifiés par les tests de routes et par 47
+assertions PostgreSQL, répétées après restauration ; les 69 assertions existantes
+restent inchangées. Le banc de concurrence vérifie réellement deux sessions,
+leur empreinte et l’absence d’événement d’audit du perdant. Aucun accès distant
+n’est activé et aucune suppression définitive n’est exposée.
+
+Les nouveaux brouillons ne sont pas visibles aux rôles élèves/anon via RLS.
+Cela ne borne pas les anciens services avec bypass RLS ou RPC definer : leur
+compatibilité et la rétention legacy restent des portes de mise en service,
+hors développement applicatif NovLearn après D07.
+
+## Relevés antérieurs
+
 **État local courant D04 :** [rôles et profils](lot-1a-local-restore-and-privacy.md),
 [RPC privilégiés](lot-1a-local-rpc-review.md) et restauration sur fixtures sont
 préparés et testés dans NovLearn : 50 migrations et 53 assertions après

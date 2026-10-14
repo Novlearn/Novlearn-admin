@@ -9,6 +9,9 @@ les tests, les blocages et le point de reprise.
 
 [Saisie MathLive préparée](math-input.md) : composant contrôlé, clavier scientifique et banc navigateur local.
 
+[Catalogue local](catalogue.md) : écrans Admin, brouillons et permissions SQL,
+preuves de restauration, limites et étapes avant activation distante.
+
 [Rapprochement des migrations par empreintes](lot-1a-hash-reconciliation.md) : relevé en lecture seule, sept candidats et historique partiellement dépourvu de SQL.
 
 | Document                                                     | Objet                                                                          |

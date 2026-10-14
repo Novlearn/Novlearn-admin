@@ -32,6 +32,12 @@ Les commandes `npm.cmd` évitent le blocage fréquent de `npm.ps1` par la politi
 [MathLive](math-input.md), uniquement sur 127.0.0.1:3138, sans base ni correcteur.
 Les polices du champ sont préparées automatiquement avant `dev` et `build`.
 
+`node scripts/catalogue-browser.mjs` sert le banc visuel synthétique du catalogue
+sur 127.0.0.1:3139. Aucun accès Supabase ; sa simulation de sauvegarde renvoie
+volontairement 409. Voir [catalogue](catalogue.md) pour les écrans réels et les
+47 assertions SQL. `npm run verify:engine`, inclus dans `check`, vérifie
+l’archive certifiée conservée dans `vendor/` et les empreintes du lockfile.
+
 - TypeScript strict ; App Router dans `src/app/`.
 - Alias `@/*` vers `src/*`.
 - Server Components par défaut ; ajouter du code client seulement quand un besoin d'interaction l'exige.

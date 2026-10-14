@@ -4,7 +4,8 @@
 
 Le code Auth serveur, les formulaires, la protection des pages et le layout
 Admin sont implémentés. Les tests utilisent des doubles synthétiques. L'accès
-Staging est **désactivé** : la sécurisation SQL du Lot 1A n'est pas réalisée et
+Staging est **désactivé** : la sécurisation SQL du Lot 1A est désormais testée
+localement, mais sa réconciliation et son application distante restent à valider ;
 le relevé du 13 octobre 2026 compte zéro utilisateur Auth Staging. Ce lot n'est
 pas réceptionné comme une authentification distante opérationnelle.
 

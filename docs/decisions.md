@@ -1,5 +1,21 @@
 # Décisions et arbitrages
 
+## D07 — Base NovLearn et construction de l’Admin
+
+**Source : instruction explicite de l’utilisateur du 14 octobre 2026.**
+« Change juste la base de données côté NovLearn puis crée NovLearn Admin comme donné ».
+Le périmètre NovLearn est désormais limité aux migrations et vérifications SQL
+locales. La migration des lecteurs, du duel et des verdicts de l’application
+élève appartient à une intervention séparée ; elle ne bloque plus la construction
+locale des écrans Admin. Le correctif API ajouté pendant ce tour a été retiré,
+avec son nouveau test, en conservant les modifications antérieures.
+
+Les critères SQL et Engine restent inchangés. D07 autorise le développement
+local des lots Admin sur le schéma préparé, sans déclarer le Lot 1A réceptionné
+à distance. Auth distante, publication réelle, déploiement et push restent
+désactivés et soumis aux autorisations distinctes déjà convenues. Aucun changement
+silencieux du CDC : cette décision précise le périmètre de réalisation.
+
 ## D06 — Cible Engine Linux bornée
 
 **Source : réponse explicite de l'utilisateur le 14 octobre 2026.**

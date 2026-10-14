@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { Brand } from '@/components/brand';
 import { requireAdminPage } from '@/lib/auth/require-admin';
+import { AdminNavigation } from '@/components/admin-navigation';
 
 export const dynamic = 'force-dynamic';
 
@@ -26,17 +27,9 @@ export default async function AdminLayout({
         >
           <Brand />
         </Link>
-        <nav aria-label="Navigation principale" className="mt-8">
-          <Link
-            className="block rounded-lg bg-blue-50 px-4 py-3 text-sm font-semibold text-blue-700"
-            href="/admin"
-          >
-            Vue d’ensemble
-          </Link>
-        </nav>
+        <AdminNavigation />
         <p className="mt-10 text-xs leading-6 text-slate-500">
-          Les rubriques du catalogue seront ouvertes après validation de leurs
-          prérequis.
+          Créez, organisez et préparez vos contenus pédagogiques dans Staging.
         </p>
       </aside>
       <div className="min-w-0">

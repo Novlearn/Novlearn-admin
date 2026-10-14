@@ -1,5 +1,31 @@
 # Progression du goal NovLearn Admin
 
+## 14 octobre — catalogue Admin local et recentrage D07
+
+Le périmètre courant est désormais **schéma NovLearn local + application Admin**.
+Le correctif API NovLearn commencé pendant ce tour a été retiré avec son test ;
+les changements antérieurs sont conservés. Les migrations restent dans le dépôt
+NovLearn, leur propriétaire canonique. Aucune modification distante n’a lieu.
+
+Le [catalogue](catalogue.md) est construit et testé : métadonnées, liste privée,
+recherche, tri, statuts, pagination, brouillons versionnés, copie indépendante,
+archivage/restauration, historique et diff de définitions. Les mutations passent
+par Auth/rôle serveur frais, origine exacte et RPC invoker protégées par RLS.
+L’archive Engine certifiée est installée et contrôlée par SHA256/SHA512.
+
+**Preuves : 52 migrations, 47 assertions catalogue sur le rejeu puis sur sa
+restauration, 69 assertions historiques après restauration, 98 tests Admin.**
+La sauvegarde conserve toutes les données, structures, ACL et séquences selon
+le comparateur existant ; les différences brutes restent archivées.
+Le banc navigateur utilise des fixtures synthétiques, pas un compte distant.
+
+**Le goal reste actif et incomplet.** Prochaine réalisation : Creator canonique
+avec MathLive, éléments et variables, puis validation/aperçu via le runtime
+Engine Linux borné. L’activation distante reste fermée : réconciliation SQL,
+restauration réelle, compte Admin et compatibilité élève à traiter séparément.
+Les sections suivantes conservent l’historique des étapes ; leurs anciens
+blocages applicatifs sont remplacés par D07 pour le développement local.
+
 ## Certification Engine locale validée — objectif incomplet
 
 La [certification locale Linux](lot-1a-engine-linux-certification.md) est validée

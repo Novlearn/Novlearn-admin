@@ -1,6 +1,6 @@
 # Modèle cible des exercices
 
-Modèle validé explicitement par l'utilisateur le 13 octobre 2026 : `public.exercises` porte l'identité stable et `public.exercise_versions` ses révisions. L'ancien arbitrage entre une et deux tables est clos. Le schéma détaillé et ses migrations ne sont pas implémentés.
+Modèle validé explicitement par l'utilisateur le 13 octobre 2026 : `public.exercises` porte l'identité stable et `public.exercise_versions` ses révisions. Le schéma est désormais implémenté et testé **localement** dans les migrations NovLearn 21–27. Aucune application distante n’est effectuée. Le [catalogue Admin](catalogue.md) utilise ce schéma. Les sections suivantes conservent les constats de départ et la justification du modèle ; elles ne décrivent pas un schéma distant déjà migré.
 
 ## Faits de départ
 

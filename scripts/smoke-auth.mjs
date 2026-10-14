@@ -71,17 +71,26 @@ try {
     'MathLive font is empty',
   );
   assert.equal((await fetch(`${origin}/mathlive/LICENSE.txt`)).status, 200);
-  const admin = await fetch(`${origin}/admin`, {
-    redirect: 'manual',
-    headers: { cookie: 'role=admin' },
-  });
-  assert.equal(admin.status, 307);
-  assert.equal(
-    new URL(admin.headers.get('location'), origin).pathname,
-    '/login',
-  );
+  for (const path of [
+    '/admin',
+    '/admin/exercises',
+    '/admin/exercises/new',
+    '/admin/exercises/1',
+  ]) {
+    const admin = await fetch(`${origin}${path}`, {
+      redirect: 'manual',
+      headers: { cookie: 'role=admin' },
+    });
+    assert.equal(admin.status, 307);
+    assert.equal(
+      new URL(admin.headers.get('location'), origin).pathname,
+      '/login',
+    );
+  }
   for (const [path, method] of [
     ['/api/admin/session', 'GET'],
+    ['/api/admin/exercises', 'GET'],
+    ['/api/admin/exercises', 'POST'],
     ['/auth/login', 'POST'],
     ['/auth/logout', 'POST'],
   ]) {

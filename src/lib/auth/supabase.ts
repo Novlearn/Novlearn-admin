@@ -74,10 +74,10 @@ export function createRouteAuth(
       },
     },
   });
-  return { gateway: asAuthGateway(client), response };
+  return { gateway: asAuthGateway(client), response, client };
 }
 
-export async function createPageAuth() {
+export async function createPageClient() {
   const config = readAuthConfiguration(process.env);
   if (!config) return null;
   const store = await cookies();
@@ -94,7 +94,12 @@ export async function createPageAuth() {
       setAll() {},
     },
   });
-  return asAuthGateway(client);
+  return client;
+}
+
+export async function createPageAuth() {
+  const client = await createPageClient();
+  return client ? asAuthGateway(client) : null;
 }
 
 export function transferAuthCookies(
