@@ -91,6 +91,7 @@ try {
     ['/api/admin/session', 'GET'],
     ['/api/admin/exercises', 'GET'],
     ['/api/admin/exercises', 'POST'],
+    ['/api/admin/engine', 'POST'],
     ['/auth/login', 'POST'],
     ['/auth/logout', 'POST'],
   ]) {

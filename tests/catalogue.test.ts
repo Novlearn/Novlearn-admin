@@ -47,6 +47,9 @@ describe('contrats du catalogue', () => {
     expect(definition.elements).toEqual([]);
     expect(draftEnvelope({ ...definition, schemaVersion: 4 })).toBe(false);
     expect(draftEnvelope({ ...definition, title: '' })).toBe(false);
+    expect(draftEnvelope({ ...definition, generation: {} })).toBe(false);
+    expect(draftEnvelope({ ...definition, variables: [null] })).toBe(false);
+    expect(draftEnvelope({ ...definition, elements: [null] })).toBe(false);
     expect(
       draftEnvelope({ ...definition, elements: Array(101).fill({}) }),
     ).toBe(false);

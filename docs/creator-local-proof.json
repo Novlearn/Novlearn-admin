@@ -1,0 +1,106 @@
+{
+  "recordedAt": "2026-10-14T17:04:08.627Z",
+  "scope": "Local Admin canonical authoring and structural validation; no remote writes",
+  "baseCommit": "b06c0c7674961fa7834370e5ac70dc90721cf879",
+  "engine": {
+    "archive": "vendor/novlearn-exercise-engine-0.1.0.tgz",
+    "sha256": "650128cdeb1e798b952a09e91b038d018b9e7947d0a6ee4c247695f899190290",
+    "sourceUnchanged": true,
+    "schemaVersion": 5
+  },
+  "checks": {
+    "unitTests": {
+      "passed": 146,
+      "files": 11
+    },
+    "typecheck": "PASS",
+    "lint": "PASS, existing synthetic harness img warning",
+    "format": "PASS",
+    "build": "PASS",
+    "standaloneHttpSmoke": "PASS",
+    "fullCheckLog": {
+      "path": ".local/lot1a/.creator-release-check.log",
+      "sha256": "212a9acf1609b87950f672a2f85a8f7ad47a38df8557249aedcd21e2bc51b21b"
+    }
+  },
+  "nativeRuntime": {
+    "artifact": ".local/lot1a/creator-runtime-20261014170254290/proof.json",
+    "sha256": "a7f0b3658ba997a2de4b3c54cc97530778f5375976f1e298dd61ac2acf5ddbab",
+    "result": {
+      "result": "PASS",
+      "profile": "Linux x64 / bounded cgroup v2",
+      "cgroup": {
+        "memory.max": "402653184",
+        "memory.swap.max": "0",
+        "pids.max": "64"
+      },
+      "canonicalValidation": true,
+      "invalidSchemaRejected": true,
+      "abortedRequestRejected": true,
+      "unboundedFallback": false
+    }
+  },
+  "standaloneWorker": {
+    "artifact": ".local/lot1a/creator-standalone-20261014170321855/proof.json",
+    "sha256": "8163b64567e72c9bfded36ac4579797e221b3b86c416e22bc9703efe86754104",
+    "result": {
+      "result": "PASS",
+      "artifact": "actual Next standalone node_modules",
+      "nativeValidation": true,
+      "nativeInstantiation": true,
+      "workerDependencyClosureVerified": true,
+      "elapsedMs": 1872.274895
+    }
+  },
+  "browser": {
+    "browser": "Brave",
+    "synthetic": true,
+    "remoteAuthUsed": false,
+    "checks": [
+      "MathLive a+1 keyboard entry",
+      "New element ID and copied expression after duplication",
+      "Scientific virtual keyboard entry 7",
+      "Cancelable same-document back dismissed; title and question preserved",
+      "Explicit synthetic 503 preserves draft",
+      "Synthetic save 409 preserves draft",
+      "390px viewport, no global horizontal overflow",
+      "No console errors"
+    ],
+    "screenshot": {
+      "path": ".local/lot1a/creator-desktop.png",
+      "sha256": "4fc53fb9f10fc4acc2af2bcb7162423966c317bbf0a4d57f95baa3d945cb6111"
+    }
+  },
+  "priorSqlCheckpoint": "docs/catalogue-local-proof.json; no SQL changes in this Creator increment",
+  "limitations": [
+    "No authenticated complete Next+Auth+Engine HTTP runtime qualification yet",
+    "No mathematical preview or multi-seed/grade workflow yet",
+    "Older browsers or non-cancelable traversal require draft recovery before full CDC 8.6 reception",
+    "No live references or remote activation qualified",
+    "Editing advanced graph/table definitions does not certify preview rendering"
+  ],
+  "sources": {
+    "src/lib/creator.ts": "73d4fb68517702ef5d2290df80643c647269faf45f3f27ebcd10527f0fe0168c",
+    "src/lib/editor-navigation.ts": "cf57f302acd71dedfc003e5ce5a0b0faf492775969a627fabba6498c9f0be2c8",
+    "src/lib/engine-runtime.ts": "3dfce8d28f3387b460624319035b97971e774ed6961e2e92bac29a70bb76b195",
+    "src/lib/catalogue.ts": "7a4c81995ba3ce28350980740f3782d116537f3e3917cea915588d30cce1c1f9",
+    "src/components/canonical-fields.tsx": "e167e1f2d7eb1a9dfd5e11d7a81a4d58195abc51c749880e2756af4a10847b8e",
+    "src/components/creator-fields.tsx": "66023cc6dfce172271230b799bb44f8409403dfd27f2c298b9f4ef47a7c2136e",
+    "src/components/draft-metadata-form.tsx": "65b4fdb106493e38b68cf3d71437f1373d487e59aaae2f551714c0e363eb9de5",
+    "src/components/catalogue-action.tsx": "271048ef03bb5d1062037f1fadf57a11525111a60b9557ede07b53ed94c8fea8",
+    "src/app/api/admin/engine/route.ts": "762bd99768ec13e6c60286a167e4c6ccbf26ac43f02f615292df8c8343c799f2",
+    "next.config.ts": "455daf45a1c73d8bfbf58967af258b338657090e0b3571e1bca8a7cb7ce3bcc1",
+    "tests/creator.test.ts": "5ca390b757b62478ba8a0192c50a5a010344e79fc2b5c4c6bc9425a743a4d997",
+    "tests/editor-navigation.test.ts": "202cec97e820271131f68b2136bb1055066c629ce9feabb115fe4c1b0b404021",
+    "tests/engine-routes.test.ts": "6d62f864e4e531bcf4bbcb55f3c74b3d5b8ee79d7924a0720f8aec39fe677a18",
+    "tests/catalogue.test.ts": "a22231b24de90ec473cc84bd11d1e419b65341ff30beb28798cb6ecb5826588f",
+    "tests/browser/catalogue.tsx": "d557e256dfc9ad8babc731fbc66939f94555eb2e694f95dd2be2205e37576348",
+    "scripts/catalogue-browser.mjs": "f2a847c99a6bac9839905136f47e7a92cb506ec78a61f2a7baee9dcff5b45238",
+    "scripts/smoke-auth.mjs": "d512a015c9d1ecd5a3a2e3e854a44d63cb050f139bda9faba3722a4ca6e0b801",
+    "scripts/engine-runtime-setup.mjs": "bb7f4334d37e8800342d40d73acbb4f608e8d93860d2a292bb2ba0c6281ff3b3",
+    "scripts/engine-runtime-test.mjs": "1b6c5953151bd1906b785e21007764d715997a496cdea5010c5e0dc7050b457d",
+    "scripts/engine-standalone-test.mjs": "8f0a74747c836c9201de939932e01f08b898e6b18b65ee5f5b4051f512473402",
+    "scripts/test-engine-runtime-local.ps1": "c9b1169491d33a435959e9a39af5433b4a75f0b38d6c69f838c195cd50581721",
+    "scripts/test-engine-standalone-local.ps1": "c4756fe4cf9b3f45f7ef7a9d8210372b4d72fe1ea4ee72259fcf2c0f69806402"
+  }
+}

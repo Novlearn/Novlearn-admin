@@ -70,6 +70,27 @@ export function isFingerprint(value: unknown): value is string {
 export function draftEnvelope(value: unknown): value is ExerciseDefinition {
   if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
   const draft = value as Record<string, unknown>;
+  const generation = draft.generation as Record<string, unknown> | undefined;
+  if (
+    !generation ||
+    generation.schemaVersion !== 5 ||
+    !Array.isArray(generation.definitions) ||
+    !Array.isArray(generation.constraints)
+  )
+    return false;
+  const records = (list: unknown) =>
+    Array.isArray(list) &&
+    list.every(
+      (item) =>
+        item !== null && typeof item === 'object' && !Array.isArray(item),
+    );
+  if (
+    !records(generation.definitions) ||
+    !records(generation.constraints) ||
+    !records(draft.elements) ||
+    !records(draft.variables)
+  )
+    return false;
   if (draft.catalogue !== undefined) {
     if (
       !draft.catalogue ||

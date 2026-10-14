@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { requestEditorLeave } from '@/lib/editor-navigation';
 
 export function CatalogueAction({
   action,
@@ -20,6 +21,7 @@ export function CatalogueAction({
   const label =
     action === 'duplicate' ? 'Dupliquer' : archived ? 'Restaurer' : 'Archiver';
   async function run() {
+    if (!requestEditorLeave()) return;
     setBusy(true);
     setError('');
     try {

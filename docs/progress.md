@@ -1,5 +1,21 @@
 # Progression du goal NovLearn Admin
 
+## Creator canonique et runtime local — objectif incomplet
+
+Le [Creator](creator.md) ajoute les cinq familles de variables, les 20 types
+d’éléments, MathLive et les politiques de correction au catalogue. La route
+protégée valide la structure via l’archive Engine certifiée et un worker natif
+Linux borné ; aucun repli ou verdict mathématique parallèle. **146 tests Admin
+passent**, ainsi que l’adaptateur Docker et le worker du standalone. Brave
+vérifie la saisie, duplication, clavier, retour interne annulé et conservation
+sur erreurs dans un banc synthétique.
+
+Le Lot 3 garde des critères restants : aperçu, réception des sorties sur tous
+les navigateurs, diagnostics de génération. Le Lot 4 fournit les tests et
+l’aperçu ; aucun statut approuvé ou publié n’est attribué par cette validation
+structurelle. Auth distante reste fermée, NovLearn reste limité aux migrations
+locales. Aucun push, déploiement ou changement distant.
+
 ## 14 octobre — catalogue Admin local et recentrage D07
 
 Le périmètre courant est désormais **schéma NovLearn local + application Admin**.

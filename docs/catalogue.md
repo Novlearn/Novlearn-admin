@@ -1,5 +1,10 @@
 # Catalogue Admin — implémentation locale
 
+**Complément du 14 octobre 2026 :** le [Creator canonique](creator.md) étend
+désormais le formulaire aux variables, éléments, réponses et validation
+structurelle Engine. Les preuves SQL ci-dessous restent le relevé du checkpoint
+catalogue ; les nouveaux tests et limites sont documentés séparément.
+
 Le 14 octobre 2026, D07 autorise la construction locale d’Admin sur le schéma
 NovLearn préparé. Les corrections de l’application élève sont hors périmètre.
 Le catalogue n’est pas activé à distance ; Auth reste fermée par défaut.

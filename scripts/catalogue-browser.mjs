@@ -31,6 +31,17 @@ const server = await createServer({
             }),
           );
         });
+        server.middlewares.use('/api/admin/engine', (request, response) => {
+          request.resume();
+          response.statusCode = 503;
+          response.setHeader('content-type', 'application/json');
+          response.end(
+            JSON.stringify({
+              error:
+                'Banc visuel : aucun runtime Engine connecté. Le test Linux est exécuté séparément.',
+            }),
+          );
+        });
       },
     },
   ],

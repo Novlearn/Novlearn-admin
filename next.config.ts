@@ -2,6 +2,15 @@ import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   output: 'standalone',
+  serverExternalPackages: ['novlearn-exercise-engine'],
+  outputFileTracingIncludes: {
+    '/api/admin/engine': [
+      './node_modules/novlearn-exercise-engine/**/*',
+      './node_modules/@cortex-js/compute-engine/**/*',
+      './node_modules/@arnog/colors/**/*',
+      './node_modules/complex.js/**/*',
+    ],
+  },
   async headers() {
     return [
       {

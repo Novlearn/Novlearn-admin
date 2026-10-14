@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
 import '@fontsource-variable/inter';
 import '@fontsource-variable/fredoka';
 import '../../src/app/globals.css';
+import { requestEditorLeave } from '../../src/lib/editor-navigation';
 import { CatalogueList } from '../../src/components/catalogue-list';
 import { DraftMetadataForm } from '../../src/components/draft-metadata-form';
 import type { CatalogueItem } from '../../src/lib/catalogue';
@@ -62,7 +63,22 @@ const items: CatalogueItem[] = [
 ];
 
 function Harness() {
-  const [view, setView] = useState('catalogue');
+  const [view, setView] = useState(
+    new URLSearchParams(window.location.search).get('view') ?? 'catalogue',
+  );
+  useEffect(() => {
+    const restore = () =>
+      setView(
+        new URLSearchParams(window.location.search).get('view') ?? 'catalogue',
+      );
+    window.addEventListener('popstate', restore);
+    return () => window.removeEventListener('popstate', restore);
+  }, []);
+  const openView = (next: string) => {
+    if (!requestEditorLeave()) return;
+    window.history.pushState(null, '', '?view=' + next);
+    setView(next);
+  };
   return (
     <div
       style={
@@ -90,25 +106,25 @@ function Harness() {
           <nav className="mt-8 space-y-1" aria-label="Banc visuel">
             <button
               className="block w-full rounded-lg bg-blue-50 px-4 py-3 text-left text-sm font-semibold text-blue-700"
-              onClick={() => setView('catalogue')}
+              onClick={() => openView('catalogue')}
             >
               Exercices
             </button>
             <button
               className="block w-full rounded-lg px-4 py-3 text-left text-sm font-semibold text-slate-600"
-              onClick={() => setView('new')}
+              onClick={() => openView('new')}
             >
               Créer un exercice
             </button>
             <button
               className="block w-full rounded-lg px-4 py-3 text-left text-sm font-semibold text-slate-600"
-              onClick={() => setView('empty')}
+              onClick={() => openView('empty')}
             >
               Catalogue vide
             </button>
             <button
               className="block w-full rounded-lg px-4 py-3 text-left text-sm font-semibold text-slate-600"
-              onClick={() => setView('unavailable')}
+              onClick={() => openView('unavailable')}
             >
               Source indisponible
             </button>

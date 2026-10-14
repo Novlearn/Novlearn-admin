@@ -1,8 +1,10 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import type { ExerciseDefinition } from 'novlearn-exercise-engine';
 import { newDraft } from '@/lib/catalogue';
+import { CreatorFields } from './creator-fields';
+import { bindEditorNavigation } from '@/lib/editor-navigation';
 
 type Props = {
   exerciseId?: string;
@@ -20,57 +22,68 @@ export function DraftMetadataForm(props: Props) {
     (props.definition?.catalogue?.skills ?? []).join(', '),
   );
   const [dirty, setDirty] = useState(false);
+  const dirtyRef = useRef(dirty);
+  dirtyRef.current = dirty;
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState('');
+  const [validating, setValidating] = useState(false);
+  const [validation, setValidation] = useState<{
+    valid: boolean;
+    diagnostics: { path: string; code: string; message: string }[];
+  } | null>(null);
+  const latest = useRef({ definition, skills });
+  latest.current = { definition, skills };
   useEffect(() => {
-    if (!dirty) return;
-    const warn = (event: BeforeUnloadEvent) => {
-      event.preventDefault();
-      event.returnValue = '';
+    setValidation(null);
+  }, [definition, skills]);
+  const clean = (
+    value: ExerciseDefinition,
+    skillList: string,
+  ): ExerciseDefinition => {
+    const result = {
+      ...value,
+      catalogue: {
+        ...value.catalogue,
+        skills: skillList
+          .split(',')
+          .map((skill) => skill.trim())
+          .filter(Boolean),
+      },
     };
-    const leave = (event: MouseEvent) => {
+    if (!result.catalogue.chapter) delete result.catalogue.chapter;
+    return result;
+  };
+  async function validate() {
+    setValidating(true);
+    setMessage('');
+    const source = JSON.stringify(clean(definition, skills));
+    try {
+      const response = await fetch('/api/admin/engine', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ definition: JSON.parse(source) }),
+      });
+      const result = await response.json();
       if (
-        event.defaultPrevented ||
-        event.button !== 0 ||
-        event.ctrlKey ||
-        event.metaKey ||
-        event.shiftKey ||
-        event.altKey
+        source !==
+        JSON.stringify(clean(latest.current.definition, latest.current.skills))
       )
         return;
-      const anchor =
-        event.target instanceof Element
-          ? event.target.closest('a[href]')
-          : null;
-      if (
-        !(anchor instanceof HTMLAnchorElement) ||
-        anchor.hasAttribute('download') ||
-        (anchor.target && anchor.target !== '_self')
-      )
+      if (!response.ok) {
+        setMessage(result.error ?? 'Validation indisponible.');
         return;
-      const destination = new URL(anchor.href, window.location.href);
-      if (
-        destination.origin === window.location.origin &&
-        destination.pathname === window.location.pathname &&
-        destination.search === window.location.search
-      )
-        return;
-      if (
-        !window.confirm(
-          'Quitter cette page et perdre les modifications non enregistrées ?',
-        )
-      ) {
-        event.preventDefault();
-        event.stopPropagation();
       }
-    };
-    window.addEventListener('beforeunload', warn);
-    document.addEventListener('click', leave, true);
-    return () => {
-      window.removeEventListener('beforeunload', warn);
-      document.removeEventListener('click', leave, true);
-    };
-  }, [dirty]);
+      setValidation({
+        valid: result.valid,
+        diagnostics: result.diagnostics ?? [],
+      });
+    } catch {
+      setMessage('Validation indisponible. Votre saisie reste conservée.');
+    } finally {
+      setValidating(false);
+    }
+  }
+  useEffect(() => bindEditorNavigation(() => dirtyRef.current), []);
   const catalogue = definition.catalogue ?? {};
   const patch = (
     fields: Partial<NonNullable<ExerciseDefinition['catalogue']>>,
@@ -110,6 +123,7 @@ export function DraftMetadataForm(props: Props) {
         setMessage(data.error ?? 'Sauvegarde impossible.');
         return;
       }
+      dirtyRef.current = false;
       setDirty(false);
       router.push(
         `/admin/exercises/${data.result.exerciseId}?version=${data.result.versionId}&saved=1`,
@@ -126,7 +140,9 @@ export function DraftMetadataForm(props: Props) {
   return (
     <form onSubmit={save} className="card space-y-6">
       <div>
-        <h2 className="text-xl font-semibold">Informations générales</h2>
+        <h2 className="text-xl font-semibold">
+          Creator · informations générales
+        </h2>
         <p className="mt-2 text-sm leading-6 text-slate-500">
           Enregistrez un brouillon pour préparer votre exercice. Les versions
           publiées sont conservées.
@@ -222,6 +238,57 @@ export function DraftMetadataForm(props: Props) {
           Calculatrice nécessaire
         </label>
       </fieldset>
+      <fieldset disabled={busy}>
+        <CreatorFields
+          definition={definition}
+          disabled={busy}
+          onChange={(next) => {
+            setDefinition(next);
+            setDirty(true);
+          }}
+        />
+      </fieldset>
+      <section
+        className="rounded-xl border border-slate-200 bg-slate-50 p-5"
+        aria-labelledby="validation-heading"
+      >
+        <h2 id="validation-heading" className="text-lg font-semibold">
+          Validation officielle Engine
+        </h2>
+        <p className="mt-2 text-sm leading-6 text-slate-500">
+          Vérifiez la structure canonique avant les tests et la relecture. Cette
+          vérification n’approuve ni ne publie votre brouillon.
+        </p>
+        <button
+          type="button"
+          className="button mt-4"
+          disabled={busy || validating}
+          onClick={validate}
+        >
+          {validating ? 'Validation…' : 'Vérifier la définition'}
+        </button>
+        {validation && (
+          <div className="mt-4" role="status">
+            {validation.valid ? (
+              <p className="text-sm font-medium text-green-700">
+                Structure canonique correcte. L’exercice reste à tester et à
+                relire.
+              </p>
+            ) : (
+              <ul className="space-y-3 text-sm text-red-800">
+                {validation.diagnostics.map((diagnostic, index) => (
+                  <li key={index}>
+                    <p className="font-mono text-xs text-slate-500">
+                      {diagnostic.path || 'Définition'} · {diagnostic.code}
+                    </p>
+                    <p className="mt-1">{diagnostic.message}</p>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        )}
+      </section>
       <div className="flex flex-wrap items-center gap-4">
         <button className="button" type="submit" disabled={busy}>
           {busy
