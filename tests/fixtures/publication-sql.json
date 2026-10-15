@@ -1,0 +1,64 @@
+{
+  "payload": {
+    "revision": 1,
+    "catalogId": "48d5bd0f-18b8-462d-b557-4fe392ac21de",
+    "schemaVersion": 1,
+    "businessDigest": "471dc09971a8d1ce6ed3c555e462fbce4407179ce9dcc0f860f4d59c86cc60fd",
+    "definitionJson": "{\"id\": \"48d5bd0f-18b8-462d-b557-4fe392ac21de\", \"kind\": \"composed\", \"title\": \"Calcul littéral\", \"elements\": [{\"id\": \"intro\", \"text\": \"Calculez la somme suivante, puis justifiez votre réponse.\", \"type\": \"text\"}, {\"id\": \"expression\", \"type\": \"expression\", \"latex\": \"a+1\"}, {\"id\": \"q\", \"text\": \"Quelle est la valeur de cette expression ?\", \"type\": \"question\", \"points\": 1, \"policy\": {\"form\": \"value-only\", \"domain\": \"rational\"}, \"response\": {\"kind\": \"rational\", \"format\": \"latex\"}, \"expectedLatex\": \"a+1\"}, {\"id\": \"values\", \"rows\": [[{\"kind\": \"number\", \"value\": {\"latex\": \"a\"}}, {\"kind\": \"math\", \"latex\": \"a+1\"}]], \"type\": \"value-table\", \"columns\": [\"Paramètre\", \"Expression\"]}, {\"id\": \"private-hint\", \"type\": \"hint\", \"content\": [{\"text\": \"PRIVATE_HINT_SENTINEL\", \"type\": \"text\"}], \"questionId\": \"q\"}], \"revision\": \"1\", \"catalogue\": {\"skills\": [\"LOCAL PUBLICATION SKILL\"], \"chapter\": \"LOCAL PUBLICATION CHAPTER\", \"appTitle\": \"Publication locale\", \"difficulty\": 2, \"exerciseType\": \"classic\", \"needsCalculator\": false}, \"variables\": [], \"extensions\": {\"privateSentinel\": \"PRIVATE_EXTENSION_SENTINEL\"}, \"generation\": {\"maxDraws\": 1000, \"constraints\": [], \"definitions\": [{\"max\": 8, \"min\": 2, \"kind\": \"integer\", \"name\": \"a\", \"exclusions\": []}], \"maxAttempts\": 100, \"schemaVersion\": 5}, \"schemaVersion\": 5}",
+    "engineContract": "schema-5;engine-0.1.0",
+    "generationVersion": "mulberry32-rejection-v1",
+    "engineArchiveSha256": "650128cdeb1e798b952a09e91b038d018b9e7947d0a6ee4c247695f899190290",
+    "canonicalizationVersion": "pg-jsonb-text-v1"
+  },
+  "inspection": {
+    "desiredHeader": {
+      "title": "Calcul littéral",
+      "chapter": "LOCAL PUBLICATION CHAPTER",
+      "Is_Flash": false,
+      "app_title": "Publication locale",
+      "difficulty": "medium",
+      "competences": ["local-publication-target-skill"],
+      "Need_Calculator": false
+    },
+    "state": {
+      "active": {
+        "id": "2d696fe9-e160-4db5-a83d-c555a91010ea",
+        "status": "published",
+        "revision": 1,
+        "businessDigest": "471dc09971a8d1ce6ed3c555e462fbce4407179ce9dcc0f860f4d59c86cc60fd",
+        "definitionJson": "{\"id\": \"48d5bd0f-18b8-462d-b557-4fe392ac21de\", \"kind\": \"composed\", \"title\": \"Calcul littéral\", \"elements\": [{\"id\": \"intro\", \"text\": \"Calculez la somme suivante, puis justifiez votre réponse.\", \"type\": \"text\"}, {\"id\": \"expression\", \"type\": \"expression\", \"latex\": \"a+1\"}, {\"id\": \"q\", \"text\": \"Quelle est la valeur de cette expression ?\", \"type\": \"question\", \"points\": 1, \"policy\": {\"form\": \"value-only\", \"domain\": \"rational\"}, \"response\": {\"kind\": \"rational\", \"format\": \"latex\"}, \"expectedLatex\": \"a+1\"}, {\"id\": \"values\", \"rows\": [[{\"kind\": \"number\", \"value\": {\"latex\": \"a\"}}, {\"kind\": \"math\", \"latex\": \"a+1\"}]], \"type\": \"value-table\", \"columns\": [\"Paramètre\", \"Expression\"]}, {\"id\": \"private-hint\", \"type\": \"hint\", \"content\": [{\"text\": \"PRIVATE_HINT_SENTINEL\", \"type\": \"text\"}], \"questionId\": \"q\"}], \"revision\": \"1\", \"catalogue\": {\"skills\": [\"LOCAL PUBLICATION SKILL\"], \"chapter\": \"LOCAL PUBLICATION CHAPTER\", \"appTitle\": \"Publication locale\", \"difficulty\": 2, \"exerciseType\": \"classic\", \"needsCalculator\": false}, \"variables\": [], \"extensions\": {\"privateSentinel\": \"PRIVATE_EXTENSION_SENTINEL\"}, \"generation\": {\"maxDraws\": 1000, \"constraints\": [], \"definitions\": [{\"max\": 8, \"min\": 2, \"kind\": \"integer\", \"name\": \"a\", \"exclusions\": []}], \"maxAttempts\": 100, \"schemaVersion\": 5}, \"schemaVersion\": 5}"
+      },
+      "parent": {
+        "id": "2",
+        "title": "Calcul littéral",
+        "chapter": "LOCAL PUBLICATION CHAPTER",
+        "Is_Flash": false,
+        "app_title": "Publication locale",
+        "catalog_id": "48d5bd0f-18b8-462d-b557-4fe392ac21de",
+        "difficulty": "medium",
+        "competences": ["local-publication-target-skill"],
+        "Need_Calculator": false,
+        "activeVersionId": "2d696fe9-e160-4db5-a83d-c555a91010ea",
+        "admin_archived_at": null,
+        "publication_epoch": 1
+      },
+      "runtime": {
+        "engineContract": "schema-5;engine-0.1.0",
+        "generationVersion": "mulberry32-rejection-v1",
+        "engineArchiveSha256": "650128cdeb1e798b952a09e91b038d018b9e7947d0a6ee4c247695f899190290",
+        "canonicalizationVersion": "pg-jsonb-text-v1"
+      },
+      "candidate": {
+        "id": "2d696fe9-e160-4db5-a83d-c555a91010ea",
+        "status": "published",
+        "revision": 1,
+        "businessDigest": "471dc09971a8d1ce6ed3c555e462fbce4407179ce9dcc0f860f4d59c86cc60fd",
+        "definitionJson": "{\"id\": \"48d5bd0f-18b8-462d-b557-4fe392ac21de\", \"kind\": \"composed\", \"title\": \"Calcul littéral\", \"elements\": [{\"id\": \"intro\", \"text\": \"Calculez la somme suivante, puis justifiez votre réponse.\", \"type\": \"text\"}, {\"id\": \"expression\", \"type\": \"expression\", \"latex\": \"a+1\"}, {\"id\": \"q\", \"text\": \"Quelle est la valeur de cette expression ?\", \"type\": \"question\", \"points\": 1, \"policy\": {\"form\": \"value-only\", \"domain\": \"rational\"}, \"response\": {\"kind\": \"rational\", \"format\": \"latex\"}, \"expectedLatex\": \"a+1\"}, {\"id\": \"values\", \"rows\": [[{\"kind\": \"number\", \"value\": {\"latex\": \"a\"}}, {\"kind\": \"math\", \"latex\": \"a+1\"}]], \"type\": \"value-table\", \"columns\": [\"Paramètre\", \"Expression\"]}, {\"id\": \"private-hint\", \"type\": \"hint\", \"content\": [{\"text\": \"PRIVATE_HINT_SENTINEL\", \"type\": \"text\"}], \"questionId\": \"q\"}], \"revision\": \"1\", \"catalogue\": {\"skills\": [\"LOCAL PUBLICATION SKILL\"], \"chapter\": \"LOCAL PUBLICATION CHAPTER\", \"appTitle\": \"Publication locale\", \"difficulty\": 2, \"exerciseType\": \"classic\", \"needsCalculator\": false}, \"variables\": [], \"extensions\": {\"privateSentinel\": \"PRIVATE_EXTENSION_SENTINEL\"}, \"generation\": {\"maxDraws\": 1000, \"constraints\": [], \"definitions\": [{\"max\": 8, \"min\": 2, \"kind\": \"integer\", \"name\": \"a\", \"exclusions\": []}], \"maxAttempts\": 100, \"schemaVersion\": 5}, \"schemaVersion\": 5}"
+      },
+      "catalogId": "48d5bd0f-18b8-462d-b557-4fe392ac21de",
+      "stateToken": "3024e6dcabab1890960ec593ad59c7228550f42fbe41cf981573efdc9aa7c03f",
+      "latestRevision": 1,
+      "requestedRevision": 1
+    }
+  }
+}

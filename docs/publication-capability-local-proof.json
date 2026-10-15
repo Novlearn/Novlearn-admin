@@ -1,0 +1,395 @@
+{
+  "recordedAt": "2026-10-15T06:36:29.223Z",
+  "scope": "Local SQL publication capability and typed diff. No HTTP publication workflow, real Auth, remote activation or production publication.",
+  "sql": {
+    "migration": {
+      "path": "../Novlearn/supabase/migrations/20261014220625_novlearn_admin_publication_capability.sql",
+      "sha256": "78d6c3202b68985e6062a7dd249973d97c15cff1847a170a5e0c068788da7a9b"
+    },
+    "localCommit": "f036c5c",
+    "migrationCount": 55,
+    "qualifiedTree": "Full local SQL tree including preserved historical 010/022/028 edits; not a clean clone",
+    "replayContainer": "novlearn-admin-lot1a-replay-20261015061424058",
+    "manifest": {
+      "path": "../Novlearn/.local/admin-sql-replay/novlearn-admin-lot1a-replay-20261015061424058/manifest.json",
+      "sha256": "1f6ad21a8c912c371478e2b677c03897ec5b2048e214107418f89820090b4eef"
+    },
+    "replayLog": {
+      "path": "../Novlearn/.local/admin-sql-replay/novlearn-admin-lot1a-replay-20261015061424058/replay.log",
+      "sha256": "cdfed0c6547475e0d10210297634663d27d1228d45c9bfef42c6a4071b627008"
+    }
+  },
+  "native": {
+    "artifact": {
+      "path": ".local/lot1a/publication-1792045248887/proof.json",
+      "sha256": "830dd89e454a223902fb3deb2dafbabec1102468d0ebe662b672a6f82e6bd1db"
+    },
+    "source": "admin_receipt_native_1792045249346",
+    "target": "admin_publication_target_1792045248887",
+    "catalogId": "48d5bd0f-18b8-462d-b557-4fe392ac21de",
+    "businessDigest": "471dc09971a8d1ce6ed3c555e462fbce4407179ce9dcc0f860f4d59c86cc60fd",
+    "assertionCount": 50,
+    "checks": [
+      "export requires fresh Admin identity",
+      "source fingerprint is rechecked",
+      "lossy Engine JSON round trip is refused",
+      "a SQL number rounded by JavaScript is refused before export",
+      "source test epoch is rechecked",
+      "revoked source Admin is refused",
+      "disabled source test key blocks export",
+      "anonymous source identity cannot export",
+      "target capability is disabled by default",
+      "publisher tests run with an unprivileged session and effective identity",
+      "fixture collides on source and target bigint identities",
+      "legacy bigint collision does not claim the canonical UUID",
+      "references resolve to target IDs without taxonomy copy",
+      "native approved source transfers exact canonical business content",
+      "target allocates its own bigint parent ID",
+      "target allocates its own revision UUID",
+      "no Staging Auth or human approval fields are copied",
+      "target recomputes its fingerprint with the local parent ID",
+      "target Auth identities are unchanged",
+      "all excluded public/Auth/private table rows and hashes are unchanged",
+      "legacy exercise and active revision are unchanged",
+      "repetition after uncertain commit does not append or advance epoch",
+      "anon cannot call publication directly",
+      "authenticated cannot call publication directly",
+      "service_role cannot call publication directly",
+      "executor denies SELECT * FROM public.profiles",
+      "executor denies SELECT * FROM auth.users",
+      "executor denies SELECT * FROM novlearn_admin_private.test_signing_keys",
+      "executor denies UPDATE public.exercise_versions SET editorial_status='published'",
+      "executor denies UPDATE public.chapters SET name='forged'",
+      "executor denies DELETE FROM public.exercises",
+      "executor denies SET ROLE novlearn_publication_writer",
+      "publication roles have no login, superuser, RLS bypass or role/database creation",
+      "API roles receive no publisher membership",
+      "writer has no writes outside the two approved tables or version updates/deletions",
+      "extra actor/environment fields are refused",
+      "target Engine archive must match",
+      "tampered business digest is refused",
+      "missing target reference blocks preflight",
+      "ambiguous target reference blocks preflight",
+      "archived target is refused atomically",
+      "target edit and revert invalidates the confirmed epoch",
+      "two concurrent different definitions yield one publication and one conflict",
+      "ordinary publication cannot silently activate an older revision",
+      "explicit rollback reactivates the retained published revision",
+      "rollback retains both immutable revisions",
+      "revision switch and rollback leave every attempt, duel, Auth row and private artifact unchanged",
+      "failure after revision insertion aborts the whole publication",
+      "late failure leaves no new revision, side effect or changed historical data",
+      "transferred published definition is immutable even to ordinary owner UPDATE"
+    ],
+    "roleFlags": [
+      {
+        "name": "novlearn_publication_writer",
+        "login": false,
+        "super": false,
+        "bypass": false,
+        "createDb": false,
+        "createRole": false
+      },
+      {
+        "name": "novlearn_publication_executor",
+        "login": false,
+        "super": false,
+        "bypass": false,
+        "createDb": false,
+        "createRole": false
+      }
+    ],
+    "excludedTableCount": 56,
+    "concurrency": {
+      "accepted": 1,
+      "conflict40001": 1
+    },
+    "targetAuthCount": 2,
+    "fixturePreparation": "One synthetic attempt is deliberately added between first publication and revision-switch tests. The CLI asserts equality against each immediate phase baseline; its original excludedBefore/excludedAfter fields span that setup.",
+    "fieldsChangedByIntentionalFixtureSetup": [
+      "public.profiles",
+      "public.user_stats",
+      "public.monthly_scores",
+      "public.exercise_attempts"
+    ],
+    "reportLabelsClarified": "The current CLI output labels the global snapshots and fixture preparation explicitly; measured assertions are unchanged.",
+    "engineProof": {
+      "path": ".local/lot1a/receipt-native-flow-1792045249346/proof.json",
+      "sha256": "e2fc1d1bdb954d919cf74c5a18b8256fd1247896720d1b33691e45dd0f21dffe"
+    },
+    "engineReport": {
+      "definitionDigest": "e2ec389fd4e04a4aed39aa217ce77d7226520bbc61759654184a5584f2f1815a",
+      "engineVersion": "0.1.0",
+      "passed": true,
+      "complete": true,
+      "seeds": [
+        {
+          "seed": 0,
+          "passed": true,
+          "reproducible": true,
+          "publicProjectionSafe": true,
+          "diagnostics": [],
+          "checks": [
+            {
+              "questionId": "q",
+              "label": "Attendu officiel",
+              "expectedState": "correct",
+              "result": {
+                "schemaVersion": 5,
+                "instanceId": "b5d80718-cad4-41d4-bb3e-60b4d3d75096",
+                "questionId": "q",
+                "state": "correct",
+                "value": "equal",
+                "comparison": "exact",
+                "form": "not-required",
+                "domain": "not-applicable",
+                "proof": "exact-number",
+                "code": "numeric-equal"
+              },
+              "passed": true
+            },
+            {
+              "questionId": "q",
+              "label": "Format volontairement invalide",
+              "expectedState": "invalid",
+              "result": {
+                "schemaVersion": 5,
+                "instanceId": "b5d80718-cad4-41d4-bb3e-60b4d3d75096",
+                "questionId": "",
+                "state": "invalid",
+                "value": "unknown",
+                "comparison": "none",
+                "form": "unknown",
+                "domain": "not-applicable",
+                "proof": "none",
+                "code": "submission-contract"
+              },
+              "passed": true
+            },
+            {
+              "questionId": "q",
+              "label": "Cas administrateur",
+              "expectedState": "incorrect",
+              "result": {
+                "schemaVersion": 5,
+                "instanceId": "b5d80718-cad4-41d4-bb3e-60b4d3d75096",
+                "questionId": "q",
+                "state": "incorrect",
+                "value": "different",
+                "comparison": "exact",
+                "form": "not-required",
+                "domain": "not-applicable",
+                "proof": "exact-number",
+                "code": "numeric-different"
+              },
+              "passed": true
+            }
+          ]
+        },
+        {
+          "seed": 42,
+          "passed": true,
+          "reproducible": true,
+          "publicProjectionSafe": true,
+          "diagnostics": [],
+          "checks": [
+            {
+              "questionId": "q",
+              "label": "Attendu officiel",
+              "expectedState": "correct",
+              "result": {
+                "schemaVersion": 5,
+                "instanceId": "953ed483-409f-49de-83d9-5c2d245db20e",
+                "questionId": "q",
+                "state": "correct",
+                "value": "equal",
+                "comparison": "exact",
+                "form": "not-required",
+                "domain": "not-applicable",
+                "proof": "exact-number",
+                "code": "numeric-equal"
+              },
+              "passed": true
+            },
+            {
+              "questionId": "q",
+              "label": "Format volontairement invalide",
+              "expectedState": "invalid",
+              "result": {
+                "schemaVersion": 5,
+                "instanceId": "953ed483-409f-49de-83d9-5c2d245db20e",
+                "questionId": "",
+                "state": "invalid",
+                "value": "unknown",
+                "comparison": "none",
+                "form": "unknown",
+                "domain": "not-applicable",
+                "proof": "none",
+                "code": "submission-contract"
+              },
+              "passed": true
+            },
+            {
+              "questionId": "q",
+              "label": "Cas administrateur",
+              "expectedState": "incorrect",
+              "result": {
+                "schemaVersion": 5,
+                "instanceId": "953ed483-409f-49de-83d9-5c2d245db20e",
+                "questionId": "q",
+                "state": "incorrect",
+                "value": "different",
+                "comparison": "exact",
+                "form": "not-required",
+                "domain": "not-applicable",
+                "proof": "exact-number",
+                "code": "numeric-different"
+              },
+              "passed": true
+            }
+          ]
+        }
+      ]
+    },
+    "authIdentityAndAttestation": "Synthetic fixtures, not real Auth or human approval of user content"
+  },
+  "backup": {
+    "source": "novlearn-admin-lot1a-replay-20261015061424058",
+    "restoredSecurityAssertions": 69,
+    "logicalSnapshotMatched": true,
+    "rawSnapshotMatched": false,
+    "scope": "synthetic local only; not remote backup or PITR",
+    "target": "novlearn-admin-lot1a-backup-20261015062353196",
+    "rawDifferenceSections": ["columns", "functions", "relations"],
+    "result": "PASS",
+    "archiveSha256": "38a4cd84d8ff92a75f8f34057ddc823cd790bc85f9824d50ee1b8713f1d3a52e",
+    "artifact": ".local/lot1a/.local/admin-sql-backup/novlearn-admin-lot1a-backup-20261015062353196",
+    "comparison": {
+      "logicalMatched": true,
+      "rawMatched": false,
+      "rawDifferenceSections": ["columns", "functions", "relations"],
+      "normalization": [
+        "ACL entry order only; privileges and grant options unchanged",
+        "relative visible column order; dropped-column ordinal holes are not preserved by logical pg_dump"
+      ]
+    },
+    "columnPrivilegeCount": 62,
+    "columnPrivilegesMatched": true,
+    "roleBootstrap": "Only the two matching NOLOGIN roles are created on the new isolated target before pg_restore; no login, credentials or application membership.",
+    "snapshotScript": {
+      "path": ".local/lot1a/publication-backup-tools/admin-backup-snapshot.sql",
+      "sha256": "8d7f27f06df3c083e9cf73bbf1ef3cd30b8e4f35f17a999be5b16da38646948a"
+    },
+    "backupScript": {
+      "path": ".local/lot1a/publication-backup-tools/test-admin-backup-local.ps1",
+      "sha256": "5a2b219c84020a3bf5ddcc2f214a2b10f28537631812004a3f2046e7c3f36d1e"
+    },
+    "comparatorTests": 11,
+    "comparatorCriteriaWeakened": false
+  },
+  "regression": {
+    "source": {
+      "catalogue": {
+        "path": ".local/lot1a/.publication-source-test-catalogue-local.log",
+        "sha256": "83f314f62e5fed60d0f7ada194a1dbf950a1a72aad8ab3ff5da7e4c0e5573496"
+      },
+      "receipts": {
+        "path": ".local/lot1a/.publication-source-test-receipts-local.log",
+        "sha256": "f6ef2a49098443bf9bc9a2e3b533fa7bd264bdd3d7393fef1f719a808b1495cc"
+      },
+      "review": {
+        "path": ".local/lot1a/.publication-source-test-editorial-review-local.log",
+        "sha256": "68af75ee06d711d2d233eedd21b8a1b15d301cb0e05d2850edc72b7bbfd7b831"
+      }
+    },
+    "restored": {
+      "catalogue": {
+        "path": ".local/lot1a/.publication-restored-test-catalogue-local.log",
+        "sha256": "83f314f62e5fed60d0f7ada194a1dbf950a1a72aad8ab3ff5da7e4c0e5573496"
+      },
+      "receipts": {
+        "path": ".local/lot1a/.publication-restored-test-receipts-local.log",
+        "sha256": "f6ef2a49098443bf9bc9a2e3b533fa7bd264bdd3d7393fef1f719a808b1495cc"
+      },
+      "review": {
+        "path": ".local/lot1a/.publication-restored-test-editorial-review-local.log",
+        "sha256": "68af75ee06d711d2d233eedd21b8a1b15d301cb0e05d2850edc72b7bbfd7b831"
+      },
+      "capability": {
+        "path": ".local/lot1a/publication-restored-1792045716347/proof.json",
+        "sha256": "af5944fc78ed9410d453651a2bb6719be501a107788387012f7d33b4d8b69c40"
+      },
+      "capabilityAssertions": 5,
+      "all58TableSnapshotsMatched": true,
+      "sequenceValuesComparedInRolledBackFixture": false
+    }
+  },
+  "admin": {
+    "unitTests": 221,
+    "testFiles": 19,
+    "command": "npm.cmd run check",
+    "log": {
+      "path": ".local/lot1a/.publication-final-check.log",
+      "sha256": "d473b81dab068bc7f302f66be62f5cba98405c21a58e9f0f3b3d270e1d251bec"
+    },
+    "actualSqlProtocolFixture": {
+      "path": "tests/fixtures/publication-sql.json",
+      "sha256": "3e177aedb5df6209c492df26c0f8cc9d4ed92a3700335d3047e4542608a843a1"
+    }
+  },
+  "retainedFailures": [
+    {
+      "path": ".local/lot1a/.publication-native-path-failure.log",
+      "sha256": "32b8fc26bdfb4768c0e9129e9fcf8d0674d3c9487df70e63b23236f4735f8ec8"
+    },
+    {
+      "path": ".local/lot1a/.publication-native-fixture-path-failure.log",
+      "sha256": "b7e4eff484cd3ec6695280f4ca95688bafa541c0276d3ca697a87dc3c0b51773"
+    },
+    {
+      "path": ".local/lot1a/.publication-native-json-operator-failure.log",
+      "sha256": "1dd350df1e5ce64d7c6f22b3be5367bbaf3c022480b81481eab348ba9b25e0cf"
+    },
+    {
+      "path": ".local/lot1a/.publication-native-null-parent-failure.log",
+      "sha256": "7adbfe80a3ca561b7fe6dfa7a52b55a63fff745644e8d2a3b5774f04eb080a2a"
+    },
+    {
+      "path": ".local/lot1a/.publication-native-superuser-session-failure.log",
+      "sha256": "35fb19e86a2a455101bb05b50e27d504c85e945e23e95ff954223462176268dc"
+    },
+    {
+      "path": ".local/lot1a/.publication-native-boolean-codec-failure.log",
+      "sha256": "16393faf62e0b46e607d2dc809e083ef8072e1a466f72e8b73e8dddf23cf0620"
+    }
+  ],
+  "unchanged": {
+    "envExample": true,
+    "cdc": true,
+    "systemDesign": true,
+    "originalCorpus": true,
+    "engineSource": true,
+    "historical51Migrations": true
+  },
+  "remoteWrites": false,
+  "existingDataDeleted": false,
+  "credentialsProvisioned": false,
+  "publicationWorkflowExposed": false,
+  "goalComplete": false,
+  "remaining": [
+    "Server PostgreSQL adapter and activation gates",
+    "Fresh Auth/role checks, source protection across target commit and native Engine revalidation",
+    "Durable Staging audit and uncertain-result recovery",
+    "Individual and batch confirmation UI",
+    "Other Admin lots and Creator acceptance",
+    "Remote SQL reconciliation, backup/PITR, runtime and learner qualification, operator provisioning and explicit approval"
+  ],
+  "securityQualification": {
+    "fullConfinementCertified": false,
+    "subsequentFinding": "Historical PUBLIC-executable trigger functions required defensive hardening",
+    "incrementalMigration": "20261015070343_novlearn_admin_friend_trigger_scope.sql",
+    "recoveryProof": "docs/goal-recovery-local-proof.json",
+    "fresh56MigrationReplayExecuted": false,
+    "restrictedProbeRerunAfterCorrection": false
+  }
+}

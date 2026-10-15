@@ -1,5 +1,38 @@
 # Progression du goal NovLearn Admin
 
+## Reprise après restriction de sécurité — 15 octobre 2026
+
+Le [bilan de reprise](goal-recovery.md) identifie trois arrêts Codex
+`cyber_policy`, distincts de l'erreur de disponibilité PostgreSQL. Le goal
+est enregistré `blocked` ; la reprise manuelle autorisée progresse sans
+forcer cet état ni répéter le contrôle concerné après découverte du refus.
+Une migration défensive additive (56e fichier) passe sur une nouvelle copie
+SQL et sa restauration : six groupes de contrôles ordinaires, 58 tables
+préservées, 48 assertions catalogue, 21 reçus et 43 relecture. Neuf tests
+publication, lint/format et empreinte Engine passent. Le rejeu neuf de 56
+migrations et la certification complète du confinement ne sont pas annoncés.
+Les résultats 55 migrations/221 tests ci-dessous sont des preuves antérieures.
+Le travail de publication reste partiel ; aucun changement distant.
+
+## Capacité locale de publication — objectif incomplet
+
+La [fondation de publication](publication-capability.md) transfère les seuls
+contenus métier autorisés entre deux bases locales : UUID stable, IDs techniques
+cibles, acteurs NULL, références résolues sans copie, empreintes, concurrence,
+idempotence et retour arrière. La capacité est fermée par défaut, sans LOGIN.
+
+**55 migrations, 50 contrôles de transfert et 5 contrôles de capacité restaurée
+passent.** Les 69 assertions historiques, 48 catalogue, 21 reçus et 43 relecture
+restent vertes après restauration ; 221 tests Admin, types, lint, format, build
+et smoke passent. Les pannes intermédiaires sont conservées et corrigées sans
+assouplir les critères. Le comparateur garde ses 11 tests.
+
+Il reste à relier service serveur, protection de la source au commit, journal
+durable et UI de publication. Aucun parcours HTTP de publication ou Auth réel
+n’est certifié par ces fixtures. Les autres lots restent ouverts. Aucun changement
+distant, push, déploiement ou suppression de donnée existante ; l'objectif reste
+incomplet et le Lot 1A distant n’est pas déclaré clos.
+
 ## Relecture humaine locale — objectif incomplet
 
 La [relecture](editorial-review.md) ajoute les transitions protégées, l’attestation

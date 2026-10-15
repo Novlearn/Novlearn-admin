@@ -98,10 +98,25 @@ const definition = JSON.parse(
   ),
 );
 // Resolve existing fixture taxonomy; no taxonomy is copied by approval.
-definition.catalogue = {
-  chapter: sql('SELECT id::text FROM public.chapters ORDER BY name LIMIT 1;'),
-  skills: [],
-};
+assert(!process.argv[3] || process.argv[3] === '--publication-fixture');
+if (process.argv[3] === '--publication-fixture') {
+  sql(
+    `INSERT INTO public.chapters(id,name,order_index,aliases) VALUES('a5510000-0000-4000-8000-000000000001','LOCAL PUBLICATION CHAPTER',990,'{}'); INSERT INTO public.competences(id,name,chapter_id,max_points) VALUES('local-publication-source-skill','LOCAL PUBLICATION SKILL','a5510000-0000-4000-8000-000000000001',10);`,
+  );
+  definition.catalogue = {
+    chapter: 'LOCAL PUBLICATION CHAPTER',
+    skills: ['LOCAL PUBLICATION SKILL'],
+    difficulty: 2,
+    appTitle: 'Publication locale',
+    exerciseType: 'classic',
+    needsCalculator: false,
+  };
+} else {
+  definition.catalogue = {
+    chapter: sql('SELECT id::text FROM public.chapters ORDER BY name LIMIT 1;'),
+    skills: [],
+  };
+}
 const jwt = `SELECT set_config('request.jwt.claim.sub','${actor}',false);SELECT set_config('request.jwt.claims','{"sub":"${actor}","is_anonymous":false}',false);SET ROLE authenticated;`;
 sql(
   `INSERT INTO auth.users(id,aud,role,email,encrypted_password,email_confirmed_at,raw_app_meta_data,raw_user_meta_data,created_at,updated_at) VALUES('${actor}','authenticated','authenticated','native-receipt@local.invalid','',now(),'{"provider":"email","providers":["email"]}','{"first_name":"NATIVE FIXTURE","birth_date":"2000-01-01"}',now(),now());UPDATE public.profiles SET role='admin' WHERE id='${actor}';INSERT INTO novlearn_admin_private.test_signing_keys(id,secret) VALUES('${key}',decode(repeat('42',32),'hex'));`,
