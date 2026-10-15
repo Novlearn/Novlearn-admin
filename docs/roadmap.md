@@ -1,5 +1,15 @@
 # Roadmap
 
+**Orchestration locale :** le [service de publication](publication-service.md)
+relie export source, nouveaux tests Engine, confirmation signée, journal et
+transaction cible. Sa route reste fermée par défaut. La transition éditoriale
+source, l'UI individuelle/groupée, le rollback complet et les parcours Auth réels
+restent à terminer ; aucune activation distante ni réception visuelle.
+
+Ce jalon passe **547 tests Admin**, types, lint sans erreur, format, build et
+smoke, ainsi que sept scénarios réels du service sur copies locales avec Engine
+Linux frais. Les preuves et les échecs intermédiaires restent datés et distincts.
+
 **Transaction cible :** la [primitive serveur](publication-target.md) passe neuf
 scénarios locaux avec PostgreSQL réel, dont commit incertain, perte de socket et
 reprise sans répétition. 463 tests Admin et le contrôle complet passent. Le service

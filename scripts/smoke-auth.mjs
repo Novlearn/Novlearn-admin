@@ -97,6 +97,7 @@ try {
     ['/api/admin/engine', 'POST'],
     ['/api/admin/preview', 'POST'],
     ['/api/admin/review', 'POST'],
+    ['/api/admin/publication', 'POST'],
     ['/api/admin/taxonomy?kind=chapter', 'GET'],
     ['/api/admin/taxonomy', 'POST'],
     ['/api/admin/flashcards', 'GET'],
@@ -114,6 +115,7 @@ try {
   }
   assert.equal((await fetch(`${origin}/auth/login`)).status, 405);
   assert.equal((await fetch(`${origin}/auth/logout`)).status, 405);
+  assert.equal((await fetch(`${origin}/api/admin/publication`)).status, 405);
   console.log(
     'PASS: standalone CSS, disabled login, protected redirect, direct Auth endpoints, no-store and security headers.',
   );

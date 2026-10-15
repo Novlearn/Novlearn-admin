@@ -4,6 +4,7 @@ import { readFile } from 'node:fs/promises';
 import { createInterface } from 'node:readline';
 import { Client } from 'pg';
 import { runTransferCommand } from '/target-worker.mjs';
+import { runServiceCommand } from '/service-worker.mjs';
 import {
   createPublicationPgPools,
   PublicationJournal,
@@ -24,6 +25,13 @@ const rejectPool = async (settings) => {
   }
 };
 const commands = {
+  servicePublish: () => runServiceCommand('publish'),
+  serviceRepeat: () => runServiceCommand('repeat'),
+  serviceBadConfirmation: () => runServiceCommand('badConfirmation'),
+  serviceFailedEngine: () => runServiceCommand('failedEngine'),
+  serviceLostAfter: () => runServiceCommand('lostAfter'),
+  serviceRecoverAfter: () => runServiceCommand('recoverAfter'),
+  serviceCancel: () => runServiceCommand('cancel'),
   targetPublish: () => runTransferCommand('publish'),
   targetRepeat: () => runTransferCommand('repeat'),
   targetAbort: () => runTransferCommand('abort'),
@@ -186,4 +194,5 @@ try {
 } finally {
   await pools?.close();
   await runTransferCommand('close');
+  await runServiceCommand('close');
 }

@@ -35,6 +35,10 @@ transfert ou accès distant activé.
 transferts/reprises sur copies, historique préservé et pertes de connexion ;
 orchestration applicative et UI toujours à raccorder.
 
+[Orchestration locale et route de publication](publication-service.md) : export
+SQL autorisé, nouveaux tests Engine, confirmation signée et reprise observée ;
+route fermée et intégration UI/état éditorial source encore incomplète.
+
 [Rapprochement des migrations par empreintes](lot-1a-hash-reconciliation.md) : relevé en lecture seule, sept candidats et historique partiellement dépourvu de SQL.
 
 | Document                                                     | Objet                                                                          |

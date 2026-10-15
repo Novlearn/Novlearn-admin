@@ -1,5 +1,26 @@
 # Progression du goal NovLearn Admin
 
+## Orchestration de publication et route fermée — 15 octobre 2026
+
+Le [service local](publication-service.md) relie désormais l'export SQL de la
+source, les nouveaux tests Engine à chaque étape, le diff signé, la prise en
+charge sous verrou cible, le transfert et la reprise par observation seule.
+La nouvelle route exige Auth, origine, configuration et secret serveur distinct ;
+elle reste désactivée. Les tests et leurs limites figurent dans les
+[preuves](publication-service-local-proof.json).
+
+**547 tests Admin** passent, ainsi que types, lint sans erreur, format, build et
+smoke. Sept scénarios du service avec Engine Linux frais, neuf transactions
+cibles et les assertions SQL avant/après restauration passent sur copies locales.
+Les échecs intermédiaires sont conservés ; les délais et critères restent
+inchangés, avec quatre workers Vitest. Les 61 migrations existantes sont
+inchangées et les 33 empreintes de sources natives correspondent au code testé.
+
+Ce jalon n'active ni connexion réelle ni données distantes. Restent la transition
+éditoriale source après transfert, l'historique et les confirmations UI,
+les lots et le rollback complet, les parcours Auth réels et les portes de mise
+en service. Les restrictions de sécurité ne sont pas contournées.
+
 ## Transaction cible et issue de commit — 15 octobre 2026
 
 La [primitive cible](publication-target.md) ajoute inspection, transaction,

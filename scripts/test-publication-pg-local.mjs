@@ -3,7 +3,7 @@
 import assert from 'node:assert/strict';
 import { spawn, spawnSync } from 'node:child_process';
 import { randomBytes, createHash } from 'node:crypto';
-import { readFile, writeFile, mkdir } from 'node:fs/promises';
+import { readFile, writeFile, mkdir, readdir } from 'node:fs/promises';
 import { createInterface } from 'node:readline';
 import path from 'node:path';
 import { build } from 'vite';
@@ -13,7 +13,9 @@ assert(
   'Run with --conditions=react-server',
 );
 const stamp = Date.now();
-const targetTransactions = process.argv.includes('--target-transactions');
+const publicationService = process.argv.includes('--publication-service');
+const targetTransactions =
+  publicationService || process.argv.includes('--target-transactions');
 const pristineContainer = 'novlearn-admin-lot1a-replay-20261015132052356';
 const artifact = path.resolve('.local/lot1a/publication-pg-' + stamp);
 await mkdir(artifact, { recursive: true });
@@ -33,6 +35,7 @@ const docker = path.join(
 );
 const endpoint = 'npipe:////./pipe/dockerDesktopLinuxEngine';
 const secrets = [
+  randomBytes(24).toString('hex'),
   randomBytes(24).toString('hex'),
   randomBytes(24).toString('hex'),
   randomBytes(24).toString('hex'),
@@ -364,7 +367,33 @@ try {
   );
   await writeFile(
     path.join(artifact, 'native-entry.ts'),
-    `export { createPublicationPgPools } from '../../../src/lib/publication-pg.ts'; export { PublicationJournal } from '../../../src/lib/publication-journal-server.ts'; export { PublicationTarget } from '../../../src/lib/publication-target.ts';\n`,
+    `export { createPublicationPgPools } from '../../../src/lib/publication-pg.ts'; export { PublicationJournal } from '../../../src/lib/publication-journal-server.ts'; export { PublicationTarget } from '../../../src/lib/publication-target.ts';\n` +
+      (publicationService
+        ? `export { PublicationService } from '../../../src/lib/publication-service.ts'; export { loadPublicationSource } from '../../../src/lib/publication-source.ts'; export { verifyPublicationEngine } from '../../../src/lib/publication-verification.ts'; export { closeEngineRuntime } from '../../../src/lib/engine-runtime.ts';\n`
+        : ''),
+  );
+  const nativeSourceFiles = (await readdir('src/lib', { recursive: true }))
+    .filter((file) => file.endsWith('.ts'))
+    .map((file) => 'src/lib/' + file.replaceAll('\\', '/'));
+  nativeSourceFiles.push(
+    'scripts/test-publication-pg-local.mjs',
+    'scripts/test-publication-pg-worker.mjs',
+    'scripts/test-publication-target-worker.mjs',
+    'scripts/test-publication-service-worker.mjs',
+  );
+  const nativeSourceHashes = Object.fromEntries(
+    await Promise.all(
+      nativeSourceFiles.sort().map(async (file) => [
+        file,
+        createHash('sha256')
+          .update(await readFile(file))
+          .digest('hex'),
+      ]),
+    ),
+  );
+  await writeFile(
+    path.join(artifact, 'native-source-hashes.json'),
+    JSON.stringify(nativeSourceHashes, null, 2) + '\n',
   );
   await build({
     configFile: false,
@@ -375,7 +404,12 @@ try {
       outDir: path.join(artifact, 'bundle'),
       emptyOutDir: false,
       rolldownOptions: {
-        external: ['pg', 'server-only'],
+        external: [
+          'pg',
+          'server-only',
+          'novlearn-exercise-engine',
+          'novlearn-exercise-engine/node-host',
+        ],
         output: { entryFileNames: 'native.mjs' },
       },
     },
@@ -409,7 +443,20 @@ try {
   };
   await writeFile(
     path.join(artifact, 'client.json'),
-    JSON.stringify({ config, actor, operationId: template.id }),
+    JSON.stringify({
+      config,
+      actor,
+      operationId: template.id,
+      ...(publicationService
+        ? {
+            confirmationKey: randomBytes(32).toString('hex'),
+            session: {
+              url: `postgresql://novlearn_admin_fixture_session:${secrets[3]}@${container}:5432/transfer_source`,
+              ca,
+            },
+          }
+        : {}),
+    }),
   );
   if (targetTransactions) {
     assert.equal(
@@ -495,12 +542,18 @@ try {
     assert(Array.isArray(definition.catalogue.skills));
     const literal = (text) =>
       `convert_from(decode('${Buffer.from(text, 'utf8').toString('base64')}','base64'),'UTF8')`;
+    if (publicationService)
+      sql(
+        'postgres',
+        `CREATE ROLE novlearn_admin_fixture_session LOGIN NOINHERIT PASSWORD '${secrets[3]}'; GRANT authenticated TO novlearn_admin_fixture_session;`,
+      );
     for (const database of [
       'transfer_target',
       'transfer_abort',
       'transfer_lost_after',
       'transfer_lost_before',
       'transfer_socket',
+      ...(publicationService ? ['service_target', 'service_lost_after'] : []),
     ]) {
       cli([
         'exec',
@@ -572,9 +625,9 @@ try {
       '--network',
       network,
       '--memory',
-      '256m',
+      publicationService ? '384m' : '256m',
       '--memory-swap',
-      '256m',
+      publicationService ? '384m' : '256m',
       '--pids-limit',
       '64',
       '--read-only',
@@ -598,6 +651,10 @@ try {
       'type=bind,source=' +
         path.resolve('scripts/test-publication-target-worker.mjs') +
         ',target=/target-worker.mjs,readonly',
+      '--mount',
+      'type=bind,source=' +
+        path.resolve('scripts/test-publication-service-worker.mjs') +
+        ',target=/service-worker.mjs,readonly',
       'node:24.19.0-bookworm@sha256:4196d66a565c6f195728d9952f161f4adfe2ad753052a08b7ec7f1c5a6bda42b',
       'node',
       '--conditions=react-server',
@@ -807,6 +864,7 @@ try {
     '16 recovery assertions pass again after dump/restore; all 62 table snapshots match',
   );
   const targetChecks = [];
+  const serviceChecks = [];
   const transferSnapshots = {};
   if (targetTransactions) {
     const sourceBefore = snapshot(container, 'transfer_source');
@@ -910,6 +968,54 @@ try {
       path.join(artifact, 'transfer-snapshots.json'),
       JSON.stringify(transferSnapshots, null, 2) + '\n',
     );
+    if (publicationService) {
+      const serviceSourceBefore = snapshot(container, 'transfer_source');
+      const serviceSnapshots = {};
+      for (const [command, database] of [
+        ['servicePublish', 'service_target'],
+        ['serviceRepeat', 'service_target'],
+        ['serviceBadConfirmation', 'service_target'],
+        ['serviceFailedEngine', 'service_target'],
+        ['serviceLostAfter', 'service_lost_after'],
+        ['serviceRecoverAfter', 'service_lost_after'],
+        ['serviceCancel', 'service_target'],
+      ]) {
+        const before = snapshot(container, database);
+        const result = await request(command);
+        const after = snapshot(container, database);
+        assert.deepEqual(outsideTransfer(after), outsideTransfer(before));
+        if (!['servicePublish', 'serviceLostAfter'].includes(command))
+          assert.deepEqual(after, before);
+        else {
+          assert.equal(
+            after['public.exercises'].rows,
+            before['public.exercises'].rows + 1,
+          );
+          assert.equal(
+            after['public.exercise_versions'].rows,
+            before['public.exercise_versions'].rows + 1,
+          );
+        }
+        serviceChecks.push({
+          command,
+          database,
+          result: 'PASS',
+          observation: result,
+        });
+        serviceSnapshots[command] = { before, after };
+      }
+      assert.deepEqual(
+        outsideJournal(snapshot(container, 'transfer_source')),
+        outsideJournal(serviceSourceBefore),
+      );
+      await writeFile(
+        path.join(artifact, 'service-snapshots.json'),
+        JSON.stringify(serviceSnapshots, null, 2) + '\n',
+      );
+      checks.push(
+        'Seven actual service scenarios with fresh native Linux Engine, SQL export through synthetic session transport, signed confirmation and observed recovery',
+      );
+    }
   }
   const sha = async (file) =>
     createHash('sha256')
@@ -943,6 +1049,7 @@ try {
         internalNetwork: true,
         checks,
         targetChecks,
+        serviceChecks,
         tls,
         recoveryAssertions: recovery.recoveryAssertions,
         recoveryAssertionsAfterRestore: restoredProof.recoveryAssertions,
@@ -954,14 +1061,22 @@ try {
         sequencesCompared: false,
         migrationSha256: await sha(migration),
         sourceDumpSha256: await sha(path.join(artifact, 'source.dump')),
-        scope: targetTransactions
-          ? 'Real local target transactions and journal recovery with a previously native-approved source and synthetic identity gateway; no remote operation'
-          : 'Actual local TLS driver and machine journal recovery; synthetic identity gateway and inspection, no target apply or real Auth',
+        nativeSourceManifestSha256: await sha(
+          path.join(artifact, 'native-source-hashes.json'),
+        ),
+        nativeBundleSha256: await sha(path.join(artifact, 'bundle/native.mjs')),
+        scope: publicationService
+          ? 'Local publication orchestration with fresh native Engine, real SQL source export/journal/target, synthetic Auth and PostgREST transport; no HTTP application activation or remote operation'
+          : targetTransactions
+            ? 'Real local target transactions and journal recovery with a previously native-approved source and synthetic identity gateway; no remote operation'
+            : 'Actual local TLS driver and machine journal recovery; synthetic identity gateway and inspection, no target apply or real Auth',
         limitations: [
           'Source and target fixture databases share one isolated PostgreSQL cluster.',
-          targetTransactions
-            ? 'No complete publication service, fresh Engine execution at transfer, live Auth or complete confinement certification.'
-            : 'No full target transfer or complete confinement certification.',
+          publicationService
+            ? 'Auth identity and Supabase REST transport remain synthetic; full API/UI and complete confinement certification are not executed.'
+            : targetTransactions
+              ? 'No complete publication service, fresh Engine execution at transfer, live Auth or complete confinement certification.'
+              : 'No full target transfer or complete confinement certification.',
           'No remote configuration, SQL, Auth activation, publication, push or deployment.',
         ],
       },
