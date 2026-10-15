@@ -21,6 +21,9 @@ références préservés, audit, tests SQL/restauration et vérification visuell
 [Dashboard Staging](dashboard.md) : agrégats réels du catalogue local, définitions,
 permissions et rejeu/restauration de 59 migrations ; accès Production restant.
 
+[Journal de publication](publication-journal.md) : plans durables, résultat
+incertain, protection de source et restauration ; transfert complet à raccorder.
+
 [Rapprochement des migrations par empreintes](lot-1a-hash-reconciliation.md) : relevé en lecture seule, sept candidats et historique partiellement dépourvu de SQL.
 
 | Document                                                     | Objet                                                                          |

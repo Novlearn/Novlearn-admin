@@ -1,5 +1,30 @@
 # Progression du goal NovLearn Admin
 
+## Journal durable de publication — 15 octobre 2026
+
+Le [journal Staging et la protection de source](publication-journal.md) ajoutent
+des plans confirmables de 15 minutes, une prise en charge unique et un état
+incertain sans faux succès. Les contenus restent protégés après perte de
+connexion, redémarrage et restauration jusqu'à observation cible établie.
+La capacité machine peut conserver ce fait après révocation de l'initiateur ;
+elle ne permet pas à cet utilisateur de démarrer un nouveau transfert.
+Migration locale 60 NovLearn `18071d2`, sans LOGIN ni appartenance provisionnés.
+
+**378 tests Admin, types, lint sans erreur, format, build et smoke passent.**
+Le rejeu neuf de 60 migrations, le parcours Engine natif/signature/relecture,
+41 assertions journal avant/après restauration, concurrence et persistance
+passent. La sauvegarde complète conserve logiquement schéma, ACL, données et
+séquences ; comparaison brute différente selon les normalisations inchangées.
+Les 69 contrôles historiques et les six suites de contenu passent après cette
+restauration. Voir les [preuves](publication-journal-local-proof.json).
+
+Le transfert complet reste à raccorder : véritable connexion serveur, Engine,
+confirmation, commit cible, relecture, reprise et UI individuelle/groupée.
+Les observations de succès des fixtures ne certifient aucun nouveau transfert.
+La qualification du confinement et la réception visuelle restent ouvertes ;
+aucune restriction contournée, modification distante, publication réelle ou
+suppression de données existantes. Le goal reste actif et incomplet.
+
 ## Dashboard Staging et 59 migrations — 15 octobre 2026
 
 Le [tableau de bord](dashboard.md) remplace son texte d'attente par des agrégats

@@ -1,0 +1,213 @@
+{
+  "id": "34ef82b6-4ea5-4d1e-98a4-74743a945bda",
+  "mode": "publish",
+  "state": "committed",
+  "outcome": {
+    "result": "published",
+    "revision": 1,
+    "catalogId": "1ca56b86-02a5-4a83-921e-c5c2b16061db",
+    "versionId": "a6030000-0000-4000-8000-000000000001",
+    "exerciseId": "9007199254740993",
+    "stateToken": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+    "businessDigest": "a8a2e9e50907c0d7b452e4311c353d431344101e045dff89ef376f0ce71d089b"
+  },
+  "payload": {
+    "revision": 1,
+    "catalogId": "1ca56b86-02a5-4a83-921e-c5c2b16061db",
+    "schemaVersion": 1,
+    "businessDigest": "a8a2e9e50907c0d7b452e4311c353d431344101e045dff89ef376f0ce71d089b",
+    "definitionJson": "{\"id\": \"1ca56b86-02a5-4a83-921e-c5c2b16061db\", \"kind\": \"composed\", \"title\": \"Calcul littéral\", \"elements\": [{\"id\": \"intro\", \"text\": \"Calculez la somme suivante, puis justifiez votre réponse.\", \"type\": \"text\"}, {\"id\": \"expression\", \"type\": \"expression\", \"latex\": \"a+1\"}, {\"id\": \"q\", \"text\": \"Quelle est la valeur de cette expression ?\", \"type\": \"question\", \"points\": 1, \"policy\": {\"form\": \"value-only\", \"domain\": \"rational\"}, \"response\": {\"kind\": \"rational\", \"format\": \"latex\"}, \"expectedLatex\": \"a+1\"}, {\"id\": \"values\", \"rows\": [[{\"kind\": \"number\", \"value\": {\"latex\": \"a\"}}, {\"kind\": \"math\", \"latex\": \"a+1\"}]], \"type\": \"value-table\", \"columns\": [\"Paramètre\", \"Expression\"]}, {\"id\": \"private-hint\", \"type\": \"hint\", \"content\": [{\"text\": \"PRIVATE_HINT_SENTINEL\", \"type\": \"text\"}], \"questionId\": \"q\"}], \"revision\": \"1\", \"catalogue\": {\"skills\": [], \"chapter\": \"09aa438d-082a-4205-9086-fadacc0c159c\"}, \"variables\": [], \"extensions\": {\"privateSentinel\": \"PRIVATE_EXTENSION_SENTINEL\"}, \"generation\": {\"maxDraws\": 1000, \"constraints\": [], \"definitions\": [{\"max\": 8, \"min\": 2, \"kind\": \"integer\", \"name\": \"a\", \"exclusions\": []}], \"maxAttempts\": 100, \"schemaVersion\": 5}, \"schemaVersion\": 5}",
+    "engineContract": "schema-5;engine-0.1.0",
+    "generationVersion": "mulberry32-rejection-v1",
+    "engineArchiveSha256": "650128cdeb1e798b952a09e91b038d018b9e7947d0a6ee4c247695f899190290",
+    "canonicalizationVersion": "pg-jsonb-text-v1"
+  },
+  "actor_id": "98500000-0000-4000-8000-000000000001",
+  "batch_id": "caab0eae-7202-407a-9c6a-f36019c63bbf",
+  "created_at": "2026-10-15T12:58:41.753486+00:00",
+  "error_code": null,
+  "expires_at": "2026-10-15T13:13:41.753486+00:00",
+  "inspection": {
+    "state": {
+      "active": null,
+      "parent": null,
+      "runtime": {
+        "engineContract": "schema-5;engine-0.1.0",
+        "generationVersion": "mulberry32-rejection-v1",
+        "engineArchiveSha256": "650128cdeb1e798b952a09e91b038d018b9e7947d0a6ee4c247695f899190290",
+        "canonicalizationVersion": "pg-jsonb-text-v1"
+      },
+      "candidate": null,
+      "catalogId": "1ca56b86-02a5-4a83-921e-c5c2b16061db",
+      "stateToken": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "latestRevision": 0,
+      "requestedRevision": 1
+    },
+    "desiredHeader": {
+      "title": "Calcul littéral",
+      "chapter": "Convexité",
+      "Is_Flash": false,
+      "app_title": "Calcul littéral",
+      "difficulty": null,
+      "competences": [],
+      "Need_Calculator": false
+    }
+  },
+  "target_key": "local-target",
+  "updated_at": "2026-10-15T12:58:41.788075+00:00",
+  "version_id": "c3368fa2-3c7e-4824-b38d-cd3183d7a620",
+  "plan_digest": "8ad51b618d124ac616c1a5e91c40da78749e382446d6f5c9f4c11bda832bfd1d",
+  "source_epoch": "0",
+  "source_snapshot": {
+    "cases": [
+      {
+        "answer": {
+          "format": "latex",
+          "source": "0"
+        },
+        "questionId": "q",
+        "expectedState": "incorrect"
+      }
+    ],
+    "epoch": 0,
+    "report": {
+      "seeds": [
+        {
+          "seed": 0,
+          "checks": [
+            {
+              "label": "Attendu officiel",
+              "passed": true,
+              "result": {
+                "code": "numeric-equal",
+                "form": "not-required",
+                "proof": "exact-number",
+                "state": "correct",
+                "value": "equal",
+                "domain": "not-applicable",
+                "comparison": "exact",
+                "instanceId": "0a0fcce7-bfd8-46bf-b8c2-00321ff44576",
+                "questionId": "q",
+                "schemaVersion": 5
+              },
+              "questionId": "q",
+              "expectedState": "correct"
+            },
+            {
+              "label": "Format volontairement invalide",
+              "passed": true,
+              "result": {
+                "code": "submission-contract",
+                "form": "unknown",
+                "proof": "none",
+                "state": "invalid",
+                "value": "unknown",
+                "domain": "not-applicable",
+                "comparison": "none",
+                "instanceId": "0a0fcce7-bfd8-46bf-b8c2-00321ff44576",
+                "questionId": "",
+                "schemaVersion": 5
+              },
+              "questionId": "q",
+              "expectedState": "invalid"
+            },
+            {
+              "label": "Cas administrateur",
+              "passed": true,
+              "result": {
+                "code": "numeric-different",
+                "form": "not-required",
+                "proof": "exact-number",
+                "state": "incorrect",
+                "value": "different",
+                "domain": "not-applicable",
+                "comparison": "exact",
+                "instanceId": "0a0fcce7-bfd8-46bf-b8c2-00321ff44576",
+                "questionId": "q",
+                "schemaVersion": 5
+              },
+              "questionId": "q",
+              "expectedState": "incorrect"
+            }
+          ],
+          "passed": true,
+          "diagnostics": [],
+          "reproducible": true,
+          "publicProjectionSafe": true
+        },
+        {
+          "seed": 42,
+          "checks": [
+            {
+              "label": "Attendu officiel",
+              "passed": true,
+              "result": {
+                "code": "numeric-equal",
+                "form": "not-required",
+                "proof": "exact-number",
+                "state": "correct",
+                "value": "equal",
+                "domain": "not-applicable",
+                "comparison": "exact",
+                "instanceId": "eb981910-694f-410a-b0a7-5afd4aae338c",
+                "questionId": "q",
+                "schemaVersion": 5
+              },
+              "questionId": "q",
+              "expectedState": "correct"
+            },
+            {
+              "label": "Format volontairement invalide",
+              "passed": true,
+              "result": {
+                "code": "submission-contract",
+                "form": "unknown",
+                "proof": "none",
+                "state": "invalid",
+                "value": "unknown",
+                "domain": "not-applicable",
+                "comparison": "none",
+                "instanceId": "eb981910-694f-410a-b0a7-5afd4aae338c",
+                "questionId": "",
+                "schemaVersion": 5
+              },
+              "questionId": "q",
+              "expectedState": "invalid"
+            },
+            {
+              "label": "Cas administrateur",
+              "passed": true,
+              "result": {
+                "code": "numeric-different",
+                "form": "not-required",
+                "proof": "exact-number",
+                "state": "incorrect",
+                "value": "different",
+                "domain": "not-applicable",
+                "comparison": "exact",
+                "instanceId": "eb981910-694f-410a-b0a7-5afd4aae338c",
+                "questionId": "q",
+                "schemaVersion": 5
+              },
+              "questionId": "q",
+              "expectedState": "incorrect"
+            }
+          ],
+          "passed": true,
+          "diagnostics": [],
+          "reproducible": true,
+          "publicProjectionSafe": true
+        }
+      ],
+      "passed": true,
+      "complete": true,
+      "engineVersion": "0.1.0",
+      "definitionDigest": "669eec27f87623c9b2413d8cfb32877f5435b1ce952bd1be6988502c2aa44e8b"
+    },
+    "reviewId": "e1759b7f-6a11-4bd1-a1b5-c048d0b9eaf1",
+    "receiptId": "c3a61f81-d80c-479f-b8d3-bea8d88fecd4",
+    "versionId": "c3368fa2-3c7e-4824-b38d-cd3183d7a620",
+    "fingerprint": "f92b03e5c5ab3a27a1cd13b1148ed5bef95c05e95e0361f01c01f6746b7c3c3a"
+  },
+  "source_fingerprint": "f92b03e5c5ab3a27a1cd13b1148ed5bef95c05e95e0361f01c01f6746b7c3c3a"
+}

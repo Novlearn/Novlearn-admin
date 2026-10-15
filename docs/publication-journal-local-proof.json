@@ -1,0 +1,209 @@
+{
+  "recordedAt": "2026-10-15T13:10:25.641Z",
+  "goalStatusObserved": "active",
+  "goalComplete": false,
+  "scope": "Durable Staging journal, guarded source and private server primitives; real isolated SQL/Engine tests; complete transfer service remains unconnected",
+  "sql": {
+    "migration": {
+      "path": "../Novlearn/supabase/migrations/20261015124209_novlearn_admin_publication_journal.sql",
+      "sha256": "3dd35e25542613d29da2b828ebc2210ac228c6f7229e6b583467747cb3a6ca66"
+    },
+    "localCommit": "18071d2",
+    "freshReplayCount": 60,
+    "manifest": {
+      "path": "../Novlearn/.local/admin-sql-replay/novlearn-admin-lot1a-replay-20261015125108699/manifest.json",
+      "sha256": "5c7e7a170e72f4d042ae356942ccc84e127b1297fb27cbf904204f47673b6300"
+    },
+    "replayLog": {
+      "path": "../Novlearn/.local/admin-sql-replay/novlearn-admin-lot1a-replay-20261015125108699/replay.log",
+      "sha256": "adf4bb136ea80ec73a95d4fc3abe037d008a6ccee948e8b076df8ae1b4a78174"
+    },
+    "currentHashesVerified": true,
+    "localTreeIncludesPreexistingSqlEdits": true
+  },
+  "journal": {
+    "artifact": {
+      "path": ".local/lot1a/publication-journal-1792069454214/proof.json",
+      "sha256": "887ec0f86312c07e9fbf536b442984f43e4c5cb13f945e23a7d9e760f94060a3"
+    },
+    "sqlAssertions": {
+      "path": "scripts/test-publication-journal-local.sql",
+      "sha256": "c4e903cb3b652db5544e39e382fcc850883e8c9146e314f1686e9d5dca4a1042"
+    },
+    "runner": {
+      "path": "scripts/test-publication-journal-local.mjs",
+      "sha256": "6905103b403349d01df67d8249ea82ef8879ef003e8e9dac5160b2f0218d087d"
+    },
+    "assertionsBeforeAndAfterRestore": 41,
+    "sourceUnchanged": true,
+    "fixtureRowsRolledBack": true,
+    "tablesCompared": 62,
+    "otherTablesPreserved": 60,
+    "concurrency": {
+      "commits": 1,
+      "conflicts40001": 1
+    },
+    "sourceGuard": {
+      "signingKeyLockObserved": true,
+      "durableAfterConnectionClose": true,
+      "durableWhileUncertain": true,
+      "releasedAfterKnownNotApplied": true
+    },
+    "pendingPersistence": {
+      "restartTested": true,
+      "rowsAndEventsRestored": true,
+      "guardRestored": true,
+      "restoredDatabase": "admin_publication_journal_1792069454214_pending",
+      "dumpSha256": "a2ef741e3ae23cf671541c82aca020ef277cff3d490f30955fb4aa467838bd26"
+    },
+    "pendingDump": {
+      "path": ".local/lot1a/publication-journal-1792069454214/pending-operations.dump",
+      "sha256": "a2ef741e3ae23cf671541c82aca020ef277cff3d490f30955fb4aa467838bd26"
+    },
+    "dataSnapshots": {
+      "path": ".local/lot1a/publication-journal-1792069454214/data-snapshots.json",
+      "sha256": "ee1de356900c0ac73cf93666b80ffbb3c35c414454ebdbde8eaa289a959884c3"
+    },
+    "incrementalSequencesCompared": false,
+    "simulatedCommittedOutcomesRolledBack": true,
+    "noTargetContacted": true
+  },
+  "nativeEngine": {
+    "proof": {
+      "path": ".local/lot1a/receipt-native-flow-1792068827587/proof.json",
+      "sha256": "5cb7d3205d30422226a1163af387e4b9e6f725c98a1a234e2384de7a2d155037"
+    },
+    "seeds": 2,
+    "passed": true,
+    "complete": true,
+    "concurrentApproval": {
+      "accepted": 1,
+      "conflict40001": 1,
+      "sessions": 2
+    },
+    "syntheticActorAndAttestation": true,
+    "fullSourceSuiteRerun": false
+  },
+  "backupRestore": {
+    "result": {
+      "path": ".local/lot1a/.local/admin-sql-backup/novlearn-admin-lot1a-backup-20261015130035535/result.json",
+      "sha256": "331d25c314de6f208ea3c163b385b79c12b2d977cfc3b44751f19e3552daca0d"
+    },
+    "comparison": {
+      "path": ".local/lot1a/.local/admin-sql-backup/novlearn-admin-lot1a-backup-20261015130035535/comparison.json",
+      "sha256": "452fd8347709d9063740b954d594b797a92f829b7d2973f8ee11dbdba5ebeae5"
+    },
+    "archive": {
+      "path": ".local/lot1a/.local/admin-sql-backup/novlearn-admin-lot1a-backup-20261015130035535/admin-backup.dump",
+      "sha256": "043050ec5ed57669b0735d2e81ff3b17789646e0e3d87bb97c593756e6e5f397"
+    },
+    "logicalMatched": true,
+    "rawMatched": false,
+    "rawDifferenceSections": ["columns", "functions", "relations"],
+    "normalization": [
+      "ACL entry order only; privileges and grant options unchanged",
+      "relative visible column order; dropped-column ordinal holes are not preserved by logical pg_dump"
+    ],
+    "historicalSecurityAssertions": 69,
+    "threeNoLoginRolesBootstrapped": true,
+    "helper": {
+      "path": ".local/lot1a/journal-backup-tools/test-admin-backup-local.ps1",
+      "sha256": "5120eb5628d7a06753d0161b64fc2c7dd995d9d44ecb57572d474297ba8a0abf"
+    },
+    "helperChangeOnlyThirdNoLoginRole": true,
+    "comparatorSnapshotAssertionsAndFixturePreparerUnchanged": true,
+    "restoredContent": {
+      "path": ".local/lot1a/content-restored-60-1792069550637/proof.json",
+      "sha256": "b87d8c3060928f2bd0b691dde45d485a5bedfcb9c2e848bc6f04ccfaea73340c"
+    },
+    "checks": [
+      {
+        "name": "test-catalogue-local",
+        "count": 48,
+        "result": "PASS"
+      },
+      {
+        "name": "test-receipts-local",
+        "count": 21,
+        "result": "PASS"
+      },
+      {
+        "name": "test-editorial-review-local",
+        "count": 43,
+        "result": "PASS"
+      },
+      {
+        "name": "test-taxonomy-local",
+        "count": 39,
+        "result": "PASS"
+      },
+      {
+        "name": "test-flashcards-local",
+        "count": 38,
+        "result": "PASS"
+      },
+      {
+        "name": "test-dashboard-local",
+        "count": 35,
+        "result": "PASS"
+      }
+    ],
+    "scope": "New isolated cluster, synthetic fixtures, exact logical data/schema/ACL/sequence comparison; not remote backup/PITR"
+  },
+  "admin": {
+    "command": "npm.cmd run check",
+    "log": {
+      "path": ".local/lot1a/.publication-journal-check.log",
+      "sha256": "aa688b35a32b20c3e8db85562332cf5a5fa64053da00fb6e9c42c8d044503a42"
+    },
+    "encoding": "UTF-8",
+    "tests": 378,
+    "testFiles": 25,
+    "newJournalTests": 41,
+    "types": "PASS",
+    "format": "PASS",
+    "lintErrors": 0,
+    "preexistingLintWarnings": 1,
+    "build": "PASS",
+    "standaloneSmoke": "PASS",
+    "engineArchiveIntegrity": "PASS",
+    "serverConnectionsAreTestDoubles": true,
+    "actualSqlContractFixture": {
+      "path": "tests/fixtures/publication-journal-sql.json",
+      "sha256": "374e85b7ab9c04c4f89bf9da2ae63177da7fcb01779f201f4e77410fa56fca94"
+    },
+    "actualSqlFixtureSource": {
+      "path": ".local/lot1a/publication-journal-1792069116216/operation-sample.json",
+      "sha256": "374e85b7ab9c04c4f89bf9da2ae63177da7fcb01779f201f4e77410fa56fca94"
+    }
+  },
+  "restrictions": {
+    "blockedSecurityProbeRepeated": false,
+    "completePublicationConfinementCertified": false,
+    "browserAttempted": false,
+    "browserAcceptanceExecuted": false,
+    "securityProtectionsChanged": false
+  },
+  "preserved": {
+    "envExample": true,
+    "cdc": true,
+    "systemDesign": true,
+    "historicalSql": true,
+    "engineSourceAndCorpus": true,
+    "preexistingNovlearnChanges": true
+  },
+  "limitations": [
+    "No bounded machine read path yet for pending recovery after process restart and initiator revocation; current private get requires the initiating Admin",
+    "No configured PostgreSQL application driver or source/target credentials",
+    "No new end-to-end target transfer or HTTP publication; journal committed fixtures simulate trusted machine observations only",
+    "Transfer orchestration, target post-commit verification and reconciliation, individual/batch confirmation UI remain to connect",
+    "Complete confinement qualification, browser acceptance, Production analytics/users and remote Lot 1A prerequisites remain open"
+  ],
+  "remoteDatabaseReads": false,
+  "remoteWrites": false,
+  "newTargetTransferExecuted": false,
+  "existingDataDeleted": false,
+  "authActivated": false,
+  "pushed": false,
+  "deployed": false
+}

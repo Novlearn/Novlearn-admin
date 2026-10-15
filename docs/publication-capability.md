@@ -1,9 +1,10 @@
 # Fondation locale de publication
 
 Le transfert SQL sélectif et le calcul des différences sont implémentés et testés
-sur deux bases Docker locales distinctes. **Le parcours de publication Admin
-n’est pas livré** : connexion serveur, protection de la source pendant le commit,
-journal durable, routes autorisées et écrans individuel/groupé restent à relier.
+sur deux bases Docker locales distinctes. Le [journal et la protection durable
+de source](publication-journal.md) sont maintenant ajoutés localement.
+**Le parcours de publication Admin n’est pas livré** : connexion PostgreSQL,
+orchestration du commit et de sa reprise, routes et écrans restent à relier.
 Aucune connexion Production, publication réelle ou activation distante n’a lieu.
 
 ## Contrat et identité
@@ -12,8 +13,10 @@ Aucune connexion Production, publication réelle ou activation distante n’a li
 permission indirecte dans deux triggers historiques. La migration défensive
 56 et ses contrôles ordinaires passent incrémentalement ; les 50 contrôles
 ci-dessous ne constituent pas une certification complète du confinement.
-Le rejeu neuf de 56 migrations et le contrôle de sécurité concerné restent
-non exécutés après restriction Codex. Voir la [reprise](goal-recovery.md).
+Le contrôle de sécurité concerné reste non exécuté après restriction Codex.
+Le rejeu neuf atteint depuis 60 migrations et les workflows ordinaires passent ;
+cela ne remplace pas cette qualification. Voir la [reprise](goal-recovery.md)
+et le [journal](publication-journal.md).
 
 La migration propriétaire
 `Novlearn/supabase/migrations/20261014220625_novlearn_admin_publication_capability.sql`
@@ -121,9 +124,10 @@ historiques 010/022/028 préexistantes, pas un clone propre ou le drift distant.
 Relier la capacité à une connexion PostgreSQL dédiée et bornée, vérifier Auth/
 rôle avant chaque étape, valider/tester avec l’Engine, puis relire et protéger
 la source pendant l’écriture cible. Le verrou d’une RPC, libéré à son retour,
-ne suffit pas à empêcher une édition entre les deux bases. Ajouter le journal
-Staging durable, les plans confirmés appartenant à l’Admin, la reprise des
-résultats incertains et les écrans individuel/groupé, avec résultat par exercice.
+ne suffit pas à empêcher une édition entre les deux bases. Raccorder le journal
+Staging et la protection durable maintenant préparés à la transaction cible,
+à la reprise des résultats incertains et aux écrans individuel/groupé, avec
+résultat par exercice.
 Aucune route de publication n’est exposée avant ces contrôles.
 
 Avant usage distant : réconciliation SQL, backup/PITR réel, comptes Admin et
