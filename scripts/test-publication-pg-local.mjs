@@ -1,5 +1,5 @@
 // Actual TLS/SQL tests on a newly retained local fixture. No remote connection,
-// trigger-planting probe, live Auth or target publication is performed.
+// trigger-planting probe, live Auth or remote publication is performed.
 import assert from 'node:assert/strict';
 import { spawn, spawnSync } from 'node:child_process';
 import { randomBytes, createHash } from 'node:crypto';
@@ -13,6 +13,8 @@ assert(
   'Run with --conditions=react-server',
 );
 const stamp = Date.now();
+const targetTransactions = process.argv.includes('--target-transactions');
+const pristineContainer = 'novlearn-admin-lot1a-replay-20261015132052356';
 const artifact = path.resolve('.local/lot1a/publication-pg-' + stamp);
 await mkdir(artifact, { recursive: true });
 const container = 'novlearn-admin-pg-' + stamp;
@@ -107,6 +109,7 @@ const wait = async (name) => {
 };
 let sourceStarted = false,
   created = false,
+  pristineStarted = false,
   clientProcess,
   clientExit;
 const checks = [];
@@ -361,7 +364,7 @@ try {
   );
   await writeFile(
     path.join(artifact, 'native-entry.ts'),
-    `export { createPublicationPgPools } from '../../../src/lib/publication-pg.ts'; export { PublicationJournal } from '../../../src/lib/publication-journal-server.ts';\n`,
+    `export { createPublicationPgPools } from '../../../src/lib/publication-pg.ts'; export { PublicationJournal } from '../../../src/lib/publication-journal-server.ts'; export { PublicationTarget } from '../../../src/lib/publication-target.ts';\n`,
   );
   await build({
     configFile: false,
@@ -408,6 +411,151 @@ try {
     path.join(artifact, 'client.json'),
     JSON.stringify({ config, actor, operationId: template.id }),
   );
+  if (targetTransactions) {
+    assert.equal(
+      cli([
+        'inspect',
+        '--format',
+        '{{.State.Running}}',
+        pristineContainer,
+      ]).stdout.trim(),
+      'false',
+    );
+    assert.equal(
+      cli([
+        'inspect',
+        '--format',
+        '{{.HostConfig.NetworkMode}}',
+        pristineContainer,
+      ]).stdout.trim(),
+      'none',
+    );
+    cli(['start', pristineContainer]);
+    pristineStarted = true;
+    await wait(pristineContainer);
+    const pristineRows = snapshot(pristineContainer, 'postgres');
+    assert.equal(pristineRows['auth.users'].rows, 0);
+    assert.equal(pristineRows['public.exercises'].rows, 0);
+    cli([
+      'exec',
+      pristineContainer,
+      'pg_dump',
+      '-U',
+      'supabase_admin',
+      '-d',
+      'postgres',
+      '--format=custom',
+      `--file=/tmp/target-pristine-${stamp}.dump`,
+    ]);
+    cli([
+      'cp',
+      `${pristineContainer}:/tmp/target-pristine-${stamp}.dump`,
+      path.join(artifact, 'target-pristine.dump'),
+    ]);
+    assert.deepEqual(snapshot(pristineContainer, 'postgres'), pristineRows);
+    cli(['stop', '--timeout', '15', pristineContainer]);
+    pristineStarted = false;
+    cli([
+      'exec',
+      container,
+      'createdb',
+      '-U',
+      'supabase_admin',
+      '--template=template0',
+      'transfer_source',
+    ]);
+    cli([
+      'exec',
+      container,
+      'pg_restore',
+      '-U',
+      'supabase_admin',
+      '-d',
+      'transfer_source',
+      '--exit-on-error',
+      '--single-transaction',
+      '/fixture-input/source.dump',
+    ]);
+    cli([
+      'exec',
+      container,
+      'psql',
+      '-qAt',
+      '-U',
+      'supabase_admin',
+      '-d',
+      'transfer_source',
+      '-v',
+      'ON_ERROR_STOP=1',
+      '-f',
+      '/tmp/recovery.sql',
+    ]);
+    const definition = JSON.parse(template.payload.definitionJson);
+    assert.equal(typeof definition.catalogue.chapter, 'string');
+    assert(Array.isArray(definition.catalogue.skills));
+    const literal = (text) =>
+      `convert_from(decode('${Buffer.from(text, 'utf8').toString('base64')}','base64'),'UTF8')`;
+    for (const database of [
+      'transfer_target',
+      'transfer_abort',
+      'transfer_lost_after',
+      'transfer_lost_before',
+      'transfer_socket',
+    ]) {
+      cli([
+        'exec',
+        container,
+        'createdb',
+        '-U',
+        'supabase_admin',
+        '--template=template0',
+        database,
+      ]);
+      cli([
+        'exec',
+        container,
+        'pg_restore',
+        '-U',
+        'supabase_admin',
+        '-d',
+        database,
+        '--exit-on-error',
+        '--single-transaction',
+        '/fixture-input/target-pristine.dump',
+      ]);
+      sql(
+        database,
+        `INSERT INTO public.chapters(id,name,order_index,aliases) VALUES('a6300000-0000-4000-8000-000000000001',${literal(definition.catalogue.chapter)},990,'{}');`,
+      );
+      sql(
+        database,
+        "INSERT INTO public.competences(id,name,chapter_id,max_points) VALUES('transaction-history-skill','LOCAL TRANSACTION UNRELATED SKILL','a6300000-0000-4000-8000-000000000001',10);",
+      );
+      for (const [index, skill] of definition.catalogue.skills.entries())
+        sql(
+          database,
+          `INSERT INTO public.competences(id,name,chapter_id,max_points) VALUES('transaction-target-skill-${index}',${literal(skill)},'a6300000-0000-4000-8000-000000000001',10);`,
+        );
+      sql(
+        database,
+        `DO $$ DECLARE e bigint; d bigint; BEGIN
+       INSERT INTO auth.users(id,aud,role,email,encrypted_password,email_confirmed_at,raw_app_meta_data,raw_user_meta_data,created_at,updated_at)
+       SELECT id,'authenticated','authenticated',id::text||'@local.invalid','',now(),'{"provider":"email","providers":["email"]}','{"first_name":"TRANSACTION HISTORY FIXTURE","birth_date":"2000-01-01"}',now(),now()
+       FROM unnest(ARRAY['a6310000-0000-4000-8000-000000000001'::uuid,'a6310000-0000-4000-8000-000000000002'::uuid]) id;
+       INSERT INTO public.friends(user1_id,user2_id,status) VALUES('a6310000-0000-4000-8000-000000000001','a6310000-0000-4000-8000-000000000002','accepted');
+       INSERT INTO public.exercises(title,chapter,content) VALUES('LOCAL TRANSACTION HISTORY','Local history','{}') RETURNING id INTO e;
+       INSERT INTO public.exercise_attempts(user_id,exercise_id,is_correct) VALUES('a6310000-0000-4000-8000-000000000002',e,false);
+       INSERT INTO public.duels(player1_id,player2_id,status) VALUES('a6310000-0000-4000-8000-000000000001','a6310000-0000-4000-8000-000000000002','active') RETURNING id INTO d;
+       INSERT INTO public.duel_attempts(duel_id,player_id,element_id,is_correct) VALUES(d,'a6310000-0000-4000-8000-000000000002',0,true);
+       END; $$; UPDATE novlearn_admin_private.publication_runtime SET enabled=true WHERE singleton;`,
+      );
+    }
+    await writeFile(
+      path.join(artifact, 'target-input.json'),
+      JSON.stringify({ source: template }) + '\n',
+    );
+    console.log('Isolated transaction targets and existing history prepared.');
+  }
   clientProcess = spawn(
     docker,
     [
@@ -446,6 +594,10 @@ try {
       'type=bind,source=' +
         path.resolve('scripts/test-publication-pg-worker.mjs') +
         ',target=/worker.mjs,readonly',
+      '--mount',
+      'type=bind,source=' +
+        path.resolve('scripts/test-publication-target-worker.mjs') +
+        ',target=/target-worker.mjs,readonly',
       'node:24.19.0-bookworm@sha256:4196d66a565c6f195728d9952f161f4adfe2ad753052a08b7ec7f1c5a6bda42b',
       'node',
       '--conditions=react-server',
@@ -654,6 +806,111 @@ try {
   checks.push(
     '16 recovery assertions pass again after dump/restore; all 62 table snapshots match',
   );
+  const targetChecks = [];
+  const transferSnapshots = {};
+  if (targetTransactions) {
+    const sourceBefore = snapshot(container, 'transfer_source');
+    const outsideTransfer = (rows) =>
+      Object.fromEntries(
+        Object.entries(rows).filter(
+          ([name]) =>
+            !['public.exercises', 'public.exercise_versions'].includes(name),
+        ),
+      );
+    for (const [command, database] of [
+      ['targetPublish', 'transfer_target'],
+      ['targetRepeat', 'transfer_target'],
+      ['targetAbort', 'transfer_abort'],
+      ['targetLostAfter', 'transfer_lost_after'],
+      ['targetRecoverAfter', 'transfer_lost_after'],
+      ['targetLostBefore', 'transfer_lost_before'],
+      ['targetRecoverBefore', 'transfer_lost_before'],
+      ['targetLostSocket', 'transfer_socket'],
+      ['targetRecoverSocket', 'transfer_socket'],
+    ]) {
+      const before = snapshot(container, database);
+      assert(before['public.exercise_attempts'].rows > 0);
+      assert(before['public.duel_attempts'].rows > 0);
+      const legacyBefore = value(
+        database,
+        "SELECT to_jsonb(e) FROM public.exercises e WHERE catalog_id IS NULL AND title='LOCAL TRANSACTION HISTORY'",
+      );
+      const result = await request(command);
+      const after = snapshot(container, database);
+      assert.deepEqual(outsideTransfer(after), outsideTransfer(before));
+      assert.deepEqual(
+        value(
+          database,
+          "SELECT to_jsonb(e) FROM public.exercises e WHERE catalog_id IS NULL AND title='LOCAL TRANSACTION HISTORY'",
+        ),
+        legacyBefore,
+      );
+      if (
+        [
+          'targetRepeat',
+          'targetAbort',
+          'targetLostBefore',
+          'targetRecoverAfter',
+          'targetRecoverBefore',
+          'targetLostSocket',
+          'targetRecoverSocket',
+        ].includes(command)
+      )
+        assert.deepEqual(after, before);
+      if (command === 'targetPublish') {
+        assert.equal(result.outcome.result, 'published');
+        assert.equal(result.contended, true);
+        assert.equal(result.contendedAfterCommit, true);
+        assert.equal(
+          after['public.exercises'].rows,
+          before['public.exercises'].rows + 1,
+        );
+        assert.equal(
+          after['public.exercise_versions'].rows,
+          before['public.exercise_versions'].rows + 1,
+        );
+      }
+      if (command === 'targetRepeat')
+        assert.equal(result.outcome.result, 'unchanged');
+      if (command === 'targetAbort') assert.equal(result.state, 'aborted');
+      if (command === 'targetLostAfter')
+        assert.equal(
+          after['public.exercise_versions'].rows,
+          before['public.exercise_versions'].rows + 1,
+        );
+      if (command === 'targetRecoverAfter')
+        assert.equal(result.outcome.result, 'unchanged');
+      if (
+        command === 'targetLostBefore' ||
+        command === 'targetLostAfter' ||
+        command === 'targetLostSocket'
+      )
+        assert.equal(result.state, 'uncertain');
+      if (
+        command === 'targetRecoverBefore' ||
+        command === 'targetRecoverSocket'
+      )
+        assert.equal(result.state, 'not_applied');
+      targetChecks.push({
+        command,
+        database,
+        result: 'PASS',
+        observation: result,
+      });
+      transferSnapshots[command] = { before, after };
+    }
+    assert.deepEqual(
+      outsideJournal(snapshot(container, 'transfer_source')),
+      outsideJournal(sourceBefore),
+    );
+    checks.push(
+      'Nine real target transaction/recovery scenarios preserve existing learner history and all excluded tables',
+    );
+    await writeFile(
+      path.join(artifact, 'transfer-snapshots.json'),
+      JSON.stringify(transferSnapshots, null, 2) + '\n',
+    );
+  }
   const sha = async (file) =>
     createHash('sha256')
       .update(await readFile(file))
@@ -685,6 +942,7 @@ try {
         publishedPorts: false,
         internalNetwork: true,
         checks,
+        targetChecks,
         tls,
         recoveryAssertions: recovery.recoveryAssertions,
         recoveryAssertionsAfterRestore: restoredProof.recoveryAssertions,
@@ -696,11 +954,14 @@ try {
         sequencesCompared: false,
         migrationSha256: await sha(migration),
         sourceDumpSha256: await sha(path.join(artifact, 'source.dump')),
-        scope:
-          'Actual local TLS driver and machine journal recovery; synthetic identity gateway and inspection, no target apply or real Auth',
+        scope: targetTransactions
+          ? 'Real local target transactions and journal recovery with a previously native-approved source and synthetic identity gateway; no remote operation'
+          : 'Actual local TLS driver and machine journal recovery; synthetic identity gateway and inspection, no target apply or real Auth',
         limitations: [
           'Source and target fixture databases share one isolated PostgreSQL cluster.',
-          'No full target transfer or complete confinement certification.',
+          targetTransactions
+            ? 'No complete publication service, fresh Engine execution at transfer, live Auth or complete confinement certification.'
+            : 'No full target transfer or complete confinement certification.',
           'No remote configuration, SQL, Auth activation, publication, push or deployment.',
         ],
       },
@@ -722,4 +983,5 @@ try {
   }
   if (created) cli(['stop', '--timeout', '15', container]);
   if (sourceStarted) cli(['stop', '--timeout', '15', sourceContainer]);
+  if (pristineStarted) cli(['stop', '--timeout', '15', pristineContainer]);
 }

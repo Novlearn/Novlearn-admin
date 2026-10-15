@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { createInterface } from 'node:readline';
 import { Client } from 'pg';
+import { runTransferCommand } from '/target-worker.mjs';
 import {
   createPublicationPgPools,
   PublicationJournal,
@@ -23,6 +24,15 @@ const rejectPool = async (settings) => {
   }
 };
 const commands = {
+  targetPublish: () => runTransferCommand('publish'),
+  targetRepeat: () => runTransferCommand('repeat'),
+  targetAbort: () => runTransferCommand('abort'),
+  targetLostAfter: () => runTransferCommand('lostAfter'),
+  targetRecoverAfter: () => runTransferCommand('recoverAfter'),
+  targetLostBefore: () => runTransferCommand('lostBefore'),
+  targetRecoverBefore: () => runTransferCommand('recoverBefore'),
+  targetLostSocket: () => runTransferCommand('lostSocket'),
+  targetRecoverSocket: () => runTransferCommand('recoverSocket'),
   async identity() {
     phase = 'construct-pools';
     pools = createPublicationPgPools(config);
@@ -175,4 +185,5 @@ try {
   }
 } finally {
   await pools?.close();
+  await runTransferCommand('close');
 }

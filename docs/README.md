@@ -31,6 +31,10 @@ incertain, protection de source et restauration ; transfert complet à raccorder
 TLS vérifié, file bornée et tests réels après révocation/restauration ; aucun
 transfert ou accès distant activé.
 
+[Transaction cible et commit incertain](publication-target.md) : composant privé,
+transferts/reprises sur copies, historique préservé et pertes de connexion ;
+orchestration applicative et UI toujours à raccorder.
+
 [Rapprochement des migrations par empreintes](lot-1a-hash-reconciliation.md) : relevé en lecture seule, sept candidats et historique partiellement dépourvu de SQL.
 
 | Document                                                     | Objet                                                                          |

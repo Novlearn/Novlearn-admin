@@ -11,7 +11,7 @@ export type PublicationPgEndpoint = { url: string; ca?: string };
 export type PublicationPgConfiguration = {
   source: PublicationPgEndpoint;
   target: PublicationPgEndpoint;
-  targetKey: 'novlearn-production';
+  targetKey: `production-${string}`;
   review: string;
 };
 
@@ -30,7 +30,7 @@ function endpoint(
       decodeURIComponent(url.password).length > 512 ||
       url.search ||
       url.hash ||
-      !/^\/[a-zA-Z0-9_]+$/.test(url.pathname) ||
+      url.pathname !== '/postgres' ||
       (url.port && url.port !== '5432')
     )
       return null;
@@ -81,7 +81,7 @@ export function readPublicationPgConfiguration(
     decodeURIComponent(s.password) === decodeURIComponent(t.password)
   )
     return null;
-  return { source, target, targetKey: 'novlearn-production', review };
+  return { source, target, targetKey: `production-${targetRef}`, review };
 }
 
 const identitySql = `SELECT r.rolname AS login,r.rolcanlogin,r.rolinherit,r.rolsuper,r.rolcreatedb,r.rolcreaterole,r.rolreplication,r.rolbypassrls,
@@ -146,9 +146,17 @@ export function createPublicationPgPools(config: PublicationPgConfiguration) {
     pool.on('error', () => {});
     const connect = async (): Promise<PublicationConnection> => {
       let client: PoolClient | undefined;
+      let broken = false;
+      const onError = () => {
+        broken = true;
+      };
       try {
         client = await pool.connect();
+        // pg's pool handles idle-client errors; a checked-out client needs its
+        // own listener so a transport loss cannot crash the Node process.
+        client.on('error', onError);
         await client.query('DISCARD ALL');
+        await client.query("SET search_path=''");
         const result = await client.query(identitySql, [role]),
           identity = result.rows[0] as Record<string, unknown> | undefined;
         const capability = identity?.capability as
@@ -196,8 +204,15 @@ export function createPublicationPgPools(config: PublicationPgConfiguration) {
         await client.query(
           "SET statement_timeout='10s'; SET lock_timeout='3s'; SET idle_in_transaction_session_timeout='60s'",
         );
+        const checked = client;
+        const release = client.release.bind(client);
+        client.release = (destroy) => {
+          checked.removeListener('error', onError);
+          release(Boolean(destroy) || broken);
+        };
         return client;
       } catch {
+        client?.removeListener('error', onError);
         client?.release(true);
         throw new PublicationPgError();
       }

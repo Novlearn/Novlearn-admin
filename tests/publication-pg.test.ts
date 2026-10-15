@@ -9,12 +9,19 @@ const fake = vi.hoisted(() => ({
   release: vi.fn(),
   end: vi.fn(),
   on: vi.fn(),
+  clientOn: vi.fn(),
+  clientOff: vi.fn(),
 }));
 vi.mock('pg', () => ({
   Pool: vi.fn(function (config: unknown) {
     fake.make(config);
     return {
-      connect: async () => ({ query: fake.query, release: fake.release }),
+      connect: async () => ({
+        query: fake.query,
+        release: fake.release,
+        on: fake.clientOn,
+        removeListener: fake.clientOff,
+      }),
       end: fake.end,
       on: fake.on,
     };
@@ -47,7 +54,7 @@ const env = () => ({
 const config = (): PublicationPgConfiguration => ({
   source: { url: sourceUrl },
   target: { url: targetUrl },
-  targetKey: 'novlearn-production',
+  targetKey: `production-${target}`,
   review: 'synthetic',
 });
 const roleData = () => ({
@@ -87,7 +94,7 @@ beforeEach(() => {
 describe('Publication : configuration fermée et séparation', () => {
   it('does not construct pools while only reading valid operator configuration', () => {
     expect(readPublicationPgConfiguration(env())?.targetKey).toBe(
-      'novlearn-production',
+      `production-${target}`,
     );
     expect(fake.make).not.toHaveBeenCalled();
   });
@@ -105,6 +112,7 @@ describe('Publication : configuration fermée et séparation', () => {
     sourceUrl + '?sslmode=disable',
     sourceUrl + '?sslrootcert=other',
     sourceUrl.replace(':5432', ':6543'),
+    sourceUrl.replace('/postgres', '/another_database'),
     sourceUrl.replace(sourceLogin, 'postgres'),
     sourceUrl.replace(
       `db.${STAGING_PROJECT_REF}.supabase.co`,
@@ -148,6 +156,25 @@ describe('Publication : configuration fermée et séparation', () => {
       }),
     ).toBeNull();
   });
+  it('binds the private destination key to the configured project and its default database', () => {
+    const other = 'z'.repeat(20);
+    expect(
+      readPublicationPgConfiguration({
+        ...env(),
+        ADMIN_PUBLICATION_TARGET_PG_URL: targetUrl.replace(
+          '/postgres',
+          '/another_database',
+        ),
+      }),
+    ).toBeNull();
+    expect(
+      readPublicationPgConfiguration({
+        ...env(),
+        ADMIN_PUBLICATION_TARGET_PROJECT_REF: other,
+        ADMIN_PUBLICATION_TARGET_PG_URL: targetUrl.replace(target, other),
+      })?.targetKey,
+    ).toBe(`production-${other}`);
+  });
   it('accepts optional trusted CA text but never URL SSL overrides', () => {
     expect(
       readPublicationPgConfiguration({
@@ -185,7 +212,8 @@ describe('Pilote : TLS et rôles bornés', () => {
     const pools = createPublicationPgPools(config());
     const connection = await pools.source();
     expect(fake.query.mock.calls[0][0]).toBe('DISCARD ALL');
-    expect(fake.query.mock.calls[1][1]).toEqual([sourceRole]);
+    expect(fake.query.mock.calls[1][0]).toBe("SET search_path=''");
+    expect(fake.query.mock.calls[2][1]).toEqual([sourceRole]);
     expect(fake.query).toHaveBeenCalledWith(
       'SET ROLE novlearn_publication_journal_executor',
     );
@@ -200,7 +228,17 @@ describe('Pilote : TLS et rôles bornés', () => {
     expect(fake.query).toHaveBeenCalledWith(
       'SET ROLE novlearn_publication_executor',
     );
-    expect(fake.query.mock.calls[1][1]).toEqual([targetRole]);
+    expect(fake.query.mock.calls[2][1]).toEqual([targetRole]);
+  });
+  it('handles a leased-client transport error and destroys that connection on release', async () => {
+    const connection = await createPublicationPgPools(config()).source();
+    const handler = fake.clientOn.mock.calls.find(
+      ([event]) => event === 'error',
+    )![1] as () => void;
+    expect(() => handler()).not.toThrow();
+    connection.release();
+    expect(fake.release).toHaveBeenCalledExactlyOnceWith(true);
+    expect(fake.clientOff).toHaveBeenCalledWith('error', handler);
   });
   it.each([
     'rolinherit',

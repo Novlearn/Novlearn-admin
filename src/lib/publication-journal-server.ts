@@ -21,7 +21,7 @@ export type PublicationConnection = {
   query(
     sql: string,
     values?: unknown[],
-  ): Promise<{ rows: Record<string, unknown>[] }>;
+  ): Promise<{ rows: Record<string, unknown>[]; command?: string }>;
   release(destroy?: boolean): void;
 };
 export class PublicationJournalError extends Error {

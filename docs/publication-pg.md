@@ -1,5 +1,10 @@
 # Connexion PostgreSQL privée et lecture de reprise — qualification locale
 
+**Checkpoint suivant :** la [transaction cible](publication-target.md) ajoute la
+primitive de transfert et sa reprise vérifiées sur copies. La clé de destination
+est maintenant liée au projet et la base réelle limitée à `postgres` ; ce texte
+conserve les preuves datées du pilote précédent. Le service et l'UI restent ouverts.
+
 Le pilote PostgreSQL et la lecture machine du journal disposent maintenant
 d'une vérification réelle sur copies locales. **Le service complet de transfert
 n'est pas encore raccordé** : aucune route de publication, configuration réelle,

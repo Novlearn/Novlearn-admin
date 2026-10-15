@@ -1,5 +1,25 @@
 # Progression du goal NovLearn Admin
 
+## Transaction cible et issue de commit — 15 octobre 2026
+
+La [primitive cible](publication-target.md) ajoute inspection, transaction,
+revérification source avant commit, relecture après commit et observation sans
+répétition. Le verrou de session précède la prise en charge source et reste
+tenu jusqu'au journal ; une reprise ne peut donc pas libérer un travail actif.
+La clé de destination est liée au projet configuré et à sa base `postgres`.
+
+**463 tests Admin**, types, lint sans erreur, format, build et smoke passent.
+Neuf scénarios PostgreSQL réels passent, avec historique existant, concurrence,
+idempotence, annulation, perte d'accusé et vraie fermeture de socket. Les reprises
+n'appellent jamais l'application ; les snapshots complets du périmètre exclu
+restent identiques. Les 16 assertions SQL avant/après restauration sont rejouées.
+Voir les [preuves](publication-target-local-proof.json).
+
+Ce composant privé n'est pas encore raccordé à l'orchestrateur Engine, aux routes
+et aux confirmations UI. Auth réelle, confinement complet et réception visuelle
+restent ouverts. Aucun changement SQL distant, publication réelle, push ou
+suppression de données existantes. Le goal reste actif et incomplet.
+
 ## Pilote PostgreSQL et reprise machine — 15 octobre 2026
 
 Le [pilote privé](publication-pg.md) relie les primitives du journal à de vraies

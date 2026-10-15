@@ -1,0 +1,298 @@
+{
+  "date": "2026-10-15T17:56:33.356Z",
+  "result": "PASS for stated local component scope",
+  "goalComplete": false,
+  "scope": "Private target transaction/verification/recovery with actual SQL and TLS pools, retained native-approved source and synthetic identity gateway; not the complete publication application",
+  "tests": {
+    "admin": 463,
+    "files": 27,
+    "targetUnit": 36,
+    "targetedTargetDriverJournal": 126,
+    "typecheck": true,
+    "lintErrors": 0,
+    "preexistingLintWarnings": 1,
+    "format": true,
+    "build": true,
+    "smoke": true
+  },
+  "native": {
+    "artifact": ".local/lot1a/publication-pg-1792086500422/proof.json",
+    "baseIntegrationChecks": 11,
+    "targetScenarios": [
+      {
+        "command": "targetPublish",
+        "database": "transfer_target",
+        "result": "PASS",
+        "observation": {
+          "state": "committed",
+          "outcome": {
+            "catalogId": "1ca56b86-02a5-4a83-921e-c5c2b16061db",
+            "revision": 1,
+            "businessDigest": "a8a2e9e50907c0d7b452e4311c353d431344101e045dff89ef376f0ce71d089b",
+            "exerciseId": "2",
+            "versionId": "62e0bdfa-a8fb-4085-a1e3-9c02d6fbb327",
+            "stateToken": "51243902bfdcbb737403b8431e884468064717b918706e88e10644f98c5bdea7",
+            "result": "published"
+          },
+          "operationState": "committed",
+          "applyCalls": 1,
+          "contended": true,
+          "contendedAfterCommit": true
+        }
+      },
+      {
+        "command": "targetRepeat",
+        "database": "transfer_target",
+        "result": "PASS",
+        "observation": {
+          "state": "committed",
+          "outcome": {
+            "catalogId": "1ca56b86-02a5-4a83-921e-c5c2b16061db",
+            "revision": 1,
+            "businessDigest": "a8a2e9e50907c0d7b452e4311c353d431344101e045dff89ef376f0ce71d089b",
+            "exerciseId": "2",
+            "versionId": "62e0bdfa-a8fb-4085-a1e3-9c02d6fbb327",
+            "stateToken": "51243902bfdcbb737403b8431e884468064717b918706e88e10644f98c5bdea7",
+            "result": "unchanged"
+          },
+          "operationState": "committed",
+          "applyCalls": 1,
+          "contended": false,
+          "contendedAfterCommit": false
+        }
+      },
+      {
+        "command": "targetAbort",
+        "database": "transfer_abort",
+        "result": "PASS",
+        "observation": {
+          "state": "aborted",
+          "outcome": null,
+          "operationState": "failed",
+          "applyCalls": 1,
+          "contended": false,
+          "contendedAfterCommit": false
+        }
+      },
+      {
+        "command": "targetLostAfter",
+        "database": "transfer_lost_after",
+        "result": "PASS",
+        "observation": {
+          "state": "uncertain",
+          "outcome": null,
+          "operationState": "uncertain",
+          "applyCalls": 1,
+          "contended": false,
+          "contendedAfterCommit": false
+        }
+      },
+      {
+        "command": "targetRecoverAfter",
+        "database": "transfer_lost_after",
+        "result": "PASS",
+        "observation": {
+          "state": "committed",
+          "outcome": {
+            "catalogId": "1ca56b86-02a5-4a83-921e-c5c2b16061db",
+            "revision": 1,
+            "businessDigest": "a8a2e9e50907c0d7b452e4311c353d431344101e045dff89ef376f0ce71d089b",
+            "exerciseId": "2",
+            "versionId": "14b3e1eb-feac-4f63-967d-d719989293fc",
+            "stateToken": "0643c9479e56f4cabcd3d4ef954621a35ed0e265d15e2c53164df8b3ab72d146",
+            "result": "unchanged"
+          },
+          "applyCallsDuringRecovery": 0
+        }
+      },
+      {
+        "command": "targetLostBefore",
+        "database": "transfer_lost_before",
+        "result": "PASS",
+        "observation": {
+          "state": "uncertain",
+          "outcome": null,
+          "operationState": "uncertain",
+          "applyCalls": 1,
+          "contended": false,
+          "contendedAfterCommit": false
+        }
+      },
+      {
+        "command": "targetRecoverBefore",
+        "database": "transfer_lost_before",
+        "result": "PASS",
+        "observation": {
+          "state": "not_applied",
+          "outcome": null,
+          "applyCallsDuringRecovery": 0
+        }
+      },
+      {
+        "command": "targetLostSocket",
+        "database": "transfer_socket",
+        "result": "PASS",
+        "observation": {
+          "state": "uncertain",
+          "outcome": null,
+          "operationState": "uncertain",
+          "applyCalls": 1,
+          "contended": false,
+          "contendedAfterCommit": false
+        }
+      },
+      {
+        "command": "targetRecoverSocket",
+        "database": "transfer_socket",
+        "result": "PASS",
+        "observation": {
+          "state": "not_applied",
+          "outcome": null,
+          "applyCallsDuringRecovery": 0
+        }
+      }
+    ],
+    "internalNetwork": true,
+    "publishedPorts": false,
+    "tls": [
+      {
+        "role": "novlearn_publication_journal_executor",
+        "login": "novlearn_admin_journal_service",
+        "ssl": true,
+        "authorized": true,
+        "version": "TLSv1.3",
+        "cipher": "TLS_AES_256_GCM_SHA384"
+      },
+      {
+        "role": "novlearn_publication_executor",
+        "login": "novlearn_admin_publication_service",
+        "ssl": true,
+        "authorized": true,
+        "version": "TLSv1.3",
+        "cipher": "TLS_AES_256_GCM_SHA384"
+      }
+    ],
+    "existingLearnerHistorySeeded": true,
+    "excludedTablesPreservedPerScenario": 60,
+    "totalTablesComparedInNoChangeScenarios": 62,
+    "legacyExerciseRowVerifiedByNativeAssertion": true,
+    "sourceOutsideJournalVerifiedByNativeAssertion": 60,
+    "sequencesCompared": false,
+    "recoverySqlBeforeRestore": 16,
+    "recoverySqlAfterRestore": 16
+  },
+  "canonicalSql": {
+    "files": 61,
+    "currentManifestMatches": true,
+    "newMigration": false
+  },
+  "sourceHashes": {
+    "src/lib/publication-target.ts": "511643c9cfd7d668706e7ceb4aeabeaa9869defd884149011178894832fe17b1",
+    "src/lib/publication-pg.ts": "ee83f3abce1d43fedff8ad3f780427e0fe7133fb628f7c2724c088e8135ed982",
+    "src/lib/publication-journal-server.ts": "2988f001932f2db67b2a583079047d232fd7e1edabbba7f4f77883d9647323ed",
+    "tests/publication-target.test.ts": "61d404bc62d5947d90328c644470b177ba6926b4d726cce86d362e29ac501ee3",
+    "tests/publication-pg.test.ts": "a1093a904bab8bad85bce70c8d495fe4e360a5a2e88648e1addb8a8e9d2e416b",
+    "scripts/test-publication-pg-local.mjs": "2cd3f40bedd030a66c58dc72f18d772392cbd81ff1de1ad71f749b82d92a97bf",
+    "scripts/test-publication-pg-worker.mjs": "33094b4d02f6e0c4232bff7bafcf3849d6de58c99e6fa3ce56543ffa05e13892",
+    "scripts/test-publication-target-worker.mjs": "b7e8b751ce2f56a2f692c4c94e92ccd49766a82436eb7d01625090b0ac7db3d7"
+  },
+  "artifacts": [
+    {
+      "path": ".local/lot1a/publication-pg-1792086500422/proof.json",
+      "sha256": "1a7c5601848145d6d12c660526b9c1e5f2e90b318e8eee9e9f4404c866095021"
+    },
+    {
+      "path": ".local/lot1a/publication-pg-1792086500422/transfer-snapshots.json",
+      "sha256": "60d9bfc209d56b39aa57131f1f73ea67822c95e422553585dee34df5b0a9b5ec"
+    },
+    {
+      "path": ".local/lot1a/publication-pg-1792086500422/snapshots.json",
+      "sha256": "41afa40bc19e58fd85f4caa6e3fc7e469a61627729ae570f72c8d85c0c93f570"
+    },
+    {
+      "path": ".local/lot1a/publication-pg-1792086500422/bundle/native.mjs",
+      "sha256": "b2b4c5a6bd90b5b572115009b04d875762399b9caea66e9b36ed564f4a81ef34"
+    },
+    {
+      "path": ".local/lot1a/publication-pg-1792086500422/target-pristine.dump",
+      "sha256": "051aff6a2abc39b50c2218f7f8f48f39cae655fa9f5ef9b25d82820c125ce350"
+    },
+    {
+      "path": ".local/lot1a/publication-pg-1792086500422/targetPublish.json",
+      "sha256": "de12d11b76ced11136c69a8963bcab81af1ebccd70fbd8cc04bb7fac1efd0046"
+    },
+    {
+      "path": ".local/lot1a/publication-pg-1792086500422/targetRepeat.json",
+      "sha256": "25480d170f03506bbda99cf577226713d7d726ce68ced84bbaa9abb2fd308ce6"
+    },
+    {
+      "path": ".local/lot1a/publication-pg-1792086500422/targetAbort.json",
+      "sha256": "e7a0eb636323a5f5b27703b76d82bebe516b10cc33727763975634be02f8ef2c"
+    },
+    {
+      "path": ".local/lot1a/publication-pg-1792086500422/targetLostAfter.json",
+      "sha256": "224266711bc57b9f321dae64da1fe87cd64d5ee3500919432b6bd0c58d221067"
+    },
+    {
+      "path": ".local/lot1a/publication-pg-1792086500422/targetRecoverAfter.json",
+      "sha256": "b66d6520d8c186998788254393c447e273e7144bcb41407b78a7bd9c3de247fc"
+    },
+    {
+      "path": ".local/lot1a/publication-pg-1792086500422/targetLostBefore.json",
+      "sha256": "224266711bc57b9f321dae64da1fe87cd64d5ee3500919432b6bd0c58d221067"
+    },
+    {
+      "path": ".local/lot1a/publication-pg-1792086500422/targetRecoverBefore.json",
+      "sha256": "b36c7f0a21e2c55bfb20709383f7ba9f00161be4d6a868cb6a23eb742c869cc0"
+    },
+    {
+      "path": ".local/lot1a/publication-pg-1792086500422/targetLostSocket.json",
+      "sha256": "224266711bc57b9f321dae64da1fe87cd64d5ee3500919432b6bd0c58d221067"
+    },
+    {
+      "path": ".local/lot1a/publication-pg-1792086500422/targetRecoverSocket.json",
+      "sha256": "b36c7f0a21e2c55bfb20709383f7ba9f00161be4d6a868cb6a23eb742c869cc0"
+    },
+    {
+      "path": ".local/lot1a/publication-pg-1792086500422/recovery-sql.log",
+      "sha256": "aa4961cbb3ff0b15c3624147642ca895a11a53fc4ac1cfc204a81d0c293114b2"
+    },
+    {
+      "path": ".local/lot1a/publication-pg-1792086500422/recovery-restored-sql.log",
+      "sha256": "aa4961cbb3ff0b15c3624147642ca895a11a53fc4ac1cfc204a81d0c293114b2"
+    },
+    {
+      "path": ".local/lot1a/.publication-target-socket-check.log",
+      "sha256": "5e3c290b9520d2fe7bce164680503a1081ad5e310f91f07d42fb983b48121b21"
+    },
+    {
+      "path": "../Novlearn/.local/admin-sql-replay/novlearn-admin-lot1a-replay-20261015132052356/manifest.json",
+      "sha256": "502c1f13404f5f99eea9d341cf6f3d325050cee777605faa15e741100f80c003"
+    }
+  ],
+  "retainedFailures": [
+    ".local/lot1a/.publication-target-native.log",
+    ".local/lot1a/.publication-target-check.log",
+    ".local/lot1a/.publication-target-final-check.log"
+  ],
+  "externalAudit": {
+    "path": "docs/audit-current-2026-10-15.md",
+    "sha256": "8ff3bf843fb6221ff8c7cb34435afc67372b25163eb4edbf1268dcae7b38f26a",
+    "originalBackup": {
+      "path": ".local/lot1a/external-audit-before-format-1792086235972.md",
+      "sha256": "c1105d6f06f8498c842432353413fc08c7efc29f8123e1707aabca1d05bb0266"
+    },
+    "textPreserved": true,
+    "onlyWhitespaceAndTableSeparatorWidthsChanged": true,
+    "excludedFromFeatureCommit": true
+  },
+  "limitations": [
+    "No full source/Engine/target application service, protected publication route or confirmation UI yet.",
+    "No fresh Engine run at transfer, live Auth, real editorial approval or full confinement certification claimed.",
+    "New target primitive rollback mode is unit-tested; prior SQL rollback proof is distinct.",
+    "Source and target fixture databases share one isolated PostgreSQL cluster.",
+    "The acknowledgement-loss cases use exceptions around actual commits; the socket-loss case actually closes its fixture transport.",
+    "No remote SQL/application changes, Auth activation, production publication, push or deployment.",
+    "No visual/browser test executed; previous policy refusal remains respected."
+  ]
+}

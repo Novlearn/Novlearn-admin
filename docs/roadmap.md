@@ -1,5 +1,11 @@
 # Roadmap
 
+**Transaction cible :** la [primitive serveur](publication-target.md) passe neuf
+scénarios locaux avec PostgreSQL réel, dont commit incertain, perte de socket et
+reprise sans répétition. 463 tests Admin et le contrôle complet passent. Le service
+Engine/source/cible, les routes et les confirmations UI restent à raccorder ;
+aucune activation distante ni réception visuelle n'est déclarée.
+
 **Connexion privée et reprise :** le [pilote PostgreSQL](publication-pg.md) et
 la migration 61 passent 11 contrôles d'intégration TLS/rôles/reprise et 16 assertions
 SQL avant/après restauration. 424 tests Admin et le contrôle complet passent.
