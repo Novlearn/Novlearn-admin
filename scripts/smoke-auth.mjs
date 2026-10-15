@@ -79,6 +79,7 @@ try {
     '/admin/chapters',
     '/admin/competences',
     '/admin/flashcards',
+    '/admin/publication',
   ]) {
     const admin = await fetch(`${origin}${path}`, {
       redirect: 'manual',

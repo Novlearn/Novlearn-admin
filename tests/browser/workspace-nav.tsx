@@ -4,6 +4,7 @@ export const workspaceLinks = [
   ['Accueil des essais', 'index.html'],
   ['Catalogue', 'catalogue.html'],
   ['Creator et tests', 'creator.html'],
+  ['Publication simulée', 'publication.html'],
   ['Chapitres et compétences', 'taxonomy.html'],
   ['Flashcards', 'flashcards.html'],
   ['Saisie mathématique', 'math-input.html'],

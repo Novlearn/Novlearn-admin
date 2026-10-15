@@ -1,5 +1,26 @@
 # Progression du goal NovLearn Admin
 
+## Interface de publication et historique — 15 octobre 2026
+
+Le [panneau de révision et l'historique](publication-ui.md) sont raccordés à l'API
+existante. Le diff exige confirmation, un plan expiré est refusé et une réponse
+perdue propose une observation du plan conservé, sans retry de publication.
+Le banc local comporte une page de simulation clairement signalée, avec huit
+scénarios et un historique simulé ; aucune écriture SQL n'y est réalisée.
+Les [preuves](publication-ui-local-proof.json) distinguent unités, rendu serveur,
+HTTP et compilation de la réception navigateur non exécutée.
+
+**575 tests Admin**, types, lint sans erreur, format, build et smoke passent.
+Les huit pages du banc compilent et six contrôles HTTP passent. Une lecture SQL
+réelle en transaction `READ ONLY` fournit onze opérations acceptées par le codec ;
+trois identités interdites et un offset hors borne sont refusés. Les 45 bundles
+JavaScript clients vérifiés ne contiennent pas les noms de configuration privée
+de publication. Les 61 migrations et le backend certifié précédent sont inchangés.
+
+La finalisation de l'état source Staging reste à implémenter et vérifier en SQL,
+ainsi que les lots, le rollback complet et les vrais parcours Auth. Aucun accès
+distant n'est activé et le goal reste incomplet.
+
 ## Orchestration de publication et route fermée — 15 octobre 2026
 
 Le [service local](publication-service.md) relie désormais l'export SQL de la

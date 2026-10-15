@@ -42,6 +42,12 @@ aucun exercice en base et ne publie rien. Le lancement alternatif
 `node scripts/content-browser.mjs` propose les mêmes écrans sans moteur ; ne pas
 lancer les deux simultanément.
 
+Le banc propose aussi une [simulation de publication](docs/publication-ui.md) :
+diff, confirmation, réponse perdue et vérification de résultat. Tous les résultats
+de ce parcours sont simulés ; il n'exécute pas de tests Engine ni de transfert.
+Le service et l'interface réels restent soumis aux prérequis d'activation et à
+la finalisation éditoriale Staging encore manquante.
+
 ## Vérifications
 
 ```powershell

@@ -28,6 +28,11 @@ function Workspace() {
   }, []);
   const cards = [
     [
+      'Publication simulée',
+      'publication.html',
+      'Relire un diff, confirmer et essayer les états de réponse perdue ou de reprise. Tous les résultats de ce parcours sont simulés ; aucun exercice n’est transféré.',
+    ],
+    [
       'Creator et tests',
       'creator.html',
       'Modifier un exercice exemple, saisir les expressions avec MathLive, générer une instance, répondre et lancer les tests par seed.',

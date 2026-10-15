@@ -1,5 +1,11 @@
 # Roadmap
 
+**Interface de publication :** le [panneau et l'historique](publication-ui.md)
+sont raccordés aux routes existantes, avec confirmation explicite, expiration
+et observation après interruption. Un scénario de simulation est disponible dans
+le banc local. La finalisation éditoriale source, les lots, le rollback complet,
+Auth réelle et la réception visuelle restent ouverts ; aucune activation distante.
+
 **Orchestration locale :** le [service de publication](publication-service.md)
 relie export source, nouveaux tests Engine, confirmation signée, journal et
 transaction cible. Sa route reste fermée par défaut. La transition éditoriale

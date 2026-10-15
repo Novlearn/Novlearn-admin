@@ -39,6 +39,10 @@ orchestration applicative et UI toujours à raccorder.
 SQL autorisé, nouveaux tests Engine, confirmation signée et reprise observée ;
 route fermée et intégration UI/état éditorial source encore incomplète.
 
+[Interface de publication et historique](publication-ui.md) : diff, confirmation,
+issue incertaine et vérification sans réapplication ; simulation locale disponible,
+réception visuelle et finalisation de source encore ouvertes.
+
 [Rapprochement des migrations par empreintes](lot-1a-hash-reconciliation.md) : relevé en lecture seule, sept candidats et historique partiellement dépourvu de SQL.
 
 | Document                                                     | Objet                                                                          |

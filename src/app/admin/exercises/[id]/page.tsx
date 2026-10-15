@@ -7,6 +7,9 @@ import { ExercisePreview } from '@/components/exercise-preview';
 import { TestHistory } from '@/components/test-history';
 import { EditorialReview } from '@/components/editorial-review';
 import { ReviewHistory } from '@/components/review-history';
+import { PublicationPanel } from '@/components/publication-panel';
+import { readPublicationPgConfiguration } from '@/lib/publication-pg';
+import { readPublicationConfirmationKey } from '@/lib/publication-service';
 import { EditorialBadge } from '@/components/catalogue-list';
 import {
   draftEnvelope,
@@ -272,6 +275,32 @@ export default async function ExercisePage({
               unavailable={!!reviewHistory?.error}
             />
           )}
+          {version &&
+            canonical &&
+            Number.isSafeInteger(version.test_epoch) &&
+            version.test_epoch >= 0 && (
+              <PublicationPanel
+                key={
+                  'publication-' +
+                  version.id +
+                  '-' +
+                  version.approval_fingerprint_sha256 +
+                  '-' +
+                  version.test_epoch
+                }
+                versionId={version.id}
+                fingerprint={version.approval_fingerprint_sha256}
+                epoch={String(version.test_epoch)}
+                revision={version.revision}
+                status={version.editorial_status}
+                archived={!!parent.admin_archived_at}
+                enabled={
+                  !!readPublicationPgConfiguration(process.env) &&
+                  !!readPublicationConfirmationKey(process.env) &&
+                  process.env.ADMIN_ENGINE_ENABLED === 'true'
+                }
+              />
+            )}
           {comparison && (
             <section className="card">
               <h2 className="text-xl font-semibold">

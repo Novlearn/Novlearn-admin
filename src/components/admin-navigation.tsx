@@ -10,6 +10,7 @@ export function AdminNavigation() {
         ['/admin', 'Vue d’ensemble'],
         ['/admin/exercises', 'Exercices'],
         ['/admin/exercises/new', 'Créer un exercice'],
+        ['/admin/publication', 'Publications'],
         ['/admin/chapters', 'Chapitres'],
         ['/admin/competences', 'Compétences'],
         ['/admin/flashcards', 'Flashcards'],

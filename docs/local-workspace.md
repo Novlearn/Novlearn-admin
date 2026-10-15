@@ -36,6 +36,12 @@ qu'elle fonctionne encore. Les anciennes preuves locales restent conservées.
 
 ## Parcours disponibles
 
+Le jalon suivant ajoute une [simulation de publication](publication-ui.md) :
+diff, confirmation, expiration, réponse perdue et observation. Ce parcours
+supplémentaire utilise uniquement des réponses fictives, sans Auth, Engine ou
+base. Les nombres de sept pages et 421 tests ci-dessous restent ceux du relevé
+antérieur ; les nouvelles preuves sont séparées dans le document lié.
+
 - **Creator et tests** : vrai `DraftMetadataForm`, exercice exemple canonique,
   champs avancés, MathLive, validation structurelle, génération, inspection
   pédagogique, réponse élève, correction native et rapports par seed.
