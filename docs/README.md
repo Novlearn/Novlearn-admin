@@ -15,6 +15,9 @@ preuves de restauration, limites et étapes avant activation distante.
 [Chapitres et compétences](taxonomy.md) : référentiel Staging, identifiants et
 références préservés, audit, tests SQL/restauration et vérification visuelle locale.
 
+[Flashcards Staging](flashcards.md) : intégration locale, permissions, rejeu de
+58 migrations et restauration ; réception visuelle bloquée et méthode manuelle.
+
 [Rapprochement des migrations par empreintes](lot-1a-hash-reconciliation.md) : relevé en lecture seule, sept candidats et historique partiellement dépourvu de SQL.
 
 | Document                                                     | Objet                                                                          |

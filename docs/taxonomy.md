@@ -18,6 +18,12 @@ Un nom de compétence utilisé comme référence ne peut pas être renommé ; un
 compétence liée à des exercices/révisions/scores ne peut pas changer de chapitre.
 Modifier son maximum ne réécrit ni ne recalcule les scores existants.
 
+La [migration 58 flashcards](flashcards.md) ajoute une restriction : un chapitre
+dont le nom exact est utilisé par une flashcard ne peut pas être renommé.
+L'alias seul ne préserverait pas le filtre exact du lecteur élève actuel.
+Cette protection est vérifiée par les nouvelles assertions SQL ; les résultats
+du Lot 6 ci-dessous restent le relevé daté de la migration 57.
+
 Les formulaires conservent les champs après erreur ou conflit. Une confirmation
 intégrée permet d'annuler une fermeture ou un changement de fiche. Le focus va
 au titre de l'éditeur. La garde de navigation commune reste utilisée ; la

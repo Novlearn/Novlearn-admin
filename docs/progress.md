@@ -1,5 +1,27 @@
 # Progression du goal NovLearn Admin
 
+## Flashcards et rejeu complet local — 15 octobre 2026
+
+Les [flashcards Staging](flashcards.md) disposent de leur formulaire, aperçu,
+insertion MathLive, API protégée et audit SQL. Migration 58 NovLearn locale
+`62629ac` ; aucune modification de l'application élève ou du moteur.
+**302 tests Admin, types, lint sans erreur, format, build et smoke passent.**
+Les 38 assertions flashcards passent avant/après restauration et la concurrence
+accepte une seule édition. Les anciennes colonnes des 59 tables sont préservées.
+
+Le nouveau rejeu **des 58 migrations** passe, suivi du parcours Engine natif /
+HMAC / reçu / relecture synthétique. La sauvegarde/restauration complète passe
+avec le comparateur inchangé (équivalence logique, comparaison brute différente),
+les 69 assertions historiques et les suites 48 catalogue, 21 reçus, 43 relecture,
+39 référentiel et 38 flashcards. Voir les [preuves](flashcards-local-proof.json).
+
+**Le pilotage visuel flashcards est bloqué par la politique d'URL du navigateur.**
+Aucun contournement ni succès visuel n'est déclaré. La réception peut être faite
+manuellement dans le banc synthétique documenté. Le goal est lu `active` ;
+publication, réception complète du Creator, statistiques/utilisateurs et portes
+distantes restent ouvertes. Aucun changement distant ni suppression de données.
+Les sections suivantes sont des relevés datés, antérieurs à ce rejeu de 58 SQL.
+
 ## Chapitres et compétences locaux — 15 octobre 2026
 
 Le [référentiel Staging](taxonomy.md) ajoute listes/recherche, création/édition,

@@ -1,0 +1,208 @@
+{
+  "recordedAt": "2026-10-15T12:20:29.918Z",
+  "goalStatusObserved": "active",
+  "goalComplete": false,
+  "scope": "Local Staging flashcards; actual SQL and Engine integration on synthetic isolated databases; browser acceptance blocked",
+  "sql": {
+    "migration": {
+      "path": "../Novlearn/supabase/migrations/20261015100454_novlearn_admin_flashcards.sql",
+      "sha256": "388e07950282dd7c2984f320940af48cb0f327e373434a7dd75b9181291bb5a5"
+    },
+    "localCommit": "62629ac",
+    "incremental": {
+      "path": ".local/lot1a/flashcards-1792065538321/proof.json",
+      "sha256": "72855e8a26adde5f32c96aa4efcfeab7132e722163db96675ba35b531f3062ea"
+    },
+    "assertionsBeforeAndAfterRestore": 38,
+    "existingTablesWithOriginalColumnsPreserved": 59,
+    "snapshotTables": 60,
+    "excludedNewColumns": ["public.flashcards.admin_epoch"],
+    "sourceUnchanged": true,
+    "fixturesRolledBack": true,
+    "restoredRowsMatched": true,
+    "incrementalSequencesCompared": false,
+    "freshFullReplay": {
+      "count": 58,
+      "manifest": {
+        "path": "../Novlearn/.local/admin-sql-replay/novlearn-admin-lot1a-replay-20261015120404408/manifest.json",
+        "sha256": "64601f5fd1e5d68095e392164806a31f5096da4a24ba20b8fb66f2ad7c92ba3a"
+      },
+      "log": {
+        "path": "../Novlearn/.local/admin-sql-replay/novlearn-admin-lot1a-replay-20261015120404408/replay.log",
+        "sha256": "319042e61f5d66012055419fa7873dc16f12a2c723e08ff20ce7ee25415359f8"
+      },
+      "currentFileHashesVerified": true,
+      "scope": "Current local tree including preexisting SQL edits; not clean Git checkout or remote drift reconciliation"
+    }
+  },
+  "regressionAndConcurrency": {
+    "artifact": {
+      "path": ".local/lot1a/flashcards-regression-1792065686029/proof.json",
+      "sha256": "474327967988a0a00166d1ecbc552290cf108102aba52fcc48acb3a2b332f91c"
+    },
+    "checks": [
+      {
+        "name": "test-catalogue-local",
+        "count": 48,
+        "result": "PASS"
+      },
+      {
+        "name": "test-receipts-local",
+        "count": 21,
+        "result": "PASS"
+      },
+      {
+        "name": "test-editorial-review-local",
+        "count": 43,
+        "result": "PASS"
+      },
+      {
+        "name": "test-taxonomy-local",
+        "count": 39,
+        "result": "PASS"
+      }
+    ],
+    "concurrency": {
+      "commits": 1,
+      "conflicts40001": 1,
+      "state": {
+        "epoch": 1,
+        "events": 2,
+        "question": "Concurrent question 1"
+      }
+    }
+  },
+  "nativeEngine": {
+    "artifact": {
+      "path": ".local/lot1a/receipt-native-flow-1792066054933/proof.json",
+      "sha256": "e0cfd2685edd14b97c700f865b8f5f44d6748f348354f8ebd07a7904dfad742d"
+    },
+    "passed": true,
+    "complete": true,
+    "seeds": 2,
+    "concurrentApproval": {
+      "accepted": 1,
+      "conflict40001": 1,
+      "sessions": 2
+    },
+    "syntheticActorAndAttestation": true,
+    "fullEngineSourceSuiteRerun": false
+  },
+  "backupRestore": {
+    "result": {
+      "path": ".local/lot1a/.local/admin-sql-backup/novlearn-admin-lot1a-backup-20261015120951224/result.json",
+      "sha256": "5b1bd23be6ca142ee41a252ae558e4dccb47d75b0d78e9b4c77cee814140d3dc"
+    },
+    "comparison": {
+      "path": ".local/lot1a/.local/admin-sql-backup/novlearn-admin-lot1a-backup-20261015120951224/comparison.json",
+      "sha256": "452fd8347709d9063740b954d594b797a92f829b7d2973f8ee11dbdba5ebeae5"
+    },
+    "archive": {
+      "path": ".local/lot1a/.local/admin-sql-backup/novlearn-admin-lot1a-backup-20261015120951224/admin-backup.dump",
+      "sha256": "a201ba916946dbe73005d7789c53b353dd14de5f6ef107cc98cc51a073a9a14b"
+    },
+    "logicalMatched": true,
+    "rawMatched": false,
+    "rawDifferenceSections": ["columns", "functions", "relations"],
+    "normalization": [
+      "ACL entry order only; privileges and grant options unchanged",
+      "relative visible column order; dropped-column ordinal holes are not preserved by logical pg_dump"
+    ],
+    "historicalSecurityAssertions": 69,
+    "comparatorUnchanged": true,
+    "restoredContent": {
+      "path": ".local/lot1a/content-restored-58-1792066395354/proof.json",
+      "sha256": "60c1293d5a7350d3d680e1850b403c5cf6ca8c2c9271afdeb547f1807e3233f9"
+    },
+    "restoredContentChecks": [
+      {
+        "name": "test-catalogue-local",
+        "count": 48,
+        "result": "PASS"
+      },
+      {
+        "name": "test-receipts-local",
+        "count": 21,
+        "result": "PASS"
+      },
+      {
+        "name": "test-editorial-review-local",
+        "count": 43,
+        "result": "PASS"
+      },
+      {
+        "name": "test-taxonomy-local",
+        "count": 39,
+        "result": "PASS"
+      },
+      {
+        "name": "test-flashcards-local",
+        "count": 38,
+        "result": "PASS"
+      }
+    ],
+    "scope": "New isolated local cluster, synthetic fixtures, data/schema/ACL/sequences compared; no remote backup or PITR"
+  },
+  "admin": {
+    "command": "npm.cmd run check",
+    "log": {
+      "path": ".local/lot1a/.flashcards-final-check.log",
+      "sha256": "12a278e722c5eac51bd93c832b89eabd794f3bdab381647c3e0119bf9ef3b65f"
+    },
+    "logEncoding": "UTF-8",
+    "tests": 302,
+    "files": 23,
+    "types": "PASS",
+    "lintErrors": 0,
+    "preexistingLintWarnings": 1,
+    "format": "PASS",
+    "build": "PASS",
+    "standaloneSmoke": "PASS",
+    "engineArchiveIntegrity": "PASS"
+  },
+  "browser": {
+    "status": "BLOCKED",
+    "executedSuccessfully": false,
+    "screenshotsProduced": false,
+    "reason": "Explicit Browser Use URL security policy rejected authority to observe page; no alternate automation attempted",
+    "manualHarness": "node scripts/content-browser.mjs",
+    "manualUrl": "http://127.0.0.1:3140/tests/browser/flashcards.html",
+    "liveAuthIntegrationExecuted": false
+  },
+  "retainedFailures": [
+    {
+      "reason": "Initial build EPERM; full check then succeeded as owner through normal tool authorization; no ACL changes",
+      "artifact": {
+        "path": ".local/lot1a/.flashcards-check.log",
+        "sha256": "98c2f4d43d23378f10a1baaa14df42120cff4e95c5cbf63105ec4e4f39946d5a"
+      }
+    },
+    {
+      "reason": "Initial incremental comparator named plural audit table; wrapper corrected to actual singular name without dropping assertions"
+    },
+    {
+      "reason": "Intermediate new SQL fixture expression precedence corrected; final coverage includes all 38 assertions"
+    },
+    {
+      "reason": "Browser URL policy refusal; visual acceptance remains unexecuted"
+    }
+  ],
+  "preserved": {
+    "preexistingEnvExample": true,
+    "cdc": true,
+    "design": true,
+    "historicalSql": true,
+    "engineSourceAndCorpus": true,
+    "preexistingNovlearnChanges": true
+  },
+  "limitations": [
+    "No complete publication service/journal/UI or confinement certification",
+    "No new full Engine source certification",
+    "No actual browser flashcards acceptance or live Auth integration",
+    "Remote SQL reconciliation, real backup/PITR and learner compatibility remain prerequisites"
+  ],
+  "remoteWrites": false,
+  "existingDataDeleted": false,
+  "authActivated": false,
+  "securityProtectionsChanged": false
+}

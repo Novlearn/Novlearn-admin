@@ -12,6 +12,7 @@ export function AdminNavigation() {
         ['/admin/exercises/new', 'Créer un exercice'],
         ['/admin/chapters', 'Chapitres'],
         ['/admin/competences', 'Compétences'],
+        ['/admin/flashcards', 'Flashcards'],
       ].map(([href, label]) => {
         const active =
           path === href ||

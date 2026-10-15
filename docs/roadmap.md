@@ -8,12 +8,18 @@ Auth distante, publication et déploiement restent désactivés.
 
 La [reprise du 15 octobre](goal-recovery.md) établit le dernier arrêt
 `cyber_policy`. La correction défensive des triggers (56e migration locale)
-passe sur copie et restauration ; le dernier rejeu neuf complet reste à 55.
+passe sur copie et restauration ; le rejeu neuf complet atteint alors 55.
 La qualification complète du confinement reste ouverte. Le goal était enregistré
 `blocked` lors de cet audit ; sa reprise à l'état `active` est vérifiée ensuite.
 Le [référentiel Staging](taxonomy.md) ajoute la 57e migration, testée
 incrémentalement : 39 assertions SQL avant/après restauration, concurrence et
-257 tests Admin. Aucun rejeu neuf de 57 migrations ni activation distante.
+257 tests Admin. À ce stade, aucun rejeu neuf de 57 migrations ni activation distante.
+
+**Mise à jour suivante :** les [flashcards](flashcards.md) ajoutent la migration 58. Le rejeu neuf des **58 migrations**, la sauvegarde/restauration complète,
+69 contrôles historiques et les suites de contenu passent, ainsi que **302 tests
+Admin**, types, format, build et smoke. Les relevés 55/57 ci-dessus sont antérieurs.
+La réception visuelle flashcards est bloquée par la politique d'URL du navigateur ;
+aucun contournement. Le goal est actif, les lots et portes restantes restent ouverts.
 
 Le [catalogue local](catalogue.md) est implémenté : liste, recherche, statuts,
 tri, pagination, brouillons et métadonnées, duplication, archivage réversible,
@@ -55,7 +61,7 @@ La roadmap décrit la cible du CDC ; documenter un lot ne signifie pas qu'il est
 | 4. Tests et aperçu                 | Seeds, diagnostics, projection et simulation de correction côté serveur      | Lot 3 ; Engine corrigé/qualifié pour hébergement cible ; politique d'attendus privés                                                | Tests multi-seeds, rejeu reproductible, réponses attendues absentes de la projection élève                                                                   | Aperçu, rapports et relecture locaux ; rendu avancé restant   |
 | 5. Publication                     | Diff, validation, transfert sélectif, audit et rollback fonctionnel          | Lots 2-4 ; deux tables autorisées ; projection métier, mapping, droits PG limités et refs manquantes définis/testés                 | Uniquement contenu métier approuvé de `exercises` et `exercise_versions` ; idempotence/concurrence ; aucune version publiée réécrite ni tentative modifiée   | Capacité SQL et diff locaux ; service, journal et UI restants |
 | 6. Chapitres et compétences        | Édition Staging et validation des références                                 | Lot 1B ; aucune propagation en V1 de publication                                                                                    | CRUD contrôlé ; publication exercices bloque refs absentes sans copie implicite                                                                              | CRUD local vérifié ; activation distante fermée               |
-| 7. Flashcards                      | Édition Staging                                                              | Lot 1B ; aucun transfert en V1                                                                                                      | Permissions et validations testées ; pas de propagation implicite                                                                                            | À faire                                                       |
+| 7. Flashcards                      | Édition Staging                                                              | Lot 1B ; aucun transfert en V1                                                                                                      | Permissions et validations testées ; pas de propagation implicite                                                                                            | CRUD/API/SQL locaux ; réception visuelle bloquée              |
 | 8. Statistiques et utilisateurs    | Indicateurs et consultations Production minimisées                           | Définitions métriques ; rôle PostgreSQL read-only techniquement réel ; décisions de confidentialité et accès nominatif              | Agrégats vérifiables, sources étiquetées, autorisations et minimisation testées                                                                              | À faire — attente accès Production                            |
 | 9. Mise en service                 | Hébergement, exploitation, accessibilité, performance et sécurité            | Lots concernés terminés ; hôte et secrets approuvés ; audit final                                                                   | Runbook, rollback, surveillance et revue sécurité acceptés                                                                                                   | À faire                                                       |
 

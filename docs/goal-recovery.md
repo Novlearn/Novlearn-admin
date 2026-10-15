@@ -1,5 +1,10 @@
 # Reprise locale du 15 octobre 2026
 
+**Relevé historique :** le statut `blocked` ci-dessous décrit le premier arrêt.
+Le goal est depuis relu `active` ; la [progression actuelle](progress.md) et le
+[bilan flashcards](flashcards.md) distinguent les contrôles réussis du refus
+actuel du navigateur. Ce dernier n'a pas été contourné.
+
 Le goal est **incomplet**. Son état lu par `get_goal` est `blocked` ; cet état
 persistant n'empêche pas la reprise manuelle demandée par l'utilisateur.
 Aucune écriture dans l'état interne de Codex ni tentative de forcer sa reprise.
