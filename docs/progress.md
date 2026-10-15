@@ -1,5 +1,27 @@
 # Progression du goal NovLearn Admin
 
+## Dashboard Staging et 59 migrations — 15 octobre 2026
+
+Le [tableau de bord](dashboard.md) remplace son texte d'attente par des agrégats
+SQL Staging : statuts du catalogue, derniers échecs courants, versions actives
+et inventaire du référentiel/flashcards. Les statuts correspondent aux filtres
+du catalogue ; les pointeurs actifs sont distingués des nouvelles révisions.
+Les données indisponibles restent distinctes d'un zéro. Migration locale 59
+NovLearn `882850e`, sans ajout de droit de lecture personnelle ou d'écriture.
+
+**337 tests Admin, types, lint sans erreur, format, build et smoke passent.**
+Les 35 assertions Dashboard passent avant/après restauration ; les 60 tables
+conservent leurs lignes. Le rejeu neuf des **59 migrations**, la restauration
+complète avec comparateur inchangé et les 69 contrôles historiques passent.
+Sur cette restauration, 48 catalogue, 21 reçus, 43 relecture, 39 référentiel,
+38 flashcards et 35 Dashboard passent. Voir les [preuves](dashboard-local-proof.json).
+
+La réception visuelle reste non exécutée après le refus de politique navigateur.
+Production, utilisateurs réels, publication complète et portes distantes restent
+ouverts. Aucun changement distant, push ou suppression de données existantes.
+La certification Engine antérieure n'est pas présentée comme une nouvelle suite
+source exécutée. Le goal reste actif et incomplet ; les relevés suivants sont datés.
+
 ## Flashcards et rejeu complet local — 15 octobre 2026
 
 Les [flashcards Staging](flashcards.md) disposent de leur formulaire, aperçu,

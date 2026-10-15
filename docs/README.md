@@ -18,6 +18,9 @@ références préservés, audit, tests SQL/restauration et vérification visuell
 [Flashcards Staging](flashcards.md) : intégration locale, permissions, rejeu de
 58 migrations et restauration ; réception visuelle bloquée et méthode manuelle.
 
+[Dashboard Staging](dashboard.md) : agrégats réels du catalogue local, définitions,
+permissions et rejeu/restauration de 59 migrations ; accès Production restant.
+
 [Rapprochement des migrations par empreintes](lot-1a-hash-reconciliation.md) : relevé en lecture seule, sept candidats et historique partiellement dépourvu de SQL.
 
 | Document                                                     | Objet                                                                          |

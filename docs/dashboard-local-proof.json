@@ -1,0 +1,171 @@
+{
+  "recordedAt": "2026-10-15T12:36:52.878Z",
+  "goalStatusObserved": "active",
+  "goalComplete": false,
+  "scope": "Actual local Staging content aggregation, isolated SQL and restore tests, server-rendered view and mocked authorization; no live Auth or Production statistics",
+  "sql": {
+    "migration": {
+      "path": "../Novlearn/supabase/migrations/20261015122337_novlearn_admin_dashboard.sql",
+      "sha256": "5474acc2fc6e74dc27aafd5016dc5b097e5bbc8da4bdf7f4e4a749c96d3a9c4c"
+    },
+    "localCommit": "882850e",
+    "incremental": {
+      "path": ".local/lot1a/dashboard-1792067473131/proof.json",
+      "sha256": "88ebe17609e300cfa0000599fb2c6f22a819ff6cc13bf6433dc9ef1b78c2c2c3"
+    },
+    "assertionsBeforeAndAfterRestore": 35,
+    "preservedTables": 60,
+    "excludedColumns": [],
+    "sourceUnchanged": true,
+    "fixturesRolledBack": true,
+    "incrementalSequencesCompared": false,
+    "runner": {
+      "path": "scripts/test-dashboard-local.mjs",
+      "sha256": "4db93f64e77a5454db4eb10ba19134a231128a6bb7ff763910577b03baaabb3b"
+    },
+    "sqlAssertions": {
+      "path": "scripts/test-dashboard-local.sql",
+      "sha256": "27858f8b57224e18cbe27a761978ec1b5308e54ccbcc620477966f2b493e612e"
+    }
+  },
+  "freshReplay": {
+    "count": 59,
+    "manifest": {
+      "path": "../Novlearn/.local/admin-sql-replay/novlearn-admin-lot1a-replay-20261015123214873/manifest.json",
+      "sha256": "2c70f53707f4b7936f2cbe2a4f0ebcdb75be05bdaf9318bc3a97e93d433482b9"
+    },
+    "log": {
+      "path": "../Novlearn/.local/admin-sql-replay/novlearn-admin-lot1a-replay-20261015123214873/replay.log",
+      "sha256": "a0081f6a869c856405cb74f2de422a99c50c819d40123b30008ca80ede7e94ff"
+    },
+    "currentFileHashesVerified": true,
+    "scope": "Current local SQL tree including preexisting edits; not a clean Git clone or remote history reconciliation"
+  },
+  "backupRestore": {
+    "result": {
+      "path": ".local/lot1a/.local/admin-sql-backup/novlearn-admin-lot1a-backup-20261015123330904/result.json",
+      "sha256": "99c44a97b0a8e2d6201bb8667c4bf3aa214eb07b583dd3f8865b54b7220f79a0"
+    },
+    "comparison": {
+      "path": ".local/lot1a/.local/admin-sql-backup/novlearn-admin-lot1a-backup-20261015123330904/comparison.json",
+      "sha256": "452fd8347709d9063740b954d594b797a92f829b7d2973f8ee11dbdba5ebeae5"
+    },
+    "archive": {
+      "path": ".local/lot1a/.local/admin-sql-backup/novlearn-admin-lot1a-backup-20261015123330904/admin-backup.dump",
+      "sha256": "fb6a7edb05fe47f201d9c3ad41d0b9a661be59222eb319fcece036f08225f5ab"
+    },
+    "logicalMatched": true,
+    "rawMatched": false,
+    "rawDifferenceSections": ["columns", "functions", "relations"],
+    "normalization": [
+      "ACL entry order only; privileges and grant options unchanged",
+      "relative visible column order; dropped-column ordinal holes are not preserved by logical pg_dump"
+    ],
+    "comparatorUnchanged": true,
+    "historicalSecurityAssertions": 69,
+    "restoredContent": {
+      "path": ".local/lot1a/content-restored-59-1792067684565/proof.json",
+      "sha256": "060a535c6f0299c9ed8d9ae0eb6d505ac68d42a158996e023a639720e8928682"
+    },
+    "checks": [
+      {
+        "name": "test-catalogue-local",
+        "count": 48,
+        "result": "PASS"
+      },
+      {
+        "name": "test-receipts-local",
+        "count": 21,
+        "result": "PASS"
+      },
+      {
+        "name": "test-editorial-review-local",
+        "count": 43,
+        "result": "PASS"
+      },
+      {
+        "name": "test-taxonomy-local",
+        "count": 39,
+        "result": "PASS"
+      },
+      {
+        "name": "test-flashcards-local",
+        "count": 38,
+        "result": "PASS"
+      },
+      {
+        "name": "test-dashboard-local",
+        "count": 35,
+        "result": "PASS"
+      }
+    ],
+    "scope": "Synthetic new local cluster; data/schema/ACL/sequences compared; no real remote backup or PITR"
+  },
+  "admin": {
+    "command": "npm.cmd run check",
+    "log": {
+      "path": ".local/lot1a/.dashboard-check.log",
+      "sha256": "c11fe54ac9e3327cec62844622cc466c15e4f24e7d89c6cbf79c1e4ac0bc50c8"
+    },
+    "logEncoding": "UTF-8",
+    "tests": 337,
+    "newDashboardTests": 35,
+    "testFiles": 24,
+    "types": "PASS",
+    "lintErrors": 0,
+    "preexistingLintWarnings": 1,
+    "format": "PASS",
+    "build": "PASS",
+    "standaloneSmoke": "PASS",
+    "engineArchiveIntegrity": "PASS",
+    "testSource": {
+      "path": "tests/dashboard.test.ts",
+      "sha256": "b55bd624882ce94a4fe0f165a86d30c3e2e52784f119544f051e70900aaa8760"
+    }
+  },
+  "browser": {
+    "status": "NOT_EXECUTED",
+    "reason": "Existing explicit URL authority policy refusal remains respected; no alternate automated surface attempted",
+    "serverRenderingTested": true,
+    "interactiveVisualAcceptance": false,
+    "screenshotsProduced": false
+  },
+  "syntheticFixtureScope": "New SQL aggregation fixtures seed owner-controlled editorial states and report rows inside rolled-back transactions, with all guards retained. They test counting only, not signature validity, Engine math, human approval or actual publication.",
+  "retainedFailures": [
+    {
+      "reason": "TypeScript target rejects BigInt literals; constructor used without changing compiler target or test expectations"
+    },
+    {
+      "reason": "Source template clone refused because of existing sessions; logical dump/restore copy used without terminating sessions",
+      "log": {
+        "path": ".local/lot1a/.dashboard-sql.log",
+        "sha256": "d255b4c0b155ac5c3db4bcf67e96b4db90c02f3798c8b96c030a280cee62d244"
+      }
+    },
+    {
+      "reason": "Edit fixture correctly refused while in review; fixture now uses existing explicit return-to-draft workflow, coverage extended to 35",
+      "log": {
+        "path": ".local/lot1a/.dashboard-sql-retry.log",
+        "sha256": "8aa325b0305adcf4dcd037f6269c452e4dee3564bb5ebb1aa234dcc2469d88b7"
+      }
+    }
+  ],
+  "preserved": {
+    "preexistingEnvExample": true,
+    "cdc": true,
+    "systemDesign": true,
+    "historicalSql": true,
+    "engineSourceAndCorpus": true,
+    "otherNovlearnChanges": true
+  },
+  "limitations": [
+    "Production statistics and user consultation require a separate real read-only capability and authorized fields",
+    "Complete publication service, source protection, durable journal, UI and confinement qualification remain open",
+    "No new full Engine source suite or native HMAC flow executed in this turn; prior 58-migration evidence remains separately dated",
+    "No live Auth or browser acceptance; remote history reconciliation, actual backup/PITR and learner compatibility remain prerequisites"
+  ],
+  "remoteWrites": false,
+  "existingDataDeleted": false,
+  "authActivated": false,
+  "securityProtectionsChanged": false
+}

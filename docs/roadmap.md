@@ -21,6 +21,12 @@ Admin**, types, format, build et smoke. Les relevés 55/57 ci-dessus sont antér
 La réception visuelle flashcards est bloquée par la politique d'URL du navigateur ;
 aucun contournement. Le goal est actif, les lots et portes restantes restent ouverts.
 
+Le [Dashboard Staging](dashboard.md) ajoute ensuite la migration 59 et remplace
+son texte d'attente par les agrégats du catalogue et des contenus. **337 tests
+Admin**, le rejeu neuf de **59 SQL**, la restauration complète, les 69 contrôles
+historiques et les six suites de contenu passent. Les chiffres Production et la
+réception visuelle restent ouverts ; ces résultats ne clôturent pas le Lot 1A.
+
 Le [catalogue local](catalogue.md) est implémenté : liste, recherche, statuts,
 tri, pagination, brouillons et métadonnées, duplication, archivage réversible,
 historique et comparaison. **52 migrations passent**, ainsi que **47 assertions
