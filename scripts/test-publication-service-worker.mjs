@@ -31,9 +31,11 @@ async function setup() {
     platform: 'linux',
     architecture: 'x64',
   });
-  async function sessionQuery(text, values = []) {
+  async function sessionQuery(text, values = [], database = 'transfer_source') {
+    const sessionUrl = new URL(session.url);
+    sessionUrl.pathname = '/' + database;
     const client = new Client({
-      connectionString: session.url,
+      connectionString: sessionUrl.href,
       ssl: { ca: session.ca, rejectUnauthorized: true },
       enableChannelBinding: true,
       connectionTimeoutMillis: 3000,
@@ -129,9 +131,9 @@ async function setup() {
       ).rows[0]?.role ?? null,
   };
   const clients = [];
-  const make = (database, key, loss = false) => {
+  const make = (database, key, loss = false, options = {}) => {
     const sourceUrl = new URL(config.source.url);
-    sourceUrl.pathname = '/transfer_source';
+    sourceUrl.pathname = '/' + (options.sourceDatabase ?? 'transfer_source');
     const targetUrl = new URL(config.target.url);
     targetUrl.pathname = '/' + database;
     const pools = api.createPublicationPgPools({
@@ -147,6 +149,8 @@ async function setup() {
       return {
         query: async (text, values) => {
           if (text.includes('public.apply_exercise_publication')) calls++;
+          if (loss === 'before' && text === 'COMMIT')
+            throw Error('Fixture loss before sending commit');
           const result = await connection.query(text, values);
           if (loss && text === 'COMMIT')
             throw Error('Fixture lost acknowledgement after real commit');
@@ -155,9 +159,65 @@ async function setup() {
         release: (destroy) => connection.release(destroy),
       };
     }, key);
-    const journal = new api.PublicationJournal(auth, pools.source);
-    const source = (selection, signal) =>
-      api.loadPublicationSource(sessionClient, selection, signal);
+    const activeAuth = options.authGateway ?? auth;
+    let journal,
+      sourceRecordTime = null,
+      sourceRecordedOutcome = null,
+      blocked = false;
+    const sourceConnection = async () => {
+      const connection = await pools.source();
+      return {
+        query: async (text, values) => {
+          const recording = text.includes(
+            'novlearn_admin_private.record_publication_outcome',
+          );
+          let unblock, held;
+          if (recording && options.blockRecord && !blocked) {
+            blocked = true;
+            let ready;
+            const started = new Promise((resolve) => {
+              ready = resolve;
+            });
+            const stop = new Promise((resolve) => {
+              unblock = resolve;
+            });
+            held = journal.withSourceLease(values[0], values[1], async () => {
+              ready();
+              await stop;
+            });
+            await Promise.race([
+              started,
+              held.then(() => {
+                throw Error('Source lease ended before contention check');
+              }),
+            ]);
+          }
+          try {
+            const result = await connection.query(
+              recording
+                ? text +
+                    ', transaction_timestamp()::text AS fixture_source_time'
+                : text,
+              values,
+            );
+            if (recording) {
+              sourceRecordTime = result.rows[0].fixture_source_time;
+              sourceRecordedOutcome = result.rows[0].operation.outcome;
+            }
+            return result;
+          } finally {
+            unblock?.();
+            if (held) await held;
+          }
+        },
+        release: (destroy) => connection.release(destroy),
+      };
+    };
+    journal = new api.PublicationJournal(activeAuth, sourceConnection);
+    const source =
+      options.sourceLoader ??
+      ((selection, signal) =>
+        api.loadPublicationSource(sessionClient, selection, signal));
     const verify = async (value, signal) => {
       checks++;
       const fact = await api.verifyPublicationEngine(value, signal);
@@ -165,7 +225,7 @@ async function setup() {
       return fact;
     };
     const deps = {
-      auth,
+      auth: activeAuth,
       journal,
       target,
       targetKey: key,
@@ -177,6 +237,8 @@ async function setup() {
       service: new api.PublicationService(deps),
       deps,
       calls: () => calls,
+      sourceTime: () => sourceRecordTime,
+      sourceOutcome: () => sourceRecordedOutcome,
     };
   };
   context = {
@@ -189,8 +251,13 @@ async function setup() {
     checks: () => checks,
     roundtrips: () => roundtrips,
     pending: null,
+    sessionQuery,
+    actor,
   };
   return context;
+}
+export async function publicationFixture() {
+  return setup();
 }
 export async function runServiceCommand(command) {
   if (command === 'close') {

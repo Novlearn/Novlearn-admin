@@ -5,6 +5,7 @@ import { createInterface } from 'node:readline';
 import { Client } from 'pg';
 import { runTransferCommand } from '/target-worker.mjs';
 import { runServiceCommand } from '/service-worker.mjs';
+import { runSourceCommand } from '/source-worker.mjs';
 import {
   createPublicationPgPools,
   PublicationJournal,
@@ -25,6 +26,30 @@ const rejectPool = async (settings) => {
   }
 };
 const commands = {
+  sourcePublish: () => runSourceCommand('publish'),
+  sourceRepeat: () => runSourceCommand('repeat'),
+  sourceLostBefore: () => runSourceCommand('lostBefore'),
+  sourceRecoverBefore: () => runSourceCommand('recoverBefore'),
+  sourceLostAfter: () => runSourceCommand('lostAfter'),
+  sourceRecoverAfterRevoked: () => runSourceCommand('recoverAfter'),
+  sourceRecordBlocked: () => runSourceCommand('recordBlocked'),
+  sourceRecoverBlocked: () => runSourceCommand('recoverBlocked'),
+  async oldSourceContract() {
+    const sourceUrl = new URL(config.source.url);
+    sourceUrl.pathname = '/target_fixture';
+    const old = createPublicationPgPools({
+      ...config,
+      source: { ...config.source, url: sourceUrl.href },
+    });
+    try {
+      await assert.rejects(old.source(), {
+        message: 'Publication backend unavailable',
+      });
+    } finally {
+      await old.close();
+    }
+    return { missingAtomicSourceRefused: true };
+  },
   servicePublish: () => runServiceCommand('publish'),
   serviceRepeat: () => runServiceCommand('repeat'),
   serviceBadConfirmation: () => runServiceCommand('badConfirmation'),
@@ -170,6 +195,7 @@ process.stdout.write(JSON.stringify({ ready: true }) + '\n');
 try {
   for await (const line of createInterface({ input: process.stdin })) {
     const { id, command } = JSON.parse(line);
+    phase = command;
     try {
       assert(Object.hasOwn(commands, command));
       process.stdout.write(

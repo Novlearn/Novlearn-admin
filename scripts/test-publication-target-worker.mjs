@@ -58,8 +58,35 @@ async function setup() {
     getVerifiedUser: async () => ({ id: actor, isAnonymous: false }),
     getProfileRole: async () => 'admin',
   };
-  const journal = new PublicationJournal(auth, sourcePools.pools.source);
-  context = { source, journal, connectTo, clients, pending: new Map() };
+  let sourceRecordTime = null;
+  const sourceConnect = async () => {
+    const connection = await sourcePools.pools.source();
+    return {
+      query: async (text, values) => {
+        const recording = text.includes(
+          'novlearn_admin_private.record_publication_outcome',
+        );
+        const result = await connection.query(
+          recording
+            ? text + ', transaction_timestamp()::text AS fixture_source_time'
+            : text,
+          values,
+        );
+        if (recording) sourceRecordTime = result.rows[0].fixture_source_time;
+        return result;
+      },
+      release: (destroy) => connection.release(destroy),
+    };
+  };
+  const journal = new PublicationJournal(auth, sourceConnect);
+  context = {
+    source,
+    journal,
+    connectTo,
+    clients,
+    pending: new Map(),
+    sourceTime: () => sourceRecordTime,
+  };
   return context;
 }
 async function plan(target, key) {
@@ -95,7 +122,7 @@ async function execute(
       prepared.plan_digest,
       'claim',
     );
-    return c.journal.withSourceLease(
+    const execution = await c.journal.withSourceLease(
       claimed.id,
       claimed.plan_digest,
       async (locked, recheck) => {
@@ -122,38 +149,39 @@ async function execute(
           await recheck();
           if (abort) throw Error('Fixture before-commit access check failed');
         });
-        const state =
-          execution.state === 'committed'
-            ? 'committed'
-            : execution.state === 'aborted'
-              ? 'failed'
-              : 'uncertain';
-        if (contend && execution.state === 'committed') {
-          const competitor = new PublicationTarget(
-            c.connectTo(database).connect,
-            key,
-          );
-          let entered = false;
-          await assert.rejects(
-            competitor.withLease(claimed, async () => {
-              entered = true;
-            }),
-            { code: 'unavailable' },
-          );
-          assert.equal(entered, false);
-          contendedAfterCommit = true;
-        }
-        const recorded = await c.journal.record(
-          claimed,
-          'executing',
-          state,
-          execution.state === 'committed' ? execution.outcome : null,
-          execution.state === 'aborted' ? 'not_applied' : null,
-        );
-        assert.equal(recorded.state, state);
-        return { execution, operation: recorded };
+        return execution;
       },
     );
+    const state =
+      execution.state === 'committed'
+        ? 'committed'
+        : execution.state === 'aborted'
+          ? 'failed'
+          : 'uncertain';
+    if (contend && execution.state === 'committed') {
+      const competitor = new PublicationTarget(
+        c.connectTo(database).connect,
+        key,
+      );
+      let entered = false;
+      await assert.rejects(
+        competitor.withLease(claimed, async () => {
+          entered = true;
+        }),
+        { code: 'unavailable' },
+      );
+      assert.equal(entered, false);
+      contendedAfterCommit = true;
+    }
+    const recorded = await c.journal.record(
+      claimed,
+      'executing',
+      state,
+      execution.state === 'committed' ? execution.outcome : null,
+      execution.state === 'aborted' ? 'not_applied' : null,
+    );
+    assert.equal(recorded.state, state);
+    return { execution, operation: recorded };
   });
   assert.equal(driver.calls(), 1);
   if (loss) {
@@ -168,6 +196,7 @@ async function execute(
     applyCalls: driver.calls(),
     contended,
     contendedAfterCommit,
+    sourceRecordTime: c.sourceTime(),
   };
 }
 async function recover(key, expected) {
@@ -208,6 +237,7 @@ async function recover(key, expected) {
     state: observation.state,
     outcome: observation.outcome ?? null,
     applyCallsDuringRecovery: driver.calls(),
+    sourceRecordTime: c.sourceTime(),
   };
 }
 export async function runTransferCommand(command) {

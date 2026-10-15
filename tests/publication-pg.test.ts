@@ -5,6 +5,7 @@ const fake = vi.hoisted(() => ({
   make: vi.fn(),
   identity: vi.fn(),
   bound: vi.fn(),
+  contract: vi.fn(),
   query: vi.fn(),
   release: vi.fn(),
   end: vi.fn(),
@@ -80,6 +81,7 @@ const identity = (role: string) => ({
 beforeEach(() => {
   fake.identity.mockImplementation(identity);
   fake.bound.mockImplementation((role) => role);
+  fake.contract.mockReturnValue('atomic-source-finalization-v1');
   let role = sourceRole;
   fake.query.mockImplementation(async (sql: string, values?: unknown[]) => {
     if (sql.includes('r.rolname AS login')) {
@@ -88,9 +90,23 @@ beforeEach(() => {
     }
     if (sql === 'SELECT current_user AS role')
       return { rows: [{ role: fake.bound(role) }] };
+    if (sql.includes('publication_source_contract'))
+      return { rows: [{ contract: fake.contract() }] };
     return { rows: [] };
   });
 });
+it.each([null, 'record-only-v0'])(
+  'refuses an absent or outdated source finalization contract %s before returning a source connection',
+  async (contract) => {
+    fake.contract.mockReturnValue(contract);
+    const pools = createPublicationPgPools(config());
+    await expect(pools.source()).rejects.toThrow(
+      'Publication backend unavailable',
+    );
+    expect(fake.release).toHaveBeenCalledWith(true);
+    await pools.close();
+  },
+);
 describe('Publication : configuration fermée et séparation', () => {
   it('does not construct pools while only reading valid operator configuration', () => {
     expect(readPublicationPgConfiguration(env())?.targetKey).toBe(

@@ -37,11 +37,15 @@ orchestration applicative et UI toujours à raccorder.
 
 [Orchestration locale et route de publication](publication-service.md) : export
 SQL autorisé, nouveaux tests Engine, confirmation signée et reprise observée ;
-route fermée et intégration UI/état éditorial source encore incomplète.
+route fermée, complétée par les jalons UI et finalisation source ci-dessous.
 
 [Interface de publication et historique](publication-ui.md) : diff, confirmation,
 issue incertaine et vérification sans réapplication ; simulation locale disponible,
-réception visuelle et finalisation de source encore ouvertes.
+réception visuelle encore ouverte.
+
+[Finalisation atomique de la source](publication-source-finalization.md) : statut,
+pointeur et journal dans une transaction, reprise après blocage/révocation,
+62 migrations et preuves natives sur copies locales ; aucune activation distante.
 
 [Rapprochement des migrations par empreintes](lot-1a-hash-reconciliation.md) : relevé en lecture seule, sept candidats et historique partiellement dépourvu de SQL.
 

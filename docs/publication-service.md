@@ -1,5 +1,10 @@
 # Orchestration de publication — intégration locale
 
+**Jalon suivant :** la [finalisation source](publication-source-finalization.md)
+complète maintenant la transaction journal/statut/pointeur avec la migration 62.
+L'[interface individuelle et l'historique](publication-ui.md) sont aussi reliés.
+Les résultats et limites ci-dessous restent ceux de l'orchestration initiale.
+
 Le service serveur relie désormais la source autorisée, une nouvelle exécution
 Engine, le diff signé, le journal durable et la transaction cible. La route
 `POST /api/admin/publication` est raccordée mais **désactivée par défaut**.

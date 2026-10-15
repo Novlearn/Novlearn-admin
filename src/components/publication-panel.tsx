@@ -85,10 +85,10 @@ export function PublicationResult({
       {operation.outcome && (
         <p className="mt-2">
           {operation.outcome.result === 'unchanged'
-            ? 'La révision demandée est déjà active avec le contenu attendu.'
+            ? 'Le contenu attendu a été constaté comme identique lors de la vérification.'
             : operation.outcome.result === 'rolled_back'
-              ? 'La révision précédente est à nouveau active en Production.'
-              : 'La révision demandée est active en Production.'}
+              ? 'La réactivation de cette révision a été confirmée en Production.'
+              : 'Le transfert de cette révision a été confirmé en Production.'}
         </p>
       )}
       {uncertain && (

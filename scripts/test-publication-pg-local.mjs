@@ -13,7 +13,9 @@ assert(
   'Run with --conditions=react-server',
 );
 const stamp = Date.now();
-const publicationService = process.argv.includes('--publication-service');
+const sourceFinalization = process.argv.includes('--source-finalization');
+const publicationService =
+  sourceFinalization || process.argv.includes('--publication-service');
 const targetTransactions =
   publicationService || process.argv.includes('--target-transactions');
 const pristineContainer = 'novlearn-admin-lot1a-replay-20261015132052356';
@@ -21,6 +23,9 @@ const artifact = path.resolve('.local/lot1a/publication-pg-' + stamp);
 await mkdir(artifact, { recursive: true });
 const container = 'novlearn-admin-pg-' + stamp;
 const network = container + '-internal';
+const finalizationMigration = path.resolve(
+  '../Novlearn/supabase/migrations/20261015191720_novlearn_admin_publication_source_finalization.sql',
+);
 const sourceContainer = 'novlearn-admin-lot1a-replay-20261015125108699';
 const sourceDatabase = 'admin_receipt_native_1792068827587';
 const actor = '98500000-0000-4000-8000-000000000001';
@@ -76,6 +81,59 @@ const sqlAt = (name, database, statement) =>
 const sql = (database, statement) => sqlAt(container, database, statement);
 const value = (database, statement) =>
   JSON.parse(sql(database, statement).split('\n').at(-1));
+const sourceRows = (database) =>
+  value(
+    database,
+    `SELECT jsonb_build_object(
+ 'parentId',(SELECT exercise_id::text FROM public.exercise_versions WHERE id='${version}'),
+ 'parentText',(SELECT to_jsonb(p)::text FROM public.exercises p JOIN public.exercise_versions v ON v.exercise_id=p.id WHERE v.id='${version}'),
+ 'versionText',(SELECT to_jsonb(v)::text FROM public.exercise_versions v WHERE id='${version}'),
+ 'parentRows',(SELECT jsonb_object_agg(id::text,encode(extensions.digest(to_jsonb(p)::text,'sha256'),'hex')) FROM public.exercises p),
+ 'versionRows',(SELECT jsonb_object_agg(id::text,encode(extensions.digest(to_jsonb(v)::text,'sha256'),'hex')) FROM public.exercise_versions v))`,
+  );
+const outsidePublicationSource = (rows) =>
+  Object.fromEntries(
+    Object.entries(rows).filter(
+      ([name]) =>
+        ![
+          'public.exercises',
+          'public.exercise_versions',
+          'novlearn_admin_private.publication_operations',
+          'novlearn_admin_private.publication_operation_events',
+        ].includes(name),
+    ),
+  );
+const encoded = (text) =>
+  `convert_from(decode('${Buffer.from(text).toString('base64')}','base64'),'UTF8')`;
+function assertSourceRows(database, before, after, committed, recordTime) {
+  if (!committed) {
+    assert.deepEqual(after, before);
+    return;
+  }
+  assert.equal(after.parentId, before.parentId);
+  for (const [field, id] of [
+    ['parentRows', before.parentId],
+    ['versionRows', version],
+  ]) {
+    const other = (rows) =>
+      Object.fromEntries(
+        Object.entries(rows[field]).filter(([key]) => key !== id),
+      );
+    assert.deepEqual(other(after), other(before));
+  }
+  assert.equal(typeof recordTime, 'string');
+  const timestamp = encoded(recordTime) + '::timestamptz',
+    oldParent = encoded(before.parentText) + '::jsonb',
+    oldVersion = encoded(before.versionText) + '::jsonb';
+  const exact = value(
+    database,
+    `WITH previous AS (SELECT ${oldParent} p,${oldVersion} v), expected AS (
+   SELECT v||CASE WHEN v->>'editorial_status'='approved' THEN jsonb_build_object('editorial_status','published','published_at',${timestamp},'updated_at',${timestamp}) ELSE '{}'::jsonb END expected_version,
+    p||CASE WHEN p->>'active_version_id' IS DISTINCT FROM '${version}' THEN jsonb_build_object('active_version_id','${version}','publication_epoch',(p->>'publication_epoch')::bigint+1)||CASE WHEN p?'updated_at' THEN jsonb_build_object('updated_at',${timestamp}) ELSE '{}'::jsonb END ELSE '{}'::jsonb END expected_parent FROM previous)
+   SELECT jsonb_build_object('version',expected_version=(SELECT to_jsonb(v) FROM public.exercise_versions v WHERE id='${version}'),'parent',expected_parent=(SELECT to_jsonb(p) FROM public.exercises p WHERE id=${encoded(before.parentId)}::bigint)) FROM expected`,
+  );
+  assert.deepEqual(exact, { version: true, parent: true });
+}
 const snapshot = (name, database) =>
   JSON.parse(
     sqlAt(
@@ -231,6 +289,7 @@ try {
     '../Novlearn/supabase/migrations/20261015131620_novlearn_admin_publication_recovery.sql',
   );
   cli(['cp', migration, container + ':/tmp/recovery.sql']);
+  cli(['cp', finalizationMigration, container + ':/tmp/finalization.sql']);
   cli([
     'exec',
     container,
@@ -244,6 +303,21 @@ try {
     'ON_ERROR_STOP=1',
     '-f',
     '/tmp/recovery.sql',
+  ]);
+  assert.deepEqual(snapshot(container, 'source_fixture'), originalRows);
+  cli([
+    'exec',
+    container,
+    'psql',
+    '-qAt',
+    '-U',
+    'supabase_admin',
+    '-d',
+    'source_fixture',
+    '-v',
+    'ON_ERROR_STOP=1',
+    '-f',
+    '/tmp/finalization.sql',
   ]);
   assert.deepEqual(snapshot(container, 'source_fixture'), originalRows);
   checks.push('Migration 61 changes no table rows in restored copy');
@@ -380,6 +454,7 @@ try {
     'scripts/test-publication-pg-worker.mjs',
     'scripts/test-publication-target-worker.mjs',
     'scripts/test-publication-service-worker.mjs',
+    'scripts/test-publication-source-worker.mjs',
   );
   const nativeSourceHashes = Object.fromEntries(
     await Promise.all(
@@ -538,6 +613,20 @@ try {
       '/tmp/recovery.sql',
     ]);
     const definition = JSON.parse(template.payload.definitionJson);
+    cli([
+      'exec',
+      container,
+      'psql',
+      '-qAt',
+      '-U',
+      'supabase_admin',
+      '-d',
+      'transfer_source',
+      '-v',
+      'ON_ERROR_STOP=1',
+      '-f',
+      '/tmp/finalization.sql',
+    ]);
     assert.equal(typeof definition.catalogue.chapter, 'string');
     assert(Array.isArray(definition.catalogue.skills));
     const literal = (text) =>
@@ -554,6 +643,14 @@ try {
       'transfer_lost_before',
       'transfer_socket',
       ...(publicationService ? ['service_target', 'service_lost_after'] : []),
+      ...(sourceFinalization
+        ? [
+            'source_target',
+            'source_before_target',
+            'source_after_target',
+            'source_blocked_target',
+          ]
+        : []),
     ]) {
       cli([
         'exec',
@@ -608,6 +705,67 @@ try {
       JSON.stringify({ source: template }) + '\n',
     );
     console.log('Isolated transaction targets and existing history prepared.');
+    if (sourceFinalization) {
+      for (const database of [
+        'source_native',
+        'source_before',
+        'source_after',
+        'source_blocked',
+      ]) {
+        cli([
+          'exec',
+          container,
+          'createdb',
+          '-U',
+          'supabase_admin',
+          '--template=template0',
+          database,
+        ]);
+        cli([
+          'exec',
+          container,
+          'pg_restore',
+          '-U',
+          'supabase_admin',
+          '-d',
+          database,
+          '--exit-on-error',
+          '--single-transaction',
+          '/fixture-input/source.dump',
+        ]);
+        for (const file of ['/tmp/recovery.sql', '/tmp/finalization.sql'])
+          cli([
+            'exec',
+            container,
+            'psql',
+            '-qAt',
+            '-U',
+            'supabase_admin',
+            '-d',
+            database,
+            '-v',
+            'ON_ERROR_STOP=1',
+            '-f',
+            file,
+          ]);
+        sql(
+          database,
+          `DO $$ DECLARE e bigint; d bigint; BEGIN
+          INSERT INTO auth.users(id,aud,role,email,encrypted_password,email_confirmed_at,raw_app_meta_data,raw_user_meta_data,created_at,updated_at)
+          SELECT id,'authenticated','authenticated',id::text||'@local.invalid','',now(),'{"provider":"email","providers":["email"]}','{"first_name":"SOURCE HISTORY FIXTURE","birth_date":"2000-01-01"}',now(),now()
+          FROM unnest(ARRAY['a6310000-0000-4000-8000-000000000001'::uuid,'a6310000-0000-4000-8000-000000000002'::uuid]) id;
+          INSERT INTO public.friends(user1_id,user2_id,status) VALUES('a6310000-0000-4000-8000-000000000001','a6310000-0000-4000-8000-000000000002','accepted');
+          INSERT INTO public.exercises(title,chapter,content) VALUES('LOCAL SOURCE HISTORY','Local history','{}') RETURNING id INTO e;
+          INSERT INTO public.exercise_attempts(user_id,exercise_id,is_correct) VALUES('a6310000-0000-4000-8000-000000000002',e,false);
+          INSERT INTO public.duels(player1_id,player2_id,status) VALUES('a6310000-0000-4000-8000-000000000001','a6310000-0000-4000-8000-000000000002','active') RETURNING id INTO d;
+          INSERT INTO public.duel_attempts(duel_id,player_id,element_id,is_correct) VALUES(d,'a6310000-0000-4000-8000-000000000002',0,true);
+          END; $$;`,
+        );
+      }
+      console.log(
+        'Dedicated source-finalization copies prepared with existing history.',
+      );
+    }
   }
   clientProcess = spawn(
     docker,
@@ -655,6 +813,10 @@ try {
       'type=bind,source=' +
         path.resolve('scripts/test-publication-service-worker.mjs') +
         ',target=/service-worker.mjs,readonly',
+      '--mount',
+      'type=bind,source=' +
+        path.resolve('scripts/test-publication-source-worker.mjs') +
+        ',target=/source-worker.mjs,readonly',
       'node:24.19.0-bookworm@sha256:4196d66a565c6f195728d9952f161f4adfe2ad753052a08b7ec7f1c5a6bda42b',
       'node',
       '--conditions=react-server',
@@ -726,6 +888,13 @@ try {
     'Both real LOGIN identities bind their distinct capability over verified TLS',
   );
   checks.push('Untrusted self-signed certificate actually rejected');
+  assert.equal(
+    (await request('oldSourceContract')).missingAtomicSourceRefused,
+    true,
+  );
+  checks.push(
+    'Old source database without atomic finalization contract refused before a source capability is returned',
+  );
   await certificate('wrong-host');
   assert.equal((await request('wrongHost')).wrongHostnameRejected, true);
   checks.push('Trusted certificate with wrong hostname actually rejected');
@@ -865,6 +1034,7 @@ try {
   );
   const targetChecks = [];
   const serviceChecks = [];
+  const sourceChecks = [];
   const transferSnapshots = {};
   if (targetTransactions) {
     const sourceBefore = snapshot(container, 'transfer_source');
@@ -887,6 +1057,8 @@ try {
       ['targetRecoverSocket', 'transfer_socket'],
     ]) {
       const before = snapshot(container, database);
+      const sourceTablesBefore = snapshot(container, 'transfer_source'),
+        sourceRowsBefore = sourceRows('transfer_source');
       assert(before['public.exercise_attempts'].rows > 0);
       assert(before['public.duel_attempts'].rows > 0);
       const legacyBefore = value(
@@ -895,6 +1067,19 @@ try {
       );
       const result = await request(command);
       const after = snapshot(container, database);
+      const sourceTablesAfter = snapshot(container, 'transfer_source'),
+        sourceRowsAfter = sourceRows('transfer_source');
+      assert.deepEqual(
+        outsidePublicationSource(sourceTablesAfter),
+        outsidePublicationSource(sourceTablesBefore),
+      );
+      assertSourceRows(
+        'transfer_source',
+        sourceRowsBefore,
+        sourceRowsAfter,
+        result.state === 'committed',
+        result.sourceRecordTime,
+      );
       assert.deepEqual(outsideTransfer(after), outsideTransfer(before));
       assert.deepEqual(
         value(
@@ -955,11 +1140,18 @@ try {
         result: 'PASS',
         observation: result,
       });
-      transferSnapshots[command] = { before, after };
+      transferSnapshots[command] = {
+        before,
+        after,
+        sourceBefore: sourceTablesBefore,
+        sourceAfter: sourceTablesAfter,
+        sourceRowsBefore,
+        sourceRowsAfter,
+      };
     }
     assert.deepEqual(
-      outsideJournal(snapshot(container, 'transfer_source')),
-      outsideJournal(sourceBefore),
+      outsidePublicationSource(snapshot(container, 'transfer_source')),
+      outsidePublicationSource(sourceBefore),
     );
     checks.push(
       'Nine real target transaction/recovery scenarios preserve existing learner history and all excluded tables',
@@ -1021,6 +1213,137 @@ try {
     createHash('sha256')
       .update(await readFile(file))
       .digest('hex');
+  if (sourceFinalization) {
+    const sourceSnapshots = {};
+    for (const [command, database, sourceDatabase] of [
+      ['sourcePublish', 'source_target', 'source_native'],
+      ['sourceRepeat', 'source_target', 'source_native'],
+      ['sourceLostBefore', 'source_before_target', 'source_before'],
+      ['sourceRecoverBefore', 'source_before_target', 'source_before'],
+      ['sourceLostAfter', 'source_after_target', 'source_after'],
+      ['sourceRecoverAfterRevoked', 'source_after_target', 'source_after'],
+      ['sourceRecordBlocked', 'source_blocked_target', 'source_blocked'],
+      ['sourceRecoverBlocked', 'source_blocked_target', 'source_blocked'],
+    ]) {
+      if (command === 'sourceRecoverAfterRevoked') {
+        const before = snapshot(container, sourceDatabase);
+        const expected = value(
+          sourceDatabase,
+          `BEGIN;
+          CREATE TEMP TABLE expected_revoke AS SELECT
+           (SELECT encode(extensions.digest(coalesce(string_agg(j::text,E'\\n' ORDER BY j::text),''),'sha256'),'hex') FROM (SELECT CASE WHEN id='${actor}' THEN to_jsonb(p)||jsonb_build_object('role','user','updated_at',transaction_timestamp()) ELSE to_jsonb(p) END j FROM public.profiles p) rows) profiles,
+           (SELECT encode(extensions.digest(coalesce(string_agg(j::text,E'\\n' ORDER BY j::text),''),'sha256'),'hex') FROM (SELECT CASE WHEN id=(SELECT key_id FROM public.admin_exercise_test_runs WHERE version_id='${version}' ORDER BY recorded_at DESC,id DESC LIMIT 1) THEN to_jsonb(k)||jsonb_build_object('enabled',false) ELSE to_jsonb(k) END j FROM novlearn_admin_private.test_signing_keys k) rows) keys;
+          UPDATE public.profiles SET role='user' WHERE id='${actor}';
+          UPDATE novlearn_admin_private.test_signing_keys SET enabled=false WHERE id=(SELECT key_id FROM public.admin_exercise_test_runs WHERE version_id='${version}' ORDER BY recorded_at DESC,id DESC LIMIT 1);
+          SELECT jsonb_build_object('profiles',profiles,'keys',keys) FROM expected_revoke; COMMIT;`,
+        );
+        const after = snapshot(container, sourceDatabase);
+        const unaffected = (rows) =>
+          Object.fromEntries(
+            Object.entries(rows).filter(
+              ([name]) =>
+                ![
+                  'public.profiles',
+                  'novlearn_admin_private.test_signing_keys',
+                ].includes(name),
+            ),
+          );
+        assert.deepEqual(unaffected(after), unaffected(before));
+        for (const [name, field] of [
+          ['public.profiles', 'profiles'],
+          ['novlearn_admin_private.test_signing_keys', 'keys'],
+        ]) {
+          assert.equal(after[name].rows, before[name].rows);
+          assert.equal(after[name].sha256, expected[field]);
+        }
+        sourceSnapshots.ownerRevocation = { before, after, expected };
+      }
+      const before = snapshot(container, database),
+        sourceBefore = snapshot(container, sourceDatabase),
+        rowsBefore = sourceRows(sourceDatabase);
+      assert(
+        sourceBefore['public.exercise_attempts'].rows > 0 &&
+          sourceBefore['public.duel_attempts'].rows > 0,
+      );
+      if (
+        [
+          'sourcePublish',
+          'sourceLostBefore',
+          'sourceLostAfter',
+          'sourceRecordBlocked',
+        ].includes(command)
+      ) {
+        assert.equal(
+          JSON.parse(rowsBefore.versionText).editorial_status,
+          'approved',
+        );
+        assert.equal(JSON.parse(rowsBefore.parentText).active_version_id, null);
+      }
+      const result = await request(command);
+      const after = snapshot(container, database),
+        sourceAfter = snapshot(container, sourceDatabase),
+        rowsAfter = sourceRows(sourceDatabase);
+      const outsideTarget = (rows) =>
+        Object.fromEntries(
+          Object.entries(rows).filter(
+            ([name]) =>
+              !['public.exercises', 'public.exercise_versions'].includes(name),
+          ),
+        );
+      assert.deepEqual(outsideTarget(after), outsideTarget(before));
+      assert.deepEqual(
+        outsidePublicationSource(sourceAfter),
+        outsidePublicationSource(sourceBefore),
+      );
+      assertSourceRows(
+        sourceDatabase,
+        rowsBefore,
+        rowsAfter,
+        result.state === 'committed',
+        result.sourceRecordTime,
+      );
+      if (
+        ['sourcePublish', 'sourceLostAfter', 'sourceRecordBlocked'].includes(
+          command,
+        )
+      ) {
+        assert.equal(
+          after['public.exercises'].rows,
+          before['public.exercises'].rows + 1,
+        );
+        assert.equal(
+          after['public.exercise_versions'].rows,
+          before['public.exercise_versions'].rows + 1,
+        );
+      } else assert.deepEqual(after, before);
+      if (command === 'sourceRecoverAfterRevoked') {
+        assert.equal(result.revokedHumanDenied, true);
+        assert.equal(result.outcome.result, 'unchanged');
+      }
+      sourceChecks.push({
+        command,
+        database,
+        sourceDatabase,
+        result: 'PASS',
+        observation: result,
+      });
+      sourceSnapshots[command] = {
+        before,
+        after,
+        sourceBefore,
+        sourceAfter,
+        rowsBefore,
+        rowsAfter,
+      };
+    }
+    await writeFile(
+      path.join(artifact, 'source-finalization-snapshots.json'),
+      JSON.stringify(sourceSnapshots, null, 2) + '\n',
+    );
+    checks.push(
+      'Eight actual source finalization scenarios preserve full source rows except exact status/pointer transitions, learner history and revoked authority',
+    );
+  }
   await writeFile(
     path.join(artifact, 'snapshots.json'),
     JSON.stringify(
@@ -1050,6 +1373,7 @@ try {
         checks,
         targetChecks,
         serviceChecks,
+        sourceChecks,
         tls,
         recoveryAssertions: recovery.recoveryAssertions,
         recoveryAssertionsAfterRestore: restoredProof.recoveryAssertions,
@@ -1060,16 +1384,19 @@ try {
         targetTablesPreserved: 62,
         sequencesCompared: false,
         migrationSha256: await sha(migration),
+        sourceFinalizationMigrationSha256: await sha(finalizationMigration),
         sourceDumpSha256: await sha(path.join(artifact, 'source.dump')),
         nativeSourceManifestSha256: await sha(
           path.join(artifact, 'native-source-hashes.json'),
         ),
         nativeBundleSha256: await sha(path.join(artifact, 'bundle/native.mjs')),
-        scope: publicationService
-          ? 'Local publication orchestration with fresh native Engine, real SQL source export/journal/target, synthetic Auth and PostgREST transport; no HTTP application activation or remote operation'
-          : targetTransactions
-            ? 'Real local target transactions and journal recovery with a previously native-approved source and synthetic identity gateway; no remote operation'
-            : 'Actual local TLS driver and machine journal recovery; synthetic identity gateway and inspection, no target apply or real Auth',
+        scope: sourceFinalization
+          ? 'Atomic source finalization with fresh native Engine, actual target commit/loss and machine recovery after revocation; synthetic Auth identity and REST transport, no remote operation'
+          : publicationService
+            ? 'Local publication orchestration with fresh native Engine, real SQL source export/journal/target, synthetic Auth and PostgREST transport; no HTTP application activation or remote operation'
+            : targetTransactions
+              ? 'Real local target transactions and journal recovery with a previously native-approved source and synthetic identity gateway; no remote operation'
+              : 'Actual local TLS driver and machine journal recovery; synthetic identity gateway and inspection, no target apply or real Auth',
         limitations: [
           'Source and target fixture databases share one isolated PostgreSQL cluster.',
           publicationService

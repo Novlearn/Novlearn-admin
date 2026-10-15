@@ -311,6 +311,19 @@ it('renders history recovery and planned cancellation with no publish action', (
   expect(html).toContain('Annuler ce plan');
   expect(html).not.toContain('Confirmer la publication');
 });
+it('describes a retained committed result as a historical fact, not a claim about the current active revision', () => {
+  const html = renderToStaticMarkup(
+    createElement(PublicationResult, {
+      operation: {
+        ...summary(),
+        state: 'committed',
+        outcome: native.outcome as PublicationSummary['outcome'],
+      },
+    }),
+  );
+  expect(html).toContain('a été confirmé');
+  expect(html).not.toContain('est active en Production');
+});
 it('requires an explicit reviewed and unexpired plan before emitting any confirmation command', () => {
   const plan = prepared(),
     context = {

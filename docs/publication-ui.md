@@ -95,15 +95,11 @@ précédent. Aucun nouveau transfert réel ni nouvelle certification Engine n'es
 déduit des réponses de cette simulation. Les nouvelles vérifications figurent
 dans [publication-ui-local-proof.json](publication-ui-local-proof.json).
 
-La finalisation du statut éditorial et de la version active Staging après
-transfert reste à implémenter. Le journal ne doit pas annoncer cette finalisation
-tant qu'elle n'a pas eu lieu. Le point de raccordement à examiner est
-l'enregistrement durable du résultat, après libération de la courte transaction
-de protection source et avant libération du verrou cible. Il faudra vérifier
-le contenu conservé, préserver les définitions publiées et ne pas exiger le
-rôle humain encore actif pour consigner un fait déjà établi après révocation.
-Les courses entre prise en charge, finalisation et édition exigent des essais
-SQL réels ; ce texte n'en constitue pas la réalisation.
+La [finalisation source](publication-source-finalization.md) est réalisée dans
+le jalon suivant : migration 62, reprise après blocage et révocation, vérifications
+de conservation des lignes complètes. Le résultat affiché décrit un fait
+historique confirmé ; il n'affirme pas que cette révision est toujours active.
+Les preuves UI datées ci-dessus restent celles du premier raccordement.
 
 Restent également les lots par exercice, le rollback fonctionnel complet,
 l'enrichissement de l'historique, les parcours Auth réels et la réception visuelle.

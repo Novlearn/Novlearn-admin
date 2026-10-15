@@ -204,6 +204,13 @@ export function createPublicationPgPools(config: PublicationPgConfiguration) {
         await client.query(
           "SET statement_timeout='10s'; SET lock_timeout='3s'; SET idle_in_transaction_session_timeout='60s'",
         );
+        if (role === sourceRole) {
+          const contract = await client.query(
+            'SELECT novlearn_admin_private.publication_source_contract() AS contract',
+          );
+          if (contract.rows[0]?.contract !== 'atomic-source-finalization-v1')
+            throw new PublicationPgError();
+        }
         const checked = client;
         const release = client.release.bind(client);
         client.release = (destroy) => {

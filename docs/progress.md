@@ -1,5 +1,21 @@
 # Progression du goal NovLearn Admin
 
+## Finalisation atomique source — 15 octobre 2026
+
+La [finalisation source](publication-source-finalization.md) ajoute la 62e
+migration locale : journal terminal, statut publié et pointeur actif source
+sont conservés dans la même transaction après vérification cible. Le pilote
+refuse une base dépourvue du nouveau contrat. Une reprise termine ce travail
+sans nouveau transfert, y compris après révocation de l'initiateur.
+
+Le rejeu neuf des **62 migrations**, **31 assertions SQL avant et après
+restauration**, les **15 groupes d'intégration** et leurs huit scénarios source
+passent. Le contrôle complet passe **578 tests dans 33 fichiers**, types, lint
+sans erreur, format, build et smoke. Les [preuves datées](publication-source-local-proof.json) distinguent
+SQL synthétique, vrai transfert local avec Engine Linux, et Auth/REST simulés.
+Les données et les protections existantes sont conservées. Aucune activation
+distante ; rollback complet, lots, vraie connexion et réception restent ouverts.
+
 ## Interface de publication et historique — 15 octobre 2026
 
 Le [panneau de révision et l'historique](publication-ui.md) sont raccordés à l'API
