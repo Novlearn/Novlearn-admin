@@ -1,5 +1,24 @@
 # Progression du goal NovLearn Admin
 
+## Essais progressifs accessibles — 15 octobre 2026
+
+Le [banc commun](local-workspace.md) rassemble les écrans existants et le vrai
+Creator avec Engine Linux sur `http://127.0.0.1:3140/`. Aucun compte ou fichier
+d'environnement n'est nécessaire. Les opérations sans base sont signalées comme
+indisponibles ; les formulaires référentiel/flashcards utilisent leurs doubles
+synthétiques existants. Ce parcours ne remplace pas l'Admin authentifié.
+
+**421 tests Admin**, types, lint sans erreur, format, build et smoke passent.
+Deux tests HTTP du banc, dix contrôles avec le moteur natif (dont rapport complet
+sur deux seeds) et la compilation des sept pages passent. La réception visuelle
+n'est pas exécutée après le refus navigateur. Le README obsolète qui indiquait
+encore l'absence de catalogue/Creator est corrigé. Voir les [preuves](local-workspace-proof.json).
+
+La connexion PostgreSQL et la lecture machine de reprise de publication sont
+encore en cours et non certifiées en intégration ; leurs changements existants
+sont conservés séparément. Aucun accès distant, publication, push, suppression
+de donnée existante ni activation Auth. Le goal reste actif et incomplet.
+
 ## Journal durable de publication — 15 octobre 2026
 
 Le [journal Staging et la protection de source](publication-journal.md) ajoutent

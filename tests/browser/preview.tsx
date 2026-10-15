@@ -6,6 +6,7 @@ import '../../src/app/globals.css';
 import { ExercisePreview } from '../../src/components/exercise-preview';
 import type { ExerciseDefinition } from 'novlearn-exercise-engine';
 import fixture from '../fixtures/preview-definition.json';
+import { WorkspaceNav } from './workspace-nav';
 function Harness() {
   const [definition, setDefinition] = useState(fixture as ExerciseDefinition);
   return (
@@ -17,6 +18,7 @@ function Harness() {
         } as React.CSSProperties
       }
     >
+      <WorkspaceNav />
       <div className="bg-amber-50 px-6 py-3 text-center text-xs font-semibold text-amber-900">
         Banc synthétique · propriétaire fictif · worker Engine réel dans Docker
         local · aucune base

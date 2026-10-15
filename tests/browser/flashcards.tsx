@@ -5,6 +5,7 @@ import '@fontsource-variable/fredoka';
 import '../../src/app/globals.css';
 import { FlashcardsManager } from '../../src/components/flashcards-manager';
 import type { FlashcardItem } from '../../src/lib/flashcards';
+import { WorkspaceNav } from './workspace-nav';
 const chapterId = 'a5810000-0000-4000-8000-000000000001';
 let mode = 'normal';
 const original = window.fetch;
@@ -56,59 +57,62 @@ function Harness() {
   const [state, setState] = useState('normal');
   mode = state;
   return (
-    <main className="mx-auto max-w-6xl p-5 sm:p-10">
-      <header className="mb-8 flex flex-wrap items-center gap-5">
-        <object
-          className="h-10 w-40"
-          data="/logo/novlearn-principal-ui.svg"
-          type="image/svg+xml"
-          aria-label="NovLearn"
-        >
-          NovLearn
-        </object>
-        <p className="text-sm text-amber-800">
-          Banc synthétique local — aucun accès Supabase
-        </p>
-        <label className="label">
-          État du banc
-          <select
-            className="field"
-            value={state}
-            onChange={(e) => setState(e.target.value)}
+    <>
+      <WorkspaceNav />
+      <main className="mx-auto max-w-6xl p-5 sm:p-10">
+        <header className="mb-8 flex flex-wrap items-center gap-5">
+          <object
+            className="h-10 w-40"
+            data="/logo/novlearn-principal-ui.svg"
+            type="image/svg+xml"
+            aria-label="NovLearn"
           >
-            <option value="normal">Normal</option>
-            <option value="empty">Vide</option>
-            <option value="error">Indisponible</option>
-            <option value="conflict">Conflit 409</option>
-            <option value="legacy">Chapitre à résoudre</option>
-          </select>
-        </label>
-      </header>
-      <FlashcardsManager
-        key={state}
-        data={
-          state === 'error'
-            ? null
-            : {
-                items:
-                  state === 'empty'
-                    ? []
-                    : [
-                        state === 'legacy'
-                          ? {
-                              ...item,
-                              chapter: 'Ancienne référence',
-                              chapterId: null,
-                            }
-                          : item,
-                      ],
-                total: state === 'empty' ? 0 : 1,
-                chapters: [{ id: chapterId, name: 'Fonctions et dérivées' }],
-              }
-        }
-        filter={{ query: '', chapter: null, page: 1 }}
-      />
-    </main>
+            NovLearn
+          </object>
+          <p className="text-sm text-amber-800">
+            Banc synthétique local — aucun accès Supabase
+          </p>
+          <label className="label">
+            État du banc
+            <select
+              className="field"
+              value={state}
+              onChange={(e) => setState(e.target.value)}
+            >
+              <option value="normal">Normal</option>
+              <option value="empty">Vide</option>
+              <option value="error">Indisponible</option>
+              <option value="conflict">Conflit 409</option>
+              <option value="legacy">Chapitre à résoudre</option>
+            </select>
+          </label>
+        </header>
+        <FlashcardsManager
+          key={state}
+          data={
+            state === 'error'
+              ? null
+              : {
+                  items:
+                    state === 'empty'
+                      ? []
+                      : [
+                          state === 'legacy'
+                            ? {
+                                ...item,
+                                chapter: 'Ancienne référence',
+                                chapterId: null,
+                              }
+                            : item,
+                        ],
+                  total: state === 'empty' ? 0 : 1,
+                  chapters: [{ id: chapterId, name: 'Fonctions et dérivées' }],
+                }
+          }
+          filter={{ query: '', chapter: null, page: 1 }}
+        />
+      </main>
+    </>
   );
 }
 createRoot(document.getElementById('root')!).render(<Harness />);

@@ -4,7 +4,9 @@ NovLearn Admin sera l'application privée d'administration de NovLearn : gestion
 
 ## État du projet
 
-Les lots 0 et 0 bis sont livrés. Le [suivi du goal](docs/progress.md) décrit l'audit et l'avancement courant. Le code du [Lot 1B Auth](docs/auth.md), le layout privé et les tests locaux sont préparés. **L'accès Staging reste désactivé** jusqu'à la sécurisation SQL du [Lot 1A](docs/lot-1a-preparation.md) et au provisionnement du premier admin. Il n'existe pas encore de gestion de contenu, de dashboard chiffré, de Creator, de publication ou de lecture Production. `exercise_versions` est absente du schéma relevé ; aucune migration n'est exécutée.
+Le catalogue, le Creator canonique, MathLive, l'aperçu et les tests Engine, la relecture, les chapitres, les compétences, les flashcards et le Dashboard Staging sont implémentés localement. Le [suivi du goal](docs/progress.md) distingue leurs preuves et limites. Les migrations SQL sont vérifiées sur des copies locales isolées ; aucune application distante n'est réalisée. La publication complète et les lectures Production restent à terminer.
+
+**L'accès Staging reste désactivé** jusqu'à validation des portes SQL du [Lot 1A](docs/lot-1a-preparation.md), provisionnement du compte Admin et vérification de l'authentification réelle. Le [code Auth](docs/auth.md) refuse l'accès sans configuration autorisée. Les tests locaux avec doubles ne valent pas une connexion distante opérationnelle.
 
 Le cahier des charges officiel est [CDC_reference.md](CDC_reference.md). Il fait foi pour la cible fonctionnelle et ne doit pas être modifié silencieusement. Le [sommaire documentaire](docs/README.md) donne accès à l'audit, à la stratégie DB, au modèle de versions, à la publication, à la sécurité et aux documents de fonctionnement.
 
@@ -32,6 +34,14 @@ npm.cmd run dev
 
 L'application démarre sur `http://localhost:3000`, avec redirection vers la connexion. Sans configuration, le formulaire est désactivé et les endpoints refusent l'accès sans contacter Supabase. `.env.example` et `.env.auth.example` décrivent la configuration ; suivre les conditions d'activation dans [Auth](docs/auth.md), après accord explicite.
 
+Pour essayer progressivement les composants sans compte ni base distante, lancer
+`node scripts/preview-browser.mjs` avec Docker Desktop Linux disponible, puis ouvrir
+`http://127.0.0.1:3140/`. Ce [banc local](docs/local-workspace.md) utilise des
+exemples fictifs et le vrai Engine Linux borné pour les calculs. Il ne sauvegarde
+aucun exercice en base et ne publie rien. Le lancement alternatif
+`node scripts/content-browser.mjs` propose les mêmes écrans sans moteur ; ne pas
+lancer les deux simultanément.
+
 ## Vérifications
 
 ```powershell
@@ -46,4 +56,4 @@ npm.cmd run build
 
 ## Périmètre et suite
 
-Le goal autorise l'avancement autonome local par lots indépendants. La préparation du Lot 1A est disponible ; sa réconciliation, ses correctifs dans NovLearn et son application Staging nécessitent les autorisations correspondantes. Le Lot 1B n'est pas réceptionné à distance. Les autres lots restent dépendants des portes de contrôle de [la roadmap](docs/roadmap.md). Aucun push ni déploiement autorisé.
+Le goal autorise l'avancement autonome local par lots indépendants. D07 autorise les migrations et vérifications SQL locales dans NovLearn ; l'application élève reste hors de ce périmètre. La réconciliation et l'application Staging nécessitent une procédure et une autorisation distinctes. Le Lot 1B n'est pas réceptionné à distance. Les portes de contrôle de [la roadmap](docs/roadmap.md) restent obligatoires. Aucun push ni déploiement autorisé.

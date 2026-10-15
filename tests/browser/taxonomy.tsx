@@ -4,6 +4,7 @@ import '@fontsource-variable/inter';
 import '@fontsource-variable/fredoka';
 import '../../src/app/globals.css';
 import { TaxonomyManager } from '../../src/components/taxonomy-manager';
+import { WorkspaceNav } from './workspace-nav';
 import type {
   TaxonomyKind,
   TaxonomyData,
@@ -80,47 +81,50 @@ function Harness() {
     chapters: [{ id: chapterId, name: 'Fonctions et dérivées' }],
   };
   return (
-    <div className="mx-auto max-w-6xl p-5 sm:p-10">
-      <header className="mb-8 flex flex-wrap items-center gap-5">
-        <object
-          data="/logo/novlearn-principal-ui.svg"
-          type="image/svg+xml"
-          aria-label="NovLearn"
-          className="h-10 w-40"
-        >
-          NovLearn Admin
-        </object>
-        <p className="text-sm text-amber-800">
-          Banc synthétique local — aucun accès Supabase
-        </p>
-        <select
-          aria-label="Vue du banc"
-          className="field w-auto"
-          value={kind}
-          onChange={(e) => setKind(e.target.value as TaxonomyKind)}
-        >
-          <option value="chapter">Chapitres</option>
-          <option value="competence">Compétences</option>
-        </select>
-        <select
-          aria-label="État du banc"
-          className="field w-auto"
-          value={state}
-          onChange={(e) => setState(e.target.value)}
-        >
-          <option value="normal">Normal</option>
-          <option value="empty">Vide</option>
-          <option value="error">Indisponible</option>
-          <option value="conflict">Conflit 409</option>
-        </select>
-      </header>
-      <TaxonomyManager
-        key={kind + state}
-        kind={kind}
-        data={state === 'error' ? null : data}
-        filter={{ query: '', chapter: null, page: 1 }}
-      />
-    </div>
+    <>
+      <WorkspaceNav />
+      <div className="mx-auto max-w-6xl p-5 sm:p-10">
+        <header className="mb-8 flex flex-wrap items-center gap-5">
+          <object
+            data="/logo/novlearn-principal-ui.svg"
+            type="image/svg+xml"
+            aria-label="NovLearn"
+            className="h-10 w-40"
+          >
+            NovLearn Admin
+          </object>
+          <p className="text-sm text-amber-800">
+            Banc synthétique local — aucun accès Supabase
+          </p>
+          <select
+            aria-label="Vue du banc"
+            className="field w-auto"
+            value={kind}
+            onChange={(e) => setKind(e.target.value as TaxonomyKind)}
+          >
+            <option value="chapter">Chapitres</option>
+            <option value="competence">Compétences</option>
+          </select>
+          <select
+            aria-label="État du banc"
+            className="field w-auto"
+            value={state}
+            onChange={(e) => setState(e.target.value)}
+          >
+            <option value="normal">Normal</option>
+            <option value="empty">Vide</option>
+            <option value="error">Indisponible</option>
+            <option value="conflict">Conflit 409</option>
+          </select>
+        </header>
+        <TaxonomyManager
+          key={kind + state}
+          kind={kind}
+          data={state === 'error' ? null : data}
+          filter={{ query: '', chapter: null, page: 1 }}
+        />
+      </div>
+    </>
   );
 }
 createRoot(document.getElementById('root')!).render(<Harness />);

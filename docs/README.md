@@ -3,6 +3,9 @@
 Le [suivi du goal](progress.md) contient l'audit actuel, les lots autorisés,
 les tests, les blocages et le point de reprise.
 
+[Essais progressifs locaux](local-workspace.md) : accueil commun, Creator relié
+au vrai Engine Linux, exemples sans compte ni base distante et limites de réception.
+
 [Authentification préparée](auth.md) : contrôle serveur, tests locaux et conditions d'activation Staging.
 
 [Identité visuelle appliquée](visual-implementation.md) : polices locales, couleurs et variantes SVG, selon [system-design.md](system-design.md).

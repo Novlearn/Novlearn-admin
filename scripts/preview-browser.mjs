@@ -5,12 +5,17 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { createServer } from 'vite';
+import { localWorkspaceConfig } from './local-workspace.mjs';
+import './prepare-mathlive.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const artifact = path.join(
   root,
   '.local/lot1a/preview-runtime-' + new Date().toISOString().replace(/\D/g, ''),
 );
+const runtimeContainer =
+  'novlearn-admin-workspace-' +
+  path.basename(artifact).replace('preview-runtime-', '');
 await mkdir(artifact, { recursive: true });
 const engine = path.join(root, 'vendor/novlearn-exercise-engine-0.1.0.tgz');
 if (
@@ -51,6 +56,8 @@ const args = [
   '--host',
   'npipe:////./pipe/dockerDesktopLinuxEngine',
   'run',
+  '--name',
+  runtimeContainer,
   '--pull',
   'never',
   '--rm',
@@ -145,73 +152,56 @@ const ready = new Promise((resolve, reject) => {
   });
 });
 await ready;
-server = await createServer({
-  configFile: false,
-  root,
-  resolve: { alias: { '@': path.join(root, 'src') } },
-  oxc: { jsx: { runtime: 'automatic' } },
-  server: {
-    host: '127.0.0.1',
-    port: 3140,
-    strictPort: true,
-    open: false,
-    cors: false,
-    watch: {
-      ignored: [
-        '**/.next/**',
-        '**/.npm-cache/**',
-        '**/.local/**',
-        '**/docs/**',
-      ],
-    },
-  },
-  plugins: [
-    {
-      name: 'native-synthetic-preview',
-      configureServer(s) {
-        s.middlewares.use('/api/admin/preview', async (req, res) => {
-          res.setHeader('content-type', 'application/json');
-          res.setHeader('cache-control', 'no-store');
-          if (
-            req.method !== 'POST' ||
-            req.headers.origin !== 'http://127.0.0.1:3140' ||
-            exited
-          ) {
-            res.statusCode = 403;
-            res.end(JSON.stringify({ error: 'Local fixture request refused' }));
-            return;
-          }
-          try {
-            let text = '';
-            for await (const chunk of req) {
-              text += chunk;
-              if (Buffer.byteLength(text) > 262144) throw Error('Input limit');
-            }
-            const body = JSON.parse(text);
-            if (!['generate', 'inspect', 'grade', 'test'].includes(body.action))
-              throw Error('Action');
-            const id = randomUUID();
-            const result = await new Promise((resolve, reject) => {
-              pending.set(id, { resolve, reject });
-              child.stdin.write(JSON.stringify({ id, body }) + '\n');
-            });
-            res.statusCode = result.status;
-            res.end(JSON.stringify(result.body));
-          } catch {
-            res.statusCode = 503;
-            res.end(
-              JSON.stringify({ error: 'Local fixture runtime unavailable' }),
-            );
-          }
+try {
+  server = await createServer(
+    localWorkspaceConfig({
+      engine: async (body) => {
+        if (exited || pending.size >= 5)
+          throw Error('Runtime unavailable or busy');
+        const id = randomUUID();
+        return new Promise((resolve, reject) => {
+          const timer = setTimeout(() => {
+            pending.delete(id);
+            reject(Error('Runtime timeout'));
+          }, 125000);
+          pending.set(id, {
+            resolve: (value) => {
+              clearTimeout(timer);
+              resolve(value);
+            },
+            reject: (error) => {
+              clearTimeout(timer);
+              reject(error);
+            },
+          });
+          child.stdin.write(JSON.stringify({ id, body }) + '\n');
         });
       },
-    },
-  ],
-});
-await server.listen();
+    }),
+  );
+  await server.listen();
+  await writeFile(
+    path.join(artifact, 'runtime.json'),
+    JSON.stringify(
+      {
+        processId: process.pid,
+        container: runtimeContainer,
+        origin: 'http://127.0.0.1:3140',
+        synthetic: true,
+        database: false,
+      },
+      null,
+      2,
+    ) + '\n',
+  );
+} catch (error) {
+  await server?.close();
+  child.stdin.end();
+  throw error;
+}
 console.log('PASS: native multi-seed preview qualification; proof=' + artifact);
 console.log(
-  'Synthetic browser owner, no Auth/database: http://127.0.0.1:3140/tests/browser/preview.html',
+  'Local workspace, real Linux Engine, no Auth/database: http://127.0.0.1:3140/',
 );
 let closing = false;
 async function close() {
@@ -222,3 +212,6 @@ async function close() {
 }
 process.on('SIGINT', () => void close());
 process.on('SIGTERM', () => void close());
+process.stdin.on('data', (value) => {
+  if (String(value).trim() === 'stop') void close();
+});

@@ -8,12 +8,25 @@ import {
   testPreview,
   acquirePreviewJob,
 } from './preview-server.ts';
-import { closeEngineRuntime } from './engine-runtime.ts';
+import { closeEngineRuntime, runEngine } from './engine-runtime.ts';
 
 const definition = JSON.parse(
   await readFile('/inputs/preview-definition.json', 'utf8'),
 );
 const signal = () => AbortSignal.timeout(120000);
+const validation = await runEngine(
+  'validateDefinition',
+  { definition },
+  signal(),
+);
+assert.equal(validation.ok, true);
+const invalidValidation = await runEngine(
+  'validateDefinition',
+  { definition: { ...definition, schemaVersion: 999 } },
+  signal(),
+);
+assert.equal(invalidValidation.ok, false);
+assert(invalidValidation.diagnostics.length > 0);
 const preview = await generatePreview(
   'native-fixture-owner',
   definition,
@@ -119,6 +132,8 @@ process.stdout.write(
     proof: {
       result: 'PASS',
       nativePreview: true,
+      nativeValidation: true,
+      nativeInvalidDefinitionRejected: true,
       nativeCorrection: true,
       ownerIsolation: true,
       privateProjection: true,
@@ -159,7 +174,27 @@ try {
         throw Error('Fixture test limits');
       release = acquirePreviewJob(owner);
       let result;
-      if (b.action === 'generate')
+      if (b.action === 'validate') {
+        const value = await runEngine(
+          'validateDefinition',
+          { definition: b.definition },
+          signal(),
+        );
+        if (!value || typeof value.ok !== 'boolean')
+          throw Error('Invalid Engine result');
+        process.stdout.write(
+          JSON.stringify({
+            id,
+            status: 200,
+            body: {
+              environment: 'staging',
+              valid: value.ok,
+              diagnostics: value.ok ? [] : value.diagnostics,
+            },
+          }) + '\n',
+        );
+        continue;
+      } else if (b.action === 'generate')
         result = await generatePreview(owner, b.definition, b.seed, signal());
       else if (b.action === 'inspect')
         result = inspectPreview(owner, b.previewId);

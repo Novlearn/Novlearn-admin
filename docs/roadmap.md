@@ -1,5 +1,11 @@
 # Roadmap
 
+**Essais progressifs :** le [banc commun local](local-workspace.md) donne accès
+aux composants et au Creator avec le vrai Engine Linux, sans Auth ni base.
+421 tests Admin, deux tests HTTP du banc, dix contrôles natifs et compilation
+des sept pages passent. Cela ne livre pas l'application authentifiée : réception
+visuelle, intégration de publication et portes distantes restent ouvertes.
+
 **État au 15 octobre 2026 :** D07 recentre le travail sur les migrations
 locales NovLearn et la construction d’Admin. Les adaptations de l’application
 élève sont hors de ce périmètre ; elles ne bloquent plus le développement

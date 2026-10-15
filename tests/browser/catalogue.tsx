@@ -8,6 +8,7 @@ import { CatalogueList } from '../../src/components/catalogue-list';
 import { DraftMetadataForm } from '../../src/components/draft-metadata-form';
 import { EditorialReview } from '../../src/components/editorial-review';
 import type { CatalogueItem } from '../../src/lib/catalogue';
+import { WorkspaceNav } from './workspace-nav';
 
 const base: CatalogueItem = {
   id: '9007199254740993',
@@ -89,6 +90,7 @@ function Harness() {
         } as React.CSSProperties
       }
     >
+      <WorkspaceNav />
       <div className="bg-amber-50 px-6 py-3 text-center text-xs font-semibold text-amber-900">
         Banc visuel local · données synthétiques · aucune connexion à une base
       </div>
