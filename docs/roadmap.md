@@ -1,5 +1,11 @@
 # Roadmap
 
+**Connexion privée et reprise :** le [pilote PostgreSQL](publication-pg.md) et
+la migration 61 passent 11 contrôles d'intégration TLS/rôles/reprise et 16 assertions
+SQL avant/après restauration. 424 tests Admin et le contrôle complet passent.
+Le transfert, la relecture cible, la reprise de commit ambigu et les confirmations
+restent à raccorder ; les portes distantes et la réception visuelle restent ouvertes.
+
 **Essais progressifs :** le [banc commun local](local-workspace.md) donne accès
 aux composants et au Creator avec le vrai Engine Linux, sans Auth ni base.
 421 tests Admin, deux tests HTTP du banc, dix contrôles natifs et compilation

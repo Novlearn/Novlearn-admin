@@ -168,6 +168,38 @@ describe('Journal : contrat privé et résultat certain', () => {
   });
 });
 describe('Journal : session fraîche et requêtes bornées', () => {
+  it('reads pending machine records after revocation without granting publication access', async () => {
+    auth.getProfileRole.mockResolvedValue('user');
+    query.mockResolvedValue({
+      rows: [
+        { page: { items: [{ ...fixture(), state: 'uncertain' }], next: null } },
+      ],
+    });
+    expect((await journal().pending()).items).toHaveLength(1);
+    expect(auth.getVerifiedUser).not.toHaveBeenCalled();
+    expect(query.mock.calls[0][1]).toEqual([null]);
+    await expect(journal().claim(id, digest, 'claim')).rejects.toMatchObject({
+      code: 'forbidden',
+    });
+  });
+  it.each([
+    { items: [], next: id },
+    { items: Array(11).fill({ ...fixture(), state: 'uncertain' }), next: null },
+    { items: [fixture()], next: null },
+    null,
+  ])('rejects invalid or non-pending recovery page %#', async (page) => {
+    query.mockResolvedValue({ rows: [{ page }] });
+    await expect(journal().pending()).rejects.toMatchObject({
+      code: 'unavailable',
+    });
+    expect(release).toHaveBeenCalledOnce();
+  });
+  it('rejects an invalid cursor before connecting', async () => {
+    await expect(journal().pending('../other')).rejects.toMatchObject({
+      code: 'invalid',
+    });
+    expect(connect).not.toHaveBeenCalled();
+  });
   it.each([null, { id: actor, isAnonymous: true }])(
     'refuses absent/guest identity %#',
     async (user) => {

@@ -1,5 +1,24 @@
 # Progression du goal NovLearn Admin
 
+## Pilote PostgreSQL et reprise machine — 15 octobre 2026
+
+Le [pilote privé](publication-pg.md) relie les primitives du journal à de vraies
+identités LOGIN contrôlées, avec TLS strict et pools source/cible distincts.
+La migration 61 NovLearn `cdf6491` fournit une lecture machine paginée des
+opérations en cours/incertaines, y compris après révocation de leur initiateur.
+Elle n'autorise aucune nouvelle publication ni lecture API de contenu privé.
+
+**424 tests Admin**, types, lint sans erreur, format, build et smoke passent.
+Onze contrôles d'intégration et 16 assertions SQL avant/après restauration passent.
+La révocation du profil est une action explicite sur la copie synthétique, dont
+le rôle et la date attendus sont vérifiés exactement ; les actions du pilote
+conservent intégralement les tables hors journal. Voir les [preuves](publication-pg-local-proof.json).
+
+Le transfert cible complet, sa relecture, la reprise de commit ambigu et l'UI
+restent à raccorder. Les profils de tests ne certifient pas Auth réelle ni le
+confinement complet. Aucun accès distant ou nouvelle activation. Les modifications
+préexistantes sont préservées ; le goal reste actif et incomplet.
+
 ## Essais progressifs accessibles — 15 octobre 2026
 
 Le [banc commun](local-workspace.md) rassemble les écrans existants et le vrai

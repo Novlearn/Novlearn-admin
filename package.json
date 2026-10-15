@@ -36,6 +36,7 @@
     "mathlive": "0.111.1",
     "next": "15.5.27",
     "novlearn-exercise-engine": "file:vendor/novlearn-exercise-engine-0.1.0.tgz",
+    "pg": "8.23.1",
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "server-only": "0.0.1"
@@ -43,6 +44,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "3.3.3",
     "@types/node": "22.19.0",
+    "@types/pg": "8.23.1",
     "@types/react": "18.3.27",
     "@types/react-dom": "18.3.7",
     "autoprefixer": "10.4.22",

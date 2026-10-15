@@ -94,10 +94,10 @@ ce refus. Une personne peut ouvrir le banc normalement et communiquer les
 résultats observés ; le pilotage automatique attend une session normalement
 autorisée. La connexion Staging reste fermée pour les raisons de [Auth](auth.md).
 
-Les travaux de connexion PostgreSQL de publication et de lecture machine des
-opérations en attente sont conservés séparément dans le worktree. Leurs tests
-unitaires sont inclus dans les 421, mais la connexion TLS effective, les
-nouveaux contrôles SQL de reprise et le transfert complet ne sont pas certifiés.
-Ce checkpoint n'achève aucun de ces travaux ni le goal global. Avant application
+Le checkpoint suivant qualifie séparément le [pilote PostgreSQL et la lecture
+machine de reprise](publication-pg.md), avec TLS réel, révocation et restauration.
+Les 421 tests ci-dessus restent le relevé daté de ce banc. Ces nouveaux contrôles
+ne raccordent pas le banc à une base ou au service complet de publication et
+n'achèvent pas le goal global. Avant application
 distante restent réconciliation SQL, sauvegarde/PITR, compatibilité élève,
 comptes et secrets séparés, réception réelle et autorisation explicite.

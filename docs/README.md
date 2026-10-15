@@ -27,6 +27,10 @@ permissions et rejeu/restauration de 59 migrations ; accès Production restant.
 [Journal de publication](publication-journal.md) : plans durables, résultat
 incertain, protection de source et restauration ; transfert complet à raccorder.
 
+[Connexion PostgreSQL et reprise machine](publication-pg.md) : identités privées,
+TLS vérifié, file bornée et tests réels après révocation/restauration ; aucun
+transfert ou accès distant activé.
+
 [Rapprochement des migrations par empreintes](lot-1a-hash-reconciliation.md) : relevé en lecture seule, sept candidats et historique partiellement dépourvu de SQL.
 
 | Document                                                     | Objet                                                                          |

@@ -1,5 +1,10 @@
 # Journal durable et protection de la source — préparation locale
 
+**Complément du même jour :** le [pilote privé et la file de reprise](publication-pg.md)
+ajoutent une connexion PostgreSQL TLS réellement exercée et une lecture machine
+bornée, migration 61. Les limites de connexion/reprise décrites ci-dessous sont
+le checkpoint antérieur ; le transfert complet et son interface restent ouverts.
+
 Le journal Staging et ses primitives serveur sont implémentés et testés
 localement. Ils complètent la [capacité SQL cible et le diff](publication-capability.md).
 **Le parcours complet de publication reste incomplet** : aucune connexion

@@ -131,6 +131,48 @@ export class PublicationJournal {
       [actor, id],
     );
   }
+  /** Recovery feed is private machine authority, including after initiator
+   * revocation. It never grants permission to start a new transfer. */
+  async pending(after: string | null = null) {
+    if (after !== null && !isUuid(after))
+      throw new PublicationJournalError('invalid');
+    let connection: PublicationConnection | undefined;
+    try {
+      connection = await this.connect();
+      const result = await connection.query(
+        'SELECT novlearn_admin_private.pending_publication_operations($1::uuid) AS page',
+        [after],
+      );
+      const page = result.rows[0]?.page;
+      if (!page || typeof page !== 'object' || Array.isArray(page))
+        throw new PublicationJournalError('unavailable');
+      const data = page as Record<string, unknown>;
+      if (
+        !Array.isArray(data.items) ||
+        data.items.length > 10 ||
+        (data.next !== null && !isUuid(data.next))
+      )
+        throw new PublicationJournalError('unavailable');
+      const items = data.items.map(publicationOperation);
+      if (
+        items.some(
+          (item) => !item || !['executing', 'uncertain'].includes(item.state),
+        ) ||
+        new Set(items.map((item) => item?.id)).size !== items.length ||
+        (data.next !== null &&
+          (items.length !== 10 || items.at(-1)?.id !== data.next))
+      )
+        throw new PublicationJournalError('unavailable');
+      return {
+        items: items as PublicationOperation[],
+        next: data.next as string | null,
+      };
+    } catch (error) {
+      throw translate(error);
+    } finally {
+      connection?.release();
+    }
+  }
   async claim(id: string, digest: string, action: 'claim' | 'cancel') {
     const actor = await this.actor();
     if (
