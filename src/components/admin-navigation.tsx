@@ -10,6 +10,8 @@ export function AdminNavigation() {
         ['/admin', 'Vue d’ensemble'],
         ['/admin/exercises', 'Exercices'],
         ['/admin/exercises/new', 'Créer un exercice'],
+        ['/admin/chapters', 'Chapitres'],
+        ['/admin/competences', 'Compétences'],
       ].map(([href, label]) => {
         const active =
           path === href ||

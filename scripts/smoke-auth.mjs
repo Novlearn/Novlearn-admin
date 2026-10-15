@@ -76,6 +76,8 @@ try {
     '/admin/exercises',
     '/admin/exercises/new',
     '/admin/exercises/1',
+    '/admin/chapters',
+    '/admin/competences',
   ]) {
     const admin = await fetch(`${origin}${path}`, {
       redirect: 'manual',
@@ -94,6 +96,8 @@ try {
     ['/api/admin/engine', 'POST'],
     ['/api/admin/preview', 'POST'],
     ['/api/admin/review', 'POST'],
+    ['/api/admin/taxonomy?kind=chapter', 'GET'],
+    ['/api/admin/taxonomy', 'POST'],
     ['/auth/login', 'POST'],
     ['/auth/logout', 'POST'],
   ]) {

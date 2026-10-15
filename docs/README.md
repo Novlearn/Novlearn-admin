@@ -12,6 +12,9 @@ les tests, les blocages et le point de reprise.
 [Catalogue local](catalogue.md) : écrans Admin, brouillons et permissions SQL,
 preuves de restauration, limites et étapes avant activation distante.
 
+[Chapitres et compétences](taxonomy.md) : référentiel Staging, identifiants et
+références préservés, audit, tests SQL/restauration et vérification visuelle locale.
+
 [Rapprochement des migrations par empreintes](lot-1a-hash-reconciliation.md) : relevé en lecture seule, sept candidats et historique partiellement dépourvu de SQL.
 
 | Document                                                     | Objet                                                                          |

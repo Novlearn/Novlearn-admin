@@ -1,5 +1,26 @@
 # Progression du goal NovLearn Admin
 
+## Chapitres et compétences locaux — 15 octobre 2026
+
+Le [référentiel Staging](taxonomy.md) ajoute listes/recherche, création/édition,
+alias/ordre/emoji, identifiants stables, rattachement, points, liens d'exercices
+et suppression contrôlée des seules fiches inutilisées. Les deux RPC protègent
+les références et l'audit, avec empreinte/époque et refus de l'écriture API directe.
+La 57e migration est ajoutée localement dans NovLearn (`c7e9f9e`).
+
+**39 assertions SQL avant/après restauration, 48 catalogue, 21 reçus et 43
+relecture passent**, ainsi que 257 tests Admin, types, lint, format, build et
+smoke. Deux éditions concurrentes donnent un commit et un conflit. Les anciennes
+colonnes des 58 tables sont préservées ; 59 snapshots sont identiques après
+annulation des fixtures et restauration. Le banc navigateur synthétique vérifie
+édition, fermeture annulable, conflit, erreurs et responsive avec Inter locale.
+Pas de nouvelle certification Engine source, Auth réel ou rejeu neuf de 57 SQL.
+
+Le goal a repris à l'état `active` après le checkpoint de restriction ci-dessous.
+La publication et la qualification complète du confinement restent ouvertes.
+Auth distante et toute propagation Production restent fermées ; les autres lots
+et le Lot 1A ne sont pas déclarés terminés.
+
 ## Reprise après restriction de sécurité — 15 octobre 2026
 
 Le [bilan de reprise](goal-recovery.md) identifie trois arrêts Codex
