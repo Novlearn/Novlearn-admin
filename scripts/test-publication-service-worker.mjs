@@ -31,7 +31,12 @@ async function setup() {
     platform: 'linux',
     architecture: 'x64',
   });
-  async function sessionQuery(text, values = [], database = 'transfer_source') {
+  async function sessionQuery(
+    text,
+    values = [],
+    database = 'transfer_source',
+    commit = false,
+  ) {
     const sessionUrl = new URL(session.url);
     sessionUrl.pathname = '/' + database;
     const client = new Client({
@@ -49,7 +54,9 @@ async function setup() {
         "SELECT set_config('request.jwt.claim.sub',$1,true),set_config('request.jwt.claims',$2,true)",
         [actor, JSON.stringify({ sub: actor, is_anonymous: false })],
       );
-      return await client.query(text, values);
+      const result = await client.query(text, values);
+      if (commit) await client.query('COMMIT');
+      return result;
     } finally {
       try {
         await client.query('ROLLBACK');
@@ -143,7 +150,8 @@ async function setup() {
       targetKey: key,
     });
     clients.push(pools);
-    let calls = 0;
+    let calls = 0,
+      targetRecordTime = null;
     const target = new api.PublicationTarget(async () => {
       const connection = await pools.target();
       return {
@@ -151,7 +159,15 @@ async function setup() {
           if (text.includes('public.apply_exercise_publication')) calls++;
           if (loss === 'before' && text === 'COMMIT')
             throw Error('Fixture loss before sending commit');
-          const result = await connection.query(text, values);
+          const applying = text.includes('public.apply_exercise_publication');
+          const result = await connection.query(
+            applying
+              ? text + ', transaction_timestamp()::text AS fixture_target_time'
+              : text,
+            values,
+          );
+          if (applying)
+            targetRecordTime = result.rows[0]?.fixture_target_time ?? null;
           if (loss && text === 'COMMIT')
             throw Error('Fixture lost acknowledgement after real commit');
           return result;
@@ -239,6 +255,7 @@ async function setup() {
       calls: () => calls,
       sourceTime: () => sourceRecordTime,
       sourceOutcome: () => sourceRecordedOutcome,
+      targetTime: () => targetRecordTime,
     };
   };
   context = {
@@ -252,6 +269,8 @@ async function setup() {
     roundtrips: () => roundtrips,
     pending: null,
     sessionQuery,
+    sessionMutation: (text, values, database) =>
+      sessionQuery(text, values, database, true),
     actor,
   };
   return context;

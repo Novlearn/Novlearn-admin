@@ -1,5 +1,8 @@
 # Finalisation de la source après publication — vérification locale
 
+Le jalon suivant vérifie le [retour serveur/SQL entre deux révisions](publication-rollback.md),
+sans nouvelle migration. Les preuves ci-dessous gardent leur périmètre daté.
+
 La migration locale NovLearn
 `20261015191720_novlearn_admin_publication_source_finalization.sql` complète
 l'enregistrement privé du résultat de publication. Après constat vérifié du

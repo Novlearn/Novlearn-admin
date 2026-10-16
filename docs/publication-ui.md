@@ -101,7 +101,8 @@ de conservation des lignes complètes. Le résultat affiché décrit un fait
 historique confirmé ; il n'affirme pas que cette révision est toujours active.
 Les preuves UI datées ci-dessus restent celles du premier raccordement.
 
-Restent également les lots par exercice, le rollback fonctionnel complet,
-l'enrichissement de l'historique, les parcours Auth réels et la réception visuelle.
+Le [retour serveur/SQL entre deux révisions](publication-rollback.md) est vérifié
+dans le jalon suivant. Restent les lots par exercice, l'enrichissement de
+l'historique, les parcours Auth réels et la réception visuelle du parcours complet.
 Les portes SQL/compatibilité/exploitation avant application distante restent
 ouvertes. Le goal et le Lot 1A ne sont pas terminés.

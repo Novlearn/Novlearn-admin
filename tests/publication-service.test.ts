@@ -17,6 +17,7 @@ import type {
   TargetExecution,
   TargetObservation,
 } from '@/lib/publication-target';
+import { PublicationTargetError } from '@/lib/publication-target';
 vi.mock('server-only', () => ({}));
 const actor = native.actor_id,
   id = native.id;
@@ -38,6 +39,15 @@ const exported = () =>
     { payload: native.payload, source: native.source_snapshot },
     selection,
   )!;
+it('preserves a target business conflict without preparing a journal operation or applying a transfer', async () => {
+  const fixture = setup();
+  fixture.target.inspect.mockRejectedValueOnce(
+    new PublicationTargetError('conflict'),
+  );
+  await expect(fixture.prepare()).rejects.toMatchObject({ code: 'conflict' });
+  expect(fixture.journal.prepare).not.toHaveBeenCalled();
+  expect(fixture.apply).not.toHaveBeenCalled();
+});
 function setup() {
   let state = original(),
     clock = Date.parse(native.created_at) + 2000,

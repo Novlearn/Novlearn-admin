@@ -4,14 +4,16 @@ import assert from 'node:assert/strict';
 import { createClient } from '@supabase/supabase-js';
 import { publicationFixture } from '/service-worker.mjs';
 const pending = new Map();
-async function driverFor(
+export async function driverFor(
   database,
   key,
   sourceDatabase,
   loss = false,
   blockRecord = false,
+  selectedVersion,
 ) {
   const fixture = await publicationFixture();
+  const versionId = selectedVersion ?? fixture.original.version_id;
   const query = (text, values = []) =>
     fixture.sessionQuery(text, values, sourceDatabase);
   const client = createClient(
@@ -30,15 +32,12 @@ async function driverFor(
           let data;
           if (url.pathname === '/rest/v1/exercise_versions') {
             assert.equal(url.searchParams.get('select'), 'id,definition');
-            assert.equal(
-              url.searchParams.get('id'),
-              'eq.' + fixture.original.version_id,
-            );
+            assert.equal(url.searchParams.get('id'), 'eq.' + versionId);
             data =
               (
                 await query(
                   'SELECT id,definition FROM public.exercise_versions WHERE id=$1::uuid',
-                  [fixture.original.version_id],
+                  [versionId],
                 )
               ).rows[0] ?? null;
           } else {

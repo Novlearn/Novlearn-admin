@@ -6,6 +6,7 @@ import { Client } from 'pg';
 import { runTransferCommand } from '/target-worker.mjs';
 import { runServiceCommand } from '/service-worker.mjs';
 import { runSourceCommand } from '/source-worker.mjs';
+import { runRollbackCommand } from '/rollback-worker.mjs';
 import {
   createPublicationPgPools,
   PublicationJournal,
@@ -26,6 +27,16 @@ const rejectPool = async (settings) => {
   }
 };
 const commands = {
+  rollbackPublishFirst: () => runRollbackCommand('publishFirst'),
+  rollbackCreateSecond: () => runRollbackCommand('createSecond'),
+  rollbackMissingSecond: () => runRollbackCommand('missingSecond'),
+  rollbackPublishSecond: () => runRollbackCommand('publishSecond'),
+  rollbackImplicitFirst: () => runRollbackCommand('implicitFirst'),
+  rollbackLostFirst: () => runRollbackCommand('lostFirst'),
+  rollbackRecoverLost: () => runRollbackCommand('recoverLost'),
+  rollbackRepeatFirst: () => runRollbackCommand('repeatFirst'),
+  rollbackRepublishSecond: () => runRollbackCommand('republishSecond'),
+  rollbackActivateFirst: () => runRollbackCommand('activateFirst'),
   sourcePublish: () => runSourceCommand('publish'),
   sourceRepeat: () => runSourceCommand('repeat'),
   sourceLostBefore: () => runSourceCommand('lostBefore'),

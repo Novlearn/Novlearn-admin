@@ -153,7 +153,7 @@ export async function POST(request: NextRequest) {
         missing: [404, 'Opération ou révision introuvable.'],
         conflict: [
           409,
-          'Le plan ou le contenu a changé. Préparez un nouveau diff.',
+          'Ce transfert est incompatible avec la révision, le mode choisi ou l’état actuel des données. Vérifiez-les avant de préparer un nouveau diff.',
         ],
         busy: [429, 'Un calcul est déjà en cours. Réessayez après sa fin.'],
         verification: [

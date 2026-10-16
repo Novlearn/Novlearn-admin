@@ -1,5 +1,27 @@
 # Progression du goal NovLearn Admin
 
+## Retour à une révision publiée — 16 octobre 2026
+
+Le [retour serveur/SQL](publication-rollback.md) passe dix étapes réelles sur
+deux révisions, dont création par RPC, nouveau reçu Engine, relecture synthétique,
+refus des modes incompatibles, commit avec réponse perdue, reprise sans transfert,
+répétition identique et réactivations. Les définitions publiées, les deux
+tentatives liées aux versions et toutes les tables exclues restent conservées.
+Un défaut de diagnostic est corrigé : conflit métier et indisponibilité technique
+restent distincts, avec nettoyage de la connexion dans les deux cas.
+
+**584 tests Admin**, types, lint sans erreur, format, build et smoke passent.
+Les 13 groupes ciblés passent ; les neuf scénarios cibles et les sept du service
+sont documentés séparément avec leur preuve de compatibilité des sources.
+Les [preuves](publication-rollback-local-proof.json) conservent tous les échecs
+intermédiaires et n'annoncent aucun test Auth/REST réel ou navigateur exécuté.
+Les 62 migrations sont inchangées. Le banc manuel est relancé après l'arrêt de
+Docker, avec contrôle natif et HTTP 200 ; il reste sans sauvegarde en base.
+
+Restent les lots, le parcours connecté avec sauvegarde, la réception visuelle,
+le rendu avancé et les portes de mise en service. Aucun changement distant ;
+le goal reste actif et incomplet.
+
 ## Finalisation atomique source — 15 octobre 2026
 
 La [finalisation source](publication-source-finalization.md) ajoute la 62e

@@ -588,6 +588,79 @@ describe('Publication cible : reprise sans transfert', () => {
     expect(events).toContain('ROLLBACK');
     expect(release).toHaveBeenCalledWith(false);
   });
+  it.each(['missing-rollback', 'implicit-rollback'])(
+    'reports a business conflict for %s without applying or leaking reference locks',
+    async (kind) => {
+      const snapshot = kind === 'missing-rollback' ? initial() : final();
+      if (kind === 'implicit-rollback') {
+        const active = snapshot.state.active!;
+        snapshot.state.active = {
+          ...active,
+          id: 'af100000-0000-4000-8000-000000000001',
+          revision: active.revision + 1,
+          definitionJson: JSON.stringify({
+            ...JSON.parse(active.definitionJson),
+            revision: String(active.revision + 1),
+          }),
+          businessDigest: 'c'.repeat(64),
+        };
+        snapshot.state.parent!.activeVersionId = snapshot.state.active.id;
+        snapshot.state.latestRevision = snapshot.state.active.revision;
+      }
+      query.mockImplementation((text) =>
+        text.includes('inspect_exercise_publication')
+          ? Promise.resolve({
+              rows: [{ inspection: snapshot }],
+              command: 'SELECT',
+            })
+          : defaultQuery(text),
+      );
+      await expect(
+        target().inspect(
+          sql.payload,
+          kind === 'missing-rollback' ? 'rollback' : 'publish',
+        ),
+      ).rejects.toMatchObject({ code: 'conflict' });
+      expect(events).toContain('ROLLBACK');
+      expect(
+        query.mock.calls.some(([text]) =>
+          text.includes('apply_exercise_publication'),
+        ),
+      ).toBe(false);
+      expect(release).toHaveBeenCalledWith(false);
+    },
+  );
+  it.each(['malformed-response', 'transport', 'wrong-catalog'])(
+    'keeps %s an unavailable inspection rather than a publication conflict',
+    async (kind) => {
+      query.mockImplementation((text) => {
+        if (text.includes('inspect_exercise_publication')) {
+          if (kind === 'transport')
+            throw Object.assign(Error('private driver detail'), {
+              code: 'rollback_unavailable',
+            });
+          if (kind === 'wrong-catalog') {
+            const snapshot = initial();
+            snapshot.state.catalogId = 'af200000-0000-4000-8000-000000000001';
+            return Promise.resolve({
+              rows: [{ inspection: snapshot }],
+              command: 'SELECT',
+            });
+          }
+          return Promise.resolve({
+            rows: [{ inspection: { invalid: true } }],
+            command: 'SELECT',
+          });
+        }
+        return defaultQuery(text);
+      });
+      await expect(
+        target().inspect(sql.payload, 'rollback'),
+      ).rejects.toMatchObject({ code: 'unavailable', message: 'unavailable' });
+      expect(events).toContain('ROLLBACK');
+      expect(release).toHaveBeenCalledWith(false);
+    },
+  );
   it.each([null, {}, { ...sql.payload, catalogId: 'bad' }])(
     'rejects invalid inspection input %# before connecting',
     async (payload) => {

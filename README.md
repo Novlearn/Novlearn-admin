@@ -48,6 +48,8 @@ de ce parcours sont simulés ; il n'exécute pas de tests Engine ni de transfert
 Le service et l'interface réels restent soumis aux prérequis d'activation.
 La [finalisation éditoriale source](docs/publication-source-finalization.md)
 est vérifiée sur copies locales, avec reprise sans répétition du transfert.
+Le [retour à une révision publiée](docs/publication-rollback.md) est aussi vérifié
+côté serveur/SQL, avec conservation des deux versions et des tentatives liées.
 
 ## Vérifications
 

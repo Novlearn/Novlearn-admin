@@ -4,6 +4,7 @@ import {
   parsePublicationPayload,
   parsePublicationInspection,
   planPublication,
+  PublicationConflict,
   type PublicationPayload,
   type PublicationInspection,
   type PublicationMode,
@@ -18,7 +19,7 @@ import {
 import type { PublicationConnection } from './publication-journal-server';
 
 export class PublicationTargetError extends Error {
-  constructor(public readonly code: 'invalid' | 'unavailable') {
+  constructor(public readonly code: 'invalid' | 'unavailable' | 'conflict') {
     super(code);
   }
 }
@@ -83,7 +84,9 @@ export class PublicationTarget {
       connection = await this.connect();
       await connection.query(beginSql);
       return await this.inspectOn(connection, payload, mode);
-    } catch {
+    } catch (error) {
+      if (error instanceof PublicationConflict && error.code !== 'protocol')
+        throw new PublicationTargetError('conflict');
       throw new PublicationTargetError('unavailable');
     } finally {
       if (connection) {

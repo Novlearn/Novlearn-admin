@@ -47,6 +47,10 @@ réception visuelle encore ouverte.
 pointeur et journal dans une transaction, reprise après blocage/révocation,
 62 migrations et preuves natives sur copies locales ; aucune activation distante.
 
+[Retour à une révision publiée](publication-rollback.md) : deux révisions,
+nouveau reçu Engine, réactivations explicites, tentatives liées conservées et
+reprise après commit ; parcours serveur/SQL vérifié, Auth/REST synthétiques.
+
 [Rapprochement des migrations par empreintes](lot-1a-hash-reconciliation.md) : relevé en lecture seule, sept candidats et historique partiellement dépourvu de SQL.
 
 | Document                                                     | Objet                                                                          |
