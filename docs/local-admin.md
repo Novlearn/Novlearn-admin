@@ -11,6 +11,9 @@ maintenant vérifié avec la session réelle et les rapports signés persistés.
 Le lancement `--engine` active ce parcours ; le lancement simple décrit
 ci-dessous conserve les calculs désactivés.
 
+La [relecture connectée](local-admin-review.md) s’active avec `--engine --review`.
+Elle conserve les attestations humaines explicites et la publication fermée.
+
 ## Instance conservée
 
 Le dossier ignoré `.local/local-admin-1792143739689/` contient `login.txt`
@@ -81,7 +84,9 @@ test SQL. Les protections et critères de succès n'ont pas été assouplis.
 
 ## Suite
 
-Réceptionner l'interface, terminer le rendu avancé et la publication par lots. Les lectures
+Réceptionner l'interface, terminer le rendu avancé et qualifier le transfert
+de publication par l’API avec Auth réelle. La publication par lots dispose
+maintenant de ses [preuves locales distinctes](publication-batch.md). Les lectures
 Production, la réconciliation distante, les comptes opérationnels et la mise
 en service restent soumis aux portes de la roadmap et à une autorisation
 distincte. Le goal reste actif et incomplet.

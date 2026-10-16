@@ -8,6 +8,10 @@ persistante. Ses comptes sont synthétiques, ses services isolés et le mode loc
 est limité au développement. Les tests historiques avec doubles ci-dessous
 restent distincts de ces nouveaux essais réels. L'accès distant reste fermé.
 
+La [relecture connectée](local-admin-review.md) utilise aussi de vraies sessions
+SSR pour tester ses transitions, le refus non-Admin et la révocation du rôle.
+Ces attestations automatisées et marquées ne valent aucune réception humaine.
+
 Le code Auth serveur, les formulaires, la protection des pages et le layout
 Admin sont implémentés. Les tests utilisent des doubles synthétiques. L'accès
 Staging est **désactivé** : la sécurisation SQL du Lot 1A est désormais testée

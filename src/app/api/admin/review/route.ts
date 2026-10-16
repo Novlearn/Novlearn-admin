@@ -4,7 +4,7 @@ import { readAuthConfiguration } from '@/lib/auth/config';
 import { isTrustedMutation, privateHeaders } from '@/lib/auth/http';
 import { readBoundedJson } from '@/lib/auth/json';
 import { createRouteAuth, transferAuthCookies } from '@/lib/auth/supabase';
-import { parseReviewRequest } from '@/lib/review';
+import { parseReviewRequest, reviewResult } from '@/lib/review';
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 export async function POST(request: NextRequest) {
@@ -71,21 +71,21 @@ export async function POST(request: NextRequest) {
               ? 403
               : 503,
       );
-    const expected =
-      body.action === 'approve'
-        ? 'approved'
-        : body.action === 'request_review'
-          ? 'in_review'
-          : 'draft';
-    if (
-      !data ||
-      data.versionId !== body.versionId ||
-      data.status !== expected ||
-      data.fingerprint !== body.fingerprint ||
-      data.epoch !== body.epoch
-    )
+    const result =
+      data &&
+      reviewResult(
+        {
+          reviewId: data.reviewId,
+          versionId: data.versionId,
+          status: data.status,
+          fingerprint: data.fingerprint,
+          epoch: data.epoch,
+        },
+        body,
+      );
+    if (!result)
       return finish({ error: 'Résultat de relecture non confirmé.' }, 503);
-    return finish({ environment: 'staging', result: data });
+    return finish({ environment: 'staging', result });
   } catch {
     return finish({ error: 'Relecture indisponible.' }, 503);
   }

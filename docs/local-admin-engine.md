@@ -15,6 +15,9 @@ node scripts/configure-local-test-signing.mjs .local/local-admin-1792143739689
 node scripts/run-local-admin.mjs .local/local-admin-1792143739689 --engine
 ```
 
+Ajouter `--review` pour la [relecture locale connectée](local-admin-review.md).
+Cette option exige le moteur et la signature, sans activer la publication.
+
 La première commande ne contacte que le conteneur PG local explicitement nommé.
 Elle insère une nouvelle clé aléatoire dans le registre privé déjà prévu par le
 schéma, puis conserve le fichier ignoré `test-signing.json`. Un second lancement

@@ -1,0 +1,39 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { localAdminOptions } from './local-admin-options.mjs';
+test('all features remain disabled without explicit local options', () =>
+  assert.deepEqual(localAdminOptions(['.local/local-admin-123']), {
+    workspace: '.local/local-admin-123',
+    stop: false,
+    engine: false,
+    review: false,
+  }));
+test('explicit local review keeps its Engine dependency', () =>
+  assert.deepEqual(
+    localAdminOptions(['.local/local-admin-123', '--engine', '--review']),
+    {
+      workspace: '.local/local-admin-123',
+      stop: false,
+      engine: true,
+      review: true,
+    },
+  ));
+test('stopping a local process enables no feature', () =>
+  assert.deepEqual(localAdminOptions(['.local/local-admin-123', '--stop']), {
+    workspace: '.local/local-admin-123',
+    stop: true,
+    engine: false,
+    review: false,
+  }));
+for (const flags of [
+  [],
+  ['--engine'],
+  ['.local/local-admin-123', '--review'],
+  ['.local/local-admin-123', '--engine', '--engine'],
+  ['.local/local-admin-123', '--production'],
+  ['.local/local-admin-123', '--stop', '--engine'],
+  ['.local/local-admin-123', '--stop', '--engine', '--review'],
+])
+  test('refuse invalid options: ' + JSON.stringify(flags), () =>
+    assert.throws(() => localAdminOptions(flags)),
+  );

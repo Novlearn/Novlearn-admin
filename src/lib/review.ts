@@ -66,3 +66,149 @@ export function parseReviewRequest(value: unknown): ReviewRequest | null {
     return null;
   return b as ReviewRequest;
 }
+
+export type ReviewContext = {
+  versionId: string;
+  fingerprint: string;
+  epoch: number;
+  status: string;
+  receiptId: string | null;
+  enabled: boolean;
+  archived?: boolean;
+};
+export const reviewContextKey = (value: ReviewContext) =>
+  JSON.stringify([
+    value.versionId,
+    value.fingerprint,
+    value.epoch,
+    value.status,
+    value.receiptId,
+    value.enabled,
+    value.archived === true,
+  ]);
+export function reviewIntent(
+  action: ReviewAction,
+  context: ReviewContext,
+  checklist: Record<string, boolean>,
+  comment: string,
+): ReviewRequest | null {
+  if (!context.enabled || context.archived) return null;
+  return parseReviewRequest({
+    versionId: context.versionId,
+    fingerprint: context.fingerprint,
+    epoch: context.epoch,
+    expectedStatus: context.status,
+    action,
+    receiptId: action === 'return_to_draft' ? null : context.receiptId,
+    checklist: action === 'approve' ? { ...checklist } : {},
+    comment,
+  });
+}
+export type ReviewResult = {
+  reviewId: string;
+  versionId: string;
+  fingerprint: string;
+  epoch: number;
+  status: 'draft' | 'in_review' | 'approved';
+};
+export function reviewResult(
+  value: unknown,
+  input: ReviewRequest,
+): ReviewResult | null {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return null;
+  const r = value as Record<string, unknown>;
+  const status =
+    input.action === 'approve'
+      ? 'approved'
+      : input.action === 'request_review'
+        ? 'in_review'
+        : 'draft';
+  if (
+    Object.keys(r).sort().join(',') !==
+      'epoch,fingerprint,reviewId,status,versionId' ||
+    !isUuid(r.reviewId) ||
+    r.versionId !== input.versionId ||
+    r.fingerprint !== input.fingerprint ||
+    r.epoch !== input.epoch ||
+    r.status !== status
+  )
+    return null;
+  return {
+    reviewId: r.reviewId,
+    versionId: input.versionId,
+    fingerprint: input.fingerprint,
+    epoch: input.epoch,
+    status,
+  };
+}
+export class ReviewRequestError extends Error {
+  constructor(
+    message: string,
+    readonly needsReload = true,
+  ) {
+    super(message);
+  }
+}
+/** One explicit confirmation, one POST; an unknown result is never retried. */
+export async function requestReview(
+  input: ReviewRequest,
+  signal?: AbortSignal,
+): Promise<ReviewResult> {
+  if (!parseReviewRequest(input))
+    throw new ReviewRequestError('Attestation ou transition invalide.', false);
+  let response: Response;
+  try {
+    response = await fetch('/api/admin/review', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      credentials: 'same-origin',
+      cache: 'no-store',
+      redirect: 'error',
+      body: JSON.stringify(input),
+      signal,
+    });
+  } catch {
+    throw new ReviewRequestError(
+      'Réponse non reçue. Rechargez la fiche pour vérifier son état avant de réessayer.',
+    );
+  }
+  let packet: unknown;
+  try {
+    packet = await response.json();
+  } catch {
+    throw new ReviewRequestError(
+      'Résultat non reconnu. Rechargez la fiche avant de réessayer.',
+    );
+  }
+  if (!response.ok) {
+    const message =
+      packet &&
+      typeof packet === 'object' &&
+      'error' in packet &&
+      typeof packet.error === 'string'
+        ? packet.error.slice(0, 500)
+        : 'Relecture indisponible.';
+    throw new ReviewRequestError(
+      message,
+      response.status !== 400 && response.status !== 415,
+    );
+  }
+  if (
+    !packet ||
+    typeof packet !== 'object' ||
+    Array.isArray(packet) ||
+    Object.keys(packet).sort().join(',') !== 'environment,result' ||
+    !('environment' in packet) ||
+    packet.environment !== 'staging' ||
+    !('result' in packet)
+  )
+    throw new ReviewRequestError(
+      'Environnement ou résultat de relecture non confirmé.',
+    );
+  const result = reviewResult(packet.result, input);
+  if (!result)
+    throw new ReviewRequestError(
+      'Le résultat ne correspond pas à la révision relue. Rechargez sa fiche.',
+    );
+  return result;
+}

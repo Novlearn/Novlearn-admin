@@ -9,6 +9,9 @@ sauvegarde persistante et limites du raccordement Engine.
 [Engine dans l'application connectée](local-admin-engine.md) : worker Linux
 borné, transport privé, tests réels et rapport signé persisté depuis une session.
 
+[Relecture locale connectée](local-admin-review.md) : activation explicite,
+attestation, historique et qualification réelle Auth/Engine/PostgREST.
+
 [Publication par lots](publication-batch.md) : sélection, confirmations par exercice,
 arrêt après résultat partiel et reprise sans réapplication ; transferts sur copies
 SQL locales et simulation manuelle séparée.

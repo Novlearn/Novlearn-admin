@@ -1,5 +1,11 @@
 # Relecture humaine — implémentation locale
 
+**Mise à jour du 16 octobre :** la [relecture dans l’application connectée](local-admin-review.md)
+est qualifiée avec Auth/SSR, Next, PostgREST et rapports Engine natifs signés.
+Le relevé ci-dessous reste la qualification historique des 54 migrations.
+La migration 63 traduit maintenant les conflits à la frontière RPC HTTP en
+`PT409`/409, sans modifier les contrôles privés ni les critères de relecture.
+
 La fiche de révision permet une demande de relecture, une approbation avec quatre
 attestations explicites et un retour à corriger avec motif. La confirmation est
 distincte des tests ; une approbation n’active ni ne publie l’exercice. Les dix

@@ -1,9 +1,20 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { reviewChecklistLabels, type ReviewAction } from '@/lib/review';
+import {
+  reviewChecklistLabels,
+  reviewContextKey,
+  reviewIntent,
+  requestReview,
+  ReviewRequestError,
+  type ReviewAction,
+  type ReviewContext,
+} from '@/lib/review';
 import { requestEditorLeave } from '@/lib/editor-navigation';
-export function EditorialReview({
+export function EditorialReview(props: ReviewContext) {
+  return <ReviewForm key={reviewContextKey(props)} {...props} />;
+}
+function ReviewForm({
   versionId,
   fingerprint,
   epoch,
@@ -11,54 +22,60 @@ export function EditorialReview({
   receiptId,
   enabled,
   archived = false,
-}: {
-  versionId: string;
-  fingerprint: string;
-  epoch: number;
-  status: string;
-  receiptId: string | null;
-  enabled: boolean;
-  archived?: boolean;
-}) {
+}: ReviewContext) {
   const router = useRouter(),
     [checks, setChecks] = useState<Record<string, boolean>>({}),
     [comment, setComment] = useState(''),
     [busy, setBusy] = useState(false),
+    [mustReload, setMustReload] = useState(false),
     [error, setError] = useState(''),
     [confirm, setConfirm] = useState<ReviewAction | null>(null);
+  const inFlight = useRef(false),
+    mounted = useRef(true),
+    controller = useRef<AbortController | null>(null);
+  useEffect(() => {
+    mounted.current = true;
+    return () => {
+      mounted.current = false;
+      controller.current?.abort();
+    };
+  }, []);
+  const disabled = busy || !enabled || mustReload;
   const checked = Object.keys(reviewChecklistLabels).every((k) => checks[k]);
   const run = async () => {
-    if (!confirm || !requestEditorLeave()) return;
+    if (!confirm || disabled || inFlight.current) return;
+    const command = reviewIntent(
+      confirm,
+      { versionId, fingerprint, epoch, status, receiptId, enabled, archived },
+      checks,
+      comment,
+    );
+    if (!command || !requestEditorLeave()) return;
+    inFlight.current = true;
+    controller.current = new AbortController();
     setBusy(true);
     setError('');
     try {
-      const response = await fetch('/api/admin/review', {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({
-          versionId,
-          fingerprint,
-          epoch,
-          expectedStatus: status,
-          action: confirm,
-          receiptId: confirm === 'return_to_draft' ? null : receiptId,
-          checklist: confirm === 'approve' ? checks : {},
-          comment,
-        }),
-      });
-      const result = await response.json();
-      if (!response.ok) {
-        setError(result.error ?? 'Relecture impossible.');
-        return;
-      }
+      await requestReview(command, controller.current.signal);
+      if (!mounted.current) return;
       setConfirm(null);
+      setChecks({});
+      setComment('');
       router.refresh();
-    } catch {
+    } catch (failure) {
+      if (!mounted.current) return;
+      setConfirm(null);
       setError(
-        'Résultat incertain. Rechargez pour vérifier l’état avant de réessayer.',
+        failure instanceof Error
+          ? failure.message
+          : 'Résultat non confirmé. Rechargez la fiche.',
+      );
+      setMustReload(
+        !(failure instanceof ReviewRequestError) || failure.needsReload,
       );
     } finally {
-      setBusy(false);
+      inFlight.current = false;
+      if (mounted.current) setBusy(false);
     }
   };
   return (
@@ -97,7 +114,7 @@ export function EditorialReview({
             </p>
           )}
           {status === 'in_review' && (
-            <fieldset disabled={busy || !enabled} className="space-y-3">
+            <fieldset disabled={disabled} className="space-y-3">
               <legend className="mb-3 text-sm font-semibold">
                 Attestation de l’administrateur connecté
               </legend>
@@ -125,7 +142,7 @@ export function EditorialReview({
               className="field min-h-24"
               value={comment}
               maxLength={2000}
-              disabled={busy || !enabled}
+              disabled={disabled}
               onChange={(e) => setComment(e.target.value)}
             />
           </label>
@@ -134,7 +151,7 @@ export function EditorialReview({
               <button
                 type="button"
                 className="button"
-                disabled={busy || !enabled || !receiptId}
+                disabled={disabled || !receiptId}
                 onClick={() => setConfirm('request_review')}
               >
                 Soumettre à la relecture
@@ -144,7 +161,7 @@ export function EditorialReview({
               <button
                 type="button"
                 className="button"
-                disabled={busy || !enabled || !receiptId || !checked}
+                disabled={disabled || !receiptId || !checked}
                 onClick={() => setConfirm('approve')}
               >
                 Approuver cette révision
@@ -154,7 +171,7 @@ export function EditorialReview({
               <button
                 type="button"
                 className="rounded-lg border border-slate-300 px-4 py-3 text-sm font-semibold"
-                disabled={busy || !enabled || !comment.trim()}
+                disabled={disabled || !comment.trim()}
                 onClick={() => setConfirm('return_to_draft')}
               >
                 Renvoyer à corriger
@@ -178,7 +195,7 @@ export function EditorialReview({
                 <button
                   type="button"
                   className="button"
-                  disabled={busy}
+                  disabled={disabled}
                   onClick={run}
                 >
                   {busy ? 'Enregistrement…' : 'Confirmer'}
@@ -203,6 +220,23 @@ export function EditorialReview({
         >
           {error}
         </p>
+      )}
+      {mustReload && (
+        <div className="notice space-y-3">
+          <p>
+            Aucune nouvelle confirmation ne sera envoyée avant rechargement. Vos
+            notes restent dans ce formulaire ; conservez-les si nécessaire avant
+            de quitter la fiche.
+          </p>
+          <button
+            type="button"
+            className="font-semibold text-blue-700 underline"
+            disabled={busy}
+            onClick={() => window.location.reload()}
+          >
+            Recharger la fiche et son historique
+          </button>
+        </div>
       )}
     </section>
   );

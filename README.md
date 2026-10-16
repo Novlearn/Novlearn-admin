@@ -32,6 +32,11 @@ L'[option Engine Linux](docs/local-admin-engine.md) permet aussi validation,
 génération, correction et rapports signés enregistrés. Le banc séparé ci-dessous
 conserve ses exemples sans base. L'accès distant reste désactivé.
 
+L’option [relecture locale connectée](docs/local-admin-review.md) complète ce
+parcours avec `--engine --review` : demande, attestation explicite et historique.
+Une approbation ne publie rien. Les identifiants d’essai sont dans le fichier
+ignoré `.local/local-admin-1792143739689/login.txt` ; utiliser le port **3150**.
+
 Node.js 24.19.x et npm 11.17.x. Dans PowerShell :
 
 ```powershell

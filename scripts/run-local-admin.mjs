@@ -4,7 +4,9 @@ import assert from 'node:assert/strict';
 import path from 'node:path';
 import { readFile, writeFile, watch } from 'node:fs/promises';
 import { createServer } from 'node:http';
-const artifact = path.resolve(process.argv[2] ?? '');
+import { localAdminOptions } from './local-admin-options.mjs';
+const options = localAdminOptions(process.argv.slice(2));
+const artifact = path.resolve(options.workspace);
 const localRoot = path.resolve('.local') + path.sep;
 assert(artifact.toLowerCase().startsWith(localRoot.toLowerCase()));
 assert.match(path.basename(artifact), /^local-admin-\d+$/);
@@ -13,7 +15,7 @@ const state = JSON.parse(
 );
 assert.equal(state.artifact, artifact);
 assert.equal(state.pending, undefined);
-if (process.argv.includes('--stop')) {
+if (options.stop) {
   const runtime = JSON.parse(
     await readFile(path.join(artifact, 'app-runtime.json'), 'utf8'),
   );
@@ -38,6 +40,7 @@ if (process.argv.includes('--stop')) {
     ADMIN_STAGING_AUTH_ENABLED: 'false',
     ADMIN_PUBLICATION_ENABLED: 'false',
     ADMIN_ENGINE_ENABLED: 'false',
+    ADMIN_EDITORIAL_REVIEW_ENABLED: 'false',
   });
   const { readAuthConfiguration } = await import('../src/lib/auth/config.ts');
   assert.equal(readAuthConfiguration(process.env)?.local, true);
@@ -50,7 +53,8 @@ if (process.argv.includes('--stop')) {
   ])
     process.env[key] = '';
   let engine;
-  if (process.argv.includes('--engine')) {
+  let signedReports = false;
+  if (options.engine) {
     const { startLocalEngine } = await import('./local-engine.mjs');
     engine = await startLocalEngine(artifact);
     Object.assign(process.env, engine.environment);
@@ -69,12 +73,20 @@ if (process.argv.includes('--stop')) {
       );
       assert.match(signing.key, /^[0-9a-f]{64}$/);
       Object.assign(process.env, signingEnvironment);
+      signedReports = true;
     } catch (error) {
       if (error.code !== 'ENOENT') {
         await engine.close();
         throw error;
       }
     }
+  }
+  if (options.review) {
+    if (!signedReports) {
+      await engine.close();
+      throw Error('Configure local receipt signing before enabling review');
+    }
+    process.env.ADMIN_EDITORIAL_REVIEW_ENABLED = 'true';
   }
   const next = (await import('next')).default;
   const app = next({
@@ -116,6 +128,7 @@ if (process.argv.includes('--stop')) {
         local: true,
         database: true,
         engine: !!engine,
+        review: options.review,
         ...(engine
           ? {
               engineContainer: engine.container,
@@ -130,6 +143,7 @@ if (process.argv.includes('--stop')) {
   console.log(
     'Local Admin ready: http://127.0.0.1:3150/ ; genuine Auth and local persistence; Linux Engine ' +
       (engine ? 'connected.' : 'disabled.'),
+    'Local editorial review ' + (options.review ? 'enabled.' : 'disabled.'),
   );
   const controller = new AbortController();
   let closing = false;

@@ -1,5 +1,34 @@
 # Progression du goal NovLearn Admin
 
+## Relecture connectée — 16 octobre 2026
+
+La [relecture locale](local-admin-review.md) s’active explicitement avec
+`--engine --review`. Le formulaire lie la confirmation à la révision, au reçu
+et à son état, remet les attestations à zéro si ce contexte change et exige
+une observation après réponse perdue ou conflit, sans nouvel envoi automatique.
+L’API projette et valide les cinq métadonnées utiles de l’événement SQL.
+
+**16 contrôles réels** passent avec de nouveaux comptes d’essai, sessions
+GoTrue/SSR, Next, PostgREST et Engine Linux borné : quatre rapports natifs,
+dont un refus pour couverture négative manquante, et six événements marqués
+comme attestations synthétiques. Révocation, archive, ancien reçu, édition,
+attestation incomplète et répétition périmée sont refusés. Les lignes métier
+préexistantes sont conservées ; le nouveau brouillon termine sans approbation.
+La [preuve](local-admin-review-proof.json) conserve les périmètres et l’échec
+intermédiaire du test d’archive, corrigé selon son contrat HTTP 409.
+
+**696 tests dans 39 fichiers**, intégrité Engine, types, lint sans erreur,
+format, build et smoke passent, ainsi que les **10 contrôles du lancement**.
+Les 48 bundles clients du build inspectés ne contiennent aucun des secrets
+ou noms privés recherchés. Ce contrôle ciblé ne vaut pas audit exhaustif.
+Après redémarrage, huit contrôles réels supplémentaires passent : nouvelle
+connexion, conservation des rapports et de l’historique, moteur natif,
+permissions et publication toujours fermée, sans mutation métier.
+
+Le serveur d’essai reste destiné aux essais progressifs manuels sur le port 3150. La réception visuelle automatisée, MFA/expiration, publication HTTP
+complète, rendu avancé, lectures Production et mise en service restent ouverts.
+Aucune migration ni modification distante ; le goal reste actif et incomplet.
+
 ## Publication par lots — 16 octobre 2026
 
 La [sélection de cinq exercices maximum](publication-batch.md) réutilise le

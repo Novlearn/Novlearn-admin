@@ -1,5 +1,12 @@
 # Roadmap
 
+**Relecture connectée, 16 octobre :** [vraies sessions et rapports natifs](local-admin-review.md),
+16 contrôles réels, quatre rapports et six événements synthétiques marqués.
+696 tests Admin et contrôle complet passent ; dix contrôles du lancement local
+passent séparément.
+L’option locale `--engine --review` permet les essais progressifs ; elle ne
+publie rien. Les anciennes qualifications et portes distantes restent distinctes.
+
 **Publication par lots, 16 octobre :** [sélection, diffs et reprise](publication-batch.md)
 avec résultats par exercice. 676 tests Admin, contrôle complet, cinq phases
 natives sur copies SQL et 13 contrôles de pages/permissions HTTP réels passent.

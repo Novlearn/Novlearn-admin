@@ -55,7 +55,7 @@ beforeEach(() => {
   });
   fake.rpc.mockResolvedValue({
     data: {
-      reviewId: 'fixture',
+      reviewId: '21000000-0000-4000-8000-000000000001',
       versionId: body.versionId,
       status: 'approved',
       fingerprint: body.fingerprint,
@@ -135,6 +135,28 @@ it('ne confirme pas un RPC retournant un autre état ou une autre révision', as
       fingerprint: body.fingerprint,
       epoch: 2,
     },
+    error: null,
+  });
+  expect((await POST(request())).status).toBe(503);
+});
+it('projette les seules métadonnées de confirmation et refuse un événement mal formé', async () => {
+  const confirmed = {
+    reviewId: '21000000-0000-4000-8000-000000000001',
+    versionId: body.versionId,
+    status: 'approved',
+    fingerprint: body.fingerprint,
+    epoch: body.epoch,
+  };
+  fake.rpc.mockResolvedValueOnce({
+    data: { ...confirmed, source_snapshot: 'SECRET' },
+    error: null,
+  });
+  expect(await (await POST(request())).json()).toEqual({
+    environment: 'staging',
+    result: confirmed,
+  });
+  fake.rpc.mockResolvedValueOnce({
+    data: { ...confirmed, reviewId: 'not-an-event' },
     error: null,
   });
   expect((await POST(request())).status).toBe(503);
