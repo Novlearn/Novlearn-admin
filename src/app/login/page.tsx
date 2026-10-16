@@ -22,7 +22,9 @@ export default async function Login({
   searchParams: Promise<{ error?: string }>;
 }) {
   const { error } = await searchParams;
-  const enabled = readAuthConfiguration(process.env) !== null;
+  const authConfig = readAuthConfiguration(process.env);
+  const enabled = authConfig !== null;
+  const local = authConfig?.local === true;
   return (
     <main className="grid min-h-screen lg:grid-cols-2">
       <section className="flex flex-col justify-between border-b border-blue-100 bg-[#F0F7FF] p-6 sm:p-10 lg:border-b-0 lg:border-r lg:p-14">
@@ -52,7 +54,9 @@ export default async function Login({
         </div>
         <p className="mt-4 text-xs text-slate-500 lg:mt-0 lg:text-sm">
           Environnement de travail{' '}
-          <span className="font-semibold text-brand-700">Staging</span>
+          <span className="font-semibold text-brand-700">
+            {local ? 'Local · données d’essai' : 'Staging'}
+          </span>
         </p>
       </section>
       <section
@@ -60,7 +64,9 @@ export default async function Login({
         className="flex items-center justify-center px-6 py-14 sm:px-12"
       >
         <div className="w-full max-w-md">
-          <span className="badge">Supabase Staging</span>
+          <span className="badge">
+            {local ? 'Supabase local · données d’essai' : 'Supabase Staging'}
+          </span>
           <h1
             id="login-title"
             className="mt-6 text-3xl font-semibold tracking-tight"
@@ -84,6 +90,12 @@ export default async function Login({
             </p>
           ) : null}
           <LoginForm enabled={enabled} />
+          {local && (
+            <p className="notice mt-6">
+              Espace d’essai local. Les modifications sont enregistrées
+              uniquement dans la base de test de cet ordinateur.
+            </p>
+          )}
           <p className="mt-6 text-sm leading-6 text-slate-500">
             L’attribution d’un accès administrateur est assurée par l’opérateur
             NovLearn.

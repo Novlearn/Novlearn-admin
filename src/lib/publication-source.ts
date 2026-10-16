@@ -216,7 +216,7 @@ export async function loadPublicationSource(
       .abortSignal(signal);
     if (error)
       throw new PublicationSourceError(
-        error.code === '40001'
+        error.code === '40001' || error.code === 'PT409'
           ? 'conflict'
           : error.code === '42501'
             ? 'forbidden'

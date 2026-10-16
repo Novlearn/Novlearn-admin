@@ -162,6 +162,7 @@ describe('Flashcards : permission fraîche et route Staging', () => {
   });
   it.each([
     ['40001', 409],
+    ['PT409', 409],
     ['23503', 409],
     ['23505', 409],
     ['P0002', 404],

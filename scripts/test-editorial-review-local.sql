@@ -77,7 +77,7 @@ PERFORM pg_temp.review_denied(pg_temp.review_statement(v,'request_review',r,'{}'
 RESET ROLE;
 UPDATE novlearn_admin_private.test_signing_keys SET enabled=true WHERE id='99200000-0000-4000-8000-000000000001';
 SET LOCAL ROLE authenticated;
-PERFORM pg_temp.review_denied(pg_temp.review_statement(v,'approve',r,attestation),'40001','draft cannot skip review');
+PERFORM pg_temp.review_denied(pg_temp.review_statement(v,'approve',r,attestation),'PT409','draft cannot skip review');
 command:=pg_temp.review_statement(v,'request_review',r,'{}');
 PERFORM set_config('request.jwt.claim.sub',student::text,true);
 PERFORM set_config('request.jwt.claims',jsonb_build_object('sub',student,'is_anonymous',false,'user_metadata',jsonb_build_object('role','admin'))::text,true);
@@ -91,11 +91,11 @@ RESET ROLE; UPDATE public.profiles SET role='user' WHERE id=actor; SET LOCAL ROL
 PERFORM pg_temp.review_denied(command,'42501','revoked role denied despite existing JWT');
 RESET ROLE; UPDATE public.profiles SET role='admin' WHERE id=actor; SET LOCAL ROLE authenticated;
 PERFORM public.admin_archive_exercise(e,false,true);
-PERFORM pg_temp.review_denied(command,'40001','archived exercise denied');
+PERFORM pg_temp.review_denied(command,'PT409','archived exercise denied');
 PERFORM public.admin_archive_exercise(e,true,false);
 EXECUTE command;
 PERFORM pg_temp.review_assert((SELECT editorial_status='in_review' AND approved_by IS NULL FROM public.exercise_versions WHERE id=v),'review does not imply approval');
-PERFORM pg_temp.review_denied(command,'40001','concurrent status mismatch denied');
+PERFORM pg_temp.review_denied(command,'PT409','concurrent status mismatch denied');
 PERFORM pg_temp.review_denied(pg_temp.review_statement(v,'approve',r,'{}'),'22023','human checklist required');
 PERFORM pg_temp.review_denied(pg_temp.review_statement(v,'approve',r,attestation||'{"gradingChecked":false}'),'22023','unchecked human criterion denied');
 EXECUTE pg_temp.review_statement(v,'approve',r,attestation,'Synthetic fixture attestation only');
@@ -112,7 +112,7 @@ EXECUTE pg_temp.review_statement(v,'approve',r,attestation);
 command:=pg_temp.review_statement(v,'return_to_draft',NULL,'{}','stale');
 UPDATE public.exercise_versions SET definition=source||'{"title":"EDITED AFTER APPROVAL"}',updated_by=actor WHERE id=v;
 PERFORM pg_temp.review_assert((SELECT editorial_status='draft' AND approved_by IS NULL AND test_epoch=1 FROM public.exercise_versions WHERE id=v),'editing approved content invalidates approval and receipt epoch');
-PERFORM pg_temp.review_denied(command,'40001','stale approval fingerprint and epoch denied');
+PERFORM pg_temp.review_denied(command,'PT409','stale approval fingerprint and epoch denied');
 PERFORM pg_temp.review_denied(pg_temp.review_statement(v,'request_review',r,'{}'),'22023','old receipt cannot certify edited content');
 FOR bad IN SELECT value FROM jsonb_array_elements(jsonb_build_array(
 source-'catalogue',jsonb_set(source,'{catalogue,chapter}','"ABSENT CHAPTER"'),
@@ -131,7 +131,7 @@ RESET ROLE; UPDATE public.chapters SET aliases='{}' WHERE id=other_chapter; SET 
 EXECUTE pg_temp.review_statement(v,'request_review',r,'{}');
 EXECUTE pg_temp.review_statement(v,'approve',r,attestation);
 RESET ROLE; UPDATE public.exercise_versions SET editorial_status='published' WHERE id=v; SET LOCAL ROLE authenticated;
-PERFORM pg_temp.review_denied(pg_temp.review_statement(v,'return_to_draft',NULL,'{}','change'),'40001','published revision remains immutable');
+PERFORM pg_temp.review_denied(pg_temp.review_statement(v,'return_to_draft',NULL,'{}','change'),'PT409','published revision remains immutable');
 RESET ROLE; SET LOCAL ROLE anon;
 PERFORM pg_temp.review_denied('SELECT public.admin_review_exercise_version(NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL)','42501','anon cannot execute review RPC');
 PERFORM pg_temp.review_denied('SELECT * FROM public.admin_exercise_reviews','42501','anon cannot read review audit');

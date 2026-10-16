@@ -1,5 +1,10 @@
 # Essais progressifs locaux
 
+**Depuis le 16 octobre**, l'[application connectée](local-admin.md) permet aussi
+de tester avec un vrai compte et des sauvegardes locales sur le port 3150.
+Le présent banc sur le port 3140 conserve sa portée distincte : Engine natif
+et exemples sans persistance.
+
 Le banc rassemble les composants existants autour d'une page d'accueil et d'une
 navigation commune. Il répond au besoin de tester l'interface pendant le
 développement ; il ne remplace pas l'application authentifiée du CDC. Aucun code

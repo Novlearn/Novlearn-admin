@@ -25,6 +25,12 @@ Les versions suivent autant que possible le frontend NovLearn observé. Voir [le
 
 ## Prérequis et démarrage
 
+**Pour tester l'application connectée localement**, suivre
+[l'instance avec connexion et sauvegarde](docs/local-admin.md), sur
+`http://127.0.0.1:3150/`. Elle conserve les brouillons dans une base d'essai.
+Le moteur de calcul n'y est pas encore raccordé ; le banc séparé ci-dessous
+permet les calculs natifs. L'accès distant reste désactivé.
+
 Node.js 24.19.x et npm 11.17.x. Dans PowerShell :
 
 ```powershell

@@ -195,13 +195,19 @@ describe('aperçu serveur protégé', () => {
     expect((await POST(savedRequest())).status).toBe(403);
     expect(fake.rpc).not.toHaveBeenCalled();
   });
-  it('ne déclare aucun enregistrement après conflit SQL ou résultat non confirmé', async () => {
-    signer();
-    fake.rpc.mockResolvedValueOnce({ data: null, error: { code: '40001' } });
-    expect((await POST(savedRequest())).status).toBe(409);
-    fake.rpc.mockResolvedValueOnce({ data: { recorded: false }, error: null });
-    expect((await POST(savedRequest())).status).toBe(503);
-  });
+  it.each(['40001', 'PT409'])(
+    'ne déclare aucun enregistrement après conflit SQL %s ou résultat non confirmé',
+    async (code) => {
+      signer();
+      fake.rpc.mockResolvedValueOnce({ data: null, error: { code } });
+      expect((await POST(savedRequest())).status).toBe(409);
+      fake.rpc.mockResolvedValueOnce({
+        data: { recorded: false },
+        error: null,
+      });
+      expect((await POST(savedRequest())).status).toBe(503);
+    },
+  );
   it('refuse définition, acteur et verdict client dans la requête de révision', async () => {
     signer();
     for (const extra of [

@@ -114,6 +114,7 @@ it('transmet les seules préconditions et attestations, avec contrôle serveur f
 });
 it.each([
   ['40001', 409],
+  ['PT409', 409],
   ['22023', 400],
   ['42501', 403],
   ['XX000', 503],

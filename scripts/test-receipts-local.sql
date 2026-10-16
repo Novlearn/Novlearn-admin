@@ -66,10 +66,10 @@ BEGIN
   PERFORM set_config('request.jwt.claims',jsonb_build_object('sub',actor,'is_anonymous',false)::text,true);
   result:=public.admin_save_exercise_draft(e,v,fp,source||'{"title":"CHANGED"}');
   PERFORM pg_temp.receipt_assert((SELECT test_epoch=1 FROM public.exercise_versions WHERE id=v),'content edit advances epoch');
-  PERFORM pg_temp.receipt_denied(format('SELECT public.admin_record_exercise_test(%L,%L)',payload,sig),'40001','stale receipt cannot bind changed content');
+  PERFORM pg_temp.receipt_denied(format('SELECT public.admin_record_exercise_test(%L,%L)',payload,sig),'PT409','stale receipt cannot bind changed content');
   result:=public.admin_save_exercise_draft(e,v,result->>'fingerprint',source);
   PERFORM pg_temp.receipt_assert(result->>'fingerprint'=fp AND (SELECT test_epoch=2 FROM public.exercise_versions WHERE id=v),'reverted identical content keeps a new epoch');
-  PERFORM pg_temp.receipt_denied(format('SELECT public.admin_record_exercise_test(%L,%L)',payload,sig),'40001','old receipt cannot survive edit and revert');
+  PERFORM pg_temp.receipt_denied(format('SELECT public.admin_record_exercise_test(%L,%L)',payload,sig),'PT409','old receipt cannot survive edit and revert');
   PERFORM pg_temp.receipt_assert((SELECT count(*)=1 FROM public.admin_exercise_test_runs WHERE id=receipt),'old history remains retained');
   RESET ROLE;
 END;

@@ -278,7 +278,7 @@ try {
     JSON.stringify(race),
   );
   assert.equal(
-    race.filter((r) => r.code !== 0 && r.errors.includes('40001')).length,
+    race.filter((r) => r.code !== 0 && r.errors.includes('PT409')).length,
     1,
     JSON.stringify(race),
   );
@@ -308,7 +308,7 @@ try {
         stored,
         editorialStatus: 'approved',
         approval,
-        concurrentApproval: { accepted: 1, conflict40001: 1, sessions: 2 },
+        concurrentApproval: { accepted: 1, conflictPT409: 1, sessions: 2 },
         sourceDatabaseReset: false,
       },
       null,

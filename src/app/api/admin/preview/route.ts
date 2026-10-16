@@ -220,11 +220,13 @@ export async function POST(request: NextRequest) {
         return finish(
           {
             error:
-              recordError.code === '40001'
+              recordError.code === '40001' || recordError.code === 'PT409'
                 ? 'La révision a changé pendant les tests. Le rapport n’est pas enregistré.'
                 : 'Rapport non enregistré. Vérifiez la configuration de signature.',
           },
-          recordError.code === '40001' ? 409 : 503,
+          recordError.code === '40001' || recordError.code === 'PT409'
+            ? 409
+            : 503,
         );
       if (
         !record ||

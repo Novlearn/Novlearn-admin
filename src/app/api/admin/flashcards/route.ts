@@ -69,7 +69,7 @@ async function handle(request: NextRequest, mutation: boolean) {
     const { data, error } = await client.rpc(name, args);
     if (error) {
       const status =
-        error.code === '40001'
+        error.code === '40001' || error.code === 'PT409'
           ? 409
           : error.code === 'P0002'
             ? 404
@@ -81,7 +81,7 @@ async function handle(request: NextRequest, mutation: boolean) {
                   ? 400
                   : 503;
       const message =
-        error.code === '40001'
+        error.code === '40001' || error.code === 'PT409'
           ? 'Cette flashcard a changé. Rechargez avant de réessayer.'
           : error.code === '23503'
             ? 'Le chapitre est absent. Choisissez un chapitre existant.'

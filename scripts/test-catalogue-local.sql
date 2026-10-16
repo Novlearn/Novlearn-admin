@@ -57,8 +57,8 @@ BEGIN
   saved := public.admin_save_exercise_draft(exercise,version,created->>'fingerprint',source || '{"title":"UPDATED CATALOGUE TEST"}');
   PERFORM pg_temp.catalogue_assert(saved->>'fingerprint'<>created->>'fingerprint','content edits change approval fingerprint');
   PERFORM pg_temp.catalogue_assert((SELECT count(*)=1 FROM public.exercise_versions WHERE exercise_id=exercise),'saving a draft does not append arbitrary revisions');
-  PERFORM pg_temp.catalogue_denied(format('SELECT public.admin_save_exercise_draft(%s,%L,%L,%L)',exercise,version,created->>'fingerprint',source),'40001','stale save cannot overwrite another editor');
-  PERFORM pg_temp.catalogue_denied(format('SELECT public.admin_save_exercise_draft(%s,%L,NULL,%L)',exercise,version,source),'40001','existing draft requires optimistic precondition');
+  PERFORM pg_temp.catalogue_denied(format('SELECT public.admin_save_exercise_draft(%s,%L,%L,%L)',exercise,version,created->>'fingerprint',source),'PT409','stale save cannot overwrite another editor');
+  PERFORM pg_temp.catalogue_denied(format('SELECT public.admin_save_exercise_draft(%s,%L,NULL,%L)',exercise,version,source),'PT409','existing draft requires optimistic precondition');
   PERFORM pg_temp.catalogue_denied(format('SELECT public.admin_save_exercise_draft(%s,NULL,NULL,%L)',legacy,source),'22023','legacy content is not silently converted');
   PERFORM pg_temp.catalogue_denied('SELECT public.admin_save_exercise_draft(NULL,NULL,NULL,''{"schemaVersion":4,"kind":"composed","title":"bad"}'')','22023','noncanonical schema rejected');
   PERFORM pg_temp.catalogue_denied('SELECT public.admin_save_exercise_draft(NULL,NULL,NULL,NULL)','22023','NULL definition rejected before parent creation');
@@ -87,8 +87,8 @@ BEGIN
   PERFORM public.admin_archive_exercise(exercise,false,true);
   PERFORM pg_temp.catalogue_assert((SELECT admin_archived_at IS NOT NULL AND active_version_id IS NULL FROM public.exercises WHERE id=exercise),'archive does not activate or erase content');
   PERFORM pg_temp.catalogue_assert((SELECT count(*)=2 FROM public.exercise_versions WHERE exercise_id=exercise),'archive preserves all revisions');
-  PERFORM pg_temp.catalogue_denied(format('SELECT public.admin_archive_exercise(%s,false,true)',exercise),'40001','archive rejects concurrent state mismatch');
-  PERFORM pg_temp.catalogue_denied(format('SELECT public.admin_save_exercise_draft(%s,NULL,NULL,%L)',exercise,source),'40001','archived exercise cannot be edited');
+  PERFORM pg_temp.catalogue_denied(format('SELECT public.admin_archive_exercise(%s,false,true)',exercise),'PT409','archive rejects concurrent state mismatch');
+  PERFORM pg_temp.catalogue_denied(format('SELECT public.admin_save_exercise_draft(%s,NULL,NULL,%L)',exercise,source),'PT409','archived exercise cannot be edited');
   PERFORM public.admin_archive_exercise(exercise,true,false);
   PERFORM pg_temp.catalogue_assert((SELECT admin_archived_at IS NULL FROM public.exercises WHERE id=exercise),'restore returns editable catalogue state');
   PERFORM pg_temp.catalogue_denied('DELETE FROM public.admin_content_events','42501','even Admin cannot delete audit events');
@@ -106,7 +106,7 @@ BEGIN
   PERFORM pg_temp.catalogue_assert((SELECT active_version_id=original FROM public.exercises WHERE id=exercise),'archive preserves existing active version');
   PERFORM pg_temp.catalogue_denied(format('UPDATE public.exercise_versions SET definition=%L WHERE id=%L',source,version),'P0001','published definition stays immutable');
   PERFORM public.admin_archive_exercise(exercise,true,false);
-  PERFORM pg_temp.catalogue_denied(format('SELECT public.admin_save_exercise_draft(%s,%L,%L,%L)',exercise,version,saved->>'fingerprint',source),'40001','published revision cannot be saved as a draft');
+  PERFORM pg_temp.catalogue_denied(format('SELECT public.admin_save_exercise_draft(%s,%L,%L,%L)',exercise,version,saved->>'fingerprint',source),'PT409','published revision cannot be saved as a draft');
 
   PERFORM set_config('request.jwt.claim.sub',student_id::text,true);
   PERFORM set_config('request.jwt.claims',jsonb_build_object('sub',student_id,'is_anonymous',false,'user_metadata',jsonb_build_object('role','admin'))::text,true);

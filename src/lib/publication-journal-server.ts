@@ -43,7 +43,7 @@ const translate = (error: unknown) => {
   return new PublicationJournalError(
     code === '42501'
       ? 'forbidden'
-      : code === '40001'
+      : code === '40001' || code === 'PT409'
         ? 'conflict'
         : code === 'P0002'
           ? 'missing'

@@ -4,7 +4,11 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 import { cookies } from 'next/headers';
 import { NextResponse, type NextRequest } from 'next/server';
 import type { AuthGateway } from './authorization';
-import { readAuthConfiguration, type AuthConfiguration } from './config';
+import {
+  readAuthConfiguration,
+  LOCAL_AUTH_COOKIE,
+  type AuthConfiguration,
+} from './config';
 import { privateHeaders } from './http';
 
 export function asAuthGateway(client: SupabaseClient): AuthGateway {
@@ -57,6 +61,7 @@ export function createRouteAuth(
   const response = NextResponse.next({ request, headers: privateHeaders() });
   const client = createServerClient(config.supabaseUrl, config.publishableKey, {
     cookieOptions: {
+      ...(config.local ? { name: LOCAL_AUTH_COOKIE } : {}),
       httpOnly: true,
       sameSite: 'lax',
       secure: config.secureCookies,
@@ -83,6 +88,7 @@ export async function createPageClient() {
   const store = await cookies();
   const client = createServerClient(config.supabaseUrl, config.publishableKey, {
     cookieOptions: {
+      ...(config.local ? { name: LOCAL_AUTH_COOKIE } : {}),
       httpOnly: true,
       sameSite: 'lax',
       secure: config.secureCookies,

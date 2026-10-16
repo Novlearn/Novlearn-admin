@@ -192,6 +192,7 @@ describe('API catalogue : permission avant toute opération', () => {
   });
   it.each([
     ['40001', 409],
+    ['PT409', 409],
     ['P0002', 404],
     ['42501', 403],
     ['22023', 400],

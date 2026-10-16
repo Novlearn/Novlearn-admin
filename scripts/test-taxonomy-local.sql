@@ -36,7 +36,7 @@ BEGIN
  updated:=public.admin_mutate_taxonomy('chapter','save',chapter->>'id',stale,jsonb_set(cvalue,'{order_index}','991'))->'item';
  chapter:=public.admin_mutate_taxonomy('chapter','save',chapter->>'id',updated->>'fingerprint',cvalue)->'item';
  PERFORM pg_temp.taxonomy_assert(chapter->>'fingerprint'<>stale,'monotone revision survives edit then revert');
- PERFORM pg_temp.taxonomy_denied(format('SELECT public.admin_mutate_taxonomy(''chapter'',''save'',%L,%L,%L)',chapter->>'id',stale,cvalue),'40001','stale save refused after edit and revert');
+ PERFORM pg_temp.taxonomy_denied(format('SELECT public.admin_mutate_taxonomy(''chapter'',''save'',%L,%L,%L)',chapter->>'id',stale,cvalue),'PT409','stale save refused after edit and revert');
  other:=public.admin_mutate_taxonomy('chapter','save',NULL,NULL,'{"name":"LOCAL OTHER TAXONOMY","aliases":[],"emoji":"","order_index":991}')->'item';
  skill:=public.admin_mutate_taxonomy('competence','save',NULL,NULL,jsonb_build_object('id','local-taxonomy-skill','name','LOCAL TAXONOMY SKILL','chapter_id',chapter->>'id','max_points',10))->'item';
  PERFORM pg_temp.taxonomy_assert(skill->'value'->>'id'='local-taxonomy-skill' AND skill->'value'->>'max_points'='10','competence stable identity and max points created');

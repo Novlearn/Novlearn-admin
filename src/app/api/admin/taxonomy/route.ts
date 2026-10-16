@@ -72,7 +72,7 @@ async function handle(request: NextRequest, mutation: boolean) {
     const { data, error } = await client.rpc(name, args);
     if (error) {
       const status =
-        error.code === '40001'
+        error.code === '40001' || error.code === 'PT409'
           ? 409
           : error.code === 'P0002'
             ? 404
@@ -88,7 +88,7 @@ async function handle(request: NextRequest, mutation: boolean) {
           ? 'Cette référence est utilisée ou son chapitre est absent. Consultez ses associations avant de modifier ou supprimer.'
           : error.code === '23505'
             ? 'Ce nom, alias ou identifiant est déjà utilisé.'
-            : error.code === '40001'
+            : error.code === '40001' || error.code === 'PT409'
               ? 'Cette fiche a changé. Rechargez avant de réessayer.'
               : status === 404
                 ? 'Fiche introuvable.'

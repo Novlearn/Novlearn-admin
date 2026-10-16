@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { Brand } from '@/components/brand';
 import { requireAdminPage } from '@/lib/auth/require-admin';
 import { AdminNavigation } from '@/components/admin-navigation';
+import { readAuthConfiguration } from '@/lib/auth/config';
 
 export const dynamic = 'force-dynamic';
 
@@ -11,6 +12,7 @@ export default async function AdminLayout({
   children: React.ReactNode;
 }) {
   await requireAdminPage();
+  const local = readAuthConfiguration(process.env)?.local === true;
   return (
     <div className="min-h-screen lg:grid lg:grid-cols-[240px_1fr]">
       <a
@@ -29,12 +31,18 @@ export default async function AdminLayout({
         </Link>
         <AdminNavigation />
         <p className="mt-10 text-xs leading-6 text-slate-500">
-          Créez, organisez et préparez vos contenus pédagogiques dans Staging.
+          {local
+            ? 'Copie locale de Staging : vos modifications restent sur cet ordinateur.'
+            : 'Créez, organisez et préparez vos contenus pédagogiques dans Staging.'}
         </p>
       </aside>
       <div className="min-w-0">
         <header className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 bg-white px-6 py-4 lg:px-10">
-          <span className="badge">Staging · espace d’administration</span>
+          <span className="badge">
+            {local
+              ? 'Local · données d’essai enregistrées'
+              : 'Staging · espace d’administration'}
+          </span>
           <form action="/auth/logout" method="post">
             <button
               className="text-sm font-medium text-slate-600 hover:text-blue-700"

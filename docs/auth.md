@@ -2,6 +2,12 @@
 
 ## État réel
 
+**Mise à jour du 16 octobre :** une [instance locale connectée](local-admin.md)
+utilise maintenant GoTrue, PostgREST et les routes Next réels avec sauvegarde
+persistante. Ses comptes sont synthétiques, ses services isolés et le mode local
+est limité au développement. Les tests historiques avec doubles ci-dessous
+restent distincts de ces nouveaux essais réels. L'accès distant reste fermé.
+
 Le code Auth serveur, les formulaires, la protection des pages et le layout
 Admin sont implémentés. Les tests utilisent des doubles synthétiques. L'accès
 Staging est **désactivé** : la sécurisation SQL du Lot 1A est désormais testée

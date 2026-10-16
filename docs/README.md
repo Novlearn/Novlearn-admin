@@ -3,6 +3,12 @@
 Le [suivi du goal](progress.md) contient l'audit actuel, les lots autorisés,
 les tests, les blocages et le point de reprise.
 
+[Application locale connectée](local-admin.md) : vraie connexion, permissions,
+sauvegarde persistante et limites du raccordement Engine.
+
+[Conflits RPC HTTP](rpc-http-conflicts.md) : correction locale 63, préservation
+des données et des attributs, restauration et concurrence réellement testées.
+
 [Essais progressifs locaux](local-workspace.md) : accueil commun, Creator relié
 au vrai Engine Linux, exemples sans compte ni base distante et limites de réception.
 

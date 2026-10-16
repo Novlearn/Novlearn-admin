@@ -1,5 +1,12 @@
 # Roadmap
 
+**État actuel, 16 octobre :** [connexion et sauvegarde locales](local-admin.md)
+avec comptes d'essai réels : 17 contrôles HTTP et 621 tests Admin passent.
+Le rejeu atteint 63 migrations, avec [conflits RPC HTTP corrigés](rpc-http-conflicts.md)
+et restauration/concurrence vérifiées. Le moteur de l'instance connectée reste
+à raccorder ; le banc Linux séparé conserve sa portée. Les relevés ci-dessous
+sont historiques ; activation distante, réception visuelle et Lot 1A restent ouverts.
+
 **Retour fonctionnel local :** le [parcours serveur/SQL](publication-rollback.md)
 passe dix étapes entre deux révisions, avec nouveaux tests Engine, tentatives
 liées et reprise sans transfert après réponse perdue. **584 tests Admin** et

@@ -1,5 +1,26 @@
 # Progression du goal NovLearn Admin
 
+## Connexion et sauvegarde locales réelles — 16 octobre 2026
+
+L'[application connectée](local-admin.md) est disponible sur le port 3150 avec
+des comptes d'essai, GoTrue, PostgREST et les vraies routes Next. **17 contrôles
+HTTP réels passent**, dont connexion, refus non-Admin, sauvegarde, rechargement,
+conflit, révocation du rôle et persistance après reconnexion. Le serveur ne lit
+aucun secret opérateur. **621 tests / 34 fichiers**, types, lint, format, build,
+intégrité Engine et smoke passent. La réception visuelle, l'expiration et MFA
+ne sont pas certifiés par ces essais.
+
+La [migration 63](rpc-http-conflicts.md) corrige un conflit métier qui provoquait
+des retries infinis de PostgREST 14 : huit frontières RPC renvoient maintenant
+`PT409`, sans modification des droits ou des données. Rejeu neuf des 63 SQL,
+189 assertions avant/après restauration, comparaison des 62 tables et concurrence
+catalogue/flashcards passent. Un bootstrap neuf Auth/REST passe aussi.
+
+Le moteur reste à raccorder à cette instance Windows ; son banc Linux séparé
+reste disponible pour les calculs. Publication et accès distants restent fermés.
+Les restrictions de sécurité sont conservées. Le goal reste actif : rendu avancé,
+réception, publication par lots et portes de mise en service restent ouverts.
+
 ## Retour à une révision publiée — 16 octobre 2026
 
 Le [retour serveur/SQL](publication-rollback.md) passe dix étapes réelles sur

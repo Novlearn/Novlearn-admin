@@ -155,6 +155,7 @@ it('uses only the session-scoped row and fixed export RPC with exact selection a
 });
 it.each([
   ['40001', 'conflict'],
+  ['PT409', 'conflict'],
   ['42501', 'forbidden'],
   ['P0002', 'missing'],
   ['XX000', 'unavailable'],

@@ -57,13 +57,13 @@ export async function POST(request: NextRequest) {
       return finish(
         {
           error:
-            error.code === '40001'
+            error.code === '40001' || error.code === 'PT409'
               ? 'La révision ou son état a changé. Rechargez avant de réessayer.'
               : error.code === '22023'
                 ? 'La relecture est bloquée : vérifiez les tests multi-seeds, la couverture, les références et l’attestation.'
                 : 'Relecture indisponible.',
         },
-        error.code === '40001'
+        error.code === '40001' || error.code === 'PT409'
           ? 409
           : error.code === '22023'
             ? 400

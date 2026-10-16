@@ -255,6 +255,7 @@ describe('Journal : session fraîche et requêtes bornées', () => {
   it.each([
     ['42501', 'forbidden'],
     ['40001', 'conflict'],
+    ['PT409', 'conflict'],
     ['P0002', 'missing'],
     ['22023', 'invalid'],
     ['XX000', 'unavailable'],

@@ -185,7 +185,7 @@ try {
   const loser = saves.find((result) => result.code !== 0);
   assert.match(
     loser.errors,
-    /ERROR:\s+40001:/,
+    /ERROR:\s+PT409:/,
     'The losing writer must get the concurrency SQLSTATE, not an arbitrary failure',
   );
   const winner = resultObject(saves.find((result) => result.code === 0).output);
@@ -223,7 +223,7 @@ try {
   console.log(
     JSON.stringify({
       result: 'PASS',
-      competingSaves: { committed: 1, refusedWithSqlstate: '40001' },
+      competingSaves: { committed: 1, refusedWithSqlstate: 'PT409' },
       parallelRevisions: revisions,
       auditEvents: state.events,
       sourceDatabaseUnchanged: true,

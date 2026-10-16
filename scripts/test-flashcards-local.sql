@@ -51,13 +51,13 @@ BEGIN
  changed:=public.admin_mutate_flashcard('save',(item->>'id')::uuid,original_fp,body||'{"question":"Changed face"}')->'item';
  item:=public.admin_mutate_flashcard('save',(item->>'id')::uuid,changed->>'fingerprint',body)->'item';
  PERFORM pg_temp.flashcard_assert(item->>'createdAt'=created AND item->>'fingerprint'<>original_fp,'creation time stable and epoch detects edit then revert');
- PERFORM pg_temp.flashcard_denied(format('SELECT public.admin_mutate_flashcard(''save'',%L,%L,%L)',item->>'id',original_fp,body),'40001','stale update refused after revert');
- PERFORM pg_temp.flashcard_denied(format('SELECT public.admin_mutate_flashcard(''delete'',%L,%L,NULL)',item->>'id',original_fp),'40001','stale delete refused');
+ PERFORM pg_temp.flashcard_denied(format('SELECT public.admin_mutate_flashcard(''save'',%L,%L,%L)',item->>'id',original_fp,body),'PT409','stale update refused after revert');
+ PERFORM pg_temp.flashcard_denied(format('SELECT public.admin_mutate_flashcard(''delete'',%L,%L,NULL)',item->>'id',original_fp),'PT409','stale delete refused');
  PERFORM pg_temp.flashcard_denied('SELECT public.admin_mutate_flashcard(''delete'',NULL,NULL,NULL)','22023','deletion requires explicit identity');
  PERFORM pg_temp.flashcard_denied(format('SELECT public.admin_mutate_flashcard(''delete'',%L,%L,%L)',item->>'id',item->>'fingerprint',body),'22023','delete cannot carry replacement content');
  PERFORM pg_temp.flashcard_denied(format('SELECT public.admin_mutate_flashcard(''save'',''a5830000-0000-4000-8000-000000000000'',%L,%L)',repeat('a',64),body),'P0002','unknown UUID is not silently created');
  SELECT count(*) INTO total_events FROM public.admin_flashcard_events;
- PERFORM pg_temp.flashcard_denied(format('SELECT public.admin_mutate_flashcard(''save'',%L,%L,%L)',item->>'id',original_fp,body),'40001','failed mutation produces a conflict');
+ PERFORM pg_temp.flashcard_denied(format('SELECT public.admin_mutate_flashcard(''save'',%L,%L,%L)',item->>'id',original_fp,body),'PT409','failed mutation produces a conflict');
  PERFORM pg_temp.flashcard_assert((SELECT count(*)=total_events FROM public.admin_flashcard_events),'failed mutation adds no audit event');
  PERFORM pg_temp.flashcard_denied('INSERT INTO public.admin_flashcard_events(actor_id,flashcard_id,action) VALUES(''a5800000-0000-4000-8000-000000000001'',''a5830000-0000-4000-8000-000000000000'',''created'')','42501','audit cannot be forged by API caller');
  PERFORM pg_temp.flashcard_assert(NOT EXISTS(SELECT 1 FROM public.admin_flashcard_events WHERE actor_id<>'a5800000-0000-4000-8000-000000000001'),'all mutation actors come from checked Auth');

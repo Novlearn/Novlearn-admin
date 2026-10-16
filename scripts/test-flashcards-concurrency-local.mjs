@@ -164,7 +164,7 @@ try {
   assert.equal(results.filter((result) => result.code === 0).length, 1);
   assert.equal(
     results.filter(
-      (result) => result.code !== 0 && result.err.includes('40001'),
+      (result) => result.code !== 0 && result.err.includes('PT409'),
     ).length,
     1,
   );
@@ -188,7 +188,7 @@ try {
         source,
         database,
         regressions,
-        concurrency: { commits: 1, conflicts40001: 1, state },
+        concurrency: { commits: 1, conflictsPT409: 1, state },
         scope:
           'Ordinary edit concurrency in a new local synthetic clone; no live Auth or remote connection',
         remoteWrites: false,

@@ -50,7 +50,8 @@ function endpoint(
 export function readPublicationPgConfiguration(
   env: Record<string, string | undefined>,
 ): PublicationPgConfiguration | null {
-  if (env.ADMIN_PUBLICATION_ENABLED !== 'true' || !readAuthConfiguration(env))
+  const auth = readAuthConfiguration(env);
+  if (env.ADMIN_PUBLICATION_ENABLED !== 'true' || !auth || auth.local)
     return null;
   const review = env.ADMIN_PUBLICATION_SECURITY_REVIEW?.trim(),
     targetRef = env.ADMIN_PUBLICATION_TARGET_PROJECT_REF;

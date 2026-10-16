@@ -1,7 +1,11 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { NextRequest, NextResponse } from 'next/server';
 import type { SupabaseClient } from '@supabase/supabase-js';
-import { readAuthConfiguration, STAGING_PROJECT_REF } from '@/lib/auth/config';
+import {
+  readAuthConfiguration,
+  STAGING_PROJECT_REF,
+  LOCAL_AUTH_COOKIE,
+} from '@/lib/auth/config';
 
 vi.mock('server-only', () => ({}));
 const sdk = vi.hoisted(() => ({ create: vi.fn() }));
@@ -48,6 +52,29 @@ function client() {
 beforeEach(() => sdk.create.mockReset());
 
 describe('adaptateur Auth Supabase', () => {
+  it('isolates local session cookies without changing the verified-user adapter', () => {
+    sdk.create.mockReturnValue(client().raw);
+    createRouteAuth(new NextRequest('http://127.0.0.1:3150/login'), {
+      supabaseUrl: 'http://127.0.0.1:55431',
+      publishableKey: 'local-fixture-key',
+      appOrigin: 'http://127.0.0.1:3150',
+      secureCookies: false,
+      review: 'fixture',
+      local: true,
+    });
+    expect(sdk.create).toHaveBeenCalledWith(
+      'http://127.0.0.1:55431',
+      'local-fixture-key',
+      expect.objectContaining({
+        cookieOptions: expect.objectContaining({
+          name: LOCAL_AUTH_COOKIE,
+          httpOnly: true,
+          sameSite: 'lax',
+          secure: false,
+        }),
+      }),
+    );
+  });
   it('vérifie la session auprès du serveur Auth puis lit uniquement le rôle propre', async () => {
     const { gateway, raw, query } = client();
     const user = await gateway.getVerifiedUser();
