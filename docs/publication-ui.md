@@ -1,5 +1,10 @@
 # Publication et historique — interface locale
 
+**Complément :** la [publication par lots](publication-batch.md) relie maintenant
+la sélection du catalogue aux diffs et résultats individuels, avec arrêt sur
+issue incertaine et reconstruction sans confirmation après rechargement.
+Les preuves et la simulation de lot sont distinctes du checkpoint ci-dessous.
+
 Le détail d'une révision canonique contient désormais un panneau de publication.
 L'entrée « Publications » ouvre l'historique du compte courant sur
 `/admin/publication`. Ces pages utilisent les composants et les couleurs Inter,

@@ -1,5 +1,33 @@
 # Progression du goal NovLearn Admin
 
+## Publication par lots — 16 octobre 2026
+
+La [sélection de cinq exercices maximum](publication-batch.md) réutilise le
+service unitaire et son journal : diffs et confirmations par exercice, arrêt
+sur refus/résultat incertain, observation après rechargement sans jeton et
+nouvelle préparation explicite après annulation. Aucune migration supplémentaire.
+Le catalogue projette explicitement ses métadonnées à sa nouvelle frontière client.
+
+**676 tests dans 38 fichiers**, intégrité Engine, types, lint sans erreur,
+format, build et smoke passent. **Cinq phases de transfert sur copies SQL**
+passent : trois reçus natifs, sept vérifications Engine fraîches, deux COMMIT
+dont une perte d'acquittement injectée, reprise sans application, annulation
+et confirmation fraîche du dernier exercice. Les trois transferts finaux sont
+confirmés ; les deux bases d'origine et les tables exclues restent conservées.
+Auth/REST et relecture de ce banc natif sont synthétiques.
+
+**13 contrôles HTTP séparés** passent avec GoTrue/PostgREST/Next réels, dont
+catalogue, page de lot, permissions et publication refusée. Neuf pages du banc
+compilent ; une simulation de lot permet les essais manuels. Les 19 bundles
+clients de l'instance et les 20 du banc inspectés n'exposent aucun des secrets
+ou noms privés recherchés. La [preuve](publication-batch-proof.json) conserve
+les périmètres, l'échec initial de format et la compatibilité AST du worker.
+
+L'application avec Engine est relancée. Le transfert par l'API avec une vraie
+session, la réception visuelle, le rendu avancé, les statistiques/utilisateurs
+Production et les portes de mise en service restent ouverts. Aucun accès ou
+changement distant ; le goal reste actif et incomplet.
+
 ## Engine dans la session connectée — 16 octobre 2026
 
 Le [worker Linux borné](local-admin-engine.md) est raccordé au serveur Windows

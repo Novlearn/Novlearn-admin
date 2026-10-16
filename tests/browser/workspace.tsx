@@ -28,6 +28,11 @@ function Workspace() {
   }, []);
   const cards = [
     [
+      'Lot de publication simulé',
+      'publication-batch.html',
+      'Préparer trois diffs, confirmer les exercices relus et observer un résultat partiel. Aucune donnée n’est transférée par cette simulation.',
+    ],
+    [
       'Publication simulée',
       'publication.html',
       'Relire un diff, confirmer et essayer les états de réponse perdue ou de reprise. Tous les résultats de ce parcours sont simulés ; aucun exercice n’est transféré.',

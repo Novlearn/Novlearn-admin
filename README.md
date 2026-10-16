@@ -53,6 +53,10 @@ Le banc propose aussi une [simulation de publication](docs/publication-ui.md) :
 diff, confirmation, réponse perdue et vérification de résultat. Tous les résultats
 de ce parcours sont simulés ; il n'exécute pas de tests Engine ni de transfert.
 Le service et l'interface réels restent soumis aux prérequis d'activation.
+La [publication par lots](docs/publication-batch.md) ajoute la sélection de
+plusieurs exercices et une simulation manuelle distincte, avec résultats partiels
+et observation après interruption. Les transferts sont qualifiés sur copies
+locales ; la publication distante reste fermée.
 La [finalisation éditoriale source](docs/publication-source-finalization.md)
 est vérifiée sur copies locales, avec reprise sans répétition du transfert.
 Le [retour à une révision publiée](docs/publication-rollback.md) est aussi vérifié

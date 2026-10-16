@@ -14,7 +14,7 @@ import {
 import type { PublicationMode, PublicationPlan } from '@/lib/publication';
 const valueText = (value: unknown) =>
   value === undefined ? 'Absent' : JSON.stringify(value, null, 2);
-function Changes({
+export function PublicationChanges({
   title,
   changes,
 }: {
@@ -287,11 +287,11 @@ export function PublicationPanel({
               ? ` · actuellement active : ${prepared.plan.previousRevision}`
               : ''}
           </p>
-          <Changes
+          <PublicationChanges
             title="Métadonnées de l’exercice"
             changes={prepared.plan.headerChanges}
           />
-          <Changes
+          <PublicationChanges
             title="Définition de la révision"
             changes={prepared.plan.definitionChanges}
           />

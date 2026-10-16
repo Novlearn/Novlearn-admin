@@ -9,6 +9,10 @@ sauvegarde persistante et limites du raccordement Engine.
 [Engine dans l'application connectée](local-admin-engine.md) : worker Linux
 borné, transport privé, tests réels et rapport signé persisté depuis une session.
 
+[Publication par lots](publication-batch.md) : sélection, confirmations par exercice,
+arrêt après résultat partiel et reprise sans réapplication ; transferts sur copies
+SQL locales et simulation manuelle séparée.
+
 [Conflits RPC HTTP](rpc-http-conflicts.md) : correction locale 63, préservation
 des données et des attributs, restauration et concurrence réellement testées.
 
