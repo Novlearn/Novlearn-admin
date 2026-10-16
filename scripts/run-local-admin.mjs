@@ -41,6 +41,41 @@ if (process.argv.includes('--stop')) {
   });
   const { readAuthConfiguration } = await import('../src/lib/auth/config.ts');
   assert.equal(readAuthConfiguration(process.env)?.local, true);
+  // Clear inherited signing/transport settings; only explicit local files may enable them.
+  for (const key of [
+    'ADMIN_LOCAL_ENGINE_URL',
+    'ADMIN_LOCAL_ENGINE_CAPABILITY',
+    'ADMIN_TEST_SIGNING_KEY_ID',
+    'ADMIN_TEST_SIGNING_KEY',
+  ])
+    process.env[key] = '';
+  let engine;
+  if (process.argv.includes('--engine')) {
+    const { startLocalEngine } = await import('./local-engine.mjs');
+    engine = await startLocalEngine(artifact);
+    Object.assign(process.env, engine.environment);
+    try {
+      const signing = JSON.parse(
+        await readFile(path.join(artifact, 'test-signing.json'), 'utf8'),
+      );
+      assert.equal(signing.artifact, artifact);
+      const signingEnvironment = {
+        ADMIN_TEST_SIGNING_KEY_ID: signing.id,
+        ADMIN_TEST_SIGNING_KEY: signing.key,
+      };
+      assert.match(
+        signing.id,
+        /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/,
+      );
+      assert.match(signing.key, /^[0-9a-f]{64}$/);
+      Object.assign(process.env, signingEnvironment);
+    } catch (error) {
+      if (error.code !== 'ENOENT') {
+        await engine.close();
+        throw error;
+      }
+    }
+  }
   const next = (await import('next')).default;
   const app = next({
     dev: true,
@@ -48,15 +83,26 @@ if (process.argv.includes('--stop')) {
     hostname: '127.0.0.1',
     port: 3150,
   });
-  await app.prepare();
+  try {
+    await app.prepare();
+  } catch (error) {
+    await engine?.close();
+    throw error;
+  }
   const handle = app.getRequestHandler();
   const server = createServer(
     (request, response) => void handle(request, response),
   );
-  await new Promise((resolve, reject) => {
-    server.once('error', reject);
-    server.listen(3150, '127.0.0.1', resolve);
-  });
+  try {
+    await new Promise((resolve, reject) => {
+      server.once('error', reject);
+      server.listen(3150, '127.0.0.1', resolve);
+    });
+  } catch (error) {
+    await app.close();
+    await engine?.close();
+    throw error;
+  }
   const { randomBytes } = await import('node:crypto');
   const controlNonce = randomBytes(24).toString('hex');
   await writeFile(
@@ -69,14 +115,21 @@ if (process.argv.includes('--stop')) {
         controlNonce,
         local: true,
         database: true,
-        engine: false,
+        engine: !!engine,
+        ...(engine
+          ? {
+              engineContainer: engine.container,
+              engineArtifact: engine.artifact,
+            }
+          : {}),
       },
       null,
       2,
     ) + '\n',
   );
   console.log(
-    'Local Admin ready: http://127.0.0.1:3150/ ; genuine Auth and local persistence, Engine not yet connected.',
+    'Local Admin ready: http://127.0.0.1:3150/ ; genuine Auth and local persistence; Linux Engine ' +
+      (engine ? 'connected.' : 'disabled.'),
   );
   const controller = new AbortController();
   let closing = false;
@@ -86,6 +139,7 @@ if (process.argv.includes('--stop')) {
     controller.abort();
     await new Promise((resolve) => server.close(resolve));
     await app.close();
+    await engine?.close();
     console.log('Local application stopped; database retained.');
     setImmediate(() => process.exit(0));
   };

@@ -1,5 +1,10 @@
 # Aperçu et tests Engine — implémentation locale
 
+**Mise à jour du 16 octobre :** le [parcours connecté](local-admin-engine.md)
+relie désormais les vraies routes Next au worker Linux borné, avec génération,
+correction et rapport signé enregistré depuis la révision relue de SQL. La
+réception navigateur reste distincte des contrôles HTTP réels.
+
 **Complément :** les [rapports signés par révision](test-receipts.md) ajoutent
 désormais la persistance des tests relus de SQL et leur historique. Ce document
 conserve le checkpoint de l’aperçu temporaire ; les nouvelles preuves et portes

@@ -6,6 +6,11 @@ persistante. Elle permet les essais progressifs du catalogue, des brouillons,
 du Creator, des chapitres, des compétences et des flashcards. Les données sont
 des données d'essai ; aucun projet distant n'est contacté.
 
+**Complément :** le [raccordement Engine Linux](local-admin-engine.md) est
+maintenant vérifié avec la session réelle et les rapports signés persistés.
+Le lancement `--engine` active ce parcours ; le lancement simple décrit
+ci-dessous conserve les calculs désactivés.
+
 ## Instance conservée
 
 Le dossier ignoré `.local/local-admin-1792143739689/` contient `login.txt`
@@ -42,14 +47,15 @@ refuser. Les cookies locaux ont leur propre nom. Chaque opération protégée
 vérifie réellement l'utilisateur et son rôle dans `profiles` ; modifier les
 métadonnées utilisateur ne donne aucun droit Admin.
 
-La publication reste désactivée. Le moteur Linux n'est **pas encore raccordé**
-au serveur Windows de cette instance : un calcul indisponible est refusé.
-Le [banc Engine séparé](local-workspace.md), sur le port 3140, reste le parcours
-de calcul natif ; ses exemples ne sont pas sauvegardés en base.
+La publication reste désactivée. Sans l'option Engine, un calcul indisponible
+est refusé. Avec cette option, le calcul reste dans le worker Linux borné et
+les routes Next conservent leurs contrôles de session et de rôle.
+Le [banc Engine séparé](local-workspace.md), sur le port 3140, conserve ses
+exemples sans sauvegarde en base.
 
 ## Vérifications et limites
 
-`npm run check` passe **621 tests dans 34 fichiers**, l'intégrité de l'archive
+Le premier jalon sans Engine a validé **621 tests dans 34 fichiers**, l'intégrité de l'archive
 Engine, les types, le lint, le format, le build et le smoke avec accès distant
 désactivé. Le rejeu neuf de 63 migrations et un bootstrap neuf avec Auth et
 PostgREST réels passent. L'instance conservée, initialement créée avec 62 SQL,
@@ -75,8 +81,7 @@ test SQL. Les protections et critères de succès n'ont pas été assouplis.
 
 ## Suite
 
-Raccorder le vrai runtime Linux borné à l'application connectée, réceptionner
-l'interface, terminer le rendu avancé et la publication par lots. Les lectures
+Réceptionner l'interface, terminer le rendu avancé et la publication par lots. Les lectures
 Production, la réconciliation distante, les comptes opérationnels et la mise
 en service restent soumis aux portes de la roadmap et à une autorisation
 distincte. Le goal reste actif et incomplet.

@@ -1,5 +1,30 @@
 # Progression du goal NovLearn Admin
 
+## Engine dans la session connectée — 16 octobre 2026
+
+Le [worker Linux borné](local-admin-engine.md) est raccordé au serveur Windows
+de développement par un transport privé. **28 contrôles HTTP réels passent** :
+Auth, sauvegarde, génération, corrections, tests reproductibles seeds 0/42,
+signature HMAC, enregistrement SQL et affichage du rapport dans la page protégée.
+Le brouillon reste un brouillon. Les refus de session, origine, rôle révoqué,
+instance fournie par le navigateur et état de test périmé sont exercés.
+
+**641 tests dans 35 fichiers**, intégrité Engine, types, lint sans erreur,
+format, build et smoke passent. Sept contrôles du canal privé passent et
+l'inspection Docker confirme les quotas/réseau/montages. Les 30 bundles clients
+inspectés ne contiennent aucun des secrets ou noms de configuration privés
+recherchés. Les preuves du jalon précédent restent datées et distinctes.
+
+Le redémarrage conserve les lignes des trois tables exercices/révisions/rapports,
+arrête l'ancien worker et laisse les services de base actifs. Une nouvelle
+connexion retrouve le rapport dans PostgREST et la page protégée. Les
+[preuves et empreintes](local-admin-engine-proof.json) distinguent ces contrôles
+de la réception visuelle non exécutée et de la suite source Engine non relancée.
+
+Aucun changement source Engine, migration ou accès distant dans ce jalon.
+Réception visuelle, rendu avancé, publication par lots et portes de mise en
+service restent ouverts ; le goal reste actif et incomplet.
+
 ## Connexion et sauvegarde locales réelles — 16 octobre 2026
 
 L'[application connectée](local-admin.md) est disponible sur le port 3150 avec

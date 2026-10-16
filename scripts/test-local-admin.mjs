@@ -19,6 +19,7 @@ const state = JSON.parse(
 assert.equal(state.pending, undefined);
 assert.equal(state.artifact, artifact);
 const origin = 'http://127.0.0.1:3150';
+const withEngine = process.argv.includes('--engine');
 assert.equal(state.authConfig.APP_BASE_URL, origin);
 assert.equal(
   state.authConfig.ADMIN_LOCAL_SUPABASE_URL,
@@ -35,7 +36,12 @@ const stamp = Date.now(),
   checks = [],
   details = {};
 const cookieJar = new Map();
-const request = async (url, options = {}, jar = cookieJar) => {
+const request = async (
+  url,
+  options = {},
+  jar = cookieJar,
+  timeoutMs = 45000,
+) => {
   const response = await fetch(origin + url, {
     ...options,
     headers: {
@@ -49,7 +55,7 @@ const request = async (url, options = {}, jar = cookieJar) => {
       ...options.headers,
     },
     redirect: 'manual',
-    signal: AbortSignal.timeout(45000),
+    signal: AbortSignal.timeout(timeoutMs),
   });
   for (const cookie of response.headers.getSetCookie()) {
     const first = cookie.split(';')[0],
@@ -325,6 +331,15 @@ try {
     body: JSON.stringify(saveBody),
   });
   assert.equal(revokedSave.status, 403);
+  if (withEngine) {
+    const deniedEngine = await request('/api/admin/engine', {
+      method: 'POST',
+      headers: { origin, 'content-type': 'application/json' },
+      body: JSON.stringify({ definition }),
+    });
+    assert.equal(deniedEngine.status, 403);
+    checks.push('Revoked real Admin session cannot execute Engine');
+  }
   checks.push(
     'Real profile revocation blocks existing session and direct mutation',
   );
@@ -361,10 +376,208 @@ try {
     headers: { origin, 'content-type': 'application/json' },
     body: JSON.stringify({ definition }),
   });
-  assert.equal(engine.status, 503);
-  checks.push(
-    'Unavailable local Engine is refused, never presented as a successful calculation',
-  );
+  if (!withEngine) {
+    assert.equal(engine.status, 503);
+    checks.push(
+      'Unavailable local Engine is refused, never presented as a successful calculation',
+    );
+  } else {
+    const runtime = JSON.parse(
+      await readFile(path.join(artifact, 'app-runtime.json'), 'utf8'),
+    );
+    assert.equal(runtime.engine, true);
+    assert.equal(engine.status, 200);
+    assert.equal((await engine.json()).valid, true);
+    checks.push(
+      'Authenticated real Next route validates with bounded native Linux Engine',
+    );
+    const post = (body) => ({
+      method: 'POST',
+      headers: { origin, 'content-type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+    const invalid = await request(
+      '/api/admin/engine',
+      post({ definition: { ...definition, schemaVersion: 999 } }),
+    );
+    assert.equal(invalid.status, 200);
+    assert.equal((await invalid.json()).valid, false);
+    checks.push(
+      'Actual native invalid definition never returns successful validation',
+    );
+    const anonymousEngine = await request(
+      '/api/admin/engine',
+      post({ definition }),
+      new Map(),
+    );
+    assert.equal(anonymousEngine.status, 401);
+    const foreignEngine = await request('/api/admin/engine', {
+      ...post({ definition }),
+      headers: {
+        origin: 'https://foreign.invalid',
+        'content-type': 'application/json',
+      },
+    });
+    assert.equal(foreignEngine.status, 403);
+    checks.push(
+      'Engine refuses missing session and foreign origin through real routes',
+    );
+    const generate = await request(
+      '/api/admin/preview',
+      post({ action: 'generate', definition: edited, seed: 42 }),
+    );
+    assert.equal(generate.status, 200);
+    const preview = (await generate.json()).result;
+    const publicText = JSON.stringify(preview.instance);
+    assert(!publicText.includes('PRIVATE_'));
+    assert(!publicText.includes('expected'));
+    assert(!publicText.includes('policy'));
+    checks.push(
+      'Actual native generation exposes only the official public projection',
+    );
+    const inspected = await request(
+      '/api/admin/preview',
+      post({ action: 'inspect', previewId: preview.previewId }),
+    );
+    assert.equal(inspected.status, 200);
+    const answer = (await inspected.json()).result.expected.find(
+      (q) => q.questionId === 'q',
+    ).answer;
+    const correct = await request(
+      '/api/admin/preview',
+      post({
+        action: 'grade',
+        previewId: preview.previewId,
+        questionId: 'q',
+        answer,
+      }),
+    );
+    assert.equal(correct.status, 200);
+    assert.equal((await correct.json()).result.state, 'correct');
+    const incorrect = await request(
+      '/api/admin/preview',
+      post({
+        action: 'grade',
+        previewId: preview.previewId,
+        questionId: 'q',
+        answer: { format: 'latex', source: '0' },
+      }),
+    );
+    assert.equal(incorrect.status, 200);
+    assert.equal((await incorrect.json()).result.state, 'incorrect');
+    checks.push(
+      'Authenticated preview inspection and true/false native corrections agree',
+    );
+    const forged = await request(
+      '/api/admin/preview',
+      post({
+        action: 'grade',
+        previewId: preview.previewId,
+        questionId: 'q',
+        answer,
+        official: {},
+      }),
+    );
+    assert.equal(forged.status, 400);
+    checks.push(
+      'Browser supplied official instance refused by actual protected route',
+    );
+    const current = await sdk
+      .from('exercise_versions')
+      .select('approval_fingerprint_sha256,test_epoch,editorial_status')
+      .eq('id', result.versionId)
+      .single();
+    assert.equal(current.error, null);
+    assert.equal(current.data.editorial_status, 'draft');
+    const cases = [
+      {
+        questionId: 'q',
+        expectedState: 'incorrect',
+        answer: { format: 'latex', source: '0' },
+      },
+    ];
+    const testSaved = {
+      action: 'test_saved',
+      versionId: result.versionId,
+      fingerprint: current.data.approval_fingerprint_sha256,
+      epoch: current.data.test_epoch,
+      seeds: [0, 42],
+      cases,
+    };
+    const tested = await request(
+      '/api/admin/preview',
+      post(testSaved),
+      cookieJar,
+      120000,
+    );
+    assert.equal(tested.status, 200);
+    const receipt = (await tested.json()).result;
+    assert.equal(receipt.report.complete, true);
+    assert.equal(receipt.report.passed, true);
+    assert.deepEqual(
+      receipt.report.seeds.map((s) => s.seed),
+      [0, 42],
+    );
+    assert(
+      receipt.report.seeds.every(
+        (s) => s.passed && s.reproducible && s.publicProjectionSafe,
+      ),
+    );
+    checks.push(
+      'Saved SQL revision passes actual reproducible native tests for two seeds',
+    );
+    const storedReceipt = await sdk
+      .from('admin_exercise_test_runs')
+      .select('id,version_id,passed,payload')
+      .eq('id', receipt.receiptId)
+      .single();
+    assert.equal(storedReceipt.error, null);
+    assert.equal(storedReceipt.data.version_id, result.versionId);
+    assert.equal(storedReceipt.data.passed, true);
+    const payload = JSON.parse(storedReceipt.data.payload);
+    assert.equal(payload.actorId, admin.id);
+    assert.equal(payload.fingerprint, current.data.approval_fingerprint_sha256);
+    assert.deepEqual(payload.report, receipt.report);
+    checks.push(
+      'Server HMAC receipt verified and persisted by real PostgREST/SQL',
+    );
+    const history = await request(
+      '/admin/exercises/' + result.exerciseId + '?version=' + result.versionId,
+    );
+    assert.equal(history.status, 200);
+    assert((await history.text()).includes(receipt.receiptId));
+    const stillDraft = await sdk
+      .from('exercise_versions')
+      .select('editorial_status')
+      .eq('id', result.versionId)
+      .single();
+    assert.equal(stillDraft.data.editorial_status, 'draft');
+    checks.push(
+      'Reloaded protected detail displays persisted receipt without approving the draft',
+    );
+    const staleReceipt = await request(
+      '/api/admin/preview',
+      post({ ...testSaved, epoch: current.data.test_epoch + 1 }),
+    );
+    assert.equal(staleReceipt.status, 409);
+    checks.push(
+      'Stale saved-test state refused before calculation and signing',
+    );
+    const privateAccess = await sdk
+      .schema('novlearn_admin_private')
+      .from('test_signing_keys')
+      .select('secret');
+    assert(privateAccess.error);
+    checks.push(
+      'Actual API Admin cannot read the private receipt signing registry',
+    );
+    details.nativeEngine = {
+      receiptId: receipt.receiptId,
+      seeds: [0, 42],
+      engineArtifact: runtime.engineArtifact,
+      engineContainer: runtime.engineContainer,
+    };
+  }
   const actual = (
     await sdk
       .from('exercise_versions')
@@ -384,7 +597,8 @@ try {
     realNextRoutes: true,
     sessionsSynthetic: false,
     visualAcceptance: false,
-    engineExecuted: false,
+    engineExecuted: withEngine,
+    signedReceiptPersisted: withEngine,
     publicationEnabled: false,
     expiryTest: false,
     mfaTest: false,
@@ -402,7 +616,7 @@ try {
       checks: checks.length,
       artifact,
       proof: 'integration-' + stamp + '.json',
-      engineExecuted: false,
+      engineExecuted: withEngine,
     }),
   );
 } catch (error) {

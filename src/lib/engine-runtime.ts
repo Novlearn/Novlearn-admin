@@ -22,8 +22,21 @@ export async function runEngine(
   payload: JsonObject,
   signal?: AbortSignal,
 ): Promise<JsonValue> {
-  if (process.platform !== 'linux')
-    throw new EngineRuntimeError('runtime-profile');
+  if (process.platform !== 'linux') {
+    const { readLocalEngineConfiguration, runLocalEngine } = await import(
+      './engine-local-transport'
+    );
+    if (!readLocalEngineConfiguration(process.env))
+      throw new EngineRuntimeError('runtime-profile');
+    try {
+      const result = await runLocalEngine(operation, payload, signal);
+      if (!result.ok) throw new EngineRuntimeError(result.error);
+      return result.value;
+    } catch (error) {
+      if (error instanceof EngineRuntimeError) throw error;
+      throw new EngineRuntimeError(signal?.aborted ? 'aborted' : 'unavailable');
+    }
+  }
   host ??= createNodeHost({ maxConcurrent: 1, maxQueued: 4 });
   const result = await host.run(
     JSON.stringify({

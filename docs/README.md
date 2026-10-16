@@ -6,6 +6,9 @@ les tests, les blocages et le point de reprise.
 [Application locale connectée](local-admin.md) : vraie connexion, permissions,
 sauvegarde persistante et limites du raccordement Engine.
 
+[Engine dans l'application connectée](local-admin-engine.md) : worker Linux
+borné, transport privé, tests réels et rapport signé persisté depuis une session.
+
 [Conflits RPC HTTP](rpc-http-conflicts.md) : correction locale 63, préservation
 des données et des attributs, restauration et concurrence réellement testées.
 

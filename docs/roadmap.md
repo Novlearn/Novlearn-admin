@@ -1,5 +1,11 @@
 # Roadmap
 
+**Dernier jalon, 16 octobre :** [Engine dans la session locale](local-admin-engine.md),
+avec génération/correction natives et rapport signé persisté : 28 contrôles HTTP
+réels, 641 tests Admin et contrôle complet passent. La réception visuelle, le
+rendu avancé, les lots et les portes distantes restent ouverts. Le relevé juste
+ci-dessous précède ce raccordement.
+
 **État actuel, 16 octobre :** [connexion et sauvegarde locales](local-admin.md)
 avec comptes d'essai réels : 17 contrôles HTTP et 621 tests Admin passent.
 Le rejeu atteint 63 migrations, avec [conflits RPC HTTP corrigés](rpc-http-conflicts.md)

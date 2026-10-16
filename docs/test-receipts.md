@@ -1,5 +1,11 @@
 # Rapports Engine persistés — état local
 
+**Complément du 16 octobre :** la [session locale réelle](local-admin-engine.md)
+permet maintenant de signer et consigner les rapports Engine par les routes
+Next et PostgREST. Une clé aléatoire est provisionnée uniquement dans cette
+copie d'essai ; aucun registre ni secret distant n'est modifié. Le relevé de
+53 migrations ci-dessous reste un checkpoint historique distinct.
+
 Ce relevé décrit le checkpoint de 53 migrations. La suite locale atteint
 maintenant 54 migrations avec la [relecture humaine](editorial-review.md),
 fermée par défaut et vérifiée séparément des tests.
