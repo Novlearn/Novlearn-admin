@@ -21,6 +21,9 @@ qualifié, comparaison exacte et performances natives.
 [Adoption du correctif Engine](engine-admin-adoption.md) : SQL 64, conservation
 des historiques, vrais rapports avancés et relecture avec le nouveau package.
 
+[Préparation de la publication HTTP](publication-http-local.md) : copies locales
+distinctes, Auth/REST réels et TLS/PG limités ; transfert HTTP encore à qualifier.
+
 [Publication par lots](publication-batch.md) : sélection, confirmations par exercice,
 arrêt après résultat partiel et reprise sans réapplication ; transferts sur copies
 SQL locales et simulation manuelle séparée.

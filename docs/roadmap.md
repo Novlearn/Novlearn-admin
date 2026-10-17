@@ -1,5 +1,11 @@
 # Roadmap
 
+**Publication HTTP, préparation du 17 octobre :** les [copies source/cible](publication-http-local.md)
+sont prêtes avec Auth/REST réels, TLS vérifié et rôles limités. Cinq contrôles
+Auth/REST, six connexions/refus TLS/PG et 74 tests ciblés passent. Le vrai
+transfert HTTP reste à exécuter ; le profil applicatif dédié est encore fermé.
+L’instance 3150 reste disponible et ne publie rien.
+
 **Adoption Engine, 17 octobre :** la [rotation SQL et le raccordement](engine-admin-adoption.md)
 passent sur copie et sur l’instance conservée. SQL 64, 735 tests Admin, contrôle
 complet, bootstrap neuf, 16 contrôles de relecture et huit contrôles avancés

@@ -1,5 +1,19 @@
 # Progression du goal NovLearn Admin
 
+## Préparation de la publication HTTP — 17 octobre 2026
+
+Le [banc dédié](publication-http-local.md) conserve une source SQL 64 avec comptes
+Auth réels et une cible pristine séparée. Les cinq contrôles Auth/REST et six
+contrôles TLS/PG passent ; les snapshots des 62 tables de chaque copie sont
+préservés pendant les vérifications PG. Le profil ordinaire reste fermé à la
+publication, ses fichiers privés sont inchangés et l’instance 3150 reste active.
+
+Le bootstrap partagé est importable sans effet ; son CLI refuse toujours le
+port occupé. Les 74 tests ciblés Auth/configuration passent. Ce jalon prépare
+l’intégration ; il ne certifie aucun transfert HTTP ou nouvelle exécution Engine.
+Prochaine étape : profil Next isolé, cookies séparés, parcours réel de transfert
+et reprise. Aucune nouvelle migration ou opération distante.
+
 ## Correctif Engine adopté dans l’Admin — 17 octobre 2026
 
 L’[adoption locale](engine-admin-adoption.md) coordonne l’archive qualifiée, les

@@ -1,0 +1,191 @@
+{
+  "result": "PASS for source Auth/REST and physical TLS preparation only; full HTTP transfer remains open",
+  "date": "2026-10-17T17:53:00.263Z",
+  "baseAdminCommit": "5987fe3",
+  "artifact": ".local/local-admin-publication-1792259029889",
+  "bootstrap": {
+    "migrations": 64,
+    "manifestSha256": "8e661db1f648196c9e586e76fb68b3f4412203bade43179b0621445aeeac9301",
+    "sourceDumpSha256": "34708abe19e9cc116ceea9fba9460207482b52a225b7923440368ab015324f9c",
+    "sourceRowsUnchanged": true,
+    "clonedRowsMatch": true,
+    "sourceAccounts": 0,
+    "onlyPublishedPort": "127.0.0.1:55432",
+    "publicationEnabled": false
+  },
+  "sourceAuth": {
+    "result": "PASS for isolated source Auth/REST preparation only",
+    "date": "2026-10-17T17:45:37.029Z",
+    "artifact": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\local-admin-publication-1792259029889",
+    "checks": [
+      "Separate containers, account secrets, API/app origins and a pristine SQL 64 clone; no privileged secret in app configuration",
+      "Genuine isolated admin sign-in and server-owned profile role",
+      "Real ordinary account cannot promote itself through PostgREST",
+      "Genuine isolated user sign-in and server-owned profile role",
+      "Main application login stays available and its publication endpoint stays closed"
+    ],
+    "schemaVersion": 64,
+    "realAuth": true,
+    "realPostgrest": true,
+    "sourceCloneMatchesPristineReplay": true,
+    "privilegedSecretsAbsentFromAppConfig": true,
+    "primaryServicesInterrupted": false,
+    "primaryCredentialsChanged": false,
+    "primaryPublicationEnabled": false,
+    "publicationEnabled": false,
+    "targetConfigured": false,
+    "applicationStarted": false,
+    "applicationConfigurationAccepted": false,
+    "publicationHttpExecuted": false,
+    "browserExecuted": false,
+    "remaining": [
+      "Dedicated local application profile and cookie isolation",
+      "Separate TLS target and least-privilege PostgreSQL capabilities",
+      "Actual Next publication HTTP/Auth/Engine transfer and recovery verification"
+    ]
+  },
+  "pg": {
+    "result": "PASS for isolated source/target TLS preparation only",
+    "date": "2026-10-17T17:48:46.611Z",
+    "artifact": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\local-admin-publication-1792259029889",
+    "directory": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\local-admin-publication-1792259029889/pg-1792259295630",
+    "checks": [
+      "Separate target restored from pristine SQL 64 dump with zero Auth accounts",
+      "All 62 source and target table snapshots remain unchanged after TLS and identity checks"
+    ],
+    "connections": {
+      "result": "PASS for isolated physical TLS connections and SQL identities only",
+      "date": "2026-10-17T17:48:45.686Z",
+      "checks": [
+        "source: real verified TLS, exact least-privilege role and direct table reads refused",
+        "target: real verified TLS, exact least-privilege role and direct table reads refused",
+        "untrusted CA: refused",
+        "wrong source password: refused",
+        "source identity on target: refused",
+        "wrong target password: refused"
+      ],
+      "sourceAndTargetDistinct": true,
+      "verifiedTLS": true,
+      "leastPrivilege": true,
+      "sourceContract": "atomic-source-finalization-v1",
+      "targetApplyExecuted": false,
+      "publicationHttpExecuted": false
+    },
+    "target": {
+      "name": "novlearn-admin-publication-local-1792259029889-target-db",
+      "running": true,
+      "ports": {},
+      "networks": ["novlearn-admin-publication-local-1792259029889-net"],
+      "memory": 1073741824,
+      "memorySwap": 1073741824,
+      "pids": 256,
+      "readOnly": false,
+      "user": "",
+      "capDrop": null,
+      "securityOpt": null
+    },
+    "proxy": {
+      "name": "novlearn-admin-publication-local-1792259029889-pg-proxy",
+      "running": true,
+      "ports": {
+        "5433/tcp": [
+          {
+            "HostIp": "127.0.0.1",
+            "HostPort": "55433"
+          }
+        ],
+        "5434/tcp": [
+          {
+            "HostIp": "127.0.0.1",
+            "HostPort": "55434"
+          }
+        ]
+      },
+      "networks": [
+        "novlearn-admin-publication-local-1792259029889-loopback",
+        "novlearn-admin-publication-local-1792259029889-net"
+      ],
+      "memory": 67108864,
+      "memorySwap": 67108864,
+      "pids": 32,
+      "readOnly": true,
+      "user": "65534:65534",
+      "capDrop": ["ALL"],
+      "securityOpt": ["no-new-privileges"]
+    },
+    "sourceDatabase": {
+      "name": "novlearn-admin-publication-local-1792259029889-db",
+      "running": true,
+      "ports": {},
+      "networks": ["novlearn-admin-publication-local-1792259029889-net"],
+      "memory": 1073741824,
+      "memorySwap": 1073741824,
+      "pids": 256,
+      "readOnly": false,
+      "user": "",
+      "capDrop": null,
+      "securityOpt": null
+    },
+    "sourceTablesPreserved": 62,
+    "targetTablesPreserved": 62,
+    "targetPristine": true,
+    "sourceDumpSha256": "34708abe19e9cc116ceea9fba9460207482b52a225b7923440368ab015324f9c",
+    "publicationEnabled": false,
+    "targetRuntimeEnabled": false,
+    "targetApplyExecuted": false,
+    "publicationHttpExecuted": false
+  },
+  "boundaries": {
+    "result": "PASS",
+    "date": "2026-10-17T17:51:24.830Z",
+    "sourceAndTargetRuntimeClosed": true,
+    "sourceAndTargetUseCertifiedArchive": true,
+    "databasePortsNotPublished": true,
+    "proxyPortsBoundToLoopbackOnly": true,
+    "mainPrivateAndAppConfigAndSigningPreservedSince64Upgrade": true,
+    "defaultCreatorRefusesOccupiedMainPort": true,
+    "publicationHttpExecuted": false
+  },
+  "targetedUnitTests": {
+    "command": "npm.cmd test -- tests/local-auth.test.ts tests/publication-pg.test.ts",
+    "tests": 74,
+    "files": 2,
+    "exitCode": 0
+  },
+  "lint": {
+    "files": [
+      "scripts/create-local-admin.mjs",
+      "scripts/create-publication-http-workspace.mjs",
+      "scripts/test-publication-http-workspace.mjs",
+      "scripts/prepare-publication-http-pg.mjs",
+      "scripts/publication-http-pg-proxy.mjs",
+      "scripts/test-publication-http-pg-worker.mjs"
+    ],
+    "exitCode": 0
+  },
+  "sources": {
+    "scripts/create-local-admin.mjs": "5902457cd77143118deec74396a1b1308b541d4c2ea8d222003db6772a20267e",
+    "scripts/create-publication-http-workspace.mjs": "55c11e100eab5ad515a8c6f5fa837b08adef62332264e8e6e602e9fa350b42b1",
+    "scripts/test-publication-http-workspace.mjs": "dba0a6ccfe4e4250d6832db0972727466033e0b68f2291eb052615f223650c94",
+    "scripts/prepare-publication-http-pg.mjs": "5e0b1661b0b7394dd0bf13312d80d01d7deb6cb70af5324a07045caf11d316c5",
+    "scripts/publication-http-pg-proxy.mjs": "358ddb29cc1753b87d7e72577330fb960a30a9f89795c01744f39b43247698a9",
+    "scripts/test-publication-http-pg-worker.mjs": "c91c8625aa1e39140df8878643a92b423610f61f2a968113a39c35f1f16580c0"
+  },
+  "mainApplicationInterrupted": false,
+  "sourceOrTargetDataDeleted": false,
+  "publicationHttpExecuted": false,
+  "targetApplyExecuted": false,
+  "nativeEngineExecuted": false,
+  "fullAdminSuiteRerun": false,
+  "buildRerun": false,
+  "remoteChanged": false,
+  "visualAcceptance": false,
+  "remaining": [
+    "Dedicated fail-closed local application and publication configuration",
+    "Separate session cookie and verified local JWT binding",
+    "Actual Next Auth/REST/Engine publication HTTP flow",
+    "Confirmation, SQL source finalization and target result",
+    "Local recovery, role revocation and source/target preservation"
+  ],
+  "sourceHashScope": "Current source files. Runtime/network assertions were added to the preparation script after its initial invocation and verified separately on the retained copies by boundary-proof.json; resource creation was not repeated."
+}
