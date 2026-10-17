@@ -19,6 +19,7 @@ import {
   type EditorialStatus,
 } from '@/lib/catalogue';
 import { requireCatalogueClient, versionColumns } from '@/lib/catalogue-server';
+import { isCurrentTestReceipt } from '@/lib/test-receipt-state';
 
 export default async function ExercisePage({
   params,
@@ -262,7 +263,16 @@ export default async function ExercisePage({
               fingerprint={version.approval_fingerprint_sha256}
               epoch={version.test_epoch}
               status={version.editorial_status}
-              receiptId={currentReceipt?.passed ? currentReceipt.id : null}
+              receiptId={
+                currentReceipt?.passed &&
+                isCurrentTestReceipt(
+                  currentReceipt,
+                  version.approval_fingerprint_sha256,
+                  version.test_epoch,
+                )
+                  ? currentReceipt.id
+                  : null
+              }
               enabled={process.env.ADMIN_EDITORIAL_REVIEW_ENABLED === 'true'}
               archived={!!parent.admin_archived_at}
             />

@@ -1,6 +1,9 @@
 \set ON_ERROR_STOP on
 BEGIN;
 -- Synthetic signed reports test SQL authorization only. Native math is tested separately.
+-- Read the trusted runtime before assuming a browser role; never grant private access.
+CREATE TEMP TABLE review_runtime AS SELECT engine_archive_sha256 FROM novlearn_admin_private.publication_runtime WHERE singleton;
+GRANT SELECT ON review_runtime TO authenticated;
 CREATE TEMP TABLE review_checks(label text);
 GRANT INSERT,SELECT ON review_checks TO authenticated,anon;
 CREATE FUNCTION pg_temp.review_assert(ok boolean,label text) RETURNS void LANGUAGE plpgsql AS $$
@@ -21,7 +24,7 @@ BEGIN
 SELECT jsonb_build_object('schemaVersion',1,'receiptId',receipt,'keyId','99200000-0000-4000-8000-000000000001',
 'actorId',auth.uid(),'versionId',id,'fingerprint',approval_fingerprint_sha256,'epoch',test_epoch,
 'issuedAt',floor(extract(epoch FROM clock_timestamp()))::bigint,
-'engineArchiveSha256','650128cdeb1e798b952a09e91b038d018b9e7947d0a6ee4c247695f899190290',
+'engineArchiveSha256',(SELECT engine_archive_sha256 FROM pg_temp.review_runtime),
 'report',report,'cases','[]'::jsonb)::text INTO payload FROM public.exercise_versions WHERE id=v;
 signature:=encode(extensions.hmac(convert_to(payload,'UTF8'),decode(repeat('42',32),'hex'),'sha256'),'hex');
 result:=public.admin_record_exercise_test(payload,signature); RETURN receipt; END; $$;

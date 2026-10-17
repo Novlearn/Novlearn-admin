@@ -6,5 +6,5 @@ export const certifiedEngineIdentity = Object.freeze({
   generationVersion: 'mulberry32-rejection-v1',
   canonicalizationVersion: 'pg-jsonb-text-v1',
   engineArchiveSha256:
-    '650128cdeb1e798b952a09e91b038d018b9e7947d0a6ee4c247695f899190290',
+    'd4d3abc408ab37f2f8a5faa512964b48947828bae9209cb1460b47111ca582f9',
 });

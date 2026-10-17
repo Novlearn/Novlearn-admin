@@ -37,6 +37,11 @@ parcours avec `--engine --review` : demande, attestation explicite et historique
 Une approbation ne publie rien. Les identifiants d’essai sont dans le fichier
 ignoré `.local/local-admin-1792143739689/login.txt` ; utiliser le port **3150**.
 
+Le [correctif Engine est maintenant adopté localement](docs/engine-admin-adoption.md)
+avec SQL 64 : génération avancée, nouveaux rapports signés et relecture réellement
+vérifiés. Les anciens rapports restent consultables et demandent de nouveaux
+tests avant une nouvelle approbation ou un export.
+
 Le [rendu des figures et vecteurs](docs/coordinate-rendering.md) s’essaie aussi
 sur le banc local, avec deux projections publiques réellement capturées du moteur.
 

@@ -6,6 +6,11 @@ persistante. Elle permet les essais progressifs du catalogue, des brouillons,
 du Creator, des chapitres, des compétences et des flashcards. Les données sont
 des données d'essai ; aucun projet distant n'est contacté.
 
+**17 octobre :** l’instance conservée utilise maintenant SQL 64 et le
+[nouveau build Engine qualifié](engine-admin-adoption.md). Connexion et
+relecture réelles passent après la mise à niveau ; les identifiants restent
+inchangés. Les preuves SQL 63 ci-dessous décrivent le premier jalon.
+
 **Complément :** le [raccordement Engine Linux](local-admin-engine.md) est
 maintenant vérifié avec la session réelle et les rapports signés persistés.
 Le lancement `--engine` active ce parcours ; le lancement simple décrit
@@ -44,7 +49,7 @@ bornées. L'application ne lit pas les secrets opérateur de `private.json`.
 ## Frontières maintenues
 
 Le mode local exige le développement, les deux origines loopback exactes et
-l'empreinte qualifiée des 63 migrations. Les variables d'activation Staging,
+l'empreinte qualifiée des 64 migrations. Les variables d'activation Staging,
 de publication ou une configuration Supabase publique incompatible le font
 refuser. Les cookies locaux ont leur propre nom. Chaque opération protégée
 vérifie réellement l'utilisateur et son rôle dans `profiles` ; modifier les

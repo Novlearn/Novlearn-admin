@@ -7,6 +7,7 @@ import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import path from 'node:path';
 import { createServerClient } from '@supabase/ssr';
 import { LOCAL_AUTH_COOKIE } from '../src/lib/auth/config.ts';
+import { certifiedEngineIdentity } from '../src/lib/engine-identity.ts';
 const workspace = path.resolve(process.argv[2] ?? '');
 assert(
   workspace
@@ -386,6 +387,10 @@ try {
       .single();
     assert.equal(stored.error, null);
     assert.equal(stored.data.passed, passing);
+    assert.equal(
+      JSON.parse(stored.data.payload).engineArchiveSha256,
+      certifiedEngineIdentity.engineArchiveSha256,
+    );
     receipts.push({
       id: value.receiptId,
       payloadSha256: createHash('sha256')
@@ -643,6 +648,7 @@ try {
     realNextRoutes: true,
     nativeEngine: true,
     nativeReports: 4,
+    engineArchiveSha256: certifiedEngineIdentity.engineArchiveSha256,
     successfulReports: 3,
     failedReportsWithMissingNegativeCoverage: 1,
     seeds: [0, 42],

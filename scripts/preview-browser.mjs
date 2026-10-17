@@ -22,7 +22,7 @@ if (
   createHash('sha256')
     .update(await readFile(engine))
     .digest('hex') !==
-  '650128cdeb1e798b952a09e91b038d018b9e7947d0a6ee4c247695f899190290'
+  'd4d3abc408ab37f2f8a5faa512964b48947828bae9209cb1460b47111ca582f9'
 )
   throw Error('Engine archive differs');
 const packed = spawnSync(

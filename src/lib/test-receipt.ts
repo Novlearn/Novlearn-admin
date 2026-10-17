@@ -1,6 +1,7 @@
 import 'server-only';
 import { createHmac, randomUUID } from 'node:crypto';
 import type { PreviewCase, PreviewTestReport } from './preview';
+import { certifiedEngineIdentity } from './engine-identity';
 export function readTestSigningConfiguration(
   env: Readonly<Record<string, string | undefined>>,
 ) {
@@ -35,8 +36,7 @@ export function signTestReceipt(
     keyId: config.id,
     ...input,
     issuedAt: Math.floor(now / 1000),
-    engineArchiveSha256:
-      '650128cdeb1e798b952a09e91b038d018b9e7947d0a6ee4c247695f899190290',
+    engineArchiveSha256: certifiedEngineIdentity.engineArchiveSha256,
   });
   if (Buffer.byteLength(payload) > 262144) throw Error('Receipt limit');
   return {

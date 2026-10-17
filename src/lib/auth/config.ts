@@ -1,6 +1,6 @@
 export const STAGING_PROJECT_REF = 'tksvbkvfusrnxulpahky';
 export const LOCAL_SCHEMA_MANIFEST_SHA256 =
-  '6d051125165f540db70f182a0343c014b47294c4671c728a9862209ecbed272b';
+  '8e661db1f648196c9e586e76fb68b3f4412203bade43179b0621445aeeac9301';
 export const LOCAL_AUTH_COOKIE = 'novlearn-admin-local-auth';
 
 export type AuthConfiguration = {

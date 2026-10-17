@@ -10,7 +10,7 @@ $packedTask=$packedTaskJson -join "`n" | ConvertFrom-Json
 $targetsTask=@{'@cortex-js/compute-engine'='/archives/cortex.tgz';'@arnog/colors'='/archives/colors.tgz';'complex.js'='/archives/complex.tgz'}
 $archiveTaskPath=Join-Path $rootTaskPath 'vendor/novlearn-exercise-engine-0.1.0.tgz'
 $hashTask=(Get-FileHash -LiteralPath $archiveTaskPath).Hash.ToLowerInvariant()
-if($hashTask -ne '650128cdeb1e798b952a09e91b038d018b9e7947d0a6ee4c247695f899190290') {throw 'Engine archive differs from certified artifact'}
+if($hashTask -ne 'd4d3abc408ab37f2f8a5faa512964b48947828bae9209cb1460b47111ca582f9') {throw 'Engine archive differs from certified artifact'}
 $mountsTask=@(@($archiveTaskPath,'/archives/engine.tgz'),@((Join-Path $PSScriptRoot 'engine-runtime-setup.mjs'),'/inputs/setup.mjs'),@((Join-Path $PSScriptRoot 'engine-runtime-test.mjs'),'/inputs/runtime-test.mjs'),@((Join-Path $rootTaskPath 'src/lib/engine-runtime.ts'),'/inputs/engine-runtime.ts'),@((Join-Path $rootTaskPath 'node_modules/server-only'),'/inputs/server-only'))
 foreach($packageTask in $packedTask) {
   if(-not $targetsTask.ContainsKey($packageTask.name)) {throw 'Unexpected offline package'}

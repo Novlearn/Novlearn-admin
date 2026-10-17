@@ -1,5 +1,12 @@
 # Roadmap
 
+**Adoption Engine, 17 octobre :** la [rotation SQL et le raccordement](engine-admin-adoption.md)
+passent sur copie et sur l’instance conservée. SQL 64, 735 tests Admin, contrôle
+complet, bootstrap neuf, 16 contrôles de relecture et huit contrôles avancés
+connectés passent. Les données et historiques sont conservés. L’instance 3150
+utilise le nouveau build ; publication et accès distants restent fermés.
+Les qualifications suivantes décrivent leurs jalons antérieurs.
+
 **Engine, 17 octobre :** le [correctif numérique ciblé](engine-numeric-cache.md)
 est qualifié : 1 540 tests, tarball installé, six générations avancées en
 2,41–2,64 s, comparaison exacte et contrôles Linux passent, avec limites

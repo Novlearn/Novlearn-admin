@@ -1,5 +1,9 @@
 # Correctif Engine des nombres de rendu — 17 octobre 2026
 
+**Mise à jour :** l’[adoption Admin avec SQL 64](engine-admin-adoption.md)
+est maintenant vérifiée sur l’instance connectée. Le relevé ci-dessous et sa
+preuve machine décrivent la qualification antérieure à cette adoption.
+
 **Le nouveau build Engine est qualifié localement. Son adoption dans l’Admin
 reste à réaliser avec la rotation de l’empreinte SQL.** L’instance connectée
 conserve son archive précédente et les limites observées avec ce build.

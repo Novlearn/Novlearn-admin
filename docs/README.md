@@ -16,8 +16,10 @@ attestation, historique et qualification réelle Auth/Engine/PostgREST.
 découpage des droites, projection 3D et captures natives pour les essais manuels.
 
 [Optimisation numérique Engine](engine-numeric-cache.md) : correctif local
-qualifié, comparaison exacte et performances natives ; rotation SQL et adoption
-Admin encore à réaliser.
+qualifié, comparaison exacte et performances natives.
+
+[Adoption du correctif Engine](engine-admin-adoption.md) : SQL 64, conservation
+des historiques, vrais rapports avancés et relecture avec le nouveau package.
 
 [Publication par lots](publication-batch.md) : sélection, confirmations par exercice,
 arrêt après résultat partiel et reprise sans réapplication ; transferts sur copies

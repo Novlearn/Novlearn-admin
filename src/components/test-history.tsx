@@ -1,4 +1,5 @@
 import type { PreviewTestReport } from '@/lib/preview';
+import { isCurrentTestReceipt } from '@/lib/test-receipt-state';
 type Run = {
   id: string;
   recorded_at: string;
@@ -40,8 +41,9 @@ export function TestHistory({
             try {
               report = JSON.parse(run.payload).report;
             } catch {}
-            const current =
+            const sameContent =
               run.fingerprint === fingerprint && run.test_epoch === epoch;
+            const current = isCurrentTestReceipt(run, fingerprint, epoch);
             return (
               <li
                 key={run.id}
@@ -63,6 +65,13 @@ export function TestHistory({
                     })}
                   </time>
                 </div>
+                {sameContent && !current && (
+                  <p className="notice mt-3 text-sm">
+                    Le moteur a été mis à jour ou ce rapport ne permet pas
+                    d’identifier sa version. Relancez les tests avant la
+                    relecture.
+                  </p>
+                )}
                 <p className="mt-2 break-all font-mono text-xs text-slate-500">
                   {run.id}
                 </p>

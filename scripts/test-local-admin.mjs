@@ -129,7 +129,7 @@ try {
     'authConfig',
     'schemaVersion',
   ]);
-  assert.equal(applicationConfig.schemaVersion, 63);
+  assert.equal(applicationConfig.schemaVersion, 64);
   for (const secret of [...Object.values(state.secrets), state.serviceKey])
     assert(
       !applicationConfigText.includes(secret),

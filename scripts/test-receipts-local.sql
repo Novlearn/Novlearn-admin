@@ -18,9 +18,10 @@ DECLARE
   student uuid:='98100000-0000-4000-8000-000000000002';
   key uuid:='98200000-0000-4000-8000-000000000001';
   receipt uuid:='98300000-0000-4000-8000-000000000001';
-  result jsonb; v uuid; e bigint; fp text; payload text; sig text; before_epoch bigint; report jsonb;
+  result jsonb; v uuid; e bigint; fp text; payload text; sig text; before_epoch bigint; report jsonb; engine_archive text;
   source jsonb:='{"schemaVersion":5,"kind":"composed","id":"fixture","revision":"1","title":"LOCAL RECEIPT FIXTURE","generation":{"schemaVersion":5,"definitions":[],"constraints":[],"maxAttempts":100,"maxDraws":1000},"variables":[],"elements":[]}';
 BEGIN
+  SELECT engine_archive_sha256 INTO STRICT engine_archive FROM novlearn_admin_private.publication_runtime WHERE singleton;
   PERFORM pg_temp.receipt_assert(encode(extensions.hmac(convert_to('Révision — épreuve','UTF8'),decode(repeat('42',32),'hex'),'sha256'),'hex')='a3c64ff09657e0d2e0dc3e1dac12cb4f61e560f083d2e936d7ff074ecb52131d','Node/PostgreSQL UTF8 HMAC agrees');
   INSERT INTO auth.users(id,aud,role,email,encrypted_password,email_confirmed_at,raw_app_meta_data,raw_user_meta_data,created_at,updated_at)
     SELECT id,'authenticated','authenticated',id::text||'@local.invalid','',now(),'{"provider":"email","providers":["email"]}','{"first_name":"LOCAL FIXTURE","birth_date":"2000-01-01"}',now(),now()
@@ -37,7 +38,7 @@ BEGIN
   PERFORM pg_temp.receipt_denied(format('UPDATE public.exercise_versions SET test_epoch=10 WHERE id=%L',v),'42501','Admin cannot set epoch');
   report:=jsonb_build_object('definitionDigest',repeat('a',64),'engineVersion','0.1.0','passed',true,'complete',true,'seeds',jsonb_build_array(jsonb_build_object('seed',42,'passed',true)));
   payload:=jsonb_build_object('schemaVersion',1,'receiptId',receipt,'keyId',key,'actorId',actor,'versionId',v,'fingerprint',fp,'epoch',0,'issuedAt',floor(extract(epoch from clock_timestamp()))::bigint,
-    'engineArchiveSha256','650128cdeb1e798b952a09e91b038d018b9e7947d0a6ee4c247695f899190290','report',report,'cases','[]'::jsonb)::text;
+    'engineArchiveSha256',engine_archive,'report',report,'cases','[]'::jsonb)::text;
   sig:=encode(extensions.hmac(convert_to(payload,'UTF8'),decode(repeat('42',32),'hex'),'sha256'),'hex');
   PERFORM pg_temp.receipt_denied(format('SELECT public.admin_record_exercise_test(%L,%L)',payload,repeat('0',64)),'42501','fabricated signature is rejected');
   PERFORM pg_temp.receipt_denied(format('SELECT public.admin_record_exercise_test(%L,%L)',replace(payload,'"epoch": 0','"epoch": 1'),sig),'42501','modified signed bytes are rejected');

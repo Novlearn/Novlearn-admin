@@ -1,0 +1,195 @@
+{
+  "result": "PASS for local SQL rotation and connected Admin adoption; goal incomplete",
+  "date": "2026-10-17T17:38:14.539Z",
+  "baseAdminCommit": "3acabee",
+  "sqlCommit": "e41b7ae8a48956bf544c0c7e9836dbcd1373a892",
+  "engineCommit": "baa48c45e27a5b94459feaae090f7b252df4791a",
+  "engineArchiveSha256": "d4d3abc408ab37f2f8a5faa512964b48947828bae9209cb1460b47111ca582f9",
+  "installedInstantiationSha256": "3c99dfbc8a5c08f53f9ec9ccd149a8c80930d38839704910c8342d0d80c8192b",
+  "schema": {
+    "migrations": 64,
+    "migration": "20261017171853_novlearn_admin_engine_archive_rotation.sql",
+    "migrationSha256": "6e1494c0038dac73cf1bdd746dbc7e3318268ff89bb7a67a5fc2a9517b6bacd8",
+    "manifestSha256": "8e661db1f648196c9e586e76fb68b3f4412203bade43179b0621445aeeac9301",
+    "sourceContainer": "novlearn-admin-lot1a-replay-20261017171950360",
+    "qualificationArtifact": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\engine-rotation-1792258285762",
+    "qualificationChecks": [
+      {
+        "name": "Fresh 64 scripts/test-receipts-local.sql",
+        "assertions": 21
+      },
+      {
+        "name": "Fresh 64 scripts/test-editorial-review-local.sql",
+        "assertions": 43
+      },
+      {
+        "name": "enabled-runtime",
+        "refused": true,
+        "allRowsPreserved": true
+      },
+      {
+        "name": "unknown-runtime",
+        "refused": true,
+        "allRowsPreserved": true
+      },
+      {
+        "name": "changed-contract",
+        "refused": true,
+        "allRowsPreserved": true
+      },
+      {
+        "name": "pending-outcome",
+        "refused": true,
+        "allRowsPreserved": true
+      },
+      {
+        "name": "changed-rpc-body",
+        "refused": true,
+        "allRowsPreserved": true
+      },
+      {
+        "name": "Actual 63→64 upgrade on restored local data",
+        "tables": 62,
+        "unchangedTables": 61,
+        "onlyRowChange": "private runtime archive",
+        "allFunctionAttributesPreserved": true
+      },
+      {
+        "name": "scripts/test-engine-rotation-local.sql",
+        "assertions": 15,
+        "rolledBack": true
+      },
+      {
+        "name": "Second application refused atomically",
+        "refused": true
+      }
+    ],
+    "applied": {
+      "result": "PASS",
+      "date": "2026-10-17T17:26:41.487Z",
+      "migrationSha256": "6e1494c0038dac73cf1bdd746dbc7e3318268ff89bb7a67a5fc2a9517b6bacd8",
+      "manifestSha256": "8e661db1f648196c9e586e76fb68b3f4412203bade43179b0621445aeeac9301",
+      "tables": 62,
+      "unchangedTables": 61,
+      "onlyDataChange": "private runtime archive",
+      "accountsDraftsReportsReviewsAndJournalsPreserved": true,
+      "allExecutionAttributesPreserved": true,
+      "signingKeyUnchanged": true,
+      "backup": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\engine-adoption-1792257903984",
+      "schemaVersion": 64
+    },
+    "oldMigrationsUnchanged": 63
+  },
+  "freshBootstrap": {
+    "result": "PASS",
+    "artifact": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\local-admin-1792258182429",
+    "newSchemaMigrations": 64,
+    "realAuth": true,
+    "realPostgrest": true,
+    "appConfigContainsNoPrivilegedCredential": true,
+    "mainWorkspacePreserved": true,
+    "freshApplicationServerStarted": false
+  },
+  "adminCheck": {
+    "command": "npm.cmd run check",
+    "exitCode": 0,
+    "tests": 735,
+    "files": 42,
+    "archiveAndInstalledIntegrity": true,
+    "types": true,
+    "lintErrors": 0,
+    "preexistingLintWarnings": 1,
+    "format": true,
+    "build": true,
+    "standaloneSmoke": true,
+    "log": ".local/lot1a/.engine-adoption-full-check-owner-final.log"
+  },
+  "supplementalScripts": {
+    "files": [
+      "scripts/qualify-engine-rotation-local.mjs",
+      "scripts/test-local-review.mjs",
+      "scripts/test-local-engine-adoption.mjs"
+    ],
+    "eslintExitCode": 0,
+    "nodeExecutionVerified": true
+  },
+  "review": {
+    "artifact": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\local-admin-1792143739689\\review-integration-1792258439254",
+    "checks": 16,
+    "nativeReports": 4,
+    "reviewEvents": 6,
+    "engineArchiveSha256": "d4d3abc408ab37f2f8a5faa512964b48947828bae9209cb1460b47111ca582f9",
+    "preexistingBusinessTablesChecked": 35,
+    "preexistingBusinessRowsPreserved": true,
+    "humanAcceptance": false
+  },
+  "advanced": {
+    "artifact": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\local-admin-1792143739689\\engine-adoption-1792258517700",
+    "checks": 8,
+    "definitionElements": 7,
+    "seeds": [0, 42],
+    "created": {
+      "revision": 1,
+      "versionId": "19b987a1-7014-4243-98d7-485246789b87",
+      "exerciseId": "8",
+      "fingerprint": "e4a758b67d3ee7083964048422ae62832c718af567fcd638f2444394da3802d9"
+    },
+    "receiptId": "c7ee1286-7a69-48a3-94cf-ac93dc18735c",
+    "retainedOldReceipts": 13,
+    "projections": [
+      {
+        "seed": 0,
+        "httpElapsedMs": 4042.5328000000004
+      },
+      {
+        "seed": 42,
+        "httpElapsedMs": 3440.9651999999996
+      }
+    ],
+    "advancedReportAndReadbackElapsedMs": 18412.1017,
+    "nativeLimitsChanged": false,
+    "browserExecution": false
+  },
+  "runtime": {
+    "date": "2026-10-17T17:36:10.107Z",
+    "processId": 38520,
+    "engine": true,
+    "review": true,
+    "container": "novlearn-admin-engine-1792258410072",
+    "running": true,
+    "image": "node:24.19.0-bookworm@sha256:4196d66a565c6f195728d9952f161f4adfe2ad753052a08b7ec7f1c5a6bda42b",
+    "user": "65534:65534",
+    "memory": 402653184,
+    "memorySwap": 402653184,
+    "pids": 64,
+    "readOnly": true,
+    "capDrop": ["ALL"],
+    "securityOpt": ["no-new-privileges"],
+    "network": "none",
+    "publishedPorts": {}
+  },
+  "clientScan": {
+    "result": "PASS",
+    "date": "2026-10-17T17:35:07.159Z",
+    "clientBundles": 28,
+    "needles": 19,
+    "scope": "Current development .next/static JS only; not production bundle certification or exhaustive leakage audit",
+    "standaloneAbsentAfterDevelopmentRestart": true
+  },
+  "sourceEngineFullSuiteRerun": false,
+  "sourceEngineQualification": "docs/engine-numeric-cache-proof.json",
+  "historicalSqlCapturesRewritten": false,
+  "previousFailuresRetained": true,
+  "remoteChanges": false,
+  "publicationEnabled": false,
+  "visualAcceptance": false,
+  "remaining": [
+    "Full publication HTTP/Auth integration",
+    "Advanced formula curve support through Engine contract",
+    "Creator recovery and manual reception",
+    "Production statistics and user consultation",
+    "MFA and expiry qualification",
+    "Remote SQL reconciliation and approved application",
+    "Hosting and final acceptance"
+  ]
+}

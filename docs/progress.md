@@ -1,5 +1,25 @@
 # Progression du goal NovLearn Admin
 
+## Correctif Engine adopté dans l’Admin — 17 octobre 2026
+
+L’[adoption locale](engine-admin-adoption.md) coordonne l’archive qualifiée, les
+signatures, le manifeste Auth et SQL 64. La migration propriétaire est commitée
+localement dans NovLearn ; aucune modification distante. Les 63 anciennes SQL
+et les huit fichiers préalablement modifiés restent identiques.
+
+Le rejeu neuf, les assertions SQL (21 reçus, 43 relecture, 15 rotation), les refus
+de migration, la copie restaurée et le bootstrap Auth/PostgREST passent. Sur les
+62 tables de l’instance conservée, seul le champ d’empreinte du registre privé
+change. La sauvegarde complète, l’ancienne archive et les clés sont conservées.
+735 tests Admin et le contrôle complet passent. Les 16 contrôles connectés de
+relecture et huit contrôles de l’exercice avancé passent avec le nouveau build.
+L’instance 3150 est rouverte avec les mêmes identifiants.
+
+Les incidents et échecs intermédiaires sont conservés et distingués des succès.
+La réception visuelle, les courbes de formules, la publication HTTP complète,
+les lectures Production et les portes distantes restent ouvertes. Le goal reste
+actif ; ce jalon ne clôture pas le Lot 1A ou la livraison complète.
+
 ## Correctif Engine qualifié — 17 octobre 2026
 
 L’autorisation D05 / Engine D51 permet la [correction locale des recalculs

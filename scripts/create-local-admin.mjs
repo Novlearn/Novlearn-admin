@@ -6,15 +6,17 @@ import { spawnSync } from 'node:child_process';
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import path from 'node:path';
 import net from 'node:net';
+import { localNetworkOptions } from './local-network-options.ts';
+const subnets = localNetworkOptions(process.argv.slice(2));
 const stamp = Date.now(),
   prefix = 'novlearn-admin-local-' + stamp;
 const artifact = path.resolve('.local/local-admin-' + stamp);
-const sourceContainer = 'novlearn-admin-lot1a-replay-20261016100059641';
+const sourceContainer = 'novlearn-admin-lot1a-replay-20261017171950360';
 const manifestFile = path.resolve(
-  '../Novlearn/.local/admin-sql-replay/novlearn-admin-lot1a-replay-20261016100059641/manifest.json',
+  '../Novlearn/.local/admin-sql-replay/novlearn-admin-lot1a-replay-20261017171950360/manifest.json',
 );
 const manifestHash =
-  '6d051125165f540db70f182a0343c014b47294c4671c728a9862209ecbed272b';
+  '8e661db1f648196c9e586e76fb68b3f4412203bade43179b0621445aeeac9301';
 const images = {
   db: 'public.ecr.aws/supabase/postgres@sha256:7374d196da7e301512cc5329e18040e0f7bb856287b323777cdadecccbc6c7e4',
   auth: 'public.ecr.aws/supabase/gotrue@sha256:1736a63078f5922b198c4cbe50f80ab9a2d3b54fe8b7b6cfb2e9dc5dbbc12c6b',
@@ -166,7 +168,7 @@ const created = [];
 try {
   assert.equal(await sha(manifestFile), manifestHash);
   const manifest = JSON.parse(await readFile(manifestFile, 'utf8'));
-  assert.equal(manifest.length, 63);
+  assert.equal(manifest.length, 64);
   for (const file of manifest)
     assert.equal(
       await sha(path.resolve('../Novlearn/supabase/migrations', file.name)),
@@ -235,7 +237,13 @@ try {
     path.join(artifact, 'db.env'),
     'POSTGRES_PASSWORD=' + secrets.db + '\nPOSTGRES_DB=postgres\n',
   );
-  cli(['network', 'create', '--internal', network]);
+  cli([
+    'network',
+    'create',
+    '--internal',
+    ...(subnets.backend ? ['--subnet', subnets.backend] : []),
+    network,
+  ]);
   cli([
     'run',
     '-d',
@@ -392,6 +400,7 @@ try {
     'create',
     '--opt',
     'com.docker.network.bridge.host_binding_ipv4=127.0.0.1',
+    ...(subnets.gateway ? ['--subnet', subnets.gateway] : []),
     edgeNetwork,
   ]);
   cli([
@@ -522,7 +531,7 @@ try {
   );
   await writeFile(
     path.join(artifact, 'app-config.json'),
-    JSON.stringify({ artifact, authConfig, schemaVersion: 63 }, null, 2) + '\n',
+    JSON.stringify({ artifact, authConfig, schemaVersion: 64 }, null, 2) + '\n',
   );
   await writeFile(
     path.join(artifact, 'login.txt'),
@@ -531,7 +540,7 @@ try {
   const proof = {
     result: 'PASS for local real Auth bootstrap and exact database clone only',
     date: new Date().toISOString(),
-    schemaMigrations: 63,
+    schemaMigrations: 64,
     manifestSha256: manifestHash,
     sourceDumpSha256: await sha(path.join(artifact, 'source.dump')),
     sourceRowsUnchanged: true,
@@ -545,6 +554,7 @@ try {
     apiOrigin,
     appOrigin,
     internalBackendNetwork: true,
+    explicitSubnets: subnets,
     loopbackGatewayNetwork: edgeNetwork,
     onlyPublishedPort: '127.0.0.1:55431',
     images,

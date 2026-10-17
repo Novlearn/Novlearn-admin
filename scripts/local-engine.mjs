@@ -19,7 +19,7 @@ export async function startLocalEngine(artifact) {
   const image =
     'node:24.19.0-bookworm@sha256:4196d66a565c6f195728d9952f161f4adfe2ad753052a08b7ec7f1c5a6bda42b';
   const archiveHash =
-    '650128cdeb1e798b952a09e91b038d018b9e7947d0a6ee4c247695f899190290';
+    'd4d3abc408ab37f2f8a5faa512964b48947828bae9209cb1460b47111ca582f9';
   const engine = path.join(root, 'vendor/novlearn-exercise-engine-0.1.0.tgz');
   assert.equal(
     createHash('sha256')

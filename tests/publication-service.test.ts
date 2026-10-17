@@ -1,5 +1,5 @@
 import { beforeEach, expect, it, vi } from 'vitest';
-import native from './fixtures/publication-journal-sql.json';
+import { currentPublicationFixture as native } from './fixtures/current-publication';
 import {
   PublicationService,
   readPublicationConfirmationKey,

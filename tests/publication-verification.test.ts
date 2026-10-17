@@ -4,7 +4,8 @@ import {
   projectPublicInstance,
   gradeAnswer,
 } from 'novlearn-exercise-engine';
-import native from './fixtures/publication-journal-sql.json';
+import historical from './fixtures/publication-journal-sql.json';
+import { currentPublicationFixture as native } from './fixtures/current-publication';
 import { parsePublicationSource } from '@/lib/publication-source';
 import {
   matchingPublicationReport,
@@ -98,6 +99,14 @@ it.each([
 ] as const)('does not run an uncertified %s runtime', async (key) => {
   const input = source();
   input.payload[key] = 'changed';
+  await expect(
+    verifyPublicationEngine(input, new AbortController().signal),
+  ).rejects.toThrow('Current Engine verification failed');
+  expect(fake.run).not.toHaveBeenCalled();
+});
+it('refuses the actual historical archive before any Engine operation', async () => {
+  const input = source();
+  input.payload.engineArchiveSha256 = historical.payload.engineArchiveSha256;
   await expect(
     verifyPublicationEngine(input, new AbortController().signal),
   ).rejects.toThrow('Current Engine verification failed');
