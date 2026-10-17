@@ -1,0 +1,613 @@
+{
+  "result": "PASS for the exact candidate Engine archive and stated local qualification scopes",
+  "date": "2026-10-17T16:44:40.829Z",
+  "authorization": "Human D05 / Engine D51 and D06 / Engine D52; local corrections and bounded Linux certification",
+  "baseCommit": "5705605",
+  "sourceChange": {
+    "file": "src/instantiation.ts",
+    "beforeSha256": "c3fd734f434c0d3e210d612b3bf992a33c11ee2715343b7ba3e1885ae5c8983c",
+    "afterSha256": "3068acf83a3a00f778b210e39e89e25070dada6e4701c9ef3dd5a8997c3589b0",
+    "scope": "Exact-success reuse by identical raw NumericField source within one generated context; final existing JSON validation detaches each occurrence",
+    "newTests": 6,
+    "existingTestsChanged": false,
+    "dependenciesChanged": false
+  },
+  "sourceCheck": {
+    "command": "npm.cmd run check",
+    "platform": "win32",
+    "exitCode": 0,
+    "tests": 1540,
+    "files": 30,
+    "skipped": 0,
+    "durationSeconds": 445.89,
+    "build": true,
+    "types": true,
+    "lint": true,
+    "format": true,
+    "log": ".local/lot1a/.engine-numeric-full-check.log",
+    "durationScope": "Vitest test execution reported by the log; excludes build, types, lint and format phases"
+  },
+  "package": {
+    "command": "npm run smoke:package",
+    "exitCode": 0,
+    "archive": ".cache/package-smoke-1792254923733/archive/novlearn-exercise-engine-0.1.0.tgz",
+    "archiveSha256": "d4d3abc408ab37f2f8a5faa512964b48947828bae9209cb1460b47111ca582f9",
+    "schemaVersion": 1,
+    "node": "v24.19.0",
+    "packageVersion": "0.1.0",
+    "sha256": "d4d3abc408ab37f2f8a5faa512964b48947828bae9209cb1460b47111ca582f9",
+    "integrity": "sha512-2EvImGGRqm0iY35OU1Hw7tkUIqZybObXfAJtBk5mLoCMoxQTBtGHXYtEsiaAoVFTFp45KIGyqJvx4ffIrYMmmQ==",
+    "files": 157,
+    "nodeEvidence": {
+      "keys": [
+        "generateVariables",
+        "gradeAnswer",
+        "instantiateExercise",
+        "parseMathInput",
+        "projectPublicInstance",
+        "validateDefinition",
+        "validateSubmission"
+      ],
+      "state": "correct",
+      "questions": 3
+    },
+    "nativeHost": {
+      "status": "pass",
+      "platform": "win32",
+      "elapsedMs": 1590.0213999999999,
+      "peakCommittedBytes": 62062592
+    },
+    "browserEvidence": {
+      "exports": [
+        "generateVariables",
+        "gradeAnswer",
+        "instantiateExercise",
+        "parseMathInput",
+        "projectPublicInstance",
+        "validateDefinition",
+        "validateSubmission"
+      ],
+      "source": "1{,}25",
+      "ok": true
+    },
+    "browserModules": 31,
+    "browserBytes": 5472098,
+    "consumer": ".cache/package-smoke-1792254923733/consumer",
+    "consumerTypesPassed": true,
+    "browserBundleExecutedInNode": true,
+    "browserSessionExecuted": false,
+    "log": ".local/lot1a/.engine-cache-package-smoke.log"
+  },
+  "native": {
+    "result": "PASS",
+    "date": "2026-10-17T16:38:23.315Z",
+    "mode": "native",
+    "exitCode": 0,
+    "container": "novlearn-engine-cache-native-1792255071615",
+    "image": "node:24.19.0-bookworm@sha256:4196d66a565c6f195728d9952f161f4adfe2ad753052a08b7ec7f1c5a6bda42b",
+    "archiveSha256": "d4d3abc408ab37f2f8a5faa512964b48947828bae9209cb1460b47111ca582f9",
+    "records": [
+      {
+        "result": "PASS",
+        "scope": "Exact installed candidate archive in the unchanged bounded native Linux host",
+        "cgroup": {
+          "memory.max": "402653184",
+          "memory.swap.max": "0",
+          "pids.max": "64"
+        },
+        "completeDefinition": true,
+        "seeds": [0, 42],
+        "rounds": 3,
+        "fullInstantiations": 6,
+        "replays": [
+          {
+            "round": 0,
+            "seed": 0,
+            "publicSha256": "51f0f19fcfe1549ad54a6e8ead8be6fc9f17633d00d4efcb13b4969478730def"
+          },
+          {
+            "round": 0,
+            "seed": 42,
+            "publicSha256": "771db336a2d0850bf1188f069c2c6c904bb926acb2942b1dc84829072d140430"
+          },
+          {
+            "round": 1,
+            "seed": 0,
+            "publicSha256": "51f0f19fcfe1549ad54a6e8ead8be6fc9f17633d00d4efcb13b4969478730def"
+          },
+          {
+            "round": 1,
+            "seed": 42,
+            "publicSha256": "771db336a2d0850bf1188f069c2c6c904bb926acb2942b1dc84829072d140430"
+          },
+          {
+            "round": 2,
+            "seed": 0,
+            "publicSha256": "51f0f19fcfe1549ad54a6e8ead8be6fc9f17633d00d4efcb13b4969478730def"
+          },
+          {
+            "round": 2,
+            "seed": 42,
+            "publicSha256": "771db336a2d0850bf1188f069c2c6c904bb926acb2942b1dc84829072d140430"
+          }
+        ],
+        "nativeDefaultDeadlineMs": 5000,
+        "maximumInstantiationMs": 2637.727072999998,
+        "minimumInstantiationMs": 2411.5969880000002,
+        "workerPidsTerminated": true,
+        "correctIncorrectInvalidGradesChecked": true,
+        "timings": [
+          {
+            "operation": "instantiateExercise",
+            "elapsedMs": 2512.989637,
+            "queuedMs": 1.0629820000000052,
+            "workerPid": 43,
+            "peakCgroupBytes": 227536896
+          },
+          {
+            "operation": "projectPublicInstance",
+            "elapsedMs": 410.25804400000015,
+            "queuedMs": 1.6044560000000274,
+            "workerPid": 53,
+            "peakCgroupBytes": 227536896
+          },
+          {
+            "operation": "gradeAnswer",
+            "elapsedMs": 935.1405279999999,
+            "queuedMs": 0.42770999999993364,
+            "workerPid": 63,
+            "peakCgroupBytes": 227536896
+          },
+          {
+            "operation": "gradeAnswer",
+            "elapsedMs": 929.8004799999999,
+            "queuedMs": 0.4674089999998614,
+            "workerPid": 73,
+            "peakCgroupBytes": 227536896
+          },
+          {
+            "operation": "gradeAnswer",
+            "elapsedMs": 792.1922970000005,
+            "queuedMs": 0.4358570000003965,
+            "workerPid": 83,
+            "peakCgroupBytes": 227536896
+          },
+          {
+            "operation": "instantiateExercise",
+            "elapsedMs": 2411.5969880000002,
+            "queuedMs": 0.2794450000001234,
+            "workerPid": 93,
+            "peakCgroupBytes": 227536896
+          },
+          {
+            "operation": "projectPublicInstance",
+            "elapsedMs": 419.3066809999991,
+            "queuedMs": 0.5820779999994556,
+            "workerPid": 103,
+            "peakCgroupBytes": 227536896
+          },
+          {
+            "operation": "gradeAnswer",
+            "elapsedMs": 880.3960260000003,
+            "queuedMs": 0.6386399999992136,
+            "workerPid": 113,
+            "peakCgroupBytes": 227536896
+          },
+          {
+            "operation": "gradeAnswer",
+            "elapsedMs": 908.613272999999,
+            "queuedMs": 0.7587189999994735,
+            "workerPid": 123,
+            "peakCgroupBytes": 227536896
+          },
+          {
+            "operation": "gradeAnswer",
+            "elapsedMs": 850.7964519999987,
+            "queuedMs": 0.6385589999990771,
+            "workerPid": 133,
+            "peakCgroupBytes": 227536896
+          },
+          {
+            "operation": "instantiateExercise",
+            "elapsedMs": 2594.7666919999992,
+            "queuedMs": 0.2437549999995099,
+            "workerPid": 143,
+            "peakCgroupBytes": 227536896
+          },
+          {
+            "operation": "projectPublicInstance",
+            "elapsedMs": 673.7692530000004,
+            "queuedMs": 1.3647820000005595,
+            "workerPid": 153,
+            "peakCgroupBytes": 227536896
+          },
+          {
+            "operation": "instantiateExercise",
+            "elapsedMs": 2637.727072999998,
+            "queuedMs": 0.32837300000028335,
+            "workerPid": 163,
+            "peakCgroupBytes": 227536896
+          },
+          {
+            "operation": "projectPublicInstance",
+            "elapsedMs": 488.2714850000011,
+            "queuedMs": 0.5009759999993548,
+            "workerPid": 173,
+            "peakCgroupBytes": 227536896
+          },
+          {
+            "operation": "instantiateExercise",
+            "elapsedMs": 2443.053656,
+            "queuedMs": 0.15072000000145636,
+            "workerPid": 183,
+            "peakCgroupBytes": 227536896
+          },
+          {
+            "operation": "projectPublicInstance",
+            "elapsedMs": 445.6441159999995,
+            "queuedMs": 0.5074390000008862,
+            "workerPid": 193,
+            "peakCgroupBytes": 227536896
+          },
+          {
+            "operation": "instantiateExercise",
+            "elapsedMs": 2418.875742,
+            "queuedMs": 0.14151099999799044,
+            "workerPid": 203,
+            "peakCgroupBytes": 227536896
+          },
+          {
+            "operation": "projectPublicInstance",
+            "elapsedMs": 474.0296869999984,
+            "queuedMs": 0.6360139999997045,
+            "workerPid": 213,
+            "peakCgroupBytes": 227536896
+          }
+        ],
+        "browserExecution": false,
+        "sourceSuiteSubstitute": false
+      }
+    ],
+    "profile": {
+      "memory": 402653184,
+      "swap": 0,
+      "pids": 64,
+      "readOnly": true,
+      "network": "none",
+      "user": "65534:65534",
+      "capDrop": ["ALL"],
+      "noNewPrivileges": true,
+      "portsPublished": 0
+    },
+    "stopped": true,
+    "artifact": ".local/lot1a/engine-cache-native-1792255071611"
+  },
+  "comparison": {
+    "result": "PASS",
+    "date": "2026-10-17T16:40:36.088Z",
+    "mode": "comparison",
+    "exitCode": 0,
+    "container": "novlearn-engine-cache-comparison-1792255208068",
+    "image": "node:24.19.0-bookworm@sha256:4196d66a565c6f195728d9952f161f4adfe2ad753052a08b7ec7f1c5a6bda42b",
+    "archiveSha256": "d4d3abc408ab37f2f8a5faa512964b48947828bae9209cb1460b47111ca582f9",
+    "records": [
+      {
+        "result": "PASS",
+        "scope": "Portable exact JSON/private snapshot and diagnostic comparison; not native runtime acceptance",
+        "comparisons": 10,
+        "records": [
+          {
+            "case": "complete",
+            "seed": 0,
+            "ok": true,
+            "exactJsonSha256": "727cae1db53eb28094be02470bf5cf1e02d65e02b287ac28a833db970a5cc690"
+          },
+          {
+            "case": "complete",
+            "seed": 42,
+            "ok": true,
+            "exactJsonSha256": "28bb4bf436ce7558f7ff3f15f77c7473b615186aa5fe681a2a466d1ddba750dd"
+          },
+          {
+            "case": "undefined",
+            "seed": 0,
+            "ok": false,
+            "exactJsonSha256": "48b279700649791174de3c4f894f724a90c5bca0b9cf0863f23a61b84a8f649a"
+          },
+          {
+            "case": "undefined",
+            "seed": 42,
+            "ok": false,
+            "exactJsonSha256": "48b279700649791174de3c4f894f724a90c5bca0b9cf0863f23a61b84a8f649a"
+          },
+          {
+            "case": "unknown-parameter",
+            "seed": 0,
+            "ok": false,
+            "exactJsonSha256": "dc76cb13f52a18bb95bd6b095ff397937b57c197740766aca9aed6cf13f2cd50"
+          },
+          {
+            "case": "unknown-parameter",
+            "seed": 42,
+            "ok": false,
+            "exactJsonSha256": "dc76cb13f52a18bb95bd6b095ff397937b57c197740766aca9aed6cf13f2cd50"
+          },
+          {
+            "case": "formal-not-numeric",
+            "seed": 0,
+            "ok": false,
+            "exactJsonSha256": "6ecd6c1582ac360217cb9bb59e7c527779c5637c1b6cf035d06fe0bca8c1feb8"
+          },
+          {
+            "case": "formal-not-numeric",
+            "seed": 42,
+            "ok": false,
+            "exactJsonSha256": "6ecd6c1582ac360217cb9bb59e7c527779c5637c1b6cf035d06fe0bca8c1feb8"
+          },
+          {
+            "case": "long-decimal",
+            "seed": 0,
+            "ok": false,
+            "exactJsonSha256": "53deb31d6af9bf42f0ba43185a73240c5c7af1e6702e989a6b9e7aa1bed950f4"
+          },
+          {
+            "case": "long-decimal",
+            "seed": 42,
+            "ok": false,
+            "exactJsonSha256": "53deb31d6af9bf42f0ba43185a73240c5c7af1e6702e989a6b9e7aa1bed950f4"
+          }
+        ],
+        "nativeDeadlineQualification": false,
+        "businessMutations": false
+      }
+    ],
+    "profile": {
+      "memory": 402653184,
+      "swap": 0,
+      "pids": 64,
+      "readOnly": true,
+      "network": "none",
+      "user": "65534:65534",
+      "capDrop": ["ALL"],
+      "noNewPrivileges": true,
+      "portsPublished": 0
+    },
+    "stopped": true,
+    "artifact": ".local/lot1a/engine-cache-comparison-1792255208064"
+  },
+  "installed": {
+    "result": "PASS",
+    "date": "2026-10-17T16:40:51.292Z",
+    "mode": "installed",
+    "exitCode": 0,
+    "container": "novlearn-engine-cache-installed-1792255236219",
+    "image": "node:24.19.0-bookworm@sha256:4196d66a565c6f195728d9952f161f4adfe2ad753052a08b7ec7f1c5a6bda42b",
+    "archiveSha256": "d4d3abc408ab37f2f8a5faa512964b48947828bae9209cb1460b47111ca582f9",
+    "records": [
+      {
+        "status": "pass",
+        "platform": "linux",
+        "node": "v24.19.0",
+        "operations": [
+          "validateDefinition",
+          "validateSubmission",
+          "parseMathInput",
+          "generateVariables",
+          "instantiateExercise",
+          "projectPublicInstance",
+          "gradeAnswer",
+          "instantiateExercise"
+        ],
+        "privateSnapshotReplayed": true,
+        "publicProjectionChecked": true,
+        "workersStopped": true,
+        "memoryMax": "402653184",
+        "swapMax": "0",
+        "pidsMax": "64"
+      }
+    ],
+    "profile": {
+      "memory": 402653184,
+      "swap": 0,
+      "pids": 64,
+      "readOnly": true,
+      "network": "none",
+      "user": "65534:65534",
+      "capDrop": ["ALL"],
+      "noNewPrivileges": true,
+      "portsPublished": 0
+    },
+    "stopped": true,
+    "artifact": ".local/lot1a/engine-cache-installed-1792255236216"
+  },
+  "linuxIsolation": {
+    "result": "PASS",
+    "date": "2026-10-17T16:41:09.381Z",
+    "mode": "os",
+    "exitCode": 0,
+    "container": "novlearn-engine-cache-os-1792255251423",
+    "image": "node:24.19.0-bookworm@sha256:4196d66a565c6f195728d9952f161f4adfe2ad753052a08b7ec7f1c5a6bda42b",
+    "archiveSha256": "d4d3abc408ab37f2f8a5faa512964b48947828bae9209cb1460b47111ca582f9",
+    "records": [
+      {
+        "externalMemoryPressure": {
+          "before": {
+            "low": 0,
+            "high": 0,
+            "max": 0,
+            "oom": 0,
+            "oom_kill": 0,
+            "oom_group_kill": 0
+          },
+          "after": {
+            "low": 0,
+            "high": 0,
+            "max": 36,
+            "oom": 1,
+            "oom_kill": 1,
+            "oom_group_kill": 0
+          },
+          "error": "crash",
+          "elapsedMs": 857.7040430000002,
+          "peakCgroupBytes": 402653184
+        }
+      },
+      {
+        "linuxCheck": "bounded-cgroup-v2",
+        "passed": 12,
+        "node": "v24.19.0",
+        "memoryMax": "402653184",
+        "swapMax": "0",
+        "pidsMax": "64"
+      }
+    ],
+    "profile": {
+      "memory": 402653184,
+      "swap": 0,
+      "pids": 64,
+      "readOnly": true,
+      "network": "none",
+      "user": "65534:65534",
+      "capDrop": ["ALL"],
+      "noNewPrivileges": true,
+      "portsPublished": 0
+    },
+    "stopped": true,
+    "artifact": ".local/lot1a/engine-cache-os-1792255251420"
+  },
+  "legacy": {
+    "result": "PASS",
+    "date": "2026-10-17T16:41:45.629Z",
+    "mode": "legacy",
+    "exitCode": 0,
+    "container": "novlearn-engine-cache-legacy-1792255269511",
+    "image": "node:24.19.0-bookworm@sha256:4196d66a565c6f195728d9952f161f4adfe2ad753052a08b7ec7f1c5a6bda42b",
+    "archiveSha256": "d4d3abc408ab37f2f8a5faa512964b48947828bae9209cb1460b47111ca582f9",
+    "records": [
+      {
+        "id": 1,
+        "adaptation": "passed",
+        "officialPipeline": "passed"
+      },
+      {
+        "id": 6,
+        "adaptation": "passed",
+        "officialPipeline": "passed"
+      },
+      {
+        "id": 36,
+        "adaptation": "passed",
+        "officialPipeline": "passed"
+      },
+      {
+        "id": 64,
+        "adaptation": "passed",
+        "officialPipeline": "passed"
+      },
+      {
+        "id": 78,
+        "adaptation": "passed",
+        "officialPipeline": "passed"
+      },
+      {
+        "id": 96,
+        "adaptation": "passed",
+        "officialPipeline": "passed"
+      },
+      {
+        "id": 103,
+        "adaptation": "passed",
+        "officialPipeline": "passed"
+      },
+      {
+        "id": 106,
+        "adaptation": "passed",
+        "officialPipeline": "passed"
+      }
+    ],
+    "profile": {
+      "memory": 402653184,
+      "swap": 0,
+      "pids": 64,
+      "readOnly": true,
+      "network": "none",
+      "user": "65534:65534",
+      "capDrop": ["ALL"],
+      "noNewPrivileges": true,
+      "portsPublished": 0
+    },
+    "stopped": true,
+    "artifact": ".local/lot1a/engine-cache-legacy-1792255269508"
+  },
+  "dependencies": [
+    {
+      "name": "@cortex-js/compute-engine",
+      "version": "0.151.0",
+      "target": "cortex",
+      "sha256": "bb540a8487325021db917fa13dc452f8cc6b67e4907bf31a9b6fec5d3ee0f4c3"
+    },
+    {
+      "name": "@arnog/colors",
+      "version": "0.7.3",
+      "target": "colors",
+      "sha256": "081bbc82ede84dce9e20f1125fdff2caa7c1d9a07186534ee4256b67a6d71467"
+    },
+    {
+      "name": "complex.js",
+      "version": "2.4.3",
+      "target": "complex",
+      "sha256": "7361293580b57abbcdfd3df713655f5ac672149f1afe6dd0a7855ccffaff931f"
+    }
+  ],
+  "sourceSha256": {
+    "src/instantiation.ts": "3068acf83a3a00f778b210e39e89e25070dada6e4701c9ef3dd5a8997c3589b0",
+    "tests/numeric-render-cache.test.ts": "5373946dd3121bcb520e2057891616fa5cb267c8b523e4bfa25f2ab33dfe68f6",
+    "src/contracts/validation.ts": "741312fdd1ed9f61ce1d1fda76de557e8ca79ac8c7a85afcf235bcc6b324c398",
+    "src/math/substitution.ts": "5af78b3d7e82f1e17bed6de0adbaba4f605cab0b5b8fbac688dc9cbacb86827a",
+    "src/math/display.ts": "37246edf89d08a2ee800a0f8e8627822d97ab7466ab8ebc40040548bb917ac0b",
+    "src/node-host/executor.ts": "5d45f3ee9e38a36f735671f20f4be3c10e540407d796e7cecc4d75b56fc310f3",
+    "src/node-host/index.ts": "62323381f0065342508009219ae121b6e050cba07eb8cb3219caf9e6476e8a27",
+    "runtime/windows/job.cs": "34be274f596390dd860f2f891e61b5985db66523e64933dbe732ec6213828c35",
+    "tools/check-linux.mjs": "e1a6077773847fd0a6dd4065d4b1ab9b36d27d1693665d3a13abe2d7c1180da7",
+    "tools/check-legacy-host.mjs": "7972e6ce2767f4de8f6d16df1c4c1cfec8c6bae3c26aa5da87a430ee7719a89e",
+    "tools/check-installed-package.mjs": "a47048214eb4ac5eea71331016428d4dae70716375c2e88c46b2895074f789bb",
+    "vitest.config.ts": "1d2a4a5b0431f59f9fac05f69200de503dc3896d9c7633cb0bacfc73b74a96cf",
+    "package.json": "952747e5ff4ecfb35f36711b4d562975cbb0c8760d7eb7469f09b2d37c17f8aa",
+    "package-lock.json": "0d33b7595305fe947bb84423e554bf1e5b4c10632364cfb8787dcf36397be2d3",
+    "docs/CDC_référence.md": "ffb97d8f1b3401e462da6411d4dde671a06d9522a6d745e28d06fb2f2e9459ae",
+    "docs/exercises_rows.json": "0f4d1173a78f9bd41e88678704c212c5147627e7e5a42ee28eb398f25f41c3ae",
+    "tests/fixtures/legacy/exercises_rows.original.json": "0f4d1173a78f9bd41e88678704c212c5147627e7e5a42ee28eb398f25f41c3ae"
+  },
+  "harnessSha256": {
+    "engine-cache-native-consumer.mjs": "df1572d3269e8daba4cec05e472f5f5329ec53b67c1c723113eecc42f0f2c713",
+    "engine-cache-regression-consumer.mjs": "7acb26f3897f0ec8fe7dec8fcd6dfec48166cdbabcddc2e5db09ff7bb2527364",
+    "engine-cache-candidate-setup.mjs": "d1cc748fae14ed1c088d05fbd9c2f4cdba33b35154a28f4af8e707b7d5bcccf6",
+    "run-engine-cache-docker.mjs": "c05deb9582991ffec00949b85a5e426a85acc9c98dce5b1ffee1e85a9b9bbbc0"
+  },
+  "preserved": {
+    "engineCDCAndOriginalCorpus": true,
+    "priorTenProtectedEngineFiles": true,
+    "previousAdminArchiveSha256": "650128cdeb1e798b952a09e91b038d018b9e7947d0a6ee4c247695f899190290",
+    "existingReceiptsUntouched": true,
+    "businessMutations": false,
+    "remoteChanges": false,
+    "windowsProtectionChanged": false
+  },
+  "adoption": {
+    "adminPackageReplaced": false,
+    "sqlMigrationApplied": false,
+    "reason": "Receipt recording and publication metadata pin the prior archive. Coordinate a separately qualified local migration before switching the Admin build; preserve old receipts and publication journal.",
+    "previousAdminArchiveVerifiedUnchanged": true
+  },
+  "limits": {
+    "hostingSLO": false,
+    "allDefinitionsPerformanceGuarantee": false,
+    "pythonFastAPIRepeated": false,
+    "newMathLiveBrowserSession": false,
+    "visualAcceptance": false,
+    "futureWindowsBinaryAcceptance": false,
+    "remoteQualification": false,
+    "goalComplete": false
+  },
+  "engineOwnerCommit": "baa48c45e27a5b94459feaae090f7b252df4791a"
+}

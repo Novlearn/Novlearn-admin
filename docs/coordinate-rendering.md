@@ -1,5 +1,11 @@
 # Figures et vecteurs — rendu local
 
+**Complément du 17 octobre :** un [correctif Engine local qualifié](engine-numeric-cache.md)
+ramène les six instanciations de cette définition complète à 2,41–2,64 s.
+Son adoption attend la rotation locale de l’empreinte SQL ; les observations
+de timeout ci-dessous restent celles de l’archive actuellement utilisée par
+l’instance et ne sont pas effacées.
+
 Le rendu utilise exclusivement les coordonnées publiques prescrites par
 l’Exercise Engine. Il ne calcule aucune formule, racine, variation ou réponse.
 Le contrat canonique et le moteur restent inchangés.

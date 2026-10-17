@@ -1,5 +1,9 @@
 # Engine Linux dans l'application locale connectée
 
+**17 octobre :** une [optimisation Engine qualifiée](engine-numeric-cache.md)
+est disponible comme candidat. L’instance décrite ici utilise toujours l’archive
+précédente, en attendant sa rotation SQL locale et une adoption coordonnée.
+
 Le serveur Next de développement Windows peut déléguer les opérations au vrai
 SDK Engine Linux certifié. L'archive reste épinglée et le chemin Linux natif
 du produit conserve ses quotas. Aucun changement dans le dépôt Engine et aucune

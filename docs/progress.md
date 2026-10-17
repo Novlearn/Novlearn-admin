@@ -1,5 +1,23 @@
 # Progression du goal NovLearn Admin
 
+## Correctif Engine qualifié — 17 octobre 2026
+
+L’autorisation D05 / Engine D51 permet la [correction locale des recalculs
+numériques](engine-numeric-cache.md), sans changement de délai ou de critères.
+Un seul fichier du cœur est modifié ; six tests d’isolation complètent la suite.
+**1 540 tests / 30 fichiers, zéro skip** et le contrôle complet Engine passent,
+ainsi que le smoke du tarball exact. Linux : six générations de la définition
+avancée complète prennent **2,41–2,64 s** sous le délai inchangé de cinq secondes.
+Les projections sont identiques ; dix comparaisons privées/diagnostiques,
+sept opérations, 12 contrôles OS et huit parcours historiques passent.
+
+Le nouveau build d4d3abc4…a582f9 est qualifié, mais **l’Admin conserve son ancienne
+archive** : SQL épingle encore cette identité pour les reçus/publications. La
+rotation locale qualifiée et l’adoption coordonnée sont les prochaines étapes ;
+les anciens reçus et journaux ne seront pas réécrits. Aucun changement SQL,
+donnée métier, environnement distant ou protection Windows dans ce jalon.
+La qualification applicative de cette nouvelle archive reste à réaliser.
+
 ## Figures et vecteurs — 16 octobre 2026
 
 Le [rendu des coordonnées publiques](coordinate-rendering.md) ajoute des

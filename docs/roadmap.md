@@ -1,5 +1,11 @@
 # Roadmap
 
+**Engine, 17 octobre :** le [correctif numérique ciblé](engine-numeric-cache.md)
+est qualifié : 1 540 tests, tarball installé, six générations avancées en
+2,41–2,64 s, comparaison exacte et contrôles Linux passent, avec limites
+inchangées. **Adoption Admin restante** : SQL épingle encore l’ancienne archive ;
+rotation locale et tests connectés à réaliser avant de changer l’instance.
+
 **Figures et vecteurs, 16 octobre :** [flèches, découpage et descriptions](coordinate-rendering.md)
 à partir des coordonnées publiques de l’Engine. Projections natives des seeds
 0/42, tests de rendu serveur et page manuelle distincte ; aucune réception

@@ -15,6 +15,10 @@ attestation, historique et qualification réelle Auth/Engine/PostgREST.
 [Figures et vecteurs](coordinate-rendering.md) : tracé des coordonnées publiques,
 découpage des droites, projection 3D et captures natives pour les essais manuels.
 
+[Optimisation numérique Engine](engine-numeric-cache.md) : correctif local
+qualifié, comparaison exacte et performances natives ; rotation SQL et adoption
+Admin encore à réaliser.
+
 [Publication par lots](publication-batch.md) : sélection, confirmations par exercice,
 arrêt après résultat partiel et reprise sans réapplication ; transferts sur copies
 SQL locales et simulation manuelle séparée.
