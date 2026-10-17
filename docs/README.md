@@ -12,6 +12,9 @@ borné, transport privé, tests réels et rapport signé persisté depuis une se
 [Relecture locale connectée](local-admin-review.md) : activation explicite,
 attestation, historique et qualification réelle Auth/Engine/PostgREST.
 
+[Figures et vecteurs](coordinate-rendering.md) : tracé des coordonnées publiques,
+découpage des droites, projection 3D et captures natives pour les essais manuels.
+
 [Publication par lots](publication-batch.md) : sélection, confirmations par exercice,
 arrêt après résultat partiel et reprise sans réapplication ; transferts sur copies
 SQL locales et simulation manuelle séparée.

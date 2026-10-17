@@ -8,6 +8,11 @@ import type {
 } from 'novlearn-exercise-engine';
 import { MathInput } from './math-input';
 import { correctionLabels } from '@/lib/preview';
+import {
+  clipDrawingLine,
+  fitVectorDrawing,
+  projectVectorCoordinates,
+} from '@/lib/plot-coordinates';
 type PlotWindow = Extract<PublicElement, { type: 'function-graph' }>['window'];
 type RenderNumber = PlotWindow['xMin'];
 type Endpoint = Extract<
@@ -94,14 +99,26 @@ function Plot({
   const x = (n: number) => 40 + ((n - a) * 440) / (b - a),
     y = (n: number) => 300 - ((n - c) * 260) / (d - c);
   const clip = 'plot-' + useId().replaceAll(':', '');
+  if (![a, b, c, d].every(Number.isFinite) || a >= b || c >= d)
+    return (
+      <p className="notice">
+        La fenêtre ne permet pas un tracé fini dans cet aperçu.
+      </p>
+    );
   return (
     <figure className="min-w-0">
       <svg
         viewBox="0 0 520 340"
         className="w-full rounded-lg border border-slate-200 bg-white"
         role="img"
-        aria-label={label}
+        aria-labelledby={`${clip}-title`}
+        aria-describedby={`${clip}-description`}
       >
+        <title id={`${clip}-title`}>{label}</title>
+        <desc id={`${clip}-description`}>
+          Les bornes exactes sont indiquées sous la figure. Seuls les objets
+          prescrits sont représentés dans cette fenêtre.
+        </desc>
         <defs>
           <clipPath id={clip}>
             <rect x="40" y="40" width="440" height="260" />
@@ -128,20 +145,251 @@ function Plot({
           {children(x, y)}
         </g>
         <text x="40" y="325" fontSize="13">
-          {w.xMin.latex}
+          x min
         </text>
         <text x="480" y="325" textAnchor="end" fontSize="13">
-          {w.xMax.latex}
+          x max
         </text>
         <text x="10" y="48" fontSize="13">
-          {w.yMax.latex}
+          y max
         </text>
         <text x="10" y="300" fontSize="13">
-          {w.yMin.latex}
+          y min
         </text>
       </svg>
-      <figcaption className="mt-2 text-xs text-slate-500">{label}</figcaption>
+      <figcaption className="mt-2 space-y-2 text-sm text-slate-600">
+        <p>
+          {label}
+          {grid ? ' · Grille de huit intervalles par axe.' : ''}
+        </p>
+        <dl className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+          {(
+            [
+              ['x min', w.xMin],
+              ['x max', w.xMax],
+              ['y min', w.yMin],
+              ['y max', w.yMax],
+            ] as const
+          ).map(([name, value]) => (
+            <div key={name}>
+              <dt>{name}</dt>
+              <dd>
+                <MathDisplay label={`Borne ${name}`} latex={value.latex} />
+              </dd>
+            </div>
+          ))}
+        </dl>
+      </figcaption>
     </figure>
+  );
+}
+
+function GeometryDescription({
+  element: e,
+}: {
+  element: Extract<PublicElement, { type: 'geometry' }>;
+}) {
+  const label = (id: string) => e.points.find((p) => p.id === id)?.label ?? id;
+  return (
+    <details className="rounded-lg border border-slate-200 p-4 text-sm">
+      <summary className="cursor-pointer font-semibold">
+        Description et coordonnées de la figure
+      </summary>
+      <p className="mt-3 text-slate-600">
+        Les objets sont ceux prescrits par l’exercice. Les points hors de la
+        fenêtre sont conservés dans cette liste.
+      </p>
+      <ul className="my-3 space-y-3" aria-label="Points de la figure">
+        {e.points.map((p) => (
+          <li key={p.id} className="flex flex-wrap items-center gap-3">
+            <span>Point {p.label}</span>
+            <MathDisplay
+              label={`Coordonnées du point ${p.label}`}
+              latex={`\\left(${p.coordinates.map((n) => n.latex).join(';')}\\right)`}
+            />
+            {(quotient(p.coordinates[0]) < quotient(e.window.xMin) ||
+              quotient(p.coordinates[0]) > quotient(e.window.xMax) ||
+              quotient(p.coordinates[1]) < quotient(e.window.yMin) ||
+              quotient(p.coordinates[1]) > quotient(e.window.yMax)) && (
+              <span className="text-slate-500">Hors de la fenêtre</span>
+            )}
+          </li>
+        ))}
+      </ul>
+      <ul className="space-y-3" aria-label="Objets prescrits">
+        {e.objects.map((o) => (
+          <li key={o.id}>
+            {o.kind === 'polygon' ? (
+              `Polygone ${o.id} : sommets ${o.vertices.map(label).join(', ')}.`
+            ) : o.kind === 'circle' ? (
+              <div className="flex flex-wrap items-center gap-3">
+                <span>
+                  Cercle {o.id} : centre {label(o.center)}, rayon
+                </span>
+                <MathDisplay
+                  label={`Rayon du cercle ${o.id}`}
+                  latex={o.radius.latex}
+                />
+              </div>
+            ) : o.kind === 'line' ? (
+              `Droite ${o.id} passant par ${label(o.from)} et ${label(o.to)}.`
+            ) : (
+              `Segment ${o.id} entre ${label(o.from)} et ${label(o.to)}.`
+            )}
+          </li>
+        ))}
+      </ul>
+    </details>
+  );
+}
+
+function VectorFigure({
+  element: e,
+}: {
+  element: Extract<PublicElement, { type: 'vectors' }>;
+}) {
+  const id = 'vectors-' + useId().replaceAll(':', '');
+  const projected = e.vectors.map((v) =>
+    projectVectorCoordinates(v.coordinates.map(quotient), e.dimension),
+  );
+  const points = projected.every((p) => p !== null)
+    ? fitVectorDrawing(projected)
+    : null;
+  const axes =
+    e.dimension === 2
+      ? [
+          { label: 'x', x: 490, y: 170 },
+          { label: 'y', x: 260, y: 30 },
+        ]
+      : [
+          { label: 'x', x: 390, y: 245 },
+          { label: 'y', x: 130, y: 245 },
+          { label: 'z', x: 260, y: 30 },
+        ];
+  return (
+    <div className="space-y-3">
+      <h4 className="font-semibold">Vecteurs · dimension {e.dimension}</h4>
+      {points ? (
+        <figure className="min-w-0">
+          <svg
+            viewBox="0 0 520 340"
+            className="w-full rounded-lg border border-slate-200 bg-white"
+            role="img"
+            aria-labelledby={`${id}-title`}
+            aria-describedby={`${id}-description`}
+          >
+            <title id={`${id}-title`}>
+              {e.dimension === 2
+                ? 'Vecteurs dans le plan'
+                : 'Projection des vecteurs de l’espace'}
+            </title>
+            <desc id={`${id}-description`}>
+              Les flèches partent de l’origine O. Une même échelle est utilisée
+              pour toutes les flèches. La liste sous la figure identifie chaque
+              vecteur.
+            </desc>
+            <defs>
+              {e.vectors.map((v, i) => (
+                <marker
+                  key={v.id}
+                  id={`${id}-arrow-${i}`}
+                  markerWidth="10"
+                  markerHeight="10"
+                  refX="9"
+                  refY="5"
+                  orient="auto"
+                  markerUnits="userSpaceOnUse"
+                >
+                  <path d="M0,0 L10,5 L0,10 Z" fill={v.color} />
+                </marker>
+              ))}
+            </defs>
+            {axes.map((axis) => (
+              <g key={axis.label}>
+                <line
+                  x1="260"
+                  y1="170"
+                  x2={axis.x}
+                  y2={axis.y}
+                  stroke="#64748b"
+                  strokeDasharray="4 4"
+                />
+                <text x={axis.x + 6} y={axis.y + 4} fontSize="14">
+                  {axis.label}
+                </text>
+              </g>
+            ))}
+            <circle cx="260" cy="170" r="3" fill="#475569" />
+            <text x="245" y="163" fontSize="14">
+              O
+            </text>
+            {points.map(([x, y], i) => (
+              <g key={e.vectors[i].id}>
+                {x === 260 && y === 170 ? (
+                  <circle
+                    cx={x}
+                    cy={y}
+                    r="5"
+                    fill="none"
+                    stroke={e.vectors[i].color}
+                    strokeWidth="2"
+                  />
+                ) : (
+                  <line
+                    x1="260"
+                    y1="170"
+                    x2={x}
+                    y2={y}
+                    stroke={e.vectors[i].color}
+                    strokeWidth="2.5"
+                    markerEnd={`url(#${id}-arrow-${i})`}
+                  />
+                )}
+                <text x={x + 8} y={y - 8} fontSize="14">
+                  {e.vectors[i].label}
+                </text>
+              </g>
+            ))}
+          </svg>
+          <figcaption className="mt-2 text-sm text-slate-600">
+            {e.dimension === 3
+              ? 'Projection orthographique 2D d’un repère 3D : des vecteurs distincts peuvent se superposer. Les longueurs spatiales ne se lisent pas sur cette projection.'
+              : 'Flèches depuis l’origine, à une échelle commune.'}
+          </figcaption>
+        </figure>
+      ) : (
+        <p className="notice">
+          Les coordonnées ne permettent pas un tracé fini dans cet aperçu.
+        </p>
+      )}
+      <ul className="space-y-3" aria-label="Liste des vecteurs">
+        {e.vectors.map((v, i) => (
+          <li key={v.id} className="flex flex-wrap items-center gap-3">
+            <span
+              aria-hidden="true"
+              className="h-1 w-6"
+              style={{ backgroundColor: v.color }}
+            />
+            <span>{v.label}</span>
+            {e.showCoordinates ? (
+              <MathDisplay
+                label={`Coordonnées du vecteur ${v.label}`}
+                latex={`\\left(${v.coordinates.map((n) => n.latex).join(';')}\\right)`}
+              />
+            ) : (
+              <span className="text-sm text-slate-500">
+                Coordonnées masquées
+              </span>
+            )}
+            {points?.[i][0] === 260 && points[i][1] === 170 && (
+              <span className="text-sm text-slate-500">
+                Projection confondue avec l’origine.
+              </span>
+            )}
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }
 type Question = Extract<PublicElement, { type: 'question' | 'mcq' }>;
@@ -574,25 +822,7 @@ function DisplayElement({
       );
     }
     case 'vectors':
-      return (
-        <div className="space-y-3">
-          <h4 className="font-semibold">Vecteurs · dimension {e.dimension}</h4>
-          {e.vectors.map((v) => (
-            <div key={v.id} className="flex flex-wrap items-center gap-3">
-              <span style={{ color: v.color }}>{v.label}</span>
-              {e.showCoordinates ? (
-                <MathDisplay
-                  latex={`\\left(${v.coordinates.map((n) => n.latex).join(';')}\\right)`}
-                />
-              ) : (
-                <span className="text-sm text-slate-500">
-                  Coordonnées masquées
-                </span>
-              )}
-            </div>
-          ))}
-        </div>
-      );
+      return <VectorFigure element={e} />;
     case 'complex-plane':
       return (
         <div className="space-y-3">
@@ -631,89 +861,91 @@ function DisplayElement({
     case 'geometry': {
       const point = (id: string) => e.points.find((p) => p.id === id)!;
       return (
-        <Plot window={e.window} grid={e.showGrid} label="Figure géométrique">
-          {(x, y) => (
-            <>
-              {e.objects.map((o) => {
-                if (o.kind === 'polygon')
+        <div className="space-y-3">
+          <Plot window={e.window} grid={e.showGrid} label="Figure géométrique">
+            {(x, y) => (
+              <>
+                {e.objects.map((o) => {
+                  if (o.kind === 'polygon')
+                    return (
+                      <polygon
+                        key={o.id}
+                        points={o.vertices
+                          .map((id) => {
+                            const p = point(id);
+                            return `${x(quotient(p.coordinates[0]))},${y(quotient(p.coordinates[1]))}`;
+                          })
+                          .join(' ')}
+                        fill="none"
+                        stroke={o.color}
+                        strokeWidth="2"
+                      />
+                    );
+                  if (o.kind === 'circle') {
+                    const p = point(o.center),
+                      radius = quotient(o.radius);
+                    return (
+                      <ellipse
+                        key={o.id}
+                        cx={x(quotient(p.coordinates[0]))}
+                        cy={y(quotient(p.coordinates[1]))}
+                        rx={Math.abs(x(radius) - x(0))}
+                        ry={Math.abs(y(radius) - y(0))}
+                        fill="none"
+                        stroke={o.color}
+                        strokeWidth="2"
+                      />
+                    );
+                  }
+                  const a = point(o.from),
+                    b = point(o.to);
+                  const clipped = clipDrawingLine(
+                    [quotient(a.coordinates[0]), quotient(a.coordinates[1])],
+                    [quotient(b.coordinates[0]), quotient(b.coordinates[1])],
+                    {
+                      xMin: quotient(e.window.xMin),
+                      xMax: quotient(e.window.xMax),
+                      yMin: quotient(e.window.yMin),
+                      yMax: quotient(e.window.yMax),
+                    },
+                    o.kind,
+                  );
+                  if (!clipped) return null;
+                  const [[ax, ay], [bx, by]] = clipped;
                   return (
-                    <polygon
+                    <line
                       key={o.id}
-                      points={o.vertices
-                        .map((id) => {
-                          const p = point(id);
-                          return `${x(quotient(p.coordinates[0]))},${y(quotient(p.coordinates[1]))}`;
-                        })
-                        .join(' ')}
-                      fill="none"
+                      x1={x(ax)}
+                      y1={y(ay)}
+                      x2={x(bx)}
+                      y2={y(by)}
                       stroke={o.color}
                       strokeWidth="2"
                     />
                   );
-                if (o.kind === 'circle') {
-                  const p = point(o.center),
-                    radius = quotient(o.radius);
-                  return (
-                    <ellipse
-                      key={o.id}
+                })}
+                {e.points.map((p) => (
+                  <g key={p.id}>
+                    <circle
                       cx={x(quotient(p.coordinates[0]))}
                       cy={y(quotient(p.coordinates[1]))}
-                      rx={Math.abs(x(radius) - x(0))}
-                      ry={Math.abs(y(radius) - y(0))}
-                      fill="none"
-                      stroke={o.color}
-                      strokeWidth="2"
+                      r="4"
+                      fill="#2563eb"
                     />
-                  );
-                }
-                const a = point(o.from),
-                  b = point(o.to);
-                let ax = x(quotient(a.coordinates[0])),
-                  ay = y(quotient(a.coordinates[1])),
-                  bx = x(quotient(b.coordinates[0])),
-                  by = y(quotient(b.coordinates[1]));
-                if (o.kind === 'line') {
-                  const dx = bx - ax,
-                    dy = by - ay,
-                    len = Math.hypot(dx, dy);
-                  if (!len) return null;
-                  ax -= (dx / len) * 1000;
-                  ay -= (dy / len) * 1000;
-                  bx += (dx / len) * 1000;
-                  by += (dy / len) * 1000;
-                }
-                return (
-                  <line
-                    key={o.id}
-                    x1={ax}
-                    y1={ay}
-                    x2={bx}
-                    y2={by}
-                    stroke={o.color}
-                    strokeWidth="2"
-                  />
-                );
-              })}
-              {e.points.map((p) => (
-                <g key={p.id}>
-                  <circle
-                    cx={x(quotient(p.coordinates[0]))}
-                    cy={y(quotient(p.coordinates[1]))}
-                    r="4"
-                    fill="#2563eb"
-                  />
-                  <text
-                    x={x(quotient(p.coordinates[0])) + 8}
-                    y={y(quotient(p.coordinates[1])) - 8}
-                    fontSize="14"
-                  >
-                    {p.label}
-                  </text>
-                </g>
-              ))}
-            </>
-          )}
-        </Plot>
+                    <text
+                      x={x(quotient(p.coordinates[0])) + 8}
+                      y={y(quotient(p.coordinates[1])) - 8}
+                      fontSize="14"
+                    >
+                      {p.label}
+                    </text>
+                  </g>
+                ))}
+              </>
+            )}
+          </Plot>
+          <GeometryDescription element={e} />
+        </div>
       );
     }
     case 'probability-tree': {

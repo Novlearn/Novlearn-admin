@@ -37,6 +37,9 @@ parcours avec `--engine --review` : demande, attestation explicite et historique
 Une approbation ne publie rien. Les identifiants d’essai sont dans le fichier
 ignoré `.local/local-admin-1792143739689/login.txt` ; utiliser le port **3150**.
 
+Le [rendu des figures et vecteurs](docs/coordinate-rendering.md) s’essaie aussi
+sur le banc local, avec deux projections publiques réellement capturées du moteur.
+
 Node.js 24.19.x et npm 11.17.x. Dans PowerShell :
 
 ```powershell

@@ -1,5 +1,33 @@
 # Progression du goal NovLearn Admin
 
+## Figures et vecteurs — 16 octobre 2026
+
+Le [rendu des coordonnées publiques](coordinate-rendering.md) ajoute des
+flèches 2D et une projection 3D explicitement annoncée, un découpage réel des
+droites à la fenêtre, les bornes MathLive et une description textuelle des
+objets géométriques. Aucun calcul de formule ni changement Engine/SQL.
+
+Les projections natives des seeds 0/42 sont capturées par les vraies routes
+Next avec Auth locale, sans mutation métier. **24 tests ciblés** passent,
+dont 22 nouveaux, et les **10 pages du banc manuel** compilent. La page
+« Figures et vecteurs » affiche ces captures sans prétendre relancer le moteur.
+Le [relevé](coordinate-rendering-proof.json) distingue les preuves natives,
+le rendu serveur et la réception visuelle non exécutée.
+
+**718 tests dans 41 fichiers** et le contrôle complet passent. Les 48 bundles
+clients de l’application et 22 du banc inspectés ne contiennent aucun des
+secrets ou noms privés recherchés. Le serveur est relancé et neuf contrôles
+réels passent lors de l’unique reproduction après un échec initial : la
+génération avait dépassé son délai natif de cinq secondes (5 022 ms, file 1,3 ms).
+Définition, sources et limites sont inchangées. La cause de cette intermittence
+reste ouverte ; la preuve globale est partielle et ne certifie pas une
+disponibilité stable du runtime pour cette charge avancée.
+
+Le tracé de fonctions/suites définies par formules reste ouvert : le contrat
+fournit leur présentation avec `formulaDomain: unverified`, sans échantillons.
+La réception visuelle, publication HTTP complète, lectures Production et mise
+en service restent aussi ouvertes. Le goal reste actif et incomplet.
+
 ## Relecture connectée — 16 octobre 2026
 
 La [relecture locale](local-admin-review.md) s’active explicitement avec

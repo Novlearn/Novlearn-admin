@@ -1,5 +1,11 @@
 # Aperçu et tests Engine — implémentation locale
 
+**Rendu du 16 octobre :** les [figures et vecteurs](coordinate-rendering.md)
+ajoutent les flèches 2D/3D, le découpage des droites à la fenêtre prescrite,
+les bornes MathLive et une description géométrique. Les projections réellement
+capturées du moteur servent aux tests et à une page d’essai manuel distincte.
+Le tracé des courbes de formules et la réception visuelle restent ouverts.
+
 **Mise à jour du 16 octobre :** le [parcours connecté](local-admin-engine.md)
 relie désormais les vraies routes Next au worker Linux borné, avec génération,
 correction et rapport signé enregistré depuis la révision relue de SQL. La

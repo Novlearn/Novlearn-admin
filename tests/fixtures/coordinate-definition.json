@@ -1,0 +1,232 @@
+{
+  "schemaVersion": 5,
+  "kind": "composed",
+  "id": "coordinate-local-fixture",
+  "revision": "1",
+  "title": "[ESSAI LOCAL] Figures et vecteurs prescrits",
+  "generation": {
+    "schemaVersion": 5,
+    "definitions": [
+      { "name": "a", "kind": "integer", "min": 2, "max": 8, "exclusions": [] }
+    ],
+    "constraints": [],
+    "maxAttempts": 100,
+    "maxDraws": 1000
+  },
+  "variables": [{ "name": "x", "domain": "real" }],
+  "elements": [
+    {
+      "id": "vectors-plane",
+      "type": "vectors",
+      "dimension": 2,
+      "showCoordinates": true,
+      "vectors": [
+        {
+          "id": "u",
+          "label": "u",
+          "coordinates": [{ "latex": "a" }, { "latex": "0" }],
+          "color": "#2563eb"
+        },
+        {
+          "id": "v",
+          "label": "v",
+          "coordinates": [{ "latex": "-1" }, { "latex": "2" }],
+          "color": "#6366f1"
+        },
+        {
+          "id": "r",
+          "label": "r",
+          "coordinates": [
+            { "latex": "\\frac{1}{2}" },
+            { "latex": "-\\frac{1}{3}" }
+          ],
+          "color": "#16a34a"
+        },
+        {
+          "id": "zero",
+          "label": "zéro",
+          "coordinates": [{ "latex": "0" }, { "latex": "0" }],
+          "color": "#475569"
+        }
+      ]
+    },
+    {
+      "id": "vectors-space",
+      "type": "vectors",
+      "dimension": 3,
+      "showCoordinates": false,
+      "vectors": [
+        {
+          "id": "i",
+          "label": "i",
+          "coordinates": [{ "latex": "1" }, { "latex": "0" }, { "latex": "0" }],
+          "color": "#2563eb"
+        },
+        {
+          "id": "j",
+          "label": "j",
+          "coordinates": [{ "latex": "0" }, { "latex": "1" }, { "latex": "0" }],
+          "color": "#6366f1"
+        },
+        {
+          "id": "k",
+          "label": "k",
+          "coordinates": [{ "latex": "0" }, { "latex": "0" }, { "latex": "1" }],
+          "color": "#16a34a"
+        },
+        {
+          "id": "camera",
+          "label": "direction de vue",
+          "coordinates": [{ "latex": "1" }, { "latex": "1" }, { "latex": "1" }],
+          "color": "#475569"
+        }
+      ]
+    },
+    {
+      "id": "geometry",
+      "type": "geometry",
+      "showGrid": true,
+      "window": {
+        "xMin": { "latex": "-5" },
+        "xMax": { "latex": "5" },
+        "yMin": { "latex": "-5" },
+        "yMax": { "latex": "5" }
+      },
+      "points": [
+        {
+          "id": "a",
+          "label": "A",
+          "coordinates": [{ "latex": "10000+a" }, { "latex": "10000+a" }]
+        },
+        {
+          "id": "b",
+          "label": "B",
+          "coordinates": [{ "latex": "10001+a" }, { "latex": "10001+a" }]
+        },
+        {
+          "id": "p",
+          "label": "P",
+          "coordinates": [
+            { "latex": "\\frac{1}{2}" },
+            { "latex": "-\\frac{1}{3}" }
+          ]
+        },
+        {
+          "id": "q",
+          "label": "Q",
+          "coordinates": [{ "latex": "-2" }, { "latex": "2" }]
+        },
+        {
+          "id": "r",
+          "label": "R",
+          "coordinates": [{ "latex": "2" }, { "latex": "2" }]
+        }
+      ],
+      "objects": [
+        {
+          "id": "d",
+          "kind": "line",
+          "from": "a",
+          "to": "b",
+          "color": "#ef4444"
+        },
+        {
+          "id": "outside",
+          "kind": "segment",
+          "from": "a",
+          "to": "b",
+          "color": "#6366f1"
+        },
+        {
+          "id": "s",
+          "kind": "segment",
+          "from": "q",
+          "to": "r",
+          "color": "#2563eb"
+        },
+        {
+          "id": "triangle",
+          "kind": "polygon",
+          "vertices": ["p", "q", "r"],
+          "color": "#6366f1"
+        },
+        {
+          "id": "c",
+          "kind": "circle",
+          "center": "p",
+          "radius": { "latex": "\\frac{3}{2}" },
+          "color": "#16a34a"
+        }
+      ]
+    },
+    {
+      "id": "complex",
+      "type": "complex-plane",
+      "showGrid": false,
+      "showCoordinates": true,
+      "window": {
+        "xMin": { "latex": "-\\frac{5}{2}" },
+        "xMax": { "latex": "\\frac{5}{2}" },
+        "yMin": { "latex": "-2" },
+        "yMax": { "latex": "2" }
+      },
+      "points": [
+        {
+          "id": "z",
+          "label": "Z",
+          "real": { "latex": "\\frac{1}{2}" },
+          "imaginary": { "latex": "-\\frac{1}{3}" },
+          "color": "#2563eb"
+        }
+      ]
+    },
+    {
+      "id": "sequence",
+      "type": "sequence-graph",
+      "showGrid": true,
+      "connectPoints": true,
+      "window": {
+        "xMin": { "latex": "-1" },
+        "xMax": { "latex": "3" },
+        "yMin": { "latex": "0" },
+        "yMax": { "latex": "10" }
+      },
+      "sequence": {
+        "mode": "points",
+        "points": [
+          { "index": 0, "value": { "latex": "a" } },
+          { "index": 1, "value": { "latex": "a+1" } }
+        ]
+      }
+    },
+    {
+      "id": "function",
+      "type": "function-graph",
+      "variable": "x",
+      "showGrid": true,
+      "window": {
+        "xMin": { "latex": "-5" },
+        "xMax": { "latex": "5" },
+        "yMin": { "latex": "-5" },
+        "yMax": { "latex": "5" }
+      },
+      "functions": [
+        {
+          "id": "f",
+          "latex": "x^2",
+          "color": "#2563eb",
+          "showExpression": true
+        }
+      ]
+    },
+    {
+      "id": "q",
+      "type": "question",
+      "text": "Quelle est la valeur de a+1 ?",
+      "points": 1,
+      "response": { "format": "latex", "kind": "rational" },
+      "expectedLatex": "a+1",
+      "policy": { "domain": "rational", "form": "value-only" }
+    }
+  ]
+}

@@ -28,6 +28,11 @@ function Workspace() {
   }, []);
   const cards = [
     [
+      'Figures et vecteurs',
+      'coordinates.html',
+      'Examiner les projections publiques réellement capturées du moteur : vecteurs 2D/3D, droite traversant la fenêtre, fractions et description des objets. Cette page ne lance aucun calcul.',
+    ],
+    [
       'Lot de publication simulé',
       'publication-batch.html',
       'Préparer trois diffs, confirmer les exercices relus et observer un résultat partiel. Aucune donnée n’est transférée par cette simulation.',
