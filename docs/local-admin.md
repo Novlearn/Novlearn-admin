@@ -26,6 +26,11 @@ ci-dessous conserve les calculs désactivés.
 La [relecture connectée](local-admin-review.md) s’active avec `--engine --review`.
 Elle conserve les attestations humaines explicites et la publication fermée.
 
+La [liste utilisateurs locale](users-readonly.md), avec nom, e-mail et activité,
+est maintenant disponible sur `/admin/users`. Son activation explicite `--users`
+s’ajoute aux choix `--engine --review --statistics` et utilise une source SQL
+synthétique séparée. Aucun accès Production.
+
 ## Instance conservée
 
 Le dossier ignoré `.local/local-admin-1792143739689/` contient `login.txt`

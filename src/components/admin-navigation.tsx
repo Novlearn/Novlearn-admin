@@ -4,8 +4,10 @@ import { usePathname } from 'next/navigation';
 
 export function AdminNavigation({
   statisticsEnabled = false,
+  usersEnabled = false,
 }: {
   statisticsEnabled?: boolean;
+  usersEnabled?: boolean;
 }) {
   const path = usePathname();
   return (
@@ -19,6 +21,7 @@ export function AdminNavigation({
         ['/admin/competences', 'Compétences'],
         ['/admin/flashcards', 'Flashcards'],
         ...(statisticsEnabled ? [['/admin/statistics', 'Statistiques']] : []),
+        ...(usersEnabled ? [['/admin/users', 'Utilisateurs']] : []),
       ].map(([href, label]) => {
         const active =
           path === href ||

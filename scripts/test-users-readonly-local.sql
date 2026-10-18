@@ -1,0 +1,63 @@
+-- Native checks on a restored synthetic SQL-66 copy only. No fixture is deleted.
+BEGIN;
+CREATE FUNCTION pg_temp.users_assert(ok boolean,label text) RETURNS void LANGUAGE plpgsql AS $$
+BEGIN IF ok IS DISTINCT FROM true THEN RAISE EXCEPTION 'Users assertion failed: %',label; END IF;
+RAISE NOTICE 'PASS: %',label; END; $$;
+CREATE FUNCTION pg_temp.users_denied(query text,label text) RETURNS void LANGUAGE plpgsql AS $$
+DECLARE rejected boolean:=false;
+BEGIN BEGIN EXECUTE query; EXCEPTION WHEN insufficient_privilege THEN rejected:=true; END;
+PERFORM pg_temp.users_assert(rejected,label); END; $$;
+DO $$ BEGIN EXECUTE format('GRANT USAGE ON SCHEMA %I TO novlearn_users_reader,novlearn_activity_reader,authenticated',
+ (SELECT nspname FROM pg_namespace WHERE oid=pg_my_temp_schema())); END; $$;
+SELECT pg_temp.users_assert((SELECT NOT rolcanlogin AND NOT rolinherit AND NOT rolsuper AND NOT rolcreatedb AND NOT rolcreaterole AND NOT rolreplication AND NOT rolbypassrls FROM pg_roles WHERE rolname='novlearn_users_reader'),'user role is NOLOGIN NOINHERIT with no elevated attributes');
+SELECT pg_temp.users_assert(NOT EXISTS(SELECT 1 FROM pg_auth_members WHERE member='novlearn_users_reader'::regrole),'user role has no parent membership');
+SELECT pg_temp.users_assert(NOT pg_has_role('novlearn_activity_reader','novlearn_users_reader','SET') AND NOT pg_has_role('authenticated','novlearn_users_reader','SET'),'aggregate/API identities cannot assume the nominal role');
+SELECT pg_temp.users_assert(NOT EXISTS(SELECT 1 FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname IN ('public','auth','novlearn_admin_private') AND c.relkind IN ('r','p','v','m','S') AND (has_table_privilege('novlearn_users_reader',c.oid,'INSERT,UPDATE,DELETE,TRUNCATE,TRIGGER,REFERENCES') OR has_any_column_privilege('novlearn_users_reader',c.oid,'INSERT,UPDATE,REFERENCES'))),'no application/Auth/private mutation privilege');
+SELECT pg_temp.users_assert((SELECT count(*)=14 FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace JOIN pg_attribute a ON a.attrelid=c.oid AND a.attnum>0 AND NOT a.attisdropped WHERE n.nspname IN ('auth','public','novlearn_admin_private') AND c.relkind IN ('r','p','v','m','f') AND has_column_privilege('novlearn_users_reader',c.oid,a.attnum,'SELECT')),'only fourteen input columns are readable');
+SELECT pg_temp.users_assert((SELECT count(*)=1 AND bool_and(p.oid='public.is_guest()'::regprocedure) FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace WHERE n.nspname IN ('public','auth','novlearn_admin_private') AND p.prosecdef AND has_function_privilege('novlearn_users_reader',p.oid,'EXECUTE')),'only the previously reviewed JWT guest helper is callable as definer');
+SET SESSION AUTHORIZATION novlearn_users_reader;
+SET LOCAL transaction_read_only=off;
+SELECT pg_temp.users_assert((SELECT count(id)=4 FROM auth.users),'actual Auth stock readable without a fabricated JWT');
+SELECT pg_temp.users_assert((SELECT count(id)=4 FROM public.profiles),'actual profile names readable through explicit SELECT policy');
+SELECT pg_temp.users_assert((SELECT count(user_id)=7 FROM public.exercise_attempts),'all dated-activity inputs readable through RLS');
+SELECT pg_temp.users_assert((SELECT count(player_id)=2 FROM public.duel_attempts),'legacy duel-policy subquery dependencies are sufficient');
+SELECT pg_temp.users_denied('SELECT encrypted_password FROM auth.users','Auth password refused');
+SELECT pg_temp.users_denied('SELECT raw_user_meta_data FROM auth.users','unbounded Auth metadata refused');
+SELECT pg_temp.users_denied('SELECT birth_date FROM public.profiles','birth date refused');
+SELECT pg_temp.users_denied('SELECT role FROM public.profiles','profile role not exposed by nominal reader');
+SELECT pg_temp.users_denied('SELECT is_correct FROM public.exercise_attempts','verdict is outside list activity inputs');
+SELECT pg_temp.users_denied('SELECT answer FROM public.duel_attempts','private answer refused');
+SELECT pg_temp.users_denied('SELECT status FROM public.duels','unneeded duel fields refused');
+SELECT pg_temp.users_denied('SELECT content FROM public.exercises','exercise definitions/answers refused');
+SELECT pg_temp.users_denied('SELECT payload FROM public.admin_exercise_test_runs','private Engine reports refused');
+SELECT pg_temp.users_denied('SELECT * FROM novlearn_admin_private.test_signing_keys','signing keys refused');
+SELECT pg_temp.users_denied('UPDATE public.profiles SET first_name=''unexpected''','actual profile UPDATE refused in a read-write transaction');
+SELECT pg_temp.users_denied('DELETE FROM auth.users','actual Auth DELETE refused');
+SELECT pg_temp.users_denied('INSERT INTO public.exercise_attempts(user_id) VALUES(''a8100000-0000-4000-8000-000000000001'')','actual attempt INSERT refused');
+SELECT pg_temp.users_denied('TRUNCATE public.profiles','actual TRUNCATE refused');
+SELECT pg_temp.users_denied('CREATE TEMP TABLE users_forbidden(value integer)','actual temporary creation refused');
+SELECT pg_temp.users_denied('SELECT pg_catalog.lo_create(0)','actual persistent large-object creation refused');
+SELECT pg_temp.users_denied('SET ROLE novlearn_activity_reader','nominal reader cannot assume aggregate identity');
+SELECT pg_temp.users_denied('SET ROLE novlearn_publication_executor','publication role refused');
+SELECT pg_temp.users_denied('SELECT public.get_weekly_leaderboard(now(),10,NULL)','indirect leaderboard projection refused');
+RESET SESSION AUTHORIZATION;
+SET SESSION AUTHORIZATION novlearn_activity_reader;
+SELECT pg_temp.users_denied('SELECT email FROM auth.users','aggregate role remains unable to read e-mail');
+SELECT pg_temp.users_denied('SELECT first_name FROM public.profiles','aggregate role remains unable to read names');
+RESET SESSION AUTHORIZATION;
+SELECT set_config('request.jwt.claim.sub','a8100000-0000-4000-8000-000000000001',true);
+SELECT set_config('request.jwt.claims','{"sub":"a8100000-0000-4000-8000-000000000001","role":"novlearn_users_reader","is_anonymous":false}',true);
+SET SESSION AUTHORIZATION authenticated;
+SELECT pg_temp.users_assert((SELECT count(id)=1 FROM public.profiles),'forged nominal claim still sees only the permanent client profile');
+SELECT pg_temp.users_denied('SELECT email FROM auth.users','forged nominal claim cannot read Auth e-mails');
+RESET SESSION AUTHORIZATION;
+SELECT set_config('request.jwt.claim.sub','a8100000-0000-4000-8000-000000000002',true);
+SELECT set_config('request.jwt.claims','{"sub":"a8100000-0000-4000-8000-000000000002","is_anonymous":true}',true);
+SET SESSION AUTHORIZATION authenticated;
+SELECT pg_temp.users_assert((SELECT count(id)=0 FROM public.profiles),'guest profile SELECT stays refused');
+DO $$ DECLARE affected bigint; BEGIN
+  UPDATE public.profiles SET first_name='guest change'; GET DIAGNOSTICS affected=ROW_COUNT;
+  PERFORM pg_temp.users_assert(affected=0,'guest profile UPDATE affects no row');
+END; $$;
+RESET SESSION AUTHORIZATION;
+ROLLBACK;

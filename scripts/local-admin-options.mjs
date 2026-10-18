@@ -7,19 +7,22 @@ export function localAdminOptions(args) {
     new Set(flags).size !== flags.length ||
     flags.some(
       (flag) =>
-        !['--stop', '--engine', '--review', '--statistics'].includes(flag),
+        !['--stop', '--engine', '--review', '--statistics', '--users'].includes(
+          flag,
+        ),
     )
   )
     throw Error('Unknown or duplicate local option');
   const stop = flags.includes('--stop'),
     engine = flags.includes('--engine'),
     review = flags.includes('--review'),
-    statistics = flags.includes('--statistics');
-  if (stop && (engine || review || statistics))
+    statistics = flags.includes('--statistics'),
+    users = flags.includes('--users');
+  if (stop && (engine || review || statistics || users))
     throw Error('Stop does not enable local features');
   if (review && !engine)
     throw Error(
       'Local review requires the qualified Engine and signed reports',
     );
-  return { workspace, stop, engine, review, statistics };
+  return { workspace, stop, engine, review, statistics, users };
 }

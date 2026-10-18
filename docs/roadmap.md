@@ -1,5 +1,13 @@
 # Roadmap
 
+**Utilisateurs locaux, 18 octobre :** [liste/recherche/activité](users-readonly.md)
+raccordées avec identité SQL distincte et lecture minimisée. Rejeu 66, restauration,
+35 assertions SQL, 16 groupes PG/TLS et 13 groupes Auth/HTTP passent. Les 62 tables
+d’activité sont conservées. Contrôle complet : **1 023 tests / 54 fichiers**,
+build et smoke passent ; huit contrôles Engine après redémarrage préservent
+les seize anciens rapports. Profils détaillés, progression, historique, Production
+et réception navigateur restent ouverts ; les jalons ci-dessous sont historiques.
+
 **Statistiques connectées, 18 octobre :** [page/API locales](activity-http.md)
 raccordées au lecteur TLS sur une source synthétique séparée. Douze groupes
 Auth/HTTP/SQL et huit contrôles Engine après redémarrage passent. Les 62 tables

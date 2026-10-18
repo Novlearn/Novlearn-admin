@@ -6,7 +6,9 @@ opérationnels et plusieurs réceptions restent ouvertes. Le contrat et l’affi
 des statistiques sont [préparés sur exemple fictif](activity-statistics.md), sans
 lecteur Production. La [page/API SQL locale](activity-http.md) est depuis
 raccordée et qualifiée sur une source synthétique séparée. Les [services locaux sont rétablis](local-recovery-2026-10-18.md) :
-connexion, sauvegarde, reconnexion et Engine passent. Les fonctions Production
+connexion, sauvegarde, reconnexion et Engine passent. La [liste utilisateurs
+locale](users-readonly.md) dispose maintenant de preuves SQL, PG/TLS et Auth/HTTP ;
+les détails, progression et historique restent à réaliser. Les fonctions Production
 manquantes restent à réaliser et qualifier.
 
 Cette matrice couvre les vingt sections de la demande `/goal` jointe. Elle
@@ -40,7 +42,7 @@ Aucune écriture ni qualification globale des deux bases n’en est déduite.
 | 12      | Compétences               | CRUD, filtres, points, références stables et conflits : [référentiel](taxonomy-local-proof.json).                                                                                                                            | Même réception ; ne pas déduire une couverture utilisateur actuelle des seules assertions SQL.                                                                                              |
 | 13      | Flashcards                | CRUD, prévisualisation et permissions : [flashcards](flashcards-local-proof.json).                                                                                                                                           | Réception navigateur ouverte ; aucune synchronisation Production en V1.                                                                                                                     |
 | 14      | Dashboard et statistiques | Agrégats **Staging** : [Dashboard](dashboard-local-proof.json). Contrat/rendu fictif et [rôle/premiers agrégats SQL natifs](activity-readonly-proof.json) qualifiés sur copies.                                              | Page/API SQL locales et permissions [qualifiées](activity-http-proof.json). Source/activation Production, filtres pédagogiques, classements et autres métriques restent à réaliser.         |
-| 15      | Utilisateurs              | Nom, e-mail et activité retenus par [D08](decisions.md). Aucun écran ni lecteur Production opérationnel n’est encore livré.                                                                                                  | Capacité bornée, liste/recherche/pagination, profils autorisés, progression, activité et historique synthétique à implémenter et qualifier.                                                 |
+| 15      | Utilisateurs              | [Liste locale nom/e-mail/activité](users-readonly-proof.json) : SQL 66, restauration, lecture minimisée, recherche, pagination et 13 groupes Auth/HTTP réels.                                                                | Profils détaillés, progression, historique synthétique, source Production et réception navigateur restent à construire/qualifier.                                                           |
 | 16      | Qualité et tests          | Suites unitaires/SSR, SQL, concurrence, sauvegarde/restauration et HTTP datés ; erreurs intermédiaires conservées.                                                                                                           | E2E navigateur, récupération connectée, expiration réelle et qualification distante non exécutés. Aucun test simulé ne remplace ces portes.                                                 |
 | 17      | Organisation autonome     | Lots, preuves, décisions et commits locaux ; jalons de base `d17fbfa` et `30eefde`, correctif `4260d80`.                                                                                                                     | Continuer les travaux autorisés indépendants, puis s’arrêter aux frontières d’autorisation ; ne pas recommencer les qualifications inchangées.                                              |
 | 18      | Points d’arrêt            | Aucune écriture SQL distante, push, déploiement ou publication réelle. [Reprise normale sans mise à jour](local-recovery-2026-10-18.md). NovLearn limité au SQL local, Engine aux corrections autorisées.                    | Autorisations distinctes pour futures opérations distantes, éventuelle mise à jour globale ou nouvelle capacité Engine hors D05.                                                            |
@@ -74,7 +76,8 @@ et autorisée avant toute modification de l’Engine.
 les premiers agrégats SQL](activity-readonly.md) sont qualifiés sur copies, y
 compris refus, droits PUBLIC et restauration. Le [login TLS et lecteur serveur](activity-pg.md)
 passent depuis sur copie synthétique ; la [page/API locale](activity-http.md) est
-maintenant raccordée. Production, filtres restants et liste nominative restent à réaliser. Un compte privilégié général ne devient pas limité par convention.
+maintenant raccordée. La [liste nominative locale](users-readonly.md) est aussi
+qualifiée ; Production, profils détaillés et filtres/métriques restants restent à réaliser. Un compte privilégié général ne devient pas limité par convention.
 
 Les métriques doivent aussi distinguer leurs sources et leur fiabilité. Le
 schéma local utilise `exercise_attempts.attempted_at` et
@@ -91,7 +94,7 @@ contre le relevé d’origine sont désormais vérifiés. Aucun environnement di
 n’est activé. Le prochain travail porte sur les fonctions et réceptions restantes :
 
 1. Compléter filtres et métriques autour de la page/API SQL locale qualifiée,
-   utilisateurs nom/e-mail/activité (D08) et
+   profils détaillés/progression/historique autour de la liste utilisateurs locale (D08) et
    version cible courante, avec permissions et minimisation vérifiées.
 2. Exécuter le parcours HTTP multi-exercices complet ; réceptionner récupération,
    MathLive et navigation dans un navigateur autorisé. Le HTTP ne prouve pas

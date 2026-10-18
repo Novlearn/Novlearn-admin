@@ -7,7 +7,10 @@ NovLearn Admin sera l'application privée d'administration de NovLearn : gestion
 La page [Statistiques](http://127.0.0.1:3150/admin/statistics) est désormais
 [raccordée à une base SQL locale synthétique](docs/activity-http.md), avec
 permissions fraîches et filtres de période. Elle permet des essais progressifs ;
-les statistiques Production et la liste utilisateurs restent à construire.
+la [liste Utilisateurs](http://127.0.0.1:3150/admin/users) permet maintenant
+[recherche, pagination et activité locales](docs/users-readonly.md), avec nom et
+e-mail autorisés. Les fonctions Production et les détails/progression/historique
+utilisateurs restent à construire.
 
 La [capacité SQL analytique](docs/activity-readonly.md) est qualifiée sur copies :
 rôle limité, agrégats natifs, refus et restauration. Le [login TLS et lecteur serveur](docs/activity-pg.md)

@@ -46,6 +46,10 @@ if (options.stop) {
     ADMIN_LOCAL_ACTIVITY_REVIEW: '',
     ADMIN_LOCAL_ACTIVITY_PG_URL: '',
     ADMIN_LOCAL_ACTIVITY_PG_CA: '',
+    ADMIN_LOCAL_USERS_ENABLED: 'false',
+    ADMIN_LOCAL_USERS_REVIEW: '',
+    ADMIN_LOCAL_USERS_PG_URL: '',
+    ADMIN_LOCAL_USERS_PG_CA: '',
   });
   if (options.statistics) {
     const marker = JSON.parse(
@@ -77,6 +81,37 @@ if (options.stop) {
       ADMIN_LOCAL_ACTIVITY_REVIEW: 'isolated-sql65-activity-http-v1',
       ADMIN_LOCAL_ACTIVITY_PG_URL: activity.config.url,
       ADMIN_LOCAL_ACTIVITY_PG_CA: activity.config.ca,
+    });
+  }
+  if (options.users) {
+    const marker = JSON.parse(
+      await readFile('.local/lot1a/users-http-current.json', 'utf8'),
+    );
+    const directory = path.resolve(marker.artifact);
+    assert.equal(
+      path.dirname(directory).toLowerCase(),
+      path.resolve('.local/lot1a').toLowerCase(),
+    );
+    assert.match(path.basename(directory), /^users-http-\d+$/);
+    assert.equal(marker.phase, 'prepared');
+    const users = JSON.parse(
+      await readFile(directory + '/private.json', 'utf8'),
+    );
+    assert.equal(users.artifact, directory);
+    assert.equal(users.physicalConnectionQualified, true);
+    const url = new URL(users.config.url);
+    assert.equal(url.hostname, '127.0.0.1');
+    assert.equal(url.port, '55435');
+    assert.equal(url.pathname, '/activity_copy');
+    assert.equal(
+      decodeURIComponent(url.username),
+      'novlearn_admin_users_service',
+    );
+    Object.assign(process.env, {
+      ADMIN_LOCAL_USERS_ENABLED: 'true',
+      ADMIN_LOCAL_USERS_REVIEW: 'isolated-sql66-users-http-v1',
+      ADMIN_LOCAL_USERS_PG_URL: users.config.url,
+      ADMIN_LOCAL_USERS_PG_CA: users.config.ca,
     });
   }
   const { readAuthConfiguration } = await import('../src/lib/auth/config.ts');
@@ -167,6 +202,7 @@ if (options.stop) {
         engine: !!engine,
         review: options.review,
         statistics: options.statistics,
+        users: options.users,
         ...(engine
           ? {
               engineContainer: engine.container,

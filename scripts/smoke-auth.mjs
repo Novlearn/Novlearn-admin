@@ -85,6 +85,7 @@ try {
     '/admin/flashcards',
     '/admin/publication',
     '/admin/statistics',
+    '/admin/users',
   ]) {
     const admin = await fetch(`${origin}${path}`, {
       redirect: 'manual',
@@ -99,6 +100,7 @@ try {
   for (const [path, method] of [
     ['/api/admin/session', 'GET'],
     ['/api/admin/statistics', 'GET'],
+    ['/api/admin/users', 'GET'],
     ['/api/admin/exercises', 'GET'],
     ['/api/admin/exercises', 'POST'],
     ['/api/admin/engine', 'POST'],

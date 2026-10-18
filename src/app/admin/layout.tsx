@@ -4,6 +4,7 @@ import { requireAdminPage } from '@/lib/auth/require-admin';
 import { AdminNavigation } from '@/components/admin-navigation';
 import { readAuthConfiguration } from '@/lib/auth/config';
 import { readLocalActivityConfiguration } from '@/lib/activity-config';
+import { readLocalUsersConfiguration } from '@/lib/users-config';
 import {
   EditorRecoveryScope,
   AdminLogout,
@@ -39,6 +40,7 @@ export default async function AdminLayout({
           </Link>
           <AdminNavigation
             statisticsEnabled={!!readLocalActivityConfiguration(process.env)}
+            usersEnabled={!!readLocalUsersConfiguration(process.env)}
           />
           <p className="mt-10 text-xs leading-6 text-slate-500">
             {local

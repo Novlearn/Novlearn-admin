@@ -1,0 +1,212 @@
+{
+  "recordedAt": "2026-10-18T21:33:24.360Z",
+  "scope": "Local SQL-66 nominal capability and actual local Auth/HTTP reader; not Production, browser acceptance or whole-goal certification",
+  "evidence": {
+    "migration": {
+      "file": ".local/lot1a/users-sql-1792347786005/proof.json",
+      "sha256": "68e683ce93601b8fc7a267dd94af6777202c043c8f3af6d57e6a31e041a902fc",
+      "date": "2026-10-18T18:23:11.796Z",
+      "result": "PASS for local nominal SQL capability and paginated query"
+    },
+    "nativeSql": {
+      "file": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\users-readonly-check-1792357941567/proof.json",
+      "sha256": "271965d3208ab7e17c36690d4b9f138f18313b509aedab70297fed81364fb693",
+      "date": "2026-10-18T21:12:24.517Z",
+      "result": "PASS for native nominal SQL, bounds and decoder checks"
+    },
+    "nativePg": {
+      "file": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\users-pg-1792358087862/proof.json",
+      "sha256": "3f15ff147f7af169f6e739072085d75aae2c25c01653f61564fe220bf00f1654",
+      "date": "2026-10-18T21:19:24.881Z",
+      "result": "PASS"
+    },
+    "restore": {
+      "file": ".local/lot1a/users-sql-1792347786005/restore-proof.json",
+      "sha256": "dd729b0c8380c4ed992bff7b390fc774450f4f72c2d1417218e372c2e5539f16",
+      "date": "2026-10-18T18:33:03.127Z",
+      "result": "PASS for actual SQL-66 logical restoration"
+    },
+    "legacySql": {
+      "file": ".local/lot1a/activity-regression-1792348176983/regression-proof.json",
+      "sha256": "22d7c8b76c4f7568f5d7c4e4b544d60d330bc535a33a37dfb051c44ec588fa8e",
+      "date": "2026-10-18T18:29:41.227Z",
+      "result": "PASS for unchanged local SQL regression suites"
+    },
+    "aggregateSql": {
+      "file": ".local/lot1a/activity-readonly-check-1792348495381/proof.json",
+      "sha256": "6213f44589805dc6a48258129e58c6fcb91e6fa48c915fc86ed09d623b68449f",
+      "date": "2026-10-18T18:34:57.090Z",
+      "result": "PASS for native isolated SQL permission and aggregate qualification"
+    },
+    "preparation": {
+      "file": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\users-http-1792358376506/preparation-proof.json",
+      "sha256": "00af222dfbc3085ce744a0c0effd4dc2309468871ae5561d400f8dbc719367ad",
+      "date": "2026-10-18T21:19:42.320Z",
+      "result": "PASS"
+    },
+    "http": {
+      "file": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\users-http-1792358376506/http-1792358864148/proof.json",
+      "sha256": "a9aaf63b3d6ddf725c33cbb86385d4ff961519eef79acf6a6f6ceba17512d976",
+      "date": "2026-10-18T21:27:55.468Z",
+      "result": "PASS"
+    },
+    "engine": {
+      "file": ".local/local-admin-1792143739689/engine-adoption-1792358551801/proof.json",
+      "sha256": "c7c983388e922ce55d314b7d11db7cfe3a6ea617d5d781300003ae7500628832",
+      "date": "2026-10-18T21:23:05.848Z",
+      "result": "PASS"
+    },
+    "closure": {
+      "file": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\users-http-1792358376506/closure-proof.json",
+      "sha256": "221193a506969dc2b8cc5b0465d6b197382ce804e87083051a812eec89b624d5",
+      "date": "2026-10-18T21:26:55.637Z",
+      "result": "PASS"
+    },
+    "fullCheck": {
+      "file": "C:\\Users\\balth\\AppData\\Local\\Temp\\novlearn-admin-check-1792358920051/proof.json",
+      "sha256": "c167a66dcea218e6deea38097c033973addd71eaac2c834a3efb38359f3b4a39",
+      "date": "2026-10-18T21:32:38.744Z",
+      "result": "PASS"
+    },
+    "clientScan": {
+      "file": ".local/lot1a/users-http-client-scan-proof.json",
+      "sha256": "6fc8b37f5804dc1a7cb3c8b9b1dc9932f562f05470027532b47fc44645f40898",
+      "date": "2026-10-18T21:33:24.178Z",
+      "result": "PASS for targeted production client-bundle scan"
+    },
+    "preservation": {
+      "file": ".local/lot1a/users-preservation-proof.json",
+      "sha256": "459f50b5dfb38b161ad8757460c86569fd2cf82aa018f55c5a16e741f95e9145",
+      "date": "2026-10-18T21:31:08.745Z",
+      "result": "PASS"
+    }
+  },
+  "sourceHashes": {
+    "scripts/users-list-query.sql": "3bd4cdfdad6913ab7576e69b29482324b0adb52607869182c0298b7abd5f5f50",
+    "scripts/test-users-readonly-local.sql": "97ff778999147d3777ed6f5432b0a3f7ebe6dfbd6ebc784f4258dd722b80d73b",
+    "scripts/test-users-readonly-local.mjs": "e68bf057da46db78d3dbd3c830767e6cb34d77b24668bfeddb28abad44491f89",
+    "src/lib/users.ts": "c55a405fc0b1d738a04881337d20597922e9b1e9f728cc685a1a81023205ec7c",
+    "src/lib/users-pg.ts": "6bd80b516c0cd08e76ea1fa651b41bd12101f2bf8a43fd79bafe245a4f79851f",
+    "src/lib/users-config.ts": "cbcedc7d2ee25acaa555845e565dfb428b0ec86923b28c5fad3f97c0fb46f0a5",
+    "scripts/users-reader-audit.sql": "36b3764735cd1ff4ee30b57907a62a330bb3caa6ecf01140d572ab27a630fa4e",
+    "scripts/test-users-pg-worker.mjs": "8b3c434f092cf4f4dd48142a540dcab6c45b7b781efac446d37cea37d6dd77fb",
+    "scripts/test-users-pg-local.mjs": "a39aa9c2d2131e334af839ddde825ca8623d52588506fa55f7636586d8d3f783",
+    "src/lib/users-server.ts": "9e6fb404964cbfd4aba2d1f9d81783032114b45e2d5c8c2b3b3e8a336520e909",
+    "src/components/users-list.tsx": "f57860b8e7e2fd0a418a73cb91f049f1a354bb70b59d8396961ab933d72d8280",
+    "src/app/admin/users/page.tsx": "cb224c9197682a6fa8b4aa34dbb1a478166ffd4dd8bb135ea7cdb18c5125cafa",
+    "src/app/api/admin/users/route.ts": "cfb2a19a60f98bc8b2c9ee6aad447bcf71709af40bd4ddcfbc20dae311e900f8",
+    "scripts/test-users-http-local.mjs": "976820ba245fa6929bb9a5b096e0f8d9efd9bfe42f2fc713cbfcc82d49b11285"
+  },
+  "freshReplay": {
+    "migrationCount": 66,
+    "manifestFile": "../Novlearn/.local/admin-sql-replay/novlearn-admin-lot1a-replay-20261018182606912/manifest.json",
+    "manifestSha256": "af193198af02e13b16e44211883811ca8e37fa8fda5c036b844099313fce6971",
+    "allMigrationSourcesStillMatch": true,
+    "logFile": "../Novlearn/.local/admin-sql-replay/novlearn-admin-lot1a-replay-20261018182606912/replay.log",
+    "logSha256": "a944e58f3622d6d66b4ccfd17c3bc98c89b3dd70c605fa07db9d9a1f088b5a38"
+  },
+  "checks": {
+    "nativeSqlPermissions": 35,
+    "nominalQueries": 14,
+    "bounds": 7,
+    "legacyAssertions": 56,
+    "aggregatePermissions": 31,
+    "nativePgGroups": 16,
+    "actualSqlDenials": 24,
+    "privilegeDriftsRefused": 2,
+    "httpGroups": 13,
+    "engineGroupsAfterRestart": 8,
+    "oldSignedReportsPreserved": 16,
+    "tableRowsPreserved": 62,
+    "restoredRelations": 73,
+    "restoredFunctions": 77,
+    "restoredSequenceStates": 11,
+    "mainReadOnlyPhaseExactTables": 35,
+    "controlledRoleTest": {
+      "roleRestored": true,
+      "onlySyntheticAdminUpdatedAtChanged": true,
+      "allOtherProfileFieldsExact": true,
+      "allOtherRowsExact": true
+    }
+  },
+  "fullCheck": {
+    "result": "PASS",
+    "date": "2026-10-18T21:32:38.744Z",
+    "artifact": "C:\\Users\\balth\\AppData\\Local\\Temp\\novlearn-admin-check-1792358920051",
+    "exitCode": 0,
+    "tests": 1023,
+    "files": 54,
+    "sourceFiles": 441,
+    "allCopiedSourcesStillMatch": true,
+    "fullCheckCommand": "npm run check",
+    "separateBuildDirectory": true,
+    "independentTemporaryProject": true,
+    "dependenciesCopied": true,
+    "applicationServersInterrupted": false,
+    "privateEnvironmentFilesCopied": false,
+    "executedForCurrentSources": true,
+    "previousFailedAttempt": {
+      "result": "FAIL",
+      "date": "2026-10-18T21:26:36.169Z",
+      "artifact": "C:\\Users\\balth\\AppData\\Local\\Temp\\novlearn-admin-check-1792358676471",
+      "exitCode": 1,
+      "tests": 1023,
+      "files": 54,
+      "sourceFiles": 441,
+      "allCopiedSourcesStillMatch": true,
+      "fullCheckCommand": "npm run check",
+      "separateBuildDirectory": true,
+      "independentTemporaryProject": true,
+      "dependenciesCopied": true,
+      "applicationServersInterrupted": false,
+      "privateEnvironmentFilesCopied": false,
+      "reason": "Next lint rejects a reserved module variable; two unused imports also removed. Build and smoke were not reached."
+    }
+  },
+  "preservedPreexistingFileHashes": {
+    ".env.example": "bef315e2915404a579ed290b3f31ec738565219eacb46c4f83e16295314854cf",
+    "docs/audit-current-2026-10-15.md": "8ff3bf843fb6221ff8c7cb34435afc67372b25163eb4edbf1268dcae7b38f26a",
+    "CDC_reference.md": "b6bfea6d74b008e54ed61aa7598ccd01bd438d496cc22add15da2ff8abb04401",
+    "docs/system-design.md": "59e40e03702a673632213c354268b11334836fe4b46a1c69a1d7be127d84b2d9"
+  },
+  "preservedNovlearnDirtyFileCount": 8,
+  "goalComplete": false,
+  "browserExecuted": false,
+  "remoteOperations": false,
+  "privilegedProductionKeysRetrieved": false,
+  "strictStolenJwtRevocationTested": false,
+  "productionActivated": false,
+  "remaining": [
+    "Production identities and activation",
+    "Administrative user detail, progression and history",
+    "Remaining metrics and filters",
+    "Current Production active version",
+    "Multi-exercise HTTP publication",
+    "MFA, strict session expiry/revocation and operations",
+    "Authorized human browser acceptance",
+    "Remote SQL reconciliation, backup/PITR, student compatibility and approvals"
+  ],
+  "engineRuntime": {
+    "container": "novlearn-admin-engine-1792358398280",
+    "uid": 65534,
+    "memory": "402653184",
+    "swap": "0",
+    "pids": "64",
+    "network": "none",
+    "readOnly": true,
+    "capDrop": ["ALL"],
+    "noNewPrivileges": true
+  },
+  "canonicalSqlCommit": "6bd706f1b28066f27ffa24c29eae140ed38bc716",
+  "clientScan": {
+    "patterns": 69,
+    "bundles": 52,
+    "matches": 0,
+    "exhaustive": false
+  },
+  "configurationsPreserved": 8,
+  "launcherPolicyChecks": {
+    "executed": true,
+    "passed": 16
+  }
+}

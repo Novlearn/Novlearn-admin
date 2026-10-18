@@ -29,9 +29,11 @@ if (hasPublic) {
 for (const name of [
   'activity-reader-audit.sql',
   'activity-statistics-query.sql',
+  'users-reader-audit.sql',
+  'users-list-query.sql',
 ]) {
   const source = await readFile(new URL('scripts/' + name, root));
   const traced = await readFile(new URL('scripts/' + name, standalone));
   assert(source.equals(traced), 'Standalone SQL source differs: ' + name);
 }
-console.log('Standalone assets and exact activity SQL sources prepared.');
+console.log('Standalone assets and exact activity/users SQL sources prepared.');
