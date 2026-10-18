@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "environment": "local-fixture",
+  "asOf": "2026-10-17T18:00:00.000Z",
+  "period": { "from": "2026-10-15", "until": "2026-10-18" },
+  "accounts": { "total": "10", "anonymous": "2" },
+  "totals": {
+    "activeAccounts": "3",
+    "exerciseAttempts": "9",
+    "duelAttempts": "4",
+    "completedDuels": "2",
+    "accountsCreated": "2",
+    "correct": "4",
+    "incorrect": "2",
+    "abandoned": "2",
+    "unclassified": "1"
+  },
+  "daily": [
+    {
+      "date": "2026-10-15",
+      "activeAccounts": "2",
+      "exerciseAttempts": "4",
+      "duelAttempts": "1",
+      "completedDuels": "0",
+      "accountsCreated": "1",
+      "correct": "2",
+      "incorrect": "1",
+      "abandoned": "1",
+      "unclassified": "0"
+    },
+    {
+      "date": "2026-10-16",
+      "activeAccounts": "1",
+      "exerciseAttempts": "2",
+      "duelAttempts": "2",
+      "completedDuels": "1",
+      "accountsCreated": "0",
+      "correct": "1",
+      "incorrect": "0",
+      "abandoned": "0",
+      "unclassified": "1"
+    },
+    {
+      "date": "2026-10-17",
+      "activeAccounts": "2",
+      "exerciseAttempts": "3",
+      "duelAttempts": "1",
+      "completedDuels": "1",
+      "accountsCreated": "1",
+      "correct": "1",
+      "incorrect": "1",
+      "abandoned": "1",
+      "unclassified": "0"
+    }
+  ]
+}

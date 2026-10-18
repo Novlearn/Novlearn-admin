@@ -4,6 +4,11 @@ NovLearn Admin sera l'application privée d'administration de NovLearn : gestion
 
 ## État du projet
 
+Un [exemple de statistiques](http://127.0.0.1:3140/tests/browser/statistics.html)
+permet aussi les retours d’interface : chiffres fictifs, période fixe et aucune
+lecture réelle. Le [contrat préparatoire](docs/activity-statistics.md) distingue
+ces essais du lecteur Production qui reste à construire et qualifier.
+
 L’[état de livraison actuel](docs/readiness-current.md) distingue les fonctions
 locales, les réceptions encore ouvertes et les statistiques/utilisateurs
 Production à construire. Le [relevé SQL actualisé](docs/lot-1a-remote-reconciliation-current.md)

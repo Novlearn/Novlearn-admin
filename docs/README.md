@@ -1,5 +1,8 @@
 # Documentation NovLearn Admin
 
+[Statistiques d’activité préparatoires](activity-statistics.md) : périodes UTC,
+contrat d’agrégats, rendu et exemple fictif ; pas de lecteur Production activé.
+
 [Réconciliation distante actualisée](lot-1a-remote-reconciliation-current.md) :
 métadonnées seulement, Git/working tree distingués et historique toujours incomplet.
 

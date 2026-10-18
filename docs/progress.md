@@ -1,5 +1,23 @@
 # Progression du goal NovLearn Admin
 
+## Statistiques d’activité — préparation du Lot 8
+
+Le [contrat et l’affichage](activity-statistics.md) préparent les agrégats,
+périodes UTC et contrôles de cohérence sans client Production ni nouvelle SQL.
+Le banc comporte un exemple figé explicitement fictif, avec états indisponibles
+et tableau accessible. Les statistiques réelles, le rôle de lecture, les filtres
+pédagogiques, les utilisateurs et la qualification SQL/HTTP restent à réaliser.
+Les choix nominaux demandés ne sont pas présumés approuvés.
+
+Le contrôle complet du 18 octobre à 12:50 UTC passe **844 tests / 45 fichiers**,
+types, lint, format, build et smoke HTTP. Les onze pages du banc compilent ;
+trois réponses HTTP de l’aperçu sont vérifiées. Les 39 nouveaux tests couvrent
+les périodes, agrégats, précision et rendus serveur. Le premier échec de
+réentrance du décodage est conservé dans la [preuve](activity-statistics-proof.json).
+Aucun test navigateur, agrégat réel Production ou qualification SQL de lecture
+n’est revendiqué. Les 64 SQL, huit configurations privées et modifications
+préexistantes contrôlées sont conservées.
+
 ## Reprise et contrôle du périmètre — 18 octobre 2026
 
 La [matrice de livraison](readiness-current.md) distingue les vingt sections de

@@ -1,5 +1,11 @@
 # Roadmap
 
+Le [volet préparatoire du Lot 8](activity-statistics.md) définit les périodes,
+agrégats et rendu de statistiques sur exemple fictif. Il ne clôture ni ne branche
+le lecteur Production : la capacité SQL et les parcours réels restent ouverts.
+Contrôle complet : **844 tests / 45 fichiers**, onze pages du banc compilées,
+trois réponses HTTP vérifiées ; interactions navigateur non exécutées.
+
 Le [relevé distant en lecture seule du 18 octobre](lot-1a-remote-reconciliation-current.md)
 confirme l’historique incomplet et les tables Admin non appliquées. Il distingue
 les comparaisons brutes et normalisées, sans nouvelle autorisation de migration.

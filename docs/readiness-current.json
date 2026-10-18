@@ -1,13 +1,13 @@
 {
-  "recordedAt": "2026-10-18T12:21:48.193Z",
+  "recordedAt": "2026-10-18T12:54:05.692Z",
   "scope": "Documentary traceability for all 20 original goal sections; not a functional test, receipt, permission or completion certificate",
   "referenceInputs": {
     "requestSha256": "fb9ac40863c57594878833b8a9fc0bd130a0cba9d0249d29c609051a54bded93",
     "cdcSha256": "b6bfea6d74b008e54ed61aa7598ccd01bd438d496cc22add15da2ff8abb04401",
     "decisionsSha256": "15f316f04bca6f001e5b0de279d598706d9d9ac3c3251bafe7b5dbecbe8e709c"
   },
-  "baselineAdminCommitAtAssessment": "4260d809a736c9ab11b15fad813a01dc95140fcb",
-  "implementationHasUncommittedChangesAtObservation": false,
+  "baselineAdminCommitAtAssessment": "296edf951848ee93cdecfdf733c74ec93b32c8f3",
+  "implementationHasUncommittedChangesAtObservation": true,
   "requestedSections": [
     {
       "id": 1,
@@ -172,8 +172,8 @@
     {
       "id": 14,
       "title": "Dashboard et statistiques",
-      "evidenceSummary": "Agrégats **Staging** : [Dashboard](dashboard-local-proof.json).",
-      "remaining": "Statistiques **Production à implémenter** : capacité read-only effective, métriques, agrégations, filtres, permissions et preuves sur copie puis environnement approuvé."
+      "evidenceSummary": "Agrégats **Staging** : [Dashboard](dashboard-local-proof.json). Contrat et affichage préparés sur [exemple fictif](activity-statistics-proof.json).",
+      "remaining": "Statistiques **Production à raccorder** : capacité read-only effective, calculs SQL, filtres pédagogiques, permissions et preuves sur copie puis environnement approuvé."
     },
     {
       "id": 15,
@@ -213,8 +213,9 @@
     }
   ],
   "referenceHashes": {
+    "activity-statistics.md": "143ffb13fc1d517d8ccf408c651fcb55b99be9717b1674ba42b3fcb1b7f3db7e",
     "lot-1a-remote-reconciliation-current.md": "4a2a06adff60f7a6541f261af3bd00a63debc01197030717c389c7c22b813dfe",
-    "progress.md": "b20312843382f4f868533ce7494ee594b9e3242e69358097844da62aa9577745",
+    "progress.md": "f84220240a425d17f4927ee29e9791b891675a4cce7730a38117ff33a05773c1",
     "lot-1a-preparation.md": "3561164a62bc6690a46d2f472c42037c11bd9aacc40add77d44814abdc5dd271",
     "recovery-cleanup-proof.json": "cb414a4c150ceb55204fcc9fca07696d05463e71642b4b4db35fd62819fa2524",
     "local-admin-proof.json": "25e120631288ff66edd129411f5855da6d05a5a0c1753961e5592982f80ac432",
@@ -232,12 +233,13 @@
     "taxonomy-local-proof.json": "ddb602ba18c47fc4ce7ecaffecb3c046c4c7759a4757cd12e6285f74655fc275",
     "flashcards-local-proof.json": "7d8da9b502804ed2160680c78b9289b712e39fdd8790fa42d2c52103ffd996c2",
     "dashboard-local-proof.json": "6c930179bc83e3050f12965895fb89d8aca87e215d9622a4f1fc31b7b859c04b",
-    "roadmap.md": "a02a44830925ce0c222501a6219b622fd53e2aa47e0ff4d9d7dd606e100d86ff",
+    "activity-statistics-proof.json": "56f1226d4bb982d162e4041bd5e3ac89ec0d9a2867c8f90798c561b316a2354e",
+    "roadmap.md": "af55e15a6520409ac1782f8e894ce63148a444514ddb8e93d4b86f2b963cc49a",
     "publication-http-connected.md": "7ba59899755437f337398293c7488926b0e48d37977bc7199a2e97b25966c131",
     "lot-1a-local-statistics-guard.md": "0bd4f19d706296ccb96f8ea246f186c4e52ddc7a23da69519f64c2a1978a7a92"
   },
   "unimplemented": [
-    "Production analytics read capability, metrics and filters",
+    "Production analytics read capability, real SQL aggregates and pedagogical filters (DTO/display prepared on a fictitious fixture only)",
     "Production user listing, search, profile/activity/progression",
     "Current Production active-version indicator",
     "Official Engine formula sampling and dependent curve rendering",

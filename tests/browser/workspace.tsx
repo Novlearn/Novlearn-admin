@@ -28,6 +28,11 @@ function Workspace() {
   }, []);
   const cards = [
     [
+      'Statistiques de démonstration',
+      'statistics.html',
+      'Examiner les filtres UTC, indicateurs, graphique et valeurs exactes sur un exemple figé explicitement fictif. Aucune activité réelle ou donnée Production n’est lue.',
+    ],
+    [
       'Figures et vecteurs',
       'coordinates.html',
       'Examiner les projections publiques réellement capturées du moteur : vecteurs 2D/3D, droite traversant la fenêtre, fractions et description des objets. Cette page ne lance aucun calcul.',

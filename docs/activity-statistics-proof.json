@@ -1,0 +1,187 @@
+{
+  "result": "PASS for Node/SSR/build/smoke checks and manual-harness HTTP responses; Production reader NOT IMPLEMENTED, browser acceptance NOT EXECUTED",
+  "date": "2026-10-18T12:54:02.497Z",
+  "baseAdminCommit": "296edf9",
+  "fullCheck": {
+    "result": "PASS",
+    "date": "2026-10-18T12:50:10.569Z",
+    "artifact": "C:\\Users\\balth\\AppData\\Local\\Temp\\novlearn-admin-check-1792327626795",
+    "exitCode": 0,
+    "tests": 844,
+    "files": 45,
+    "sourceFiles": 388,
+    "allCopiedSourcesStillMatch": true,
+    "fullCheckCommand": "npm run check",
+    "separateBuildDirectory": true,
+    "independentTemporaryProject": true,
+    "dependenciesCopied": true,
+    "applicationServersInterrupted": false,
+    "privateEnvironmentFilesCopied": false,
+    "proofSha256": "08e4f3da973dc9a154919c5b899d1a489b82b5f7de6e96c6b837aac966e0cf86",
+    "sourceManifestSha256": "c09de3fdefb8792d30be11626a288b79293141f09c18d80770f40d970c75aeb6"
+  },
+  "regressionBeforeFix": {
+    "source": "Vitest tool output transcription, not a retained raw log",
+    "reportedStart": "2026-10-18 14:35:23 Europe/Paris",
+    "result": "FAIL",
+    "passed": 35,
+    "failed": 1,
+    "reason": "Decoded period included internal to/days fields rejected by strict wire-contract revalidation; unified two-field DTO and added idempotency assertion without accepting extra keys"
+  },
+  "newTests": {
+    "count": 39,
+    "kinds": [
+      "UTC periods, leap dates, exclusive bounds, maximum 90 days, ambiguous and future filters",
+      "Exact aggregate-only DTO, expected environment/window, bigint precision and partitions",
+      "Ordered complete daily series and unique-period active-account bounds",
+      "Single rounding and non-calculable rates",
+      "SSR fixture labeling, unavailable versus valid empty, table headers and caption"
+    ],
+    "actualBrowserTests": false
+  },
+  "implementationRevalidation": {
+    "allPreviouslyCheckedCodeStillMatches": true,
+    "checkedSourceFiles": 388,
+    "changedDocumentsAfterFullCheck": [
+      "docs/activity-statistics.md",
+      "docs/progress.md",
+      "docs/readiness-current.md",
+      "docs/roadmap.md"
+    ]
+  },
+  "targetedClientScan": {
+    "result": "PASS",
+    "patterns": 34,
+    "productionBundles": 48,
+    "benchBundles": 23,
+    "privateMatches": 0,
+    "exhaustiveLeakAudit": false
+  },
+  "benchCompilation": {
+    "result": "PASS for Vite compilation only",
+    "date": "2026-10-18T12:47:20.707Z",
+    "artifact": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\creator-recovery-bench-1792327638039",
+    "pages": [
+      "catalogue.html",
+      "coordinates.html",
+      "creator.html",
+      "flashcards.html",
+      "index.html",
+      "math-input.html",
+      "preview.html",
+      "publication-batch.html",
+      "publication.html",
+      "statistics.html",
+      "taxonomy.html"
+    ],
+    "compiledPages": 11,
+    "browserExecuted": false,
+    "humanAcceptance": false,
+    "connectedApplicationTestExecuted": false
+  },
+  "httpResponses": {
+    "date": "2026-10-18T12:54:02.500Z",
+    "checks": [
+      {
+        "route": "/__local/status",
+        "status": 200,
+        "state": {
+          "synthetic": true,
+          "database": false,
+          "engine": false
+        }
+      },
+      {
+        "route": "/tests/browser/statistics.html",
+        "status": 200,
+        "responseSha256": "b1d99962232d92f80547247a45c51e26bca9ef3225a6c13d4705c1851f1426db"
+      },
+      {
+        "route": "/tests/browser/statistics.tsx",
+        "status": 200,
+        "responseSha256": "5067af146373fda9eda2e726430e276a43b61395366266c5dbe544e3aaa8bb88"
+      }
+    ],
+    "browserExecuted": false
+  },
+  "authColumnMetadataObservation": {
+    "date": "2026-10-18T12:40:12.966Z",
+    "scope": "Only Auth column metadata; no Auth records, row counts, secrets, permissions or changes",
+    "query": "select table_schema, table_name, column_name, data_type, is_nullable from information_schema.columns where table_schema='auth' and table_name='users' and column_name in ('id','created_at','is_anonymous') order by column_name",
+    "projects": [
+      {
+        "ref": "tksvbkvfusrnxulpahky",
+        "columns": [
+          {
+            "table_schema": "auth",
+            "table_name": "users",
+            "column_name": "created_at",
+            "data_type": "timestamp with time zone",
+            "is_nullable": "YES"
+          },
+          {
+            "table_schema": "auth",
+            "table_name": "users",
+            "column_name": "id",
+            "data_type": "uuid",
+            "is_nullable": "NO"
+          },
+          {
+            "table_schema": "auth",
+            "table_name": "users",
+            "column_name": "is_anonymous",
+            "data_type": "boolean",
+            "is_nullable": "NO"
+          }
+        ]
+      },
+      {
+        "ref": "abwipnppcrghdhwriyjp",
+        "columns": [
+          {
+            "table_schema": "auth",
+            "table_name": "users",
+            "column_name": "created_at",
+            "data_type": "timestamp with time zone",
+            "is_nullable": "YES"
+          },
+          {
+            "table_schema": "auth",
+            "table_name": "users",
+            "column_name": "id",
+            "data_type": "uuid",
+            "is_nullable": "NO"
+          },
+          {
+            "table_schema": "auth",
+            "table_name": "users",
+            "column_name": "is_anonymous",
+            "data_type": "boolean",
+            "is_nullable": "NO"
+          }
+        ]
+      }
+    ]
+  },
+  "preservation": {
+    "protectedFilesUnchanged": 4,
+    "privateConfigurationFilesUnchanged": 8,
+    "siblingPreexistingChangedFilesPreserved": 8,
+    "qualifiedSqlFilesUnchanged": 64,
+    "engineRepositoryClean": true
+  },
+  "scope": {
+    "productionStatisticsRead": false,
+    "productionReaderImplemented": false,
+    "personalRecordsRead": false,
+    "remoteAuthColumnMetadataSelects": 2,
+    "nativeLinuxEngineExecuted": false,
+    "browserExecuted": false,
+    "localSqlIntegrationExecuted": false,
+    "remoteModificationPerformed": false,
+    "privilegedProductionKeyRetrieved": false,
+    "globalSoftwareUpdated": false,
+    "criteriaRelaxed": false,
+    "goalComplete": false
+  }
+}
