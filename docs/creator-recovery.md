@@ -1,5 +1,9 @@
 # Récupération facultative de la saisie Creator
 
+**Complément du 18 octobre :** le [refus de nettoyage](recovery-cleanup.md)
+est signalé aussi lorsque l’accès au stockage lui-même est bloqué. Les preuves
+ci-dessous restent celles du premier jalon de récupération.
+
 Le Creator propose une copie de récupération **désactivée par défaut**. Après
 activation dans le formulaire, les modifications sont copiées dans le
 `sessionStorage` de l’onglet. Une sortie SPA non annulable ou un rechargement ne
@@ -19,7 +23,8 @@ la récupération. Les gardes de navigation existants restent actifs.
    afin qu’une soumission précoce ne précède pas la détection d’une copie.
 4. Récupérer puis relire la définition avant de l’enregistrer normalement.
    Aucun diagnostic, rapport Engine ou statut d’approbation n’est récupéré.
-5. Une sauvegarde confirmée efface uniquement la copie de ce formulaire.
+5. Une sauvegarde confirmée demande l’effacement de la seule copie de ce formulaire
+   et signale un refus connu du navigateur.
    Une réponse d’échec conserve les champs et leur récupération si activée.
 
 Un HTTP 200 avec un résultat absent, un environnement inattendu, un ID invalide

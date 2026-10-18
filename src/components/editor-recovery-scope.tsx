@@ -37,15 +37,16 @@ export function AdminLogout({
         }
         // Stop pagehide writers before clearing, so logout cannot recreate a copy.
         window.dispatchEvent(new Event(recoveryEndEvent));
+        let cleared = false;
         try {
-          if (!clearRecoveries(window.sessionStorage)) {
-            window.alert(
-              'Les copies de récupération n’ont pas pu être effacées. Fermez cet onglet après la déconnexion.',
-            );
-          }
+          cleared = clearRecoveries(window.sessionStorage);
         } catch {
           /* A disabled store must not prevent logout. */
         }
+        if (!cleared)
+          window.alert(
+            'Les copies de récupération n’ont pas pu être effacées. Fermez cet onglet après la déconnexion.',
+          );
       }}
     >
       <button className={buttonClassName} type="submit">

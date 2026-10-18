@@ -1,0 +1,145 @@
+{
+  "result": "PASS for the unchanged full Node/SSR/build/smoke check; actual browser and connected cleanup NOT EXECUTED",
+  "date": "2026-10-18T12:20:26.249Z",
+  "baseAdminCommit": "30eefde",
+  "fullCheck": {
+    "result": "PASS",
+    "date": "2026-10-18T12:18:50.592Z",
+    "artifact": "C:\\Users\\balth\\AppData\\Local\\Temp\\novlearn-admin-check-1792325746527",
+    "exitCode": 0,
+    "tests": 805,
+    "files": 44,
+    "sourceFiles": 380,
+    "allCopiedSourcesStillMatch": true,
+    "fullCheckCommand": "npm run check",
+    "separateBuildDirectory": true,
+    "independentTemporaryProject": true,
+    "dependenciesCopied": true,
+    "applicationServersInterrupted": false,
+    "privateEnvironmentFilesCopied": false,
+    "proofSha256": "8c8b44f4f02475a531caccc12a59d4447ed3ef65e20e12abd0d0552cd40a3014",
+    "sourceManifestSha256": "1bf0838579148f1e1dd53333e30800f1f856ff80f16f8ae7e64df47d2d8921de"
+  },
+  "regressionBeforeFix": {
+    "source": "Vitest tool output transcription, not a retained raw log",
+    "reportedStart": "2026-10-18 13:53:26 Europe/Paris",
+    "result": "FAIL",
+    "passed": 24,
+    "failed": 1,
+    "reason": "Blocked sessionStorage getter produced zero cleanup warning calls instead of one"
+  },
+  "intermediateFullCheck": {
+    "artifact": "C:/Users/balth/AppData/Local/Temp/novlearn-admin-check-1792325572715/proof.json",
+    "result": "FAIL",
+    "exitCode": 2,
+    "passedTests": 805,
+    "reason": "New SSR test used a createElement call whose optional-props inference failed TypeScript; direct rendering of the same hook-free component fixes the test construction"
+  },
+  "newTests": {
+    "count": 3,
+    "kinds": [
+      "Blocked storage getter does not silently claim cleanup or prevent logout",
+      "Blocked cleanup after successful storage access is reported without private error details",
+      "Shared restricted-access logout retains its POST target and style in SSR"
+    ],
+    "actualBrowserTests": false
+  },
+  "implementationRevalidation": {
+    "allPreviouslyCheckedCodeStillMatches": true,
+    "checkedSourceFiles": 380,
+    "changedDocumentsAfterFullCheck": [
+      "docs/progress.md",
+      "docs/recovery-cleanup.md"
+    ]
+  },
+  "targetedClientScan": {
+    "result": "PASS",
+    "patterns": 34,
+    "productionBundles": 48,
+    "benchBundles": 22,
+    "privateMatches": 0,
+    "exhaustiveLeakAudit": false
+  },
+  "benchCompilation": {
+    "result": "PASS for Vite compilation only",
+    "date": "2026-10-18T12:16:00.510Z",
+    "artifact": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\creator-recovery-bench-1792325757837",
+    "pages": [
+      "catalogue.html",
+      "coordinates.html",
+      "creator.html",
+      "flashcards.html",
+      "index.html",
+      "math-input.html",
+      "preview.html",
+      "publication-batch.html",
+      "publication.html",
+      "taxonomy.html"
+    ],
+    "compiledPages": 10,
+    "browserExecuted": false,
+    "humanAcceptance": false,
+    "connectedApplicationTestExecuted": false
+  },
+  "runtime": {
+    "date": "2026-10-18T12:14:06.856Z",
+    "checks": [
+      {
+        "port": 3140,
+        "route": "/__local/status",
+        "status": 200,
+        "state": {
+          "synthetic": true,
+          "database": false,
+          "engine": false
+        }
+      },
+      {
+        "port": 3140,
+        "route": "/tests/browser/creator.html",
+        "status": 200
+      },
+      {
+        "port": 3150,
+        "route": "/login",
+        "status": null,
+        "cause": "ECONNREFUSED"
+      },
+      {
+        "port": 3152,
+        "route": "/login",
+        "status": null,
+        "cause": "ECONNREFUSED"
+      }
+    ],
+    "docker": {
+      "ready": false,
+      "exitCode": 1,
+      "errorCode": null
+    },
+    "browserExecuted": false,
+    "nativeEngineExecuted": false,
+    "dataModified": false,
+    "dockerStartStopOrUpdateAttempted": false
+  },
+  "preservation": {
+    "protectedFilesUnchanged": 4,
+    "privateConfigurationFilesUnchanged": 8,
+    "siblingPreexistingChangedFilesPreserved": 8,
+    "qualifiedSqlFilesUnchanged": 64,
+    "engineRepositoryClean": true
+  },
+  "scope": {
+    "nativeLinuxEngineExecuted": false,
+    "realBrowserStorageExecuted": false,
+    "browserNavigationExecuted": false,
+    "realConnectedCleanupExecuted": false,
+    "localSqlIntegrationExecuted": false,
+    "remoteModificationPerformed": false,
+    "separateRemoteMetadataReadAuditPerformed": true,
+    "privilegedProductionKeyRetrieved": false,
+    "globalSoftwareUpdated": false,
+    "criteriaRelaxed": false,
+    "goalComplete": false
+  }
+}

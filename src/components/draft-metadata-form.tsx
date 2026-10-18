@@ -169,7 +169,10 @@ export function DraftMetadataForm(props: Props) {
         return;
       }
       dirtyRef.current = false;
-      recovery.saved();
+      if (!recovery.saved())
+        window.alert(
+          'Le brouillon est enregistré, mais sa copie de récupération n’a pas pu être effacée. Fermez cet onglet après vos vérifications.',
+        );
       setDirty(false);
       router.push(
         `/admin/exercises/${confirmed.exerciseId}?version=${confirmed.versionId}&saved=1`,

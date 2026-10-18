@@ -143,7 +143,8 @@ export function useCreatorRecovery({
     saved: () => {
       saved.current = true;
       setEnabled(false);
-      remove();
+      const removed = remove();
+      return removed || !(enabled || pending || unreadableCopy);
     },
     panel: scope ? (
       <section
@@ -183,6 +184,7 @@ export function useCreatorRecovery({
                     );
                     if (fresh.state !== 'ready') {
                       setPending(null);
+                      setUnreadableCopy(fresh.state !== 'missing');
                       setNotice(
                         'Cette copie n’est plus récupérable. Le formulaire actuel est conservé.',
                       );

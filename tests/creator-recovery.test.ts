@@ -282,3 +282,42 @@ it('préserve les copies quand le départ est refusé, puis arrête les écrivai
     detach();
   }
 });
+it('signale un refus d’accès au stockage à la déconnexion, sans empêcher de quitter la session', () => {
+  const win = Object.assign(new EventTarget(), { alert: vi.fn() });
+  Object.defineProperty(win, 'sessionStorage', {
+    get: () => {
+      throw Error('PRIVATE storage policy detail');
+    },
+  });
+  vi.stubGlobal('window', win);
+  const event = { preventDefault: vi.fn() };
+  expect(() => AdminLogout().props.onSubmit(event)).not.toThrow();
+  expect(event.preventDefault).not.toHaveBeenCalled();
+  expect(win.alert).toHaveBeenCalledOnce();
+  expect(win.alert.mock.calls[0][0]).not.toContain('PRIVATE');
+});
+it('signale aussi un refus de suppression après accès réussi au stockage', () => {
+  const { storage } = store();
+  const blocked = {
+    ...storage,
+    get length() {
+      throw Error('PRIVATE cleanup detail');
+    },
+  };
+  const win = Object.assign(new EventTarget(), {
+    sessionStorage: blocked,
+    alert: vi.fn(),
+  });
+  vi.stubGlobal('window', win);
+  const event = { preventDefault: vi.fn() };
+  AdminLogout().props.onSubmit(event);
+  expect(event.preventDefault).not.toHaveBeenCalled();
+  expect(win.alert).toHaveBeenCalledOnce();
+  expect(win.alert.mock.calls[0][0]).not.toContain('PRIVATE');
+});
+it('garde le même chemin de déconnexion depuis une page au style Accès réservé, sans lecture navigateur en SSR', () => {
+  const html = renderToStaticMarkup(AdminLogout({ buttonClassName: 'button' }));
+  expect(html).toContain('action="/auth/logout"');
+  expect(html).toContain('method="post"');
+  expect(html).toContain('class="button"');
+});
