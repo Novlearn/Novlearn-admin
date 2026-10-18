@@ -1,13 +1,13 @@
 {
-  "recordedAt": "2026-10-18T18:06:22.386Z",
+  "recordedAt": "2026-10-18T18:09:47.555Z",
   "scope": "Documentary traceability for all 20 original goal sections; not a functional test, receipt, permission or completion certificate",
   "referenceInputs": {
     "requestSha256": "fb9ac40863c57594878833b8a9fc0bd130a0cba9d0249d29c609051a54bded93",
     "cdcSha256": "b6bfea6d74b008e54ed61aa7598ccd01bd438d496cc22add15da2ff8abb04401",
     "decisionsSha256": "e45ad0c99014ccc6521ae91b0d836262b10b757c489721004dbd8f1f6a401e1f"
   },
-  "baselineAdminCommitAtAssessment": "a0fc5cb06e4225e1526bf3d091254df5c47be812",
-  "implementationHasUncommittedChangesAtObservation": true,
+  "baselineAdminCommitAtAssessment": "c8727ff7ed85c75f2ba02fe9022b270edf082f25",
+  "implementationHasUncommittedChangesAtObservation": false,
   "requestedSections": [
     {
       "id": 1,
