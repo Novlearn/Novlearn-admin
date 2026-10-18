@@ -40,6 +40,10 @@ try {
   const login = await fetch(`${origin}/login`);
   const html = await login.text();
   assert(html.includes('Connexion en attente d’activation'));
+  assert(
+    !html.includes('http://127.0.0.1:3140/'),
+    'Production login must not advertise a development-only loopback preview',
+  );
   for (const name of ['email', 'password']) {
     const input = html.match(new RegExp(`<input[^>]*name="${name}"[^>]*>`));
     assert(input?.[0].includes('disabled=""'), `${name} must be disabled`);

@@ -1,5 +1,18 @@
 # Progression du goal NovLearn Admin
 
+## Accès aux essais depuis la connexion — 18 octobre 2026
+
+La page de connexion désactivée propose maintenant le lien vers l’aperçu, en
+développement seulement. Ses exemples fictifs et l’absence de sauvegarde sont
+annoncés. Une connexion configurée conserve son parcours normal ; le build
+Production ne propose aucun lien loopback. Auth et les permissions ne changent pas.
+
+Les [preuves](login-preview-proof.json) conservent quatre tests SSR et cinq
+contrôles HTTP réels sur serveur temporaire, puis son arrêt. Le contrôle complet
+passe **848 tests / 46 fichiers**, types, lint, format, build et smoke HTTP.
+L’aperçu répond sur 3140 sans base ni Engine ; Docker et l’instance connectée
+restent à rétablir. Aucun test navigateur ou de connexion réelle supplémentaire.
+
 ## Statistiques d’activité — préparation du Lot 8
 
 Le [contrat et l’affichage](activity-statistics.md) préparent les agrégats,

@@ -90,6 +90,24 @@ export default async function Login({
             </p>
           ) : null}
           <LoginForm enabled={enabled} />
+          {!enabled && process.env.NODE_ENV === 'development' && (
+            <aside className="card mt-6" aria-labelledby="preview-title">
+              <h2 id="preview-title" className="font-semibold">
+                Tester les écrans dès maintenant
+              </h2>
+              <p className="mb-4 mt-2 text-sm leading-6 text-slate-600">
+                L’aperçu local utilise des exemples fictifs, sans compte ni
+                sauvegarde en base. Les calculs nécessitent le moteur local.
+              </p>
+              <a className="button inline-flex" href="http://127.0.0.1:3140/">
+                Ouvrir l’aperçu local
+              </a>
+              <p className="mt-3 text-xs leading-5 text-slate-500">
+                Si le lien ne répond pas, l’aperçu doit être démarré sur cet
+                ordinateur. Il est distinct de l’application avec connexion.
+              </p>
+            </aside>
+          )}
           {local && (
             <p className="notice mt-6">
               Espace d’essai local. Les modifications sont enregistrées

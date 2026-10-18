@@ -58,6 +58,12 @@ conserve les données et nécessite un accord séparé.
 sans connexion, sauvegarde ni calcul Engine. Ses réponses HTTP sont vérifiées ;
 la réception visuelle reste à réaliser dans le navigateur.
 
+En développement, la page de connexion désactivée propose également le lien
+« Ouvrir l’aperçu local ». Ce lien ne démarre pas l’aperçu : si nécessaire,
+lancer `node scripts/content-browser.mjs`. Il n’est pas affiché dans le build
+Production ou lorsque la connexion est configurée. Les permissions restent
+obligatoires pour l’application connectée.
+
 Le [Creator de l’aperçu](http://127.0.0.1:3140/tests/browser/creator.html)
 propose maintenant une [récupération facultative de saisie](docs/creator-recovery.md).
 Son activation est explicite ; la réception de ce parcours dans le navigateur

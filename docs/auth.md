@@ -2,6 +2,22 @@
 
 ## État réel
 
+**18 octobre :** l’instance connectée est arrêtée pendant la panne Docker.
+L’[aperçu des écrans](http://127.0.0.1:3140/) reste distinct, sans compte ni
+sauvegarde en base. La page de connexion désactivée propose ce lien uniquement
+en développement. Il disparaît dans le build Production ou quand Auth est
+configurée ; il ne donne aucun accès aux pages/API protégées et ne démarre
+aucun service. Les [preuves](login-preview-proof.json) séparent rendu serveur,
+HTTP et réception navigateur.
+
+Quatre tests de rendu serveur et cinq contrôles HTTP réels passent : affichage
+du lien en développement, formulaire désactivé, redirection privée, refus des
+endpoints et disponibilité du banc distinct. Le contrôle complet passe
+**848 tests / 46 fichiers**, types, lint, format, build et smoke, dont l’absence
+du lien dans la réponse Production. Le serveur temporaire est arrêté après
+vérification ; le banc sur 3140 reste disponible. Aucun test de connexion réelle,
+de sauvegarde ou de navigation visuelle n’est déduit de ce résultat.
+
 **Mise à jour du 16 octobre :** une [instance locale connectée](local-admin.md)
 utilise maintenant GoTrue, PostgREST et les routes Next réels avec sauvegarde
 persistante. Ses comptes sont synthétiques, ses services isolés et le mode local

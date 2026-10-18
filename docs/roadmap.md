@@ -1,5 +1,10 @@
 # Roadmap
 
+**Essais progressifs, 18 octobre :** la connexion désactivée en développement
+propose un accès à l’aperçu fictif. [Quatre tests SSR et cinq contrôles HTTP](login-preview-proof.json)
+passent ; contrôle complet **848 tests / 46 fichiers**. Ce lien ne rétablit pas
+Docker, n’active pas Auth et n’apparaît pas dans le build Production.
+
 Le [volet préparatoire du Lot 8](activity-statistics.md) définit les périodes,
 agrégats et rendu de statistiques sur exemple fictif. Il ne clôture ni ne branche
 le lecteur Production : la capacité SQL et les parcours réels restent ouverts.
