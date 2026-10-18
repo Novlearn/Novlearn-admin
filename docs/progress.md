@@ -1,5 +1,15 @@
 # Progression du goal NovLearn Admin
 
+## Statistiques — parcours connecté local du 18 octobre
+
+La [page/API locale](activity-http.md) est raccordée avec source synthétique
+distincte, activation explicite, contrôle frais Admin et refus de dérive SQL.
+Douze groupes HTTP réels passent, puis huit contrôles Engine inchangés après
+redémarrage. Les données antérieures sont conservées ; deux comptes de test
+dédiés et un brouillon/rapport Engine synthétiques sont ajoutés et retenus.
+Les échecs de préparation et du pilote sont détaillés dans les preuves, sans
+les convertir en réussites. Production et utilisateurs nominatifs restent ouverts.
+
 ## Lecteur analytique — PostgreSQL/TLS local du 18 octobre
 
 Le [login dédié et lecteur serveur](activity-pg.md) passent sur la copie SQL 65

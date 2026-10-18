@@ -2,7 +2,11 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-export function AdminNavigation() {
+export function AdminNavigation({
+  statisticsEnabled = false,
+}: {
+  statisticsEnabled?: boolean;
+}) {
   const path = usePathname();
   return (
     <nav aria-label="Navigation principale" className="mt-8 space-y-1">
@@ -14,6 +18,7 @@ export function AdminNavigation() {
         ['/admin/chapters', 'Chapitres'],
         ['/admin/competences', 'Compétences'],
         ['/admin/flashcards', 'Flashcards'],
+        ...(statisticsEnabled ? [['/admin/statistics', 'Statistiques']] : []),
       ].map(([href, label]) => {
         const active =
           path === href ||

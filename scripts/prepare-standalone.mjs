@@ -1,4 +1,5 @@
-import { access, cp, mkdir } from 'node:fs/promises';
+import { access, cp, mkdir, readFile } from 'node:fs/promises';
+import assert from 'node:assert/strict';
 import { fileURLToPath } from 'node:url';
 
 const root = new URL('../', import.meta.url);
@@ -25,4 +26,12 @@ if (hasPublic) {
     { recursive: true },
   );
 }
-console.log('Standalone assets prepared.');
+for (const name of [
+  'activity-reader-audit.sql',
+  'activity-statistics-query.sql',
+]) {
+  const source = await readFile(new URL('scripts/' + name, root));
+  const traced = await readFile(new URL('scripts/' + name, standalone));
+  assert(source.equals(traced), 'Standalone SQL source differs: ' + name);
+}
+console.log('Standalone assets and exact activity SQL sources prepared.');

@@ -42,7 +42,43 @@ if (options.stop) {
     ADMIN_PUBLICATION_ENABLED: 'false',
     ADMIN_ENGINE_ENABLED: 'false',
     ADMIN_EDITORIAL_REVIEW_ENABLED: 'false',
+    ADMIN_LOCAL_ACTIVITY_ENABLED: 'false',
+    ADMIN_LOCAL_ACTIVITY_REVIEW: '',
+    ADMIN_LOCAL_ACTIVITY_PG_URL: '',
+    ADMIN_LOCAL_ACTIVITY_PG_CA: '',
   });
+  if (options.statistics) {
+    const marker = JSON.parse(
+      await readFile('.local/lot1a/activity-http-current.json', 'utf8'),
+    );
+    const directory = path.resolve(marker.artifact);
+    assert.equal(
+      path.dirname(directory).toLowerCase(),
+      path.resolve('.local/lot1a').toLowerCase(),
+    );
+    assert.match(path.basename(directory), /^activity-http-\d+$/);
+    assert.equal(marker.phase, 'prepared');
+    const activity = JSON.parse(
+      await readFile(directory + '/private.json', 'utf8'),
+    );
+    assert.equal(activity.artifact, directory);
+    assert.match(activity.prefix, /^novlearn-admin-activity-http-\d+$/);
+    assert.equal(activity.physicalConnectionQualified, true);
+    const url = new URL(activity.config.url);
+    assert.equal(url.hostname, '127.0.0.1');
+    assert.equal(url.port, '55435');
+    assert.equal(url.pathname, '/activity_copy');
+    assert.equal(
+      decodeURIComponent(url.username),
+      'novlearn_admin_activity_service',
+    );
+    Object.assign(process.env, {
+      ADMIN_LOCAL_ACTIVITY_ENABLED: 'true',
+      ADMIN_LOCAL_ACTIVITY_REVIEW: 'isolated-sql65-activity-http-v1',
+      ADMIN_LOCAL_ACTIVITY_PG_URL: activity.config.url,
+      ADMIN_LOCAL_ACTIVITY_PG_CA: activity.config.ca,
+    });
+  }
   const { readAuthConfiguration } = await import('../src/lib/auth/config.ts');
   assert.equal(readAuthConfiguration(process.env)?.local, true);
   // Clear inherited signing/transport settings; only explicit local files may enable them.
@@ -130,6 +166,7 @@ if (options.stop) {
         database: true,
         engine: !!engine,
         review: options.review,
+        statistics: options.statistics,
         ...(engine
           ? {
               engineContainer: engine.container,

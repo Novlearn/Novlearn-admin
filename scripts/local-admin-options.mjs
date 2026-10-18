@@ -5,17 +5,21 @@ export function localAdminOptions(args) {
     throw Error('Local workspace path required');
   if (
     new Set(flags).size !== flags.length ||
-    flags.some((flag) => !['--stop', '--engine', '--review'].includes(flag))
+    flags.some(
+      (flag) =>
+        !['--stop', '--engine', '--review', '--statistics'].includes(flag),
+    )
   )
     throw Error('Unknown or duplicate local option');
   const stop = flags.includes('--stop'),
     engine = flags.includes('--engine'),
-    review = flags.includes('--review');
-  if (stop && (engine || review))
+    review = flags.includes('--review'),
+    statistics = flags.includes('--statistics');
+  if (stop && (engine || review || statistics))
     throw Error('Stop does not enable local features');
   if (review && !engine)
     throw Error(
       'Local review requires the qualified Engine and signed reports',
     );
-  return { workspace, stop, engine, review };
+  return { workspace, stop, engine, review, statistics };
 }

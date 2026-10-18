@@ -1,5 +1,13 @@
 # Authentification, autorisations et accès Production
 
+## Page et API analytiques locales — 18 octobre
+
+Le [parcours connecté](activity-http.md) vérifie identité et rôle frais avant
+lecture, puis droits SQL du login et du rôle. Les tests réels refusent les claims
+metadata, la révocation et un grant de colonne imprévu ; les pertes SQL ne
+fabriquent pas de résultat. Source séparée, TLS, no-store et cookies isolés sont
+vérifiés localement. Aucun accès Production n’est activé.
+
 ## Lecture analytique SQL locale — 18 octobre
 
 La [migration 65 et la requête analytique](activity-readonly.md) sont qualifiées

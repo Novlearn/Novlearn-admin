@@ -1,5 +1,8 @@
 # Statistiques — rôle de lecture et agrégats SQL locaux
 
+**Parcours connecté :** la [page/API locale](activity-http.md) est depuis qualifiée,
+avec sa source SQL synthétique distincte. Production reste fermé.
+
 **Jalon suivant :** le [login PostgreSQL/TLS et lecteur serveur](activity-pg.md)
 sont depuis qualifiés sur copie. Les mentions de lecteur futur ci-dessous
 décrivent le jalon SQL initial ; routes/page et accès Production restent ouverts.

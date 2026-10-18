@@ -3,6 +3,10 @@ import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { Pool, type PoolClient } from 'pg';
 import {
+  validLocalActivityEndpoint,
+  type LocalActivityPgConfiguration,
+} from './activity-config';
+import {
   decodeActivityStatistics,
   readStatisticsPeriod,
   type ActivityStatistics,
@@ -29,37 +33,9 @@ const columns = [
   'public.duels.finished_at',
 ].sort();
 
-/** Trusted operator configuration for the isolated SQL copy only.
- * No environment parser, route or remote activation is provided by this module. */
-export type LocalActivityPgConfiguration = {
-  url: string;
-  ca: string;
-  environment: 'local-copy';
-};
 export class ActivityPgError extends Error {
   constructor() {
     super('Statistiques indisponibles');
-  }
-}
-function validEndpoint(config: LocalActivityPgConfiguration) {
-  try {
-    const url = new URL(config.url);
-    return (
-      config.environment === 'local-copy' &&
-      ['postgres:', 'postgresql:'].includes(url.protocol) &&
-      url.hostname === '127.0.0.1' &&
-      url.port === '55435' &&
-      url.pathname === '/activity_copy' &&
-      !url.search &&
-      !url.hash &&
-      decodeURIComponent(url.username) === login &&
-      decodeURIComponent(url.password).length >= 16 &&
-      decodeURIComponent(url.password).length <= 512 &&
-      config.ca.length <= 32768 &&
-      config.ca.includes('-----BEGIN CERTIFICATE-----')
-    );
-  } catch {
-    return false;
   }
 }
 function validAudit(value: unknown, assumed: boolean): boolean {
@@ -112,7 +88,7 @@ function validAudit(value: unknown, assumed: boolean): boolean {
 export function createLocalActivityReader(
   config: LocalActivityPgConfiguration,
 ) {
-  if (!validEndpoint(config)) throw new ActivityPgError();
+  if (!validLocalActivityEndpoint(config)) throw new ActivityPgError();
   const pool = new Pool({
     connectionString: config.url,
     ssl: { rejectUnauthorized: true, ca: config.ca, minVersion: 'TLSv1.2' },

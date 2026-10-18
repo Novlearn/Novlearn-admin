@@ -1,13 +1,13 @@
 {
-  "recordedAt": "2026-10-18T17:29:37.758Z",
+  "recordedAt": "2026-10-18T18:06:22.386Z",
   "scope": "Documentary traceability for all 20 original goal sections; not a functional test, receipt, permission or completion certificate",
   "referenceInputs": {
     "requestSha256": "fb9ac40863c57594878833b8a9fc0bd130a0cba9d0249d29c609051a54bded93",
     "cdcSha256": "b6bfea6d74b008e54ed61aa7598ccd01bd438d496cc22add15da2ff8abb04401",
     "decisionsSha256": "e45ad0c99014ccc6521ae91b0d836262b10b757c489721004dbd8f1f6a401e1f"
   },
-  "baselineAdminCommitAtAssessment": "68a08f51e8fb99d919a956b7d1a091d1062671a0",
-  "implementationHasUncommittedChangesAtObservation": false,
+  "baselineAdminCommitAtAssessment": "a0fc5cb06e4225e1526bf3d091254df5c47be812",
+  "implementationHasUncommittedChangesAtObservation": true,
   "requestedSections": [
     {
       "id": 1,
@@ -173,7 +173,7 @@
       "id": 14,
       "title": "Dashboard et statistiques",
       "evidenceSummary": "Agrégats **Staging** : [Dashboard](dashboard-local-proof.json). Contrat/rendu fictif et [rôle/premiers agrégats SQL natifs](activity-readonly-proof.json) qualifiés sur copies.",
-      "remaining": "Login/TLS et lecteur serveur qualifiés sur copie ([preuves](activity-pg-proof.json)) ; routes/page, filtres, classements et données Production restent à réaliser."
+      "remaining": "Page/API SQL locales et permissions [qualifiées](activity-http-proof.json). Source/activation Production, filtres pédagogiques, classements et autres métriques restent à réaliser."
     },
     {
       "id": 15,
@@ -213,10 +213,11 @@
     }
   ],
   "referenceHashes": {
-    "activity-statistics.md": "e6a6aca75ec4e9885449fb05fa9188580d1377f60cdff88d72b91c1f55e40acb",
+    "activity-statistics.md": "a033caf7fa9c22a297e5b1af197cac32218eb746515c31c1d8e97552c2c140cd",
+    "activity-http.md": "9d8552e34eb357ef87a0fbd2925b4ddabd7b20f918bf19ee6b48a40dc6def3d1",
     "local-recovery-2026-10-18.md": "ab6e2a667d7b054b673a1b175044ed6504218a993fd9e8c6054b46fb970aac1f",
     "lot-1a-remote-reconciliation-current.md": "4a2a06adff60f7a6541f261af3bd00a63debc01197030717c389c7c22b813dfe",
-    "progress.md": "848d834cf1806f9fdb840d4cc8165eb2cf787247384af4359c0f74152fd97aff",
+    "progress.md": "a733891adffcc2bc5acad2c570f2c2fe8cf99335b091775eb2fbfc5fcdadd484",
     "lot-1a-preparation.md": "3561164a62bc6690a46d2f472c42037c11bd9aacc40add77d44814abdc5dd271",
     "recovery-cleanup-proof.json": "cb414a4c150ceb55204fcc9fca07696d05463e71642b4b4db35fd62819fa2524",
     "local-recovery-2026-10-18-proof.json": "5c9f10801159d1b94c66aebf2f4f45cb91e6a3447f6098968d85e03c83e0e26d",
@@ -235,15 +236,15 @@
     "flashcards-local-proof.json": "7d8da9b502804ed2160680c78b9289b712e39fdd8790fa42d2c52103ffd996c2",
     "dashboard-local-proof.json": "6c930179bc83e3050f12965895fb89d8aca87e215d9622a4f1fc31b7b859c04b",
     "activity-readonly-proof.json": "c362635524c4dc6cfe81cdbc489e2130a3e3285f8346462e5075915fddb51401",
-    "activity-pg-proof.json": "e469325b9e64fffe185dced8c0d0a5f78fb0122b57dc091f2ec52a1a306e4c1c",
+    "activity-http-proof.json": "c4ae58e794d8944ecf0947935e799b834bb1742336984c5cd8c51201af35b806",
     "decisions.md": "e45ad0c99014ccc6521ae91b0d836262b10b757c489721004dbd8f1f6a401e1f",
-    "roadmap.md": "1e4bb5f59e978b3ef03496ff04fdbe3d421b5c7c03f1a374c532f276017e0543",
-    "activity-readonly.md": "06bb0472c274437835897477b75fe671c720161b56977dfe56d67168c0eca832",
-    "activity-pg.md": "93794bb7d0facc3415ca910f4799269d8c7b7156caeb2122589f5567232de792",
+    "roadmap.md": "977efb32846d3c073d1f388d74b923fdf5caee791c19d55b95f8e21ae85f19a8",
+    "activity-readonly.md": "0bc4135dfe48409cb19a8f2ad0b98e9593c65f83f46bc12b53a4a8e6fd1fbdff",
+    "activity-pg.md": "ce3ae62c070f728174bc2cae7817d1ed727d42fd1e2e09d162cadd188b028aec",
     "lot-1a-local-statistics-guard.md": "0bd4f19d706296ccb96f8ea246f186c4e52ddc7a23da69519f64c2a1978a7a92"
   },
   "unimplemented": [
-    "Production analytics identity/activation, app routes/page and remaining metrics/pedagogical filters (SQL role, local login/TLS and server reader qualified; DTO/display prepared)",
+    "Production analytics identity/source activation and remaining metrics/pedagogical filters (local SQL role, login/TLS, server reader and Auth/HTTP page/API qualified)",
     "Production user listing, search, profile/activity/progression",
     "Current Production active-version indicator",
     "Official Engine formula sampling and dependent curve rendering",

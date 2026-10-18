@@ -1,5 +1,9 @@
 # Statistiques — connexion et lecteur SQL locaux
 
+**Jalon suivant :** la [page/API locale](activity-http.md) est depuis raccordée et
+qualifiée avec Auth/HTTP/SQL réels. Les mentions de page future ci-dessous
+décrivent ce jalon du lecteur ; Production reste fermé.
+
 Le login PostgreSQL/TLS et le lecteur serveur passent sur la copie synthétique
 SQL 65 conservée. Ce jalon prolonge la [qualification SQL](activity-readonly.md) ;
 il ne raccorde pas encore la page Admin et n’active aucune lecture Production.

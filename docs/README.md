@@ -1,5 +1,8 @@
 # Documentation NovLearn Admin
 
+[Statistiques connectées locales](activity-http.md) : page/API, vrai Auth et SQL,
+source synthétique séparée, permissions et conservation des données vérifiées.
+
 [Lecteur analytique PostgreSQL/TLS](activity-pg.md) : compte dédié, audit des deux
 identités, agrégats serveur et dérives refusées sur copie ; page encore non raccordée.
 

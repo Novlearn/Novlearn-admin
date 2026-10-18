@@ -1,5 +1,12 @@
 # Roadmap
 
+**Statistiques connectées, 18 octobre :** [page/API locales](activity-http.md)
+raccordées au lecteur TLS sur une source synthétique séparée. Douze groupes
+Auth/HTTP/SQL et huit contrôles Engine après redémarrage passent. Les 62 tables
+d’activité et toutes les lignes des 35 tables métier initiales sont conservées.
+Production, filtres/métriques restants, utilisateurs et réception navigateur
+restent ouverts. Les relevés suivants précèdent ce raccordement.
+
 **Lecteur analytique, 18 octobre :** [login SCRAM/TLS et lecteur serveur](activity-pg.md)
 qualifiés sur copie synthétique : treize groupes natifs, dix-huit refus SQL et
 deux dérives de droits refusées. Les 62 tables sont conservées. Routes/page,
@@ -234,7 +241,7 @@ La roadmap décrit la cible du CDC ; documenter un lot ne signifie pas qu'il est
 | 5. Publication                     | Diff, validation, transfert sélectif, audit et rollback fonctionnel          | Lots 2-4 ; deux tables autorisées ; projection métier, mapping, droits PG limités et refs manquantes définis/testés                 | Uniquement contenu métier approuvé de `exercises` et `exercise_versions` ; idempotence/concurrence ; aucune version publiée réécrite ni tentative modifiée   | Transferts individuels/par lots, retour SQL et UI locaux ; réception restante           |
 | 6. Chapitres et compétences        | Édition Staging et validation des références                                 | Lot 1B ; aucune propagation en V1 de publication                                                                                    | CRUD contrôlé ; publication exercices bloque refs absentes sans copie implicite                                                                              | CRUD local vérifié ; activation distante fermée                                         |
 | 7. Flashcards                      | Édition Staging                                                              | Lot 1B ; aucun transfert en V1                                                                                                      | Permissions et validations testées ; pas de propagation implicite                                                                                            | CRUD/API/SQL locaux ; réception visuelle bloquée                                        |
-| 8. Statistiques et utilisateurs    | Indicateurs et consultations Production minimisées                           | Définitions métriques ; rôle PostgreSQL read-only techniquement réel ; décisions de confidentialité et accès nominatif              | Agrégats vérifiables, sources étiquetées, autorisations et minimisation testées                                                                              | Rôle, agrégats et lecteur TLS locaux qualifiés ; routes/page et utilisateurs à réaliser |
+| 8. Statistiques et utilisateurs    | Indicateurs et consultations Production minimisées                           | Définitions métriques ; rôle PostgreSQL read-only techniquement réel ; décisions de confidentialité et accès nominatif              | Agrégats vérifiables, sources étiquetées, autorisations et minimisation testées                                                                              | Page/API SQL locales qualifiées ; métriques, utilisateurs et Production restent ouverts |
 | 9. Mise en service                 | Hébergement, exploitation, accessibilité, performance et sécurité            | Lots concernés terminés ; hôte et secrets approuvés ; audit final                                                                   | Runbook, rollback, surveillance et revue sécurité acceptés                                                                                                   | À faire                                                                                 |
 
 ## Portes obligatoires avant la première migration

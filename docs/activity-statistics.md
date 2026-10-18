@@ -1,5 +1,9 @@
 # Statistiques d’activité — contrat et affichage préparatoires
 
+**Parcours connecté :** la [page/API locale](activity-http.md) lit depuis une vraie
+base SQL synthétique séparée. L’exemple du banc décrit ici reste sans base ;
+Production n’est pas activé.
+
 **Jalon suivant :** le [login TLS et lecteur serveur](activity-pg.md) passent
 sur copie synthétique ; la page reste à raccorder. Le label `local-copy` distingue
 une vraie requête SQL locale de cet exemple `local-fixture` sans base.

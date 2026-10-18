@@ -3,6 +3,7 @@ import { Brand } from '@/components/brand';
 import { requireAdminPage } from '@/lib/auth/require-admin';
 import { AdminNavigation } from '@/components/admin-navigation';
 import { readAuthConfiguration } from '@/lib/auth/config';
+import { readLocalActivityConfiguration } from '@/lib/activity-config';
 import {
   EditorRecoveryScope,
   AdminLogout,
@@ -36,7 +37,9 @@ export default async function AdminLayout({
           >
             <Brand />
           </Link>
-          <AdminNavigation />
+          <AdminNavigation
+            statisticsEnabled={!!readLocalActivityConfiguration(process.env)}
+          />
           <p className="mt-10 text-xs leading-6 text-slate-500">
             {local
               ? 'Copie locale de Staging : vos modifications restent sur cet ordinateur.'
