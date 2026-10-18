@@ -1,5 +1,8 @@
 /** Analytics DTO only. No database connection, profile projection or math grading. */
-export type StatisticsEnvironment = 'production' | 'local-fixture';
+export type StatisticsEnvironment =
+  | 'production'
+  | 'local-fixture'
+  | 'local-copy';
 export type StatisticsPeriod = {
   from: string;
   to: string;
@@ -129,7 +132,11 @@ export function decodeActivityStatistics(
   value: unknown,
   expected: { environment: StatisticsEnvironment; period: StatisticsPeriod },
 ): ActivityStatistics | null {
-  if (!['production', 'local-fixture'].includes(expected.environment))
+  if (
+    !['production', 'local-fixture', 'local-copy'].includes(
+      expected.environment,
+    )
+  )
     return null;
   const period = statisticsPeriod(expected.period.from, expected.period.to);
   if (

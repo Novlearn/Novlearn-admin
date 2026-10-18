@@ -14,6 +14,27 @@ import fixture from './fixtures/activity-statistics.json';
 const period = statisticsPeriod('2026-10-15', '2026-10-17')!;
 const expected = { environment: 'local-fixture' as const, period };
 const copy = () => structuredClone(fixture);
+it('distingue une vraie lecture SQL synthétique de la démonstration sans base', () => {
+  const data = decodeActivityStatistics(
+    { ...copy(), environment: 'local-copy' },
+    { environment: 'local-copy', period },
+  );
+  expect(data).not.toBeNull();
+  const html = renderToStaticMarkup(
+    createElement(ActivityStatisticsView, {
+      data,
+      period,
+      environment: 'local-copy',
+    }),
+  );
+  expect(html).toContain('Base locale synthétique');
+  expect(html).toContain('base SQL locale de test');
+  expect(html).not.toContain('ne lit aucune base');
+  expect(html).not.toContain('Production · consultation');
+  expect(
+    decodeActivityStatistics(data, { environment: 'production', period }),
+  ).toBeNull();
+});
 it('choisit trente jours UTC inclusifs même près d’un changement de jour local', () => {
   expect(
     readStatisticsPeriod(

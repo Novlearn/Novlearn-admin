@@ -1,5 +1,9 @@
 # Statistiques d’activité — contrat et affichage préparatoires
 
+**Jalon suivant :** le [login TLS et lecteur serveur](activity-pg.md) passent
+sur copie synthétique ; la page reste à raccorder. Le label `local-copy` distingue
+une vraie requête SQL locale de cet exemple `local-fixture` sans base.
+
 Ce jalon prépare le contrat d’agrégats, les périodes et l’affichage du Lot 8.
 **Il ne livre pas encore les statistiques réelles de Production.** Le rôle et la
 requête SQL sont depuis [qualifiés sur copies locales](activity-readonly.md),

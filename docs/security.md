@@ -5,8 +5,9 @@
 La [migration 65 et la requête analytique](activity-readonly.md) sont qualifiées
 sur copies : colonnes minimales, rôle NOLOGIN non privilégié, refus effectifs,
 héritage PUBLIC borné, agrégats et restauration. Aucun nouveau definer n’est
-ajouté. Le login PG/TLS et le lecteur serveur restent à qualifier ; ni cette
-preuve ni le choix nominatif D08 n’activent un client ou secret Production.
+ajouté. Le [login PG/TLS et lecteur serveur](activity-pg.md) sont depuis qualifiés
+sur copie isolée, avec refus des dérives du login et du rôle. Routes et accès
+Production restent fermés ; ni ces preuves ni D08 n’activent un secret distant.
 Les bases applicatives conservées restent sur leur schéma 64.
 
 ## Catalogue Admin local — D07

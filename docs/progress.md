@@ -1,5 +1,18 @@
 # Progression du goal NovLearn Admin
 
+## Lecteur analytique — PostgreSQL/TLS local du 18 octobre
+
+Le [login dédié et lecteur serveur](activity-pg.md) passent sur la copie SQL 65
+conservée : treize groupes natifs, dix-huit refus effectifs en read-write et deux
+dérives de privilèges refusées. Les 62 tables restent identiques. Le source label
+`local-copy` distingue une vraie requête SQL synthétique de l’exemple sans base.
+Routes/page, permissions Auth/HTTP et capacités Production restent à réaliser.
+Les services 3150/3152 et leurs configurations ne sont pas modifiés.
+Le contrôle complet final passe 877 tests / 47 fichiers, types, lint, format,
+build et smoke HTTP. La première tentative dans le Temp éphémère du bac Windows
+reste un échec conservé ; la même suite passe via l’exécution locale autorisée.
+Les [preuves](activity-pg-proof.json) distinguent ces tentatives et le test SQL natif.
+
 ## Lecture analytique — qualification SQL locale du 18 octobre
 
 Le [rôle et les agrégats SQL](activity-readonly.md) disposent d’une migration 65

@@ -1,5 +1,8 @@
 # Documentation NovLearn Admin
 
+[Lecteur analytique PostgreSQL/TLS](activity-pg.md) : compte dédié, audit des deux
+identités, agrégats serveur et dérives refusées sur copie ; page encore non raccordée.
+
 [Lecture analytique SQL](activity-readonly.md) : migration locale 65, rôle limité,
 agrégats natifs, refus et restauration ; lecteur Production encore non raccordé.
 

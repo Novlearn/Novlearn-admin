@@ -5,8 +5,9 @@ NovLearn Admin sera l'application privée d'administration de NovLearn : gestion
 ## État du projet
 
 La [capacité SQL analytique](docs/activity-readonly.md) est qualifiée sur copies :
-rôle limité, agrégats natifs, refus et restauration. Son lecteur serveur et sa
-connexion PostgreSQL/TLS restent à raccorder ; aucun relevé Production n’est activé.
+rôle limité, agrégats natifs, refus et restauration. Le [login TLS et lecteur serveur](docs/activity-pg.md)
+passent sur copie synthétique ; le raccordement à la page reste à faire.
+Aucun relevé Production n’est activé.
 
 **Connexion et sauvegarde locales rétablies :** ouvrir
 [NovLearn Admin sur 3150](http://127.0.0.1:3150/login). Les identifiants d’essai

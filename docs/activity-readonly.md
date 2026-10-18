@@ -1,5 +1,9 @@
 # Statistiques — rôle de lecture et agrégats SQL locaux
 
+**Jalon suivant :** le [login PostgreSQL/TLS et lecteur serveur](activity-pg.md)
+sont depuis qualifiés sur copie. Les mentions de lecteur futur ci-dessous
+décrivent le jalon SQL initial ; routes/page et accès Production restent ouverts.
+
 La migration locale **65**, `20261018162349_novlearn_admin_activity_readonly.sql`,
 est préparée dans le dépôt propriétaire NovLearn. Le rejeu neuf, les permissions,
 les agrégats et la restauration sur copies synthétiques passent. Les

@@ -40,7 +40,9 @@ export function ActivityStatisticsView({
         <span className="badge">
           {environment === 'local-fixture'
             ? 'Démonstration locale · chiffres fictifs'
-            : 'Production · consultation en lecture seule'}
+            : environment === 'local-copy'
+              ? 'Base locale synthétique · lecture seule'
+              : 'Production · consultation en lecture seule'}
         </span>
         <h1 className="mt-4 text-3xl font-semibold tracking-tight">
           Activité de la plateforme
@@ -53,6 +55,12 @@ export function ActivityStatisticsView({
           <p className="notice mt-4">
             Cet exemple ne lit aucune base et ne décrit pas l’activité réelle
             des utilisateurs. Le lecteur Production n’est pas activé.
+          </p>
+        )}
+        {environment === 'local-copy' && (
+          <p className="notice mt-4">
+            Ces chiffres proviennent d’une base SQL locale de test. Ils ne
+            décrivent pas l’activité réelle des utilisateurs de Production.
           </p>
         )}
       </header>

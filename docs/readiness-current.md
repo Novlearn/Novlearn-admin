@@ -38,7 +38,7 @@ Aucune écriture ni qualification globale des deux bases n’en est déduite.
 | 11      | Chapitres                 | CRUD, références et permissions : [référentiel](taxonomy-local-proof.json).                                                                                                                                                  | Réception navigateur et mise en service Staging ; aucun transfert automatique Production.                                                                                                   |
 | 12      | Compétences               | CRUD, filtres, points, références stables et conflits : [référentiel](taxonomy-local-proof.json).                                                                                                                            | Même réception ; ne pas déduire une couverture utilisateur actuelle des seules assertions SQL.                                                                                              |
 | 13      | Flashcards                | CRUD, prévisualisation et permissions : [flashcards](flashcards-local-proof.json).                                                                                                                                           | Réception navigateur ouverte ; aucune synchronisation Production en V1.                                                                                                                     |
-| 14      | Dashboard et statistiques | Agrégats **Staging** : [Dashboard](dashboard-local-proof.json). Contrat/rendu fictif et [rôle/premiers agrégats SQL natifs](activity-readonly-proof.json) qualifiés sur copies.                                              | Login PostgreSQL/TLS, lecteur/route/page Production, filtres pédagogiques, classements et preuves HTTP/données réelles restent à réaliser.                                                  |
+| 14      | Dashboard et statistiques | Agrégats **Staging** : [Dashboard](dashboard-local-proof.json). Contrat/rendu fictif et [rôle/premiers agrégats SQL natifs](activity-readonly-proof.json) qualifiés sur copies.                                              | Login/TLS et lecteur serveur qualifiés sur copie ([preuves](activity-pg-proof.json)) ; routes/page, filtres, classements et données Production restent à réaliser.                          |
 | 15      | Utilisateurs              | Nom, e-mail et activité retenus par [D08](decisions.md). Aucun écran ni lecteur Production opérationnel n’est encore livré.                                                                                                  | Capacité bornée, liste/recherche/pagination, profils autorisés, progression, activité et historique synthétique à implémenter et qualifier.                                                 |
 | 16      | Qualité et tests          | Suites unitaires/SSR, SQL, concurrence, sauvegarde/restauration et HTTP datés ; erreurs intermédiaires conservées.                                                                                                           | E2E navigateur, récupération connectée, expiration réelle et qualification distante non exécutés. Aucun test simulé ne remplace ces portes.                                                 |
 | 17      | Organisation autonome     | Lots, preuves, décisions et commits locaux ; jalons de base `d17fbfa` et `30eefde`, correctif `4260d80`.                                                                                                                     | Continuer les travaux autorisés indépendants, puis s’arrêter aux frontières d’autorisation ; ne pas recommencer les qualifications inchangées.                                              |
@@ -71,9 +71,9 @@ et autorisée avant toute modification de l’Engine.
 
 **Production : lecteur et capacités applicatives encore manquants.** Le [rôle et
 les premiers agrégats SQL](activity-readonly.md) sont qualifiés sur copies, y
-compris refus, droits PUBLIC et restauration. Le login PostgreSQL/TLS, son audit,
-le lecteur serveur, les filtres restants et la liste nominative ne sont pas
-encore livrés. Un compte privilégié général ne devient pas limité par convention.
+compris refus, droits PUBLIC et restauration. Le [login TLS et lecteur serveur](activity-pg.md)
+passent depuis sur copie synthétique. Routes/page, filtres restants et liste
+nominative restent à réaliser. Un compte privilégié général ne devient pas limité par convention.
 
 Les métriques doivent aussi distinguer leurs sources et leur fiabilité. Le
 schéma local utilise `exercise_attempts.attempted_at` et
@@ -89,7 +89,7 @@ La sauvegarde à froid, les services conservés et la reprise de publication
 contre le relevé d’origine sont désormais vérifiés. Aucun environnement distant
 n’est activé. Le prochain travail porte sur les fonctions et réceptions restantes :
 
-1. Qualifier le login PostgreSQL/TLS puis raccorder les agrégats SQL au lecteur,
+1. Raccorder le lecteur PostgreSQL/TLS qualifié aux routes et à la page Admin,
    compléter filtres et métriques, utilisateurs nom/e-mail/activité (D08) et
    version cible courante, avec permissions et minimisation vérifiées.
 2. Exécuter le parcours HTTP multi-exercices complet ; réceptionner récupération,

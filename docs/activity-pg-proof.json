@@ -1,0 +1,213 @@
+{
+  "result": "PASS for local SQL login/TLS and server aggregate reader only",
+  "recordedAt": "2026-10-18T17:29:10.036Z",
+  "nativeArtifact": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\activity-pg-1792343332880",
+  "native": {
+    "result": "PASS",
+    "date": "2026-10-18T17:13:09.056Z",
+    "checks": [
+      "Actual password login with verified certificate, host and TLS 1.2+",
+      "Session login: nine actual 42501 denials in read-write transactions",
+      "Assumed reader: nine actual 42501 denials in read-write transactions",
+      "Server statement timeout cancels a real query",
+      "Wrong password rejected by SCRAM authentication",
+      "Untrusted certificate rejected",
+      "Wrong certificate hostname rejected",
+      "Unencrypted login rejected by fixture HBA",
+      "Login to another database rejected by fixture HBA",
+      "Real server reader audits both identities and decodes known nonempty aggregate",
+      "Reused pool lease is reset and both identities re-audited",
+      "Valid empty period distinguished from unavailable data",
+      "Inconsistent period rejected before SQL execution"
+    ],
+    "realLogin": true,
+    "realTls": true,
+    "realServerReader": true,
+    "writeDenials": 18,
+    "remoteAccess": false,
+    "browserExecuted": false,
+    "effectivePrivilegeDriftsRejected": ["reader-email", "login-temporary"],
+    "container": "novlearn-admin-activity-sql-1792341273740",
+    "artifact": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\activity-pg-1792343332880",
+    "postgresImageDigest": "public.ecr.aws/supabase/postgres@sha256:7374d196da7e301512cc5329e18040e0f7bb856287b323777cdadecccbc6c7e4",
+    "nodeImage": "node:24.19.0-bookworm@sha256:4196d66a565c6f195728d9952f161f4adfe2ad753052a08b7ec7f1c5a6bda42b",
+    "sourceHashes": {
+      "src/lib/activity-pg.ts": "db6b6e8cd613d4f724df6a2f76eade375ef85aabdd04cfd0d9c773a07fc8d886",
+      "src/lib/activity-statistics.ts": "4743e04707ccf424f6ddb4ea502dddc18796e00a1c359f85242d8eb60b3d6dfe",
+      "scripts/activity-reader-audit.sql": "a39caa379dab41b385cde85a58ce08eda8773838de897450f06798613767ed6e",
+      "scripts/activity-statistics-query.sql": "a0dd6194dc41b0f0eaffa6904e2c25c86e88f7def1c8779760821bdd065117e0",
+      "scripts/test-activity-pg-worker.mjs": "45c29bfa857bba6ab5e8a52bda0330e4164792dcd1ed6a4bb47760d8dc2a73c4",
+      "scripts/test-activity-pg-local.mjs": "365d36c171ec10b98f7795d6f310ad80b19d36f622e7aa2909887695cbb087dc"
+    },
+    "tableSnapshotsCompared": 62,
+    "allTableRowsPreserved": true,
+    "existingApplicationModified": false,
+    "productionReaderActivated": false,
+    "remoteDatabaseOperationPerformed": false,
+    "fixtureLoginCreatedAfterSql65": true,
+    "fixtureHbaRequiresScramAndTls": true,
+    "fixtureNetwork": "none",
+    "publishedPorts": []
+  },
+  "protectedFiles": {
+    ".env.example": "bef315e2915404a579ed290b3f31ec738565219eacb46c4f83e16295314854cf",
+    "CDC_reference.md": "b6bfea6d74b008e54ed61aa7598ccd01bd438d496cc22add15da2ff8abb04401",
+    "docs/system-design.md": "59e40e03702a673632213c354268b11334836fe4b46a1c69a1d7be127d84b2d9",
+    "docs/audit-current-2026-10-15.md": "8ff3bf843fb6221ff8c7cb34435afc67372b25163eb4edbf1268dcae7b38f26a",
+    "../Novlearn/supabase/migrations/20261018162349_novlearn_admin_activity_readonly.sql": "2c15766585250ad1478725ffd2dc0715a839080cbeb647fe273b320bde64ed82"
+  },
+  "fullCheck": {
+    "executedForThisChange": true,
+    "artifact": "C:\\Users\\balth\\AppData\\Local\\Temp\\novlearn-admin-check-1792344220169",
+    "proof": {
+      "result": "PASS",
+      "date": "2026-10-18T17:27:21.786Z",
+      "artifact": "C:\\Users\\balth\\AppData\\Local\\Temp\\novlearn-admin-check-1792344220169",
+      "exitCode": 0,
+      "tests": 877,
+      "files": 47,
+      "sourceFiles": 405,
+      "allCopiedSourcesStillMatch": true,
+      "fullCheckCommand": "npm run check",
+      "separateBuildDirectory": true,
+      "independentTemporaryProject": true,
+      "dependenciesCopied": true,
+      "applicationServersInterrupted": false,
+      "privateEnvironmentFilesCopied": false
+    }
+  },
+  "localApplicationUrl": "http://127.0.0.1:3150/login",
+  "existingApplicationModified": false,
+  "newLoginOnlyOnSyntheticCopy": true,
+  "applicationAuthRoutePageWired": false,
+  "nominalUsersImplemented": false,
+  "productionReadEnabled": false,
+  "remoteWritesPerformed": false,
+  "browserExecuted": false,
+  "goalComplete": false,
+  "remaining": [
+    "Local app configuration and network access, standalone SQL files, freshly authorized routes/page and HTTP tests",
+    "Pedagogical filters and remaining metrics/rankings",
+    "Separate user capability: name, email and activity",
+    "Production identity/TLS attestation, credentials/certificate rotation and remote approval",
+    "Other original goal requirements tracked in readiness-current.md"
+  ],
+  "intermediateFailure": {
+    "kind": "Technical Docker nested mountpoint missing",
+    "testsExecutedByFailedWorker": false,
+    "resolution": "Create empty nested mountpoint first; retain read-only parent, same resources and security settings"
+  },
+  "existingPrivateConfigurationsPreserved": 8,
+  "preexistingSiblingChangedFilesPreserved": 8,
+  "priorFailedFullCheckAttempt": {
+    "result": "FAIL",
+    "date": "2026-10-18T17:22:33.491Z",
+    "artifact": "C:\\Users\\balth\\AppData\\Local\\Packages\\sandbox.{1db73042-1359-4f7b-be83-464071ed4421}\\AC\\Temp\\novlearn-admin-check-1792343741645",
+    "exitCode": 1,
+    "tests": 877,
+    "files": 47,
+    "sourceFiles": 405,
+    "allCopiedSourcesStillMatch": true,
+    "observedPassedStages": [
+      "Engine archive integrity",
+      "unit and SSR tests",
+      "types",
+      "lint with one preexisting warning",
+      "format"
+    ],
+    "lastObservedStage": "Next production build",
+    "observedWarnings": [
+      "EPERM on Webpack server-production cache rename",
+      "EPERM on Webpack edge-server-production cache rename"
+    ],
+    "exactTerminalBuildErrorKnown": false,
+    "reason": "The per-command Windows sandbox temporary directory disappeared when the command ended; its complete terminal build log could not be read afterward, including through authorized owner access.",
+    "buildOrSmokePassed": false,
+    "retryMethod": "Same unchanged complete check through the approved owner execution channel and a retained ordinary local temporary project. No protection or validation setting changed."
+  },
+  "targetedClientBundleScan": {
+    "result": "PASS for targeted production client-bundle scan",
+    "date": "2026-10-18T17:27:50.705Z",
+    "artifact": "C:\\Users\\balth\\AppData\\Local\\Temp\\novlearn-admin-check-1792344220169",
+    "patterns": 45,
+    "productionBundles": 48,
+    "matches": 0,
+    "exhaustiveLeakAudit": false,
+    "newSqlFixtureOwnerPasswordsIncluded": 3
+  },
+  "physicalIdentityAudits": [
+    {
+      "role": "novlearn_admin_activity_service",
+      "flags": {
+        "login": true,
+        "super": false,
+        "inherit": false,
+        "createdb": false,
+        "bypassrls": false,
+        "createrole": false,
+        "replication": false
+      },
+      "login": "novlearn_admin_activity_service",
+      "columns": [],
+      "database": "activity_copy",
+      "rlsTables": 4,
+      "temporary": false,
+      "tableWrite": false,
+      "memberships": [
+        {
+          "set": true,
+          "role": "novlearn_activity_reader",
+          "admin": false,
+          "inherit": false
+        }
+      ],
+      "ownedObjects": false,
+      "schemaCreate": false,
+      "databaseCreate": false,
+      "sequenceAccess": false,
+      "largeObjectCreate": false,
+      "unexpectedDefinerAccess": false
+    },
+    {
+      "role": "novlearn_activity_reader",
+      "flags": {
+        "login": false,
+        "super": false,
+        "inherit": false,
+        "createdb": false,
+        "bypassrls": false,
+        "createrole": false,
+        "replication": false
+      },
+      "login": "novlearn_admin_activity_service",
+      "columns": [
+        "auth.users.created_at",
+        "auth.users.id",
+        "auth.users.is_anonymous",
+        "public.duel_attempts.duel_id",
+        "public.duel_attempts.player_id",
+        "public.duel_attempts.submitted_at",
+        "public.duels.finished_at",
+        "public.duels.id",
+        "public.duels.player1_id",
+        "public.duels.player2_id",
+        "public.duels.status",
+        "public.exercise_attempts.attempted_at",
+        "public.exercise_attempts.is_abandoned",
+        "public.exercise_attempts.is_correct",
+        "public.exercise_attempts.user_id"
+      ],
+      "database": "activity_copy",
+      "rlsTables": 4,
+      "temporary": false,
+      "tableWrite": false,
+      "memberships": [],
+      "ownedObjects": false,
+      "schemaCreate": false,
+      "databaseCreate": false,
+      "sequenceAccess": false,
+      "largeObjectCreate": false,
+      "unexpectedDefinerAccess": false
+    }
+  ]
+}
