@@ -1,5 +1,11 @@
 # Creator canonique — état local du 14 octobre 2026
 
+**18 octobre :** la [récupération facultative de saisie](creator-recovery.md)
+complète les gardes de sortie. Elle distingue les versions et prépare une
+nouvelle révision en cas de référence modifiée. Sa réception navigateur et son
+essai connecté après réparation de Docker restent ouverts ; les limites de
+confirmation décrites ci-dessous restent celles du jalon initial.
+
 **Complément :** l’[aperçu et les tests Engine](preview.md) ajoutent maintenant
 génération, projection élève, inspection privée et correction natives, ainsi que
 les tests multi-seeds. Les preuves ci-dessous conservent le checkpoint initial

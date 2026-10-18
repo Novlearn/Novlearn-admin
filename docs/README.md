@@ -1,5 +1,8 @@
 # Documentation NovLearn Admin
 
+[Récupération Creator](creator-recovery.md) : copie facultative dans l’onglet,
+reprise explicite et préservation des versions en cas de référence modifiée.
+
 Le [suivi du goal](progress.md) contient l'audit actuel, les lots autorisés,
 les tests, les blocages et le point de reprise.
 

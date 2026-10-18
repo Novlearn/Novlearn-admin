@@ -66,6 +66,39 @@ export function isFingerprint(value: unknown): value is string {
   return typeof value === 'string' && /^[0-9a-f]{64}$/.test(value);
 }
 
+/** A malformed HTTP 200 is not proof that this editor was saved. */
+export function readSavedDraft(
+  value: unknown,
+  expected: {
+    exerciseId?: string;
+    versionId?: string;
+    newRevision?: boolean;
+  },
+): { exerciseId: string; versionId: string } | null {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return null;
+  const body = value as Record<string, unknown>;
+  if (
+    body.environment !== 'staging' ||
+    !body.result ||
+    typeof body.result !== 'object' ||
+    Array.isArray(body.result)
+  )
+    return null;
+  const result = body.result as Record<string, unknown>;
+  if (
+    !isExerciseId(result.exerciseId) ||
+    !isUuid(result.versionId) ||
+    (expected.exerciseId !== undefined &&
+      result.exerciseId !== expected.exerciseId) ||
+    (expected.versionId !== undefined &&
+      (expected.newRevision
+        ? result.versionId === expected.versionId
+        : result.versionId !== expected.versionId))
+  )
+    return null;
+  return { exerciseId: result.exerciseId, versionId: result.versionId };
+}
+
 /** Drafts may be incomplete; official mathematical validation remains Engine-only. */
 export function draftEnvelope(value: unknown): value is ExerciseDefinition {
   if (!value || typeof value !== 'object' || Array.isArray(value)) return false;

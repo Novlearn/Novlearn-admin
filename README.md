@@ -48,6 +48,11 @@ conserve les données et nécessite un accord séparé.
 sans connexion, sauvegarde ni calcul Engine. Ses réponses HTTP sont vérifiées ;
 la réception visuelle reste à réaliser dans le navigateur.
 
+Le [Creator de l’aperçu](http://127.0.0.1:3140/tests/browser/creator.html)
+propose maintenant une [récupération facultative de saisie](docs/creator-recovery.md).
+Son activation est explicite ; la réception de ce parcours dans le navigateur
+et dans l’application connectée reste à réaliser.
+
 Le [correctif Engine est maintenant adopté localement](docs/engine-admin-adoption.md)
 avec SQL 64 : génération avancée, nouveaux rapports signés et relecture réellement
 vérifiés. Les anciens rapports restent consultables et demandent de nouveaux

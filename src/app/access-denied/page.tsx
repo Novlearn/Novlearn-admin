@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { AdminLogout } from '@/components/editor-recovery-scope';
 
 export default function AccessDenied() {
   return (
@@ -11,11 +12,9 @@ export default function AccessDenied() {
         Votre compte ne dispose pas des droits nécessaires. Contactez
         l’opérateur NovLearn pour demander un accès.
       </p>
-      <form action="/auth/logout" method="post" className="mt-8">
-        <button className="button" type="submit">
-          Se déconnecter
-        </button>
-      </form>
+      <div className="mt-8">
+        <AdminLogout buttonClassName="button" />
+      </div>
       <Link className="mt-5 text-sm text-blue-700 underline" href="/login">
         Retour à la connexion
       </Link>

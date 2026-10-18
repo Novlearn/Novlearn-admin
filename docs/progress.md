@@ -1,5 +1,21 @@
 # Progression du goal NovLearn Admin
 
+## Récupération Creator — 18 octobre 2026
+
+La [copie de récupération](creator-recovery.md) est facultative et explicitement
+privée. Elle distingue compte, API, exercice, version et mode d’édition ; les
+copies périmées ne sont pas restaurées et une référence modifiée conduit à
+une nouvelle révision. Les gardes de sortie et les contrôles serveur restent
+actifs. Les résultats Node/SSR et de compilation sont distingués des essais
+navigateur et connectés, encore non exécutés pour ce jalon.
+
+Le contrôle complet passe **802 tests / 44 fichiers**, types, lint sans erreur,
+format, compilation et smoke. Trente-cinq tests nouveaux couvrent récupération
+et confirmations de sauvegarde ; un HTTP 200 incompatible ne supprime plus
+la copie. Dix pages du banc compilent ; la recherche ciblée de secrets passe.
+Les références protégées, configurations et migrations restent inchangées.
+Le commit de publication HTTP est `d17fbfa` ; aucun push ni accès distant.
+
 ## Publication HTTP réelle sur copies — 17–18 octobre 2026
 
 Le [parcours connecté](publication-http-connected.md) qualifie la vraie route

@@ -1,11 +1,13 @@
 'use client';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import type { ExerciseDefinition } from 'novlearn-exercise-engine';
-import { newDraft } from '@/lib/catalogue';
+import { newDraft, readSavedDraft } from '@/lib/catalogue';
 import { CreatorFields } from './creator-fields';
 import { bindEditorNavigation } from '@/lib/editor-navigation';
 import { ExercisePreview } from './exercise-preview';
+import { useCreatorRecovery } from './creator-recovery';
+import { recoveryResource } from '@/lib/creator-recovery';
 
 type Props = {
   exerciseId?: string;
@@ -35,6 +37,35 @@ export function DraftMetadataForm(props: Props) {
   } | null>(null);
   const latest = useRef({ definition, skills });
   latest.current = { definition, skills };
+  const [recoveredAsNewRevision, setRecoveredAsNewRevision] = useState(false);
+  const newRevision = props.newRevision || recoveredAsNewRevision;
+  const recoveryBase = useMemo(
+    () => ({
+      fingerprint: props.fingerprint ?? null,
+      epoch: props.testEpoch ?? null,
+    }),
+    [props.fingerprint, props.testEpoch],
+  );
+  const recovery = useCreatorRecovery({
+    resource: recoveryResource(
+      props.exerciseId,
+      props.versionId,
+      props.newRevision,
+    ),
+    base: recoveryBase,
+    definition,
+    skills,
+    dirty,
+    createRevision: !!newRevision,
+    onRestore(copy, changedBase) {
+      setDefinition(copy.definition);
+      setSkills(copy.skills);
+      setRecoveredAsNewRevision(changedBase && !!props.exerciseId);
+      dirtyRef.current = true;
+      setDirty(true);
+      setValidation(null);
+    },
+  });
   useEffect(() => {
     setValidation(null);
   }, [definition, skills]);
@@ -95,6 +126,7 @@ export function DraftMetadataForm(props: Props) {
   };
   async function save(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (busy || recovery.awaitingChoice) return;
     setBusy(true);
     setMessage('');
     try {
@@ -115,8 +147,8 @@ export function DraftMetadataForm(props: Props) {
         body: JSON.stringify({
           action: 'save',
           exerciseId: props.exerciseId ?? null,
-          versionId: props.newRevision ? null : (props.versionId ?? null),
-          fingerprint: props.newRevision ? null : (props.fingerprint ?? null),
+          versionId: newRevision ? null : (props.versionId ?? null),
+          fingerprint: newRevision ? null : (props.fingerprint ?? null),
           definition: cleaned,
         }),
       });
@@ -125,10 +157,22 @@ export function DraftMetadataForm(props: Props) {
         setMessage(data.error ?? 'Sauvegarde impossible.');
         return;
       }
+      const confirmed = readSavedDraft(data, {
+        exerciseId: props.exerciseId,
+        versionId: props.versionId,
+        newRevision: !!newRevision,
+      });
+      if (!confirmed) {
+        setMessage(
+          'L’enregistrement n’a pas pu être confirmé. Votre saisie et sa copie de récupération restent conservées ; vérifiez le catalogue avant de réessayer.',
+        );
+        return;
+      }
       dirtyRef.current = false;
+      recovery.saved();
       setDirty(false);
       router.push(
-        `/admin/exercises/${data.result.exerciseId}?version=${data.result.versionId}&saved=1`,
+        `/admin/exercises/${confirmed.exerciseId}?version=${confirmed.versionId}&saved=1`,
       );
       router.refresh();
     } catch {
@@ -150,7 +194,17 @@ export function DraftMetadataForm(props: Props) {
           publiées sont conservées.
         </p>
       </div>
-      <fieldset disabled={busy} className="grid gap-5 md:grid-cols-2">
+      {recovery.panel}
+      {recoveredAsNewRevision && (
+        <p role="status" className="notice">
+          Votre saisie sera enregistrée dans une nouvelle révision. La version
+          actuelle reste conservée.
+        </p>
+      )}
+      <fieldset
+        disabled={busy || recovery.awaitingChoice}
+        className="grid gap-5 md:grid-cols-2"
+      >
         <label className="label md:col-span-2">
           Titre administratif
           <input
@@ -240,10 +294,10 @@ export function DraftMetadataForm(props: Props) {
           Calculatrice nécessaire
         </label>
       </fieldset>
-      <fieldset disabled={busy}>
+      <fieldset disabled={busy || recovery.awaitingChoice}>
         <CreatorFields
           definition={definition}
-          disabled={busy}
+          disabled={busy || recovery.awaitingChoice}
           onChange={(next) => {
             setDefinition(next);
             setDirty(true);
@@ -264,7 +318,7 @@ export function DraftMetadataForm(props: Props) {
         <button
           type="button"
           className="button mt-4"
-          disabled={busy || validating}
+          disabled={busy || validating || recovery.awaitingChoice}
           onClick={validate}
         >
           {validating ? 'Validation…' : 'Vérifier la définition'}
@@ -293,9 +347,9 @@ export function DraftMetadataForm(props: Props) {
       </section>
       <ExercisePreview
         definition={clean(definition, skills)}
-        disabled={busy}
+        disabled={busy || recovery.awaitingChoice}
         saved={
-          !props.newRevision &&
+          !newRevision &&
           props.versionId &&
           props.fingerprint &&
           typeof props.testEpoch === 'number'
@@ -308,10 +362,14 @@ export function DraftMetadataForm(props: Props) {
         }
       />
       <div className="flex flex-wrap items-center gap-4">
-        <button className="button" type="submit" disabled={busy}>
+        <button
+          className="button"
+          type="submit"
+          disabled={busy || recovery.awaitingChoice}
+        >
           {busy
             ? 'Enregistrement…'
-            : props.newRevision
+            : newRevision
               ? 'Créer une nouvelle révision'
               : 'Enregistrer le brouillon'}
         </button>

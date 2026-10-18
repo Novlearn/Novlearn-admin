@@ -1,5 +1,11 @@
 # Roadmap
 
+**Récupération Creator, 18 octobre :** la [copie facultative](creator-recovery.md)
+conserve la saisie dans l’onglet pendant trente minutes de récupération.
+Un changement de référence prépare une nouvelle révision. La réception
+navigateur et l’essai connecté restent ouverts ; aucun accès distant.
+802 tests et le contrôle complet passent ; dix pages du banc compilent.
+
 **Publication HTTP connectée, 17–18 octobre :** le [parcours réel](publication-http-connected.md)
 passe treize contrôles : Auth/REST, Engine natif, confirmation, deux révisions,
 retour à la première et conservation des historiques. 767 tests et le contrôle

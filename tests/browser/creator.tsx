@@ -7,6 +7,7 @@ import '../../src/app/globals.css';
 import { DraftMetadataForm } from '../../src/components/draft-metadata-form';
 import { WorkspaceNav } from './workspace-nav';
 import fixture from '../fixtures/preview-definition.json';
+import { EditorRecoveryScope } from '../../src/components/editor-recovery-scope';
 
 function Creator() {
   return (
@@ -19,8 +20,9 @@ function Creator() {
           <p>
             Modifiez cet exemple, puis utilisez la validation et l’aperçu plus
             bas. Le moteur Linux doit être lancé pour les calculs. La sauvegarde
-            en base reste indisponible ; le rechargement abandonne vos
-            modifications.
+            en base reste indisponible. Activez la copie de récupération si vous
+            souhaitez retrouver votre saisie après un rechargement de cet
+            onglet.
           </p>
           <p className="mt-2">
             Pour le premier essai, générez une instance, répondez à la question
@@ -28,7 +30,9 @@ function Creator() {
             par exemple 0 pour cet exemple initial.
           </p>
         </div>
-        <DraftMetadataForm definition={fixture as ExerciseDefinition} />
+        <EditorRecoveryScope scope="synthetic-creator-bench">
+          <DraftMetadataForm definition={fixture as ExerciseDefinition} />
+        </EditorRecoveryScope>
       </main>
     </>
   );

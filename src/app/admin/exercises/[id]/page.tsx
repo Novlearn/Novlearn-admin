@@ -196,7 +196,12 @@ export default async function ExercisePage({
             </section>
           ) : editable ? (
             <DraftMetadataForm
-              key={version.id + version.approval_fingerprint_sha256}
+              key={
+                version.id +
+                version.approval_fingerprint_sha256 +
+                ':' +
+                version.test_epoch
+              }
               exerciseId={id}
               versionId={version.id}
               fingerprint={version.approval_fingerprint_sha256}
@@ -218,7 +223,17 @@ export default async function ExercisePage({
                   </summary>
                   <div className="mt-5">
                     <DraftMetadataForm
+                      key={
+                        'new-' +
+                        version.id +
+                        version.approval_fingerprint_sha256 +
+                        ':' +
+                        version.test_epoch
+                      }
                       exerciseId={id}
+                      versionId={version.id}
+                      fingerprint={version.approval_fingerprint_sha256}
+                      testEpoch={version.test_epoch}
                       definition={version.definition as ExerciseDefinition}
                       newRevision
                     />

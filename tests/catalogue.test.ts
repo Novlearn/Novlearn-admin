@@ -6,10 +6,71 @@ import {
   isUuid,
   newDraft,
   revisionDiff,
+  readSavedDraft,
 } from '@/lib/catalogue';
 import { readBoundedJson } from '@/lib/auth/json';
 
 describe('contrats du catalogue', () => {
+  it('n’accepte une confirmation de sauvegarde que pour les identifiants attendus sans arrondir les bigint', () => {
+    const versionId = '9a000000-0000-0000-0000-000000000001';
+    const newerId = '9a000000-0000-0000-0000-000000000002';
+    const result = { exerciseId: '9007199254740993', versionId };
+    const body = { environment: 'staging', result };
+    expect(readSavedDraft(body, {})).toEqual(result);
+    expect(readSavedDraft(body, result)).toEqual(result);
+    expect(readSavedDraft(body, { ...result, newRevision: true })).toBeNull();
+    expect(
+      readSavedDraft(
+        { ...body, result: { ...result, versionId: newerId } },
+        { ...result, newRevision: true },
+      ),
+    ).toEqual({ ...result, versionId: newerId });
+    expect(readSavedDraft(body, { ...result, exerciseId: '12' })).toBeNull();
+    expect(readSavedDraft(body, { ...result, versionId: newerId })).toBeNull();
+  });
+  it.each([
+    null,
+    [],
+    {},
+    {
+      result: {
+        exerciseId: '12',
+        versionId: '9a000000-0000-0000-0000-000000000001',
+      },
+    },
+    {
+      environment: 'production',
+      result: {
+        exerciseId: '12',
+        versionId: '9a000000-0000-0000-0000-000000000001',
+      },
+    },
+    { environment: 'staging', result: null },
+    { environment: 'staging', result: [] },
+    {
+      environment: 'staging',
+      result: {
+        exerciseId: 12,
+        versionId: '9a000000-0000-0000-0000-000000000001',
+      },
+    },
+    {
+      environment: 'staging',
+      result: {
+        exerciseId: '9223372036854775808',
+        versionId: '9a000000-0000-0000-0000-000000000001',
+      },
+    },
+    {
+      environment: 'staging',
+      result: { exerciseId: '12', versionId: '../../another-page' },
+    },
+  ])(
+    'ne déduit aucun succès d’un HTTP 200 au corps incompatible %#',
+    (body) => {
+      expect(readSavedDraft(body, {})).toBeNull();
+    },
+  );
   it('conserve les bigint sans perte de précision et rejette les identifiants SQL arbitraires', () => {
     expect(isExerciseId('9007199254740993')).toBe(true);
     expect(isExerciseId('9223372036854775807')).toBe(true);
