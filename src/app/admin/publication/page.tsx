@@ -25,15 +25,23 @@ export default async function PublicationPage({
     { p_offset: (page - 1) * 25 },
   );
   const history = error ? null : publicationHistory(data);
+  const publicationConfig = readPublicationPgConfiguration(process.env);
+  const localFixture =
+    process.env.ADMIN_LOCAL_PUBLICATION_FIXTURE_ENABLED === 'true';
   const enabled =
-    !!readPublicationPgConfiguration(process.env) &&
-    !!readPublicationConfirmationKey(process.env) &&
+    !!publicationConfig &&
+    !!readPublicationConfirmationKey(
+      process.env,
+      publicationConfig?.localFixture,
+    ) &&
     process.env.ADMIN_ENGINE_ENABLED === 'true';
   return (
     <div className="max-w-6xl space-y-7">
       <header>
         <p className="text-sm font-semibold text-blue-700">
-          Staging → Production
+          {localFixture
+            ? 'Copie source → copie cible · essai local'
+            : 'Staging → Production'}
         </p>
         <h1 className="mt-2 text-3xl font-semibold tracking-tight">
           Mes opérations de publication
@@ -106,7 +114,14 @@ export default async function PublicationPage({
                       <p>Lot : {item.batchId}</p>
                     </div>
                   </details>
-                  <PublicationHistoryActions item={item} enabled={enabled} />
+                  <PublicationHistoryActions
+                    item={item}
+                    enabled={enabled}
+                    localFixture={
+                      process.env.ADMIN_LOCAL_PUBLICATION_FIXTURE_ENABLED ===
+                      'true'
+                    }
+                  />
                 </li>
               ))}
             </ol>

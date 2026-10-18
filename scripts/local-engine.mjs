@@ -6,7 +6,14 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { createServer } from 'node:http';
 import path from 'node:path';
 
-export async function startLocalEngine(artifact) {
+export async function startLocalEngine(
+  artifact,
+  { publicationFixture = false } = {},
+) {
+  assert.equal(typeof publicationFixture, 'boolean');
+  if (publicationFixture)
+    assert.match(path.basename(artifact), /^local-admin-publication-\d+$/);
+  const port = publicationFixture ? 3153 : 3151;
   const root = process.cwd();
   assert(path.resolve(artifact).startsWith(path.resolve('.local') + path.sep));
   const work = path.join(artifact, 'engine-' + Date.now());
@@ -255,7 +262,7 @@ export async function startLocalEngine(artifact) {
       const supplied = req.headers.authorization ?? '';
       const expected = 'Bearer ' + capability;
       if (
-        req.headers.host !== '127.0.0.1:3151' ||
+        req.headers.host !== '127.0.0.1:' + port ||
         req.headers.origin ||
         Buffer.byteLength(supplied) !== Buffer.byteLength(expected) ||
         !timingSafeEqual(Buffer.from(supplied), Buffer.from(expected))
@@ -328,7 +335,7 @@ export async function startLocalEngine(artifact) {
     server.headersTimeout = 10000;
     await new Promise((resolve, reject) => {
       server.once('error', reject);
-      server.listen(3151, '127.0.0.1', resolve);
+      server.listen(port, '127.0.0.1', resolve);
     });
     const sources = {};
     for (const name of [
@@ -364,7 +371,7 @@ export async function startLocalEngine(artifact) {
       container,
       artifact: work,
       environment: {
-        ADMIN_LOCAL_ENGINE_URL: 'http://127.0.0.1:3151/run',
+        ADMIN_LOCAL_ENGINE_URL: 'http://127.0.0.1:' + port + '/run',
         ADMIN_LOCAL_ENGINE_CAPABILITY: capability,
         ADMIN_ENGINE_ENABLED: 'true',
       },

@@ -321,6 +321,7 @@ export class PublicationRequestError extends Error {
 export async function requestPublication(
   command: PublicationCommand,
   signal?: AbortSignal,
+  environment: 'operational' | 'local-fixture' = 'operational',
 ): Promise<PreparedPublication | PublicationSummary> {
   let response: Response;
   try {
@@ -361,8 +362,10 @@ export async function requestPublication(
   if (
     !object(data) ||
     !exact(data, ['sourceEnvironment', 'targetEnvironment', 'result']) ||
-    data.sourceEnvironment !== 'staging' ||
-    data.targetEnvironment !== 'production'
+    data.sourceEnvironment !==
+      (environment === 'local-fixture' ? 'local-source' : 'staging') ||
+    data.targetEnvironment !==
+      (environment === 'local-fixture' ? 'local-target' : 'production')
   )
     throw new PublicationRequestError(
       'Environnements de publication non confirmés.',

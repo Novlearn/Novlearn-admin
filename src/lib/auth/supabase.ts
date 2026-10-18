@@ -7,6 +7,7 @@ import type { AuthGateway } from './authorization';
 import {
   readAuthConfiguration,
   LOCAL_AUTH_COOKIE,
+  LOCAL_PUBLICATION_AUTH_COOKIE,
   type AuthConfiguration,
 } from './config';
 import { privateHeaders } from './http';
@@ -61,7 +62,13 @@ export function createRouteAuth(
   const response = NextResponse.next({ request, headers: privateHeaders() });
   const client = createServerClient(config.supabaseUrl, config.publishableKey, {
     cookieOptions: {
-      ...(config.local ? { name: LOCAL_AUTH_COOKIE } : {}),
+      ...(config.local
+        ? {
+            name: config.localPublicationFixture
+              ? LOCAL_PUBLICATION_AUTH_COOKIE
+              : LOCAL_AUTH_COOKIE,
+          }
+        : {}),
       httpOnly: true,
       sameSite: 'lax',
       secure: config.secureCookies,
@@ -88,7 +95,13 @@ export async function createPageClient() {
   const store = await cookies();
   const client = createServerClient(config.supabaseUrl, config.publishableKey, {
     cookieOptions: {
-      ...(config.local ? { name: LOCAL_AUTH_COOKIE } : {}),
+      ...(config.local
+        ? {
+            name: config.localPublicationFixture
+              ? LOCAL_PUBLICATION_AUTH_COOKIE
+              : LOCAL_AUTH_COOKIE,
+          }
+        : {}),
       httpOnly: true,
       sameSite: 'lax',
       secure: config.secureCookies,

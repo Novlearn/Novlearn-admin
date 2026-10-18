@@ -1,5 +1,10 @@
 # Publication HTTP locale — préparation du banc
 
+**Mise à jour :** le [parcours HTTP connecté](publication-http-connected.md)
+et son contrôle complet passent le 17 octobre. Le présent relevé décrit la
+préparation antérieure. La reprise du 18 octobre est séparément bloquée par
+Docker Desktop ; elle n’est pas déclarée réussie.
+
 **Les deux copies et leurs connexions sont qualifiées. Le transfert HTTP complet
 n’est pas encore exécuté.** L’application principale reste sur le port 3150,
 avec sa connexion disponible et sa publication fermée.

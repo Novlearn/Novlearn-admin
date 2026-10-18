@@ -29,6 +29,7 @@ export default async function ExercisePage({
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
   const client = await requireCatalogueClient();
+  const publicationConfig = readPublicationPgConfiguration(process.env);
   const { id } = await params;
   const query = await searchParams;
   if (!isExerciseId(id)) notFound();
@@ -304,9 +305,15 @@ export default async function ExercisePage({
                 revision={version.revision}
                 status={version.editorial_status}
                 archived={!!parent.admin_archived_at}
+                localFixture={
+                  process.env.ADMIN_LOCAL_PUBLICATION_FIXTURE_ENABLED === 'true'
+                }
                 enabled={
-                  !!readPublicationPgConfiguration(process.env) &&
-                  !!readPublicationConfirmationKey(process.env) &&
+                  !!publicationConfig &&
+                  !!readPublicationConfirmationKey(
+                    process.env,
+                    publicationConfig?.localFixture,
+                  ) &&
                   process.env.ADMIN_ENGINE_ENABLED === 'true'
                 }
               />

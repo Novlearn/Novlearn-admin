@@ -37,6 +37,17 @@ parcours avec `--engine --review` : demande, attestation explicite et historique
 Une approbation ne publie rien. Les identifiants d’essai sont dans le fichier
 ignoré `.local/local-admin-1792143739689/login.txt` ; utiliser le port **3150**.
 
+**Reprise du 18 octobre :** Docker Desktop est actuellement en erreur de
+démarrage, donc les instances locales sont arrêtées. Le [bilan de publication
+HTTP](docs/publication-http-connected.md) distingue les treize contrôles réussis
+du 17 octobre et la reprise encore non exécutée. La réparation globale proposée
+conserve les données et nécessite un accord séparé.
+
+**Disponible pendant cette panne :** l’aperçu sans Docker est relancé sur
+`http://127.0.0.1:3140/`. Il permet les essais manuels des écrans avec des exemples,
+sans connexion, sauvegarde ni calcul Engine. Ses réponses HTTP sont vérifiées ;
+la réception visuelle reste à réaliser dans le navigateur.
+
 Le [correctif Engine est maintenant adopté localement](docs/engine-admin-adoption.md)
 avec SQL 64 : génération avancée, nouveaux rapports signés et relecture réellement
 vérifiés. Les anciens rapports restent consultables et demandent de nouveaux

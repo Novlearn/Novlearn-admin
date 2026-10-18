@@ -1,5 +1,13 @@
 # Roadmap
 
+**Publication HTTP connectée, 17–18 octobre :** le [parcours réel](publication-http-connected.md)
+passe treize contrôles : Auth/REST, Engine natif, confirmation, deux révisions,
+retour à la première et conservation des historiques. 767 tests et le contrôle
+complet passent sur copie indépendante des sources. La vérification après
+redémarrage reste non exécutée : Docker Desktop 4.90 échoue au démarrage et
+les applications sont actuellement arrêtées. Réparation globale soumise à accord ;
+aucune donnée supprimée, activation distante ou réception navigateur.
+
 **Publication HTTP, préparation du 17 octobre :** les [copies source/cible](publication-http-local.md)
 sont prêtes avec Auth/REST réels, TLS vérifié et rôles limités. Cinq contrôles
 Auth/REST, six connexions/refus TLS/PG et 74 tests ciblés passent. Le vrai

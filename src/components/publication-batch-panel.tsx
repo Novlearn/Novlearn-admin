@@ -19,12 +19,14 @@ export function PublicationBatchPanel({
   candidates,
   enabled,
   persistCheckpoint = true,
+  localFixture = false,
 }: {
   batchId: string;
   items: BatchLocator[];
   candidates: (BatchCandidate | null)[];
   enabled: boolean;
   persistCheckpoint?: boolean;
+  localFixture?: boolean;
 }) {
   const [, redraw] = useReducer((n) => n + 1, 0);
   const [runner] = useState(
@@ -34,7 +36,12 @@ export function PublicationBatchPanel({
         items,
         candidates,
         enabled,
-        requestPublication,
+        (command, signal) =>
+          requestPublication(
+            command,
+            signal,
+            localFixture ? 'local-fixture' : 'operational',
+          ),
         () => redraw(),
       ),
   );
@@ -236,8 +243,8 @@ export function PublicationBatchPanel({
               )}
               {row.phase === 'idle' && (
                 <p className="text-sm text-slate-600">
-                  La présence et les différences en Production seront vérifiées
-                  à la préparation du diff.
+                  La présence et les différences sur la cible seront vérifiées à
+                  la préparation du diff.
                 </p>
               )}
               {row.phase === 'verify' && !row.operation && (
@@ -264,8 +271,8 @@ export function PublicationBatchPanel({
                   </h3>
                   <p className="text-sm text-slate-600">
                     {p.plan.previousRevision === null
-                      ? 'Aucune révision active en Production lors de la préparation.'
-                      : `Révision active en Production lors de la préparation : ${p.plan.previousRevision}.`}
+                      ? 'Aucune révision active sur la cible lors de la préparation.'
+                      : `Révision active sur la cible lors de la préparation : ${p.plan.previousRevision}.`}
                   </p>
                   <PublicationChanges
                     title="Métadonnées de l’exercice"
@@ -292,7 +299,7 @@ export function PublicationBatchPanel({
                     />
                     <span>
                       J’ai relu ce diff et je confirme le transfert de cet
-                      exercice en Production.
+                      exercice sur la cible.
                     </span>
                   </label>
                 </div>

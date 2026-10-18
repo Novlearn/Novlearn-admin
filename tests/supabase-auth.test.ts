@@ -5,6 +5,7 @@ import {
   readAuthConfiguration,
   STAGING_PROJECT_REF,
   LOCAL_AUTH_COOKIE,
+  LOCAL_PUBLICATION_AUTH_COOKIE,
 } from '@/lib/auth/config';
 
 vi.mock('server-only', () => ({}));
@@ -52,6 +53,29 @@ function client() {
 beforeEach(() => sdk.create.mockReset());
 
 describe('adaptateur Auth Supabase', () => {
+  it('uses a distinct cookie namespace for the dedicated publication fixture', () => {
+    sdk.create.mockReturnValue(client().raw);
+    createRouteAuth(new NextRequest('http://127.0.0.1:3152/login'), {
+      supabaseUrl: 'http://127.0.0.1:55432',
+      publishableKey: 'fixture',
+      appOrigin: 'http://127.0.0.1:3152',
+      secureCookies: false,
+      review: 'fixture',
+      local: true,
+      localPublicationFixture: true,
+    });
+    expect(sdk.create).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.anything(),
+      expect.objectContaining({
+        cookieOptions: expect.objectContaining({
+          name: LOCAL_PUBLICATION_AUTH_COOKIE,
+          httpOnly: true,
+        }),
+      }),
+    );
+    expect(LOCAL_PUBLICATION_AUTH_COOKIE).not.toBe(LOCAL_AUTH_COOKIE);
+  });
   it('isolates local session cookies without changing the verified-user adapter', () => {
     sdk.create.mockReturnValue(client().raw);
     createRouteAuth(new NextRequest('http://127.0.0.1:3150/login'), {

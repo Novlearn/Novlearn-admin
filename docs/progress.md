@@ -1,5 +1,27 @@
 # Progression du goal NovLearn Admin
 
+## Publication HTTP réelle sur copies — 17–18 octobre 2026
+
+Le [parcours connecté](publication-http-connected.md) qualifie la vraie route
+Next avec GoTrue, PostgREST, Engine Linux borné et PG TLS. Treize contrôles
+passent : deux révisions transférées, confirmations altérées refusées, révocation,
+retour à la première version et conservation d’historiques non vides. Une socket
+cliente fermée après les en-têtes est traitée séparément d’une perte d’acquittement
+COMMIT. Le profil local possède ses propres paramètres, cookie et libellés ;
+le profil ordinaire et les environnements distants ne sont pas activés.
+
+Le contrôle complet passe 767 tests / 43 fichiers, types, lint, format, build
+et smoke sur copie indépendante aux sources vérifiées identiques. Les échecs
+intermédiaires restent conservés. Aucun critère ou délai n’est assoupli.
+
+À la reprise du 18 octobre, Docker Desktop 4.90 échoue sur `sailor-ingest.sock`.
+Les processus applicatifs sont arrêtés et la reprise HTTP reste non exécutée.
+Les huit fichiers privés comparés sont inchangés ; aucune réinitialisation ni
+modification des protections n’est tentée. La mise à jour officielle avec
+sauvegarde est proposée séparément car elle touche un logiciel global.
+Le goal reste actif ; les autres lots locaux indépendants et portes de la
+roadmap restent ouverts.
+
 ## Préparation de la publication HTTP — 17 octobre 2026
 
 Le [banc dédié](publication-http-local.md) conserve une source SQL 64 avec comptes

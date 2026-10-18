@@ -71,7 +71,7 @@ export async function POST(request: NextRequest) {
     NextResponse.json(body, { status, headers: privateHeaders() });
   const authConfig = readAuthConfiguration(process.env),
     pgConfig = readPublicationPgConfiguration(process.env),
-    key = readPublicationConfirmationKey(process.env);
+    key = readPublicationConfirmationKey(process.env, pgConfig?.localFixture);
   if (
     !authConfig ||
     !pgConfig ||
@@ -142,7 +142,13 @@ export async function POST(request: NextRequest) {
             ? await service.cancel(input.operationId, signal)
             : await service.recover(input.operationId, signal);
     return finish(
-      { sourceEnvironment: 'staging', targetEnvironment: 'production', result },
+      {
+        sourceEnvironment: pgConfig.localFixture ? 'local-source' : 'staging',
+        targetEnvironment: pgConfig.localFixture
+          ? 'local-target'
+          : 'production',
+        result,
+      },
       'state' in result && result.state === 'uncertain' ? 202 : 200,
     );
   } catch (error) {

@@ -31,6 +31,7 @@ if (options.stop) {
   for (const key of Object.keys(process.env))
     if (
       key.startsWith('ADMIN_PUBLICATION_') ||
+      key.startsWith('ADMIN_LOCAL_PUBLICATION_') ||
       key.startsWith('ADMIN_STAGING_')
     )
       process.env[key] = '';

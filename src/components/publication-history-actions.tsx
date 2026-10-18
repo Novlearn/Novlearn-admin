@@ -10,9 +10,11 @@ import {
 export function PublicationHistoryActions({
   item,
   enabled,
+  localFixture = false,
 }: {
   item: PublicationHistoryItem;
   enabled: boolean;
+  localFixture?: boolean;
 }) {
   const router = useRouter(),
     [busy, setBusy] = useState(false),
@@ -39,6 +41,7 @@ export function PublicationHistoryActions({
       const data = await requestPublication(
         { action, operationId: item.id },
         controller.current.signal,
+        localFixture ? 'local-fixture' : 'operational',
       );
       if (!mounted.current) return;
       if (

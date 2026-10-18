@@ -11,14 +11,16 @@ export type PublicationPgEndpoint = { url: string; ca?: string };
 export type PublicationPgConfiguration = {
   source: PublicationPgEndpoint;
   target: PublicationPgEndpoint;
-  targetKey: `production-${string}`;
+  targetKey: `production-${string}` | 'local-http-fixture';
   review: string;
+  localFixture?: true;
 };
 
 function endpoint(
   value: unknown,
   login: string,
   ca: unknown,
+  fixturePort?: '55433' | '55434',
 ): PublicationPgEndpoint | null {
   if (typeof value !== 'string' || value.length > 4096) return null;
   try {
@@ -30,10 +32,13 @@ function endpoint(
       decodeURIComponent(url.password).length > 512 ||
       url.search ||
       url.hash ||
-      url.pathname !== '/postgres' ||
-      (url.port && url.port !== '5432')
+      url.pathname !== (fixturePort ? '/admin_local' : '/postgres') ||
+      (fixturePort
+        ? url.hostname !== '127.0.0.1' || url.port !== fixturePort
+        : url.port && url.port !== '5432')
     )
       return null;
+    if (fixturePort && (typeof ca !== 'string' || !ca.trim())) return null;
     if (
       ca !== undefined &&
       (typeof ca !== 'string' ||
@@ -51,6 +56,48 @@ export function readPublicationPgConfiguration(
   env: Record<string, string | undefined>,
 ): PublicationPgConfiguration | null {
   const auth = readAuthConfiguration(env);
+  if (auth?.localPublicationFixture) {
+    if (
+      env.ADMIN_LOCAL_PUBLICATION_ENABLED !== 'true' ||
+      env.ADMIN_ENGINE_ENABLED !== 'true' ||
+      env.ADMIN_LOCAL_PUBLICATION_REVIEW !== 'isolated-sql64-http-fixture-v1'
+    )
+      return null;
+    const source = endpoint(
+      env.ADMIN_LOCAL_PUBLICATION_SOURCE_PG_URL,
+      sourceLogin,
+      env.ADMIN_LOCAL_PUBLICATION_SOURCE_PG_CA,
+      '55433',
+    );
+    const target = endpoint(
+      env.ADMIN_LOCAL_PUBLICATION_TARGET_PG_URL,
+      targetLogin,
+      env.ADMIN_LOCAL_PUBLICATION_TARGET_PG_CA,
+      '55434',
+    );
+    if (
+      !source ||
+      !target ||
+      new URL(source.url).password === new URL(target.url).password
+    )
+      return null;
+    return {
+      source,
+      target,
+      targetKey: 'local-http-fixture',
+      review: 'isolated-sql64-http-fixture-v1',
+      localFixture: true,
+    };
+  }
+  if (
+    Object.entries(env).some(
+      ([key, value]) =>
+        key.startsWith('ADMIN_LOCAL_PUBLICATION_') &&
+        value &&
+        value !== 'false',
+    )
+  )
+    return null;
   if (env.ADMIN_PUBLICATION_ENABLED !== 'true' || !auth || auth.local)
     return null;
   const review = env.ADMIN_PUBLICATION_SECURITY_REVIEW?.trim(),

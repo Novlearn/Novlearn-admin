@@ -49,8 +49,11 @@ export class PublicationServiceError extends Error {
 /** Separate, persistent server secret; no key is generated or enabled implicitly. */
 export function readPublicationConfirmationKey(
   env: Record<string, string | undefined>,
+  localFixture = false,
 ): Buffer | null {
-  const value = env.ADMIN_PUBLICATION_CONFIRMATION_KEY;
+  const value = localFixture
+    ? env.ADMIN_LOCAL_PUBLICATION_CONFIRMATION_KEY
+    : env.ADMIN_PUBLICATION_CONFIRMATION_KEY;
   return typeof value === 'string' && /^[a-fA-F0-9]{64}$/.test(value)
     ? Buffer.from(value, 'hex')
     : null;

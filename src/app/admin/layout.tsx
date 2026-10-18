@@ -12,7 +12,8 @@ export default async function AdminLayout({
   children: React.ReactNode;
 }) {
   await requireAdminPage();
-  const local = readAuthConfiguration(process.env)?.local === true;
+  const authConfig = readAuthConfiguration(process.env);
+  const local = authConfig?.local === true;
   return (
     <div className="min-h-screen lg:grid lg:grid-cols-[240px_1fr]">
       <a
@@ -39,9 +40,11 @@ export default async function AdminLayout({
       <div className="min-w-0">
         <header className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 bg-white px-6 py-4 lg:px-10">
           <span className="badge">
-            {local
-              ? 'Local · données d’essai enregistrées'
-              : 'Staging · espace d’administration'}
+            {authConfig?.localPublicationFixture
+              ? 'Banc de publication local · données synthétiques'
+              : local
+                ? 'Local · données d’essai enregistrées'
+                : 'Staging · espace d’administration'}
           </span>
           <form action="/auth/logout" method="post">
             <button

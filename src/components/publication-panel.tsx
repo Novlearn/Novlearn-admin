@@ -44,7 +44,7 @@ export function PublicationChanges({
               <div className="grid gap-3 lg:grid-cols-2">
                 {(
                   [
-                    ['Production actuelle', change.before],
+                    ['Cible actuelle', change.before],
                     ['Après confirmation', change.after],
                   ] as const
                 ).map(([label, value]) => (
@@ -87,8 +87,8 @@ export function PublicationResult({
           {operation.outcome.result === 'unchanged'
             ? 'Le contenu attendu a été constaté comme identique lors de la vérification.'
             : operation.outcome.result === 'rolled_back'
-              ? 'La réactivation de cette révision a été confirmée en Production.'
-              : 'Le transfert de cette révision a été confirmé en Production.'}
+              ? 'La réactivation de cette révision a été confirmée sur la cible.'
+              : 'Le transfert de cette révision a été confirmé sur la cible.'}
         </p>
       )}
       {uncertain && (
@@ -115,6 +115,7 @@ export function PublicationPanel({
   status,
   enabled,
   archived = false,
+  localFixture = false,
 }: {
   versionId: string;
   fingerprint: string;
@@ -123,6 +124,7 @@ export function PublicationPanel({
   status: string;
   enabled: boolean;
   archived?: boolean;
+  localFixture?: boolean;
 }) {
   const router = useRouter();
   const [prepared, setPrepared] = useState<PreparedPublication | null>(null),
@@ -177,6 +179,7 @@ export function PublicationPanel({
       const result = await requestPublication(
         command,
         controller.current.signal,
+        localFixture ? 'local-fixture' : 'operational',
       );
       if (!mounted.current) return;
       if ('operation' in result) {
@@ -217,7 +220,9 @@ export function PublicationPanel({
     >
       <header>
         <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-blue-700">
-          Staging → Production
+          {localFixture
+            ? 'Copie source → copie cible · essai local'
+            : 'Staging → Production'}
         </p>
         <h2 id="publication-heading" className="text-xl font-semibold">
           Publier la révision {revision}
@@ -323,7 +328,7 @@ export function PublicationPanel({
               {mode === 'rollback'
                 ? 'la réactivation de cette révision précédente'
                 : 'ce transfert'}{' '}
-              en Production.
+              sur la cible.
             </span>
           </label>
           <button

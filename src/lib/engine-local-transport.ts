@@ -11,10 +11,14 @@ import { randomUUID } from 'node:crypto';
 export function readLocalEngineConfiguration(
   env: Record<string, string | undefined>,
 ) {
+  const auth = readAuthConfiguration(env);
   if (
-    !readAuthConfiguration(env)?.local ||
+    !auth?.local ||
     env.ADMIN_ENGINE_ENABLED !== 'true' ||
-    env.ADMIN_LOCAL_ENGINE_URL !== 'http://127.0.0.1:3151/run' ||
+    env.ADMIN_LOCAL_ENGINE_URL !==
+      (auth.localPublicationFixture
+        ? 'http://127.0.0.1:3153/run'
+        : 'http://127.0.0.1:3151/run') ||
     !/^[0-9a-f]{64}$/.test(env.ADMIN_LOCAL_ENGINE_CAPABILITY ?? '')
   )
     return null;

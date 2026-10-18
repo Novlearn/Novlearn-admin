@@ -16,6 +16,9 @@ export default async function PublicationBatchPage({
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
   const client = await requireCatalogueClient();
+  const publicationConfig = readPublicationPgConfiguration(process.env);
+  const localFixture =
+    process.env.ADMIN_LOCAL_PUBLICATION_FIXTURE_ENABLED === 'true';
   const params = new URLSearchParams();
   for (const [key, value] of Object.entries(await searchParams))
     for (const item of Array.isArray(value) ? value : value ? [value] : [])
@@ -29,15 +32,20 @@ export default async function PublicationBatchPage({
     new Set(present.map((c) => c.exerciseId)).size !== present.length ||
     new Set(present.map((c) => c.catalogId)).size !== present.length;
   const enabled =
-    !!readPublicationPgConfiguration(process.env) &&
-    !!readPublicationConfirmationKey(process.env) &&
+    !!publicationConfig &&
+    !!readPublicationConfirmationKey(
+      process.env,
+      publicationConfig?.localFixture,
+    ) &&
     process.env.ADMIN_ENGINE_ENABLED === 'true';
   const batchId = query?.batchId ?? randomUUID();
   return (
     <div className="max-w-6xl space-y-7">
       <header>
         <p className="text-sm font-semibold text-blue-700">
-          Staging → Production
+          {localFixture
+            ? 'Copie source → copie cible · essai local'
+            : 'Staging → Production'}
         </p>
         <h1 className="mt-2 text-3xl font-semibold tracking-tight">
           Publier plusieurs exercices
@@ -71,6 +79,7 @@ export default async function PublicationBatchPage({
           items={query.items}
           candidates={candidates}
           enabled={enabled}
+          localFixture={localFixture}
         />
       )}
     </div>

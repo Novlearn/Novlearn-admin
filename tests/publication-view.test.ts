@@ -181,6 +181,27 @@ it('does not retry after a lost confirmation response or invent a result', async
   ).rejects.toThrow('Vérifiez le résultat');
   expect(fetcher).toHaveBeenCalledTimes(1);
 });
+it('accepts local responses only when the caller explicitly expects the dedicated fixture', async () => {
+  const command = { action: 'recover' as const, operationId: native.id };
+  fetcher.mockImplementation(
+    async () =>
+      new Response(
+        JSON.stringify({
+          sourceEnvironment: 'local-source',
+          targetEnvironment: 'local-target',
+          result: summary(),
+        }),
+      ),
+  );
+  await expect(requestPublication(command)).rejects.toThrow('Environnements');
+  await expect(
+    requestPublication(command, undefined, 'local-fixture'),
+  ).resolves.toMatchObject({ id: native.id });
+  fetcher.mockResolvedValue(new Response(JSON.stringify(packet(summary()))));
+  await expect(
+    requestPublication(command, undefined, 'local-fixture'),
+  ).rejects.toThrow('Environnements');
+});
 it('preserves an uncertain 202 observation and does not treat it as a successful transfer', async () => {
   fetcher.mockResolvedValue(
     new Response(JSON.stringify(packet({ ...summary(), state: 'uncertain' })), {

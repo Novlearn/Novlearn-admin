@@ -2,6 +2,7 @@ export const STAGING_PROJECT_REF = 'tksvbkvfusrnxulpahky';
 export const LOCAL_SCHEMA_MANIFEST_SHA256 =
   '8e661db1f648196c9e586e76fb68b3f4412203bade43179b0621445aeeac9301';
 export const LOCAL_AUTH_COOKIE = 'novlearn-admin-local-auth';
+export const LOCAL_PUBLICATION_AUTH_COOKIE = 'novlearn-admin-publication-auth';
 
 export type AuthConfiguration = {
   supabaseUrl: string;
@@ -10,6 +11,7 @@ export type AuthConfiguration = {
   secureCookies: boolean;
   review: string;
   local?: true;
+  localPublicationFixture?: true;
 };
 
 type Environment = Record<string, string | undefined>;
@@ -18,10 +20,18 @@ type Environment = Record<string, string | undefined>;
 function readLocalAuthConfiguration(
   env: Environment,
 ): AuthConfiguration | null {
+  const fixture = env.ADMIN_LOCAL_PUBLICATION_FIXTURE_ENABLED === 'true';
   if (
     env.NODE_ENV !== 'development' ||
     env.ADMIN_STAGING_AUTH_ENABLED === 'true' ||
     env.ADMIN_PUBLICATION_ENABLED === 'true' ||
+    (fixture &&
+      Object.entries(env).some(
+        ([key, value]) =>
+          key.startsWith('ADMIN_PUBLICATION_') &&
+          value &&
+          !(key === 'ADMIN_PUBLICATION_ENABLED' && value === 'false'),
+      )) ||
     env.NEXT_PUBLIC_SUPABASE_URL ||
     env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
     env.ADMIN_LOCAL_SCHEMA_MANIFEST_SHA256 !== LOCAL_SCHEMA_MANIFEST_SHA256
@@ -32,8 +42,10 @@ function readLocalAuthConfiguration(
     const app = new URL(env.APP_BASE_URL ?? '');
     const key = env.ADMIN_LOCAL_SUPABASE_ANON_KEY ?? '';
     if (
-      supabase.href !== 'http://127.0.0.1:55431/' ||
-      app.href !== 'http://127.0.0.1:3150/' ||
+      supabase.href !==
+        (fixture ? 'http://127.0.0.1:55432/' : 'http://127.0.0.1:55431/') ||
+      app.href !==
+        (fixture ? 'http://127.0.0.1:3152/' : 'http://127.0.0.1:3150/') ||
       key.length > 2048
     )
       return null;
@@ -48,7 +60,10 @@ function readLocalAuthConfiguration(
       header.alg !== 'HS256' ||
       header.typ !== 'JWT' ||
       payload.iss !== 'supabase' ||
-      payload.ref !== 'novlearn-admin-local' ||
+      payload.ref !==
+        (fixture
+          ? 'novlearn-admin-publication-local'
+          : 'novlearn-admin-local') ||
       payload.role !== 'anon' ||
       payload.sub !== undefined
     )
@@ -60,6 +75,7 @@ function readLocalAuthConfiguration(
       secureCookies: false,
       review: 'local-schema:' + LOCAL_SCHEMA_MANIFEST_SHA256,
       local: true,
+      ...(fixture ? { localPublicationFixture: true as const } : {}),
     };
   } catch {
     return null;
@@ -72,6 +88,7 @@ export function readAuthConfiguration(
 ): AuthConfiguration | null {
   if (env.ADMIN_LOCAL_WORKSPACE_ENABLED === 'true')
     return readLocalAuthConfiguration(env);
+  if (env.ADMIN_LOCAL_PUBLICATION_FIXTURE_ENABLED === 'true') return null;
   if (env.ADMIN_STAGING_AUTH_ENABLED !== 'true') return null;
   const review = env.ADMIN_STAGING_SECURITY_REVIEW?.trim();
   if (!review) return null;
