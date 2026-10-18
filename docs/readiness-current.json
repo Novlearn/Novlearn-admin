@@ -1,13 +1,13 @@
 {
-  "recordedAt": "2026-10-18T17:29:10.576Z",
+  "recordedAt": "2026-10-18T17:29:37.758Z",
   "scope": "Documentary traceability for all 20 original goal sections; not a functional test, receipt, permission or completion certificate",
   "referenceInputs": {
     "requestSha256": "fb9ac40863c57594878833b8a9fc0bd130a0cba9d0249d29c609051a54bded93",
     "cdcSha256": "b6bfea6d74b008e54ed61aa7598ccd01bd438d496cc22add15da2ff8abb04401",
     "decisionsSha256": "e45ad0c99014ccc6521ae91b0d836262b10b757c489721004dbd8f1f6a401e1f"
   },
-  "baselineAdminCommitAtAssessment": "e7dd9b288dec547bf8c428396dbcbb1fdc341976",
-  "implementationHasUncommittedChangesAtObservation": true,
+  "baselineAdminCommitAtAssessment": "68a08f51e8fb99d919a956b7d1a091d1062671a0",
+  "implementationHasUncommittedChangesAtObservation": false,
   "requestedSections": [
     {
       "id": 1,
@@ -235,7 +235,7 @@
     "flashcards-local-proof.json": "7d8da9b502804ed2160680c78b9289b712e39fdd8790fa42d2c52103ffd996c2",
     "dashboard-local-proof.json": "6c930179bc83e3050f12965895fb89d8aca87e215d9622a4f1fc31b7b859c04b",
     "activity-readonly-proof.json": "c362635524c4dc6cfe81cdbc489e2130a3e3285f8346462e5075915fddb51401",
-    "activity-pg-proof.json": "6244024f3ba5c987f7637458c788f3567e0b63c5fad89d2a2272e8428aaa7bf4",
+    "activity-pg-proof.json": "e469325b9e64fffe185dced8c0d0a5f78fb0122b57dc091f2ec52a1a306e4c1c",
     "decisions.md": "e45ad0c99014ccc6521ae91b0d836262b10b757c489721004dbd8f1f6a401e1f",
     "roadmap.md": "1e4bb5f59e978b3ef03496ff04fdbe3d421b5c7c03f1a374c532f276017e0543",
     "activity-readonly.md": "06bb0472c274437835897477b75fe671c720161b56977dfe56d67168c0eca832",
