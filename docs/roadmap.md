@@ -1,5 +1,14 @@
 # Roadmap
 
+Le [relevé distant en lecture seule du 18 octobre](lot-1a-remote-reconciliation-current.md)
+confirme l’historique incomplet et les tables Admin non appliquées. Il distingue
+les comparaisons brutes et normalisées, sans nouvelle autorisation de migration.
+
+La [matrice de livraison actuelle](readiness-current.md) distingue implémentation,
+preuves locales et fonctions encore manquantes. Les statistiques/utilisateurs
+Production, l’indication de version cible courante et les réceptions restent
+ouverts ; le goal n’est pas réductible au seul redémarrage de Docker.
+
 **Récupération Creator, 18 octobre :** la [copie facultative](creator-recovery.md)
 conserve la saisie dans l’onglet pendant trente minutes de récupération.
 Un changement de référence prépare une nouvelle révision. La réception

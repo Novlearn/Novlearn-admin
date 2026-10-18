@@ -1,5 +1,10 @@
 # Lot 1A — rapprochement par empreintes SQL
 
+**Actualisation du 18 octobre :** le [nouveau relevé en lecture seule](lot-1a-remote-reconciliation-current.md)
+compare les 64 fichiers qualifiés et distingue Git HEAD de l’arbre contenant
+des modifications préexistantes. Les résultats ci-dessous restent ceux du
+13 octobre ; aucune équivalence ou application n’est ajoutée rétroactivement.
+
 Relevé du 13 octobre 2026, exclusivement en lecture. Ce complément rapproche
 des empreintes des statements archivés avec les fichiers suivis dans NovLearn.
 Il ne répare pas l'historique, n'applique rien et ne réceptionne pas le Lot 1A.

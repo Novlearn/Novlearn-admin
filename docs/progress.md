@@ -1,5 +1,32 @@
 # Progression du goal NovLearn Admin
 
+## Reprise et contrôle du périmètre — 18 octobre 2026
+
+La [matrice de livraison](readiness-current.md) distingue les vingt sections de
+la demande. Les statistiques/utilisateurs Production et l’indication courante
+de version cible sont encore à construire ; Docker ne constitue pas leur seule
+limite. Les courbes n’ont pas de points calculés dans l’API Engine actuelle.
+Les réceptions navigateur, sessions et exploitation restent explicitement ouvertes.
+
+Un [correctif de nettoyage](recovery-cleanup.md) reproduit puis traite le refus
+d’accès au stockage pendant la déconnexion, sans bloquer la fin de session ni
+supprimer d’autres données du navigateur. Les résultats datés seront conservés
+dans sa preuve ; aucune écriture distante ou réparation globale n’est effectuée.
+
+Le [relevé de réconciliation actualisé](lot-1a-remote-reconciliation-current.md)
+lit uniquement les métadonnées des deux projets : 70 migrations, 25 sans
+statements et 22 tables publiques sans `exercise_versions`. Git HEAD conserve
+sept candidats par empreinte normalisée, l’arbre qualifié six, avec trois SQL
+préexistantes préservées. Les différences brutes de trois fonctions ne sont
+pas transformées en dérive fonctionnelle prouvée ; leurs corps rapprochés et
+attributs sélectionnés correspondent. Aucun historique n’est réparé.
+
+Le contrôle complet final passe **805 tests / 44 fichiers**, types, lint sans
+erreur, format, build et smoke HTTP ; dix pages du banc compilent. Les échecs
+de régression et de typage intermédiaire restent des échecs documentés.
+Ces résultats ne certifient ni les effets navigateur ni la reprise connectée.
+Le correctif de nettoyage est commité localement dans `4260d80`, sans push.
+
 ## Récupération Creator — 18 octobre 2026
 
 La [copie de récupération](creator-recovery.md) est facultative et explicitement

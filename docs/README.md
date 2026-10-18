@@ -1,5 +1,11 @@
 # Documentation NovLearn Admin
 
+[Réconciliation distante actualisée](lot-1a-remote-reconciliation-current.md) :
+métadonnées seulement, Git/working tree distingués et historique toujours incomplet.
+
+[État de livraison actuel](readiness-current.md) : correspondance avec les vingt
+sections de la demande, fonctions encore manquantes et ordre de reprise.
+
 [Récupération Creator](creator-recovery.md) : copie facultative dans l’onglet,
 reprise explicite et préservation des versions en cas de référence modifiée.
 

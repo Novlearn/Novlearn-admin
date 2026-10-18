@@ -1,0 +1,258 @@
+{
+  "recordedAt": "2026-10-18T12:21:48.193Z",
+  "scope": "Documentary traceability for all 20 original goal sections; not a functional test, receipt, permission or completion certificate",
+  "referenceInputs": {
+    "requestSha256": "fb9ac40863c57594878833b8a9fc0bd130a0cba9d0249d29c609051a54bded93",
+    "cdcSha256": "b6bfea6d74b008e54ed61aa7598ccd01bd438d496cc22add15da2ff8abb04401",
+    "decisionsSha256": "15f316f04bca6f001e5b0de279d598706d9d9ac3c3251bafe7b5dbecbe8e709c"
+  },
+  "baselineAdminCommitAtAssessment": "4260d809a736c9ab11b15fad813a01dc95140fcb",
+  "implementationHasUncommittedChangesAtObservation": false,
+  "requestedSections": [
+    {
+      "id": 1,
+      "title": "Audit de démarrage"
+    },
+    {
+      "id": 2,
+      "title": "Architecture technique"
+    },
+    {
+      "id": 3,
+      "title": "Authentification et sécurité"
+    },
+    {
+      "id": 4,
+      "title": "Interface générale"
+    },
+    {
+      "id": 5,
+      "title": "Gestion des exercices"
+    },
+    {
+      "id": 6,
+      "title": "Creator visuel"
+    },
+    {
+      "id": 7,
+      "title": "MathLive"
+    },
+    {
+      "id": 8,
+      "title": "Intégration de l'Exercise Engine"
+    },
+    {
+      "id": 9,
+      "title": "Prévisualisation et tests"
+    },
+    {
+      "id": 10,
+      "title": "Validation éditoriale et publication"
+    },
+    {
+      "id": 11,
+      "title": "Chapitres"
+    },
+    {
+      "id": 12,
+      "title": "Compétences"
+    },
+    {
+      "id": 13,
+      "title": "Flashcards"
+    },
+    {
+      "id": 14,
+      "title": "Dashboard et statistiques"
+    },
+    {
+      "id": 15,
+      "title": "Utilisateurs"
+    },
+    {
+      "id": 16,
+      "title": "Qualité et tests"
+    },
+    {
+      "id": 17,
+      "title": "Organisation du travail autonome"
+    },
+    {
+      "id": 18,
+      "title": "Points d'arrêt obligatoires"
+    },
+    {
+      "id": 19,
+      "title": "Conditions de réussite"
+    },
+    {
+      "id": 20,
+      "title": "Rapport et suivi"
+    }
+  ],
+  "assessedSections": [
+    {
+      "id": 1,
+      "title": "Audit initial",
+      "evidenceSummary": "CDC, schéma local et API Engine examinés ; décisions et historique dans [progression](progress.md) et [Lot 1A](lot-1a-preparation.md).",
+      "remaining": "Réconcilier le schéma/historique distant avant application ; les relevés du 13 octobre ne prouvent pas l’état distant actuel."
+    },
+    {
+      "id": 2,
+      "title": "Architecture",
+      "evidenceSummary": "Next, TypeScript strict, services serveur, contrats et package Engine verrouillés ; contrôle complet référencé dans [correctif de récupération](recovery-cleanup-proof.json).",
+      "remaining": "Capacité de lecture Production et hébergement à concevoir/qualifier ; aucune clé générale ne vaut un droit limité."
+    },
+    {
+      "id": 3,
+      "title": "Auth et sécurité",
+      "evidenceSummary": "Vrais comptes locaux, rôle serveur frais, refus et révocation dans [Auth locale](local-admin-proof.json) et [relecture](local-admin-review-proof.json).",
+      "remaining": "Reprise des services ; expiration réelle, MFA, provision opérationnel et réception Staging non certifiés."
+    },
+    {
+      "id": 4,
+      "title": "Interface générale",
+      "evidenceSummary": "Identité [visuelle](visual-implementation.md), navigation, formulaires, retours d’erreur et essais sur 3140.",
+      "remaining": "Réception visuelle/accessibilité actuelle ; aucun succès navigateur déduit de la compilation ou du SSR."
+    },
+    {
+      "id": 5,
+      "title": "Gestion des exercices",
+      "evidenceSummary": "CRUD, conflits, versions, duplication et archivage dans [catalogue](catalogue-local-proof.json) et parcours Auth/REST réels.",
+      "remaining": "La fiche affiche la version active **Staging** ; l’indication courante de la version active **Production** reste à raccorder à une capacité autorisée."
+    },
+    {
+      "id": 6,
+      "title": "Creator visuel",
+      "evidenceSummary": "Édition canonique des vingt types, variables, contraintes, questions, politiques ; [Creator](creator-local-proof.json), [récupération](creator-recovery-proof.json).",
+      "remaining": "Réception de la récupération en navigateur et avec la sauvegarde connectée ; courbes de formules non prises en charge faute de points calculés officiels."
+    },
+    {
+      "id": 7,
+      "title": "MathLive",
+      "evidenceSummary": "Saisie et clavier existants ; [preuves Creator](creator-local-proof.json) et [aperçu](preview-local-proof.json) distinctes des captures serveur.",
+      "remaining": "Réception des interactions actuelles dans une session navigateur autorisée ; ne pas présenter les tests de chaînes LaTeX comme des clics de clavier exécutés."
+    },
+    {
+      "id": 8,
+      "title": "Engine officiel",
+      "evidenceSummary": "[1 540 tests et qualification Linux](engine-numeric-cache-proof.json), puis [adoption locale](engine-admin-adoption-proof.json) de l’archive exacte d4d3abc4…a582f9.",
+      "remaining": "Docker indisponible aujourd’hui ; aucun nouveau calcul natif revendiqué. Qualification de l’hôte de déploiement et compatibilité élève restent des portes séparées."
+    },
+    {
+      "id": 9,
+      "title": "Aperçu et tests",
+      "evidenceSummary": "Seeds 0/42, génération/correction, projection et rapports signés : [Engine connecté](local-admin-engine-proof.json), adoption du 17 octobre.",
+      "remaining": "Réception manuelle actuelle et tracés avancés encore ouverts ; conserver `indeterminate` et les diagnostics réels."
+    },
+    {
+      "id": 10,
+      "title": "Validation et publication",
+      "evidenceSummary": "Relecture réelle locale ; [13 contrôles HTTP](publication-http-connected-proof.json), deux révisions, retour et conservation des historiques. [Lots](publication-batch-proof.json) qualifiés dans leur portée.",
+      "remaining": "Reprise après redémarrage et parcours HTTP multi-exercices complet non exécutés ; première publication réelle interdite sans accord distinct. Les attestations synthétiques ne valent pas validation pédagogique humaine."
+    },
+    {
+      "id": 11,
+      "title": "Chapitres",
+      "evidenceSummary": "CRUD, références et permissions : [référentiel](taxonomy-local-proof.json).",
+      "remaining": "Réception navigateur et mise en service Staging ; aucun transfert automatique Production."
+    },
+    {
+      "id": 12,
+      "title": "Compétences",
+      "evidenceSummary": "CRUD, filtres, points, références stables et conflits : [référentiel](taxonomy-local-proof.json).",
+      "remaining": "Même réception ; ne pas déduire une couverture utilisateur actuelle des seules assertions SQL."
+    },
+    {
+      "id": 13,
+      "title": "Flashcards",
+      "evidenceSummary": "CRUD, prévisualisation et permissions : [flashcards](flashcards-local-proof.json).",
+      "remaining": "Réception navigateur ouverte ; aucune synchronisation Production en V1."
+    },
+    {
+      "id": 14,
+      "title": "Dashboard et statistiques",
+      "evidenceSummary": "Agrégats **Staging** : [Dashboard](dashboard-local-proof.json).",
+      "remaining": "Statistiques **Production à implémenter** : capacité read-only effective, métriques, agrégations, filtres, permissions et preuves sur copie puis environnement approuvé."
+    },
+    {
+      "id": 15,
+      "title": "Utilisateurs",
+      "evidenceSummary": "Aucun écran ni lecteur Production opérationnel n’est livré ; la navigation ne propose pas de page vide.",
+      "remaining": "Liste/recherche/pagination, champs de profil autorisés, progression, activité et historique synthétique à implémenter après cadrage de la capacité et des données minimales."
+    },
+    {
+      "id": 16,
+      "title": "Qualité et tests",
+      "evidenceSummary": "Suites unitaires/SSR, SQL, concurrence, sauvegarde/restauration et HTTP datés ; erreurs intermédiaires conservées.",
+      "remaining": "E2E navigateur, récupération connectée, expiration réelle et qualification distante non exécutés. Aucun test simulé ne remplace ces portes."
+    },
+    {
+      "id": 17,
+      "title": "Organisation autonome",
+      "evidenceSummary": "Lots, preuves, décisions et commits locaux ; jalons de base `d17fbfa` et `30eefde`, correctif `4260d80`.",
+      "remaining": "Continuer les travaux autorisés indépendants, puis s’arrêter aux frontières d’autorisation ; ne pas recommencer les qualifications inchangées."
+    },
+    {
+      "id": 18,
+      "title": "Points d’arrêt",
+      "evidenceSummary": "Aucune écriture SQL distante ; ni push, ni déploiement, ni publication réelle. NovLearn limité au SQL local, Engine aux corrections autorisées.",
+      "remaining": "Accord pour une réparation logicielle globale ; autorisations distinctes pour les futures opérations distantes ou une nouvelle capacité Engine hors D05."
+    },
+    {
+      "id": 19,
+      "title": "Réussite complète",
+      "evidenceSummary": "**Non atteinte** : fonctions Production manquantes et P0 de réception/exploitation ouverts.",
+      "remaining": "Vérifier tous les critères initiaux avec des preuves correspondant à leur portée ; aucune clôture sur le seul nombre de tests."
+    },
+    {
+      "id": 20,
+      "title": "Rapport et suivi",
+      "evidenceSummary": "[Progression](progress.md), [roadmap](roadmap.md), preuves et cette matrice.",
+      "remaining": "Actualiser les résultats après chaque exécution ; garder séparés implémenté, exécuté, réceptionné et autorisé."
+    }
+  ],
+  "referenceHashes": {
+    "lot-1a-remote-reconciliation-current.md": "4a2a06adff60f7a6541f261af3bd00a63debc01197030717c389c7c22b813dfe",
+    "progress.md": "b20312843382f4f868533ce7494ee594b9e3242e69358097844da62aa9577745",
+    "lot-1a-preparation.md": "3561164a62bc6690a46d2f472c42037c11bd9aacc40add77d44814abdc5dd271",
+    "recovery-cleanup-proof.json": "cb414a4c150ceb55204fcc9fca07696d05463e71642b4b4db35fd62819fa2524",
+    "local-admin-proof.json": "25e120631288ff66edd129411f5855da6d05a5a0c1753961e5592982f80ac432",
+    "local-admin-review-proof.json": "72bd632dfa49b92d172f7e3b6700ebe9c460019490aa4fdffc6869c4a8fc4ad9",
+    "visual-implementation.md": "c1989019b7112e6b78cb75a3f0a7c33866b848fa1383820cda25c08cd06e68ea",
+    "catalogue-local-proof.json": "2d5cdc385f1e3847df1731c895dd96530eb136c78833d18a2786d933ac90be16",
+    "creator-local-proof.json": "078c421317a0b209e697b9016d218691766d10218f3fedcb07b7a9feb3abc606",
+    "creator-recovery-proof.json": "8c6118f240bdd919f74ab435b6f1fbae86f14421b90b9523cae39407b079c43c",
+    "preview-local-proof.json": "54ac7a8e6ed2acd321603db03bb5ab8cb174950d61ec3b8b58a49632772f12bf",
+    "engine-numeric-cache-proof.json": "b8396361f4a15ed4f974ff212c4807e5d71daa8fc6699bd09c6e89d719ecfd6c",
+    "engine-admin-adoption-proof.json": "f777d361a955c502d8a1cbf2b5844a120d4a5232c1095379cd72df262bba88c0",
+    "local-admin-engine-proof.json": "fba814a65d4ccbc7b4732793e6744a0da9814b0427698bec43c9e479b8e24d63",
+    "publication-http-connected-proof.json": "24efedd259d0a55db2dc8c826621d2354c2508830af9d4bd9973859a2089c74b",
+    "publication-batch-proof.json": "78db7933510ee9ef241e0ac9c7d9831f2e027ccc0c7418e921ef6640099eea11",
+    "taxonomy-local-proof.json": "ddb602ba18c47fc4ce7ecaffecb3c046c4c7759a4757cd12e6285f74655fc275",
+    "flashcards-local-proof.json": "7d8da9b502804ed2160680c78b9289b712e39fdd8790fa42d2c52103ffd996c2",
+    "dashboard-local-proof.json": "6c930179bc83e3050f12965895fb89d8aca87e215d9622a4f1fc31b7b859c04b",
+    "roadmap.md": "a02a44830925ce0c222501a6219b622fd53e2aa47e0ff4d9d7dd606e100d86ff",
+    "publication-http-connected.md": "7ba59899755437f337398293c7488926b0e48d37977bc7199a2e97b25966c131",
+    "lot-1a-local-statistics-guard.md": "0bd4f19d706296ccb96f8ea246f186c4e52ddc7a23da69519f64c2a1978a7a92"
+  },
+  "unimplemented": [
+    "Production analytics read capability, metrics and filters",
+    "Production user listing, search, profile/activity/progression",
+    "Current Production active-version indicator",
+    "Official Engine formula sampling and dependent curve rendering",
+    "MFA policy and implementation"
+  ],
+  "notExecuted": [
+    "Authorized browser acceptance of current recovery/cleanup",
+    "Connected cleanup/recovery after Docker restoration",
+    "Real session expiry qualification",
+    "Post-restart publication qualification",
+    "Full multi-exercise publication HTTP qualification",
+    "Target deployment-host qualification",
+    "Remote migration rehearsal/approval and controlled first publication"
+  ],
+  "remoteWritesPerformed": false,
+  "privilegedProductionKeysRetrieved": false,
+  "goalComplete": false
+}

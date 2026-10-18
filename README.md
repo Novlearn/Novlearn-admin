@@ -4,6 +4,11 @@ NovLearn Admin sera l'application privée d'administration de NovLearn : gestion
 
 ## État du projet
 
+L’[état de livraison actuel](docs/readiness-current.md) distingue les fonctions
+locales, les réceptions encore ouvertes et les statistiques/utilisateurs
+Production à construire. Le [relevé SQL actualisé](docs/lot-1a-remote-reconciliation-current.md)
+ne lit que les métadonnées ; aucune migration distante n’est appliquée.
+
 Le catalogue, le Creator canonique, MathLive, l'aperçu et les tests Engine, la relecture, les chapitres, les compétences, les flashcards et le Dashboard Staging sont implémentés localement. Le [suivi du goal](docs/progress.md) distingue leurs preuves et limites. Les migrations SQL sont vérifiées sur des copies locales isolées ; aucune application distante n'est réalisée. La publication complète et les lectures Production restent à terminer.
 
 **L'accès Staging reste désactivé** jusqu'à validation des portes SQL du [Lot 1A](docs/lot-1a-preparation.md), provisionnement du compte Admin et vérification de l'authentification réelle. Le [code Auth](docs/auth.md) refuse l'accès sans configuration autorisée. Les tests locaux avec doubles ne valent pas une connexion distante opérationnelle.
