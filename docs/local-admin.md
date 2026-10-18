@@ -1,10 +1,11 @@
 # Application locale connectée — 16 octobre 2026
 
-**État du 18 octobre :** les services connectés sont actuellement arrêtés à
-cause de l’erreur Docker. Les disponibilités et résultats ci-dessous décrivent
-leurs jalons datés. L’aperçu sans base reste proposé sur
-`http://127.0.0.1:3140/` ; voir l’[état de livraison](readiness-current.md)
-pour les fonctions manquantes, restrictions et prérequis de reprise.
+**État du 18 octobre après reprise :** l’instance sur 3150 est de nouveau
+disponible avec les mêmes identifiants, sauvegarde et Engine. La [reprise locale](local-recovery-2026-10-18.md)
+vérifie les vraies connexions, persistance et calculs après sauvegarde à froid,
+sans mise à jour Docker. L’aperçu distinct sans base reste sur 3140. Les jalons
+ci-dessous gardent leurs dates ; l’[état de livraison](readiness-current.md)
+conserve les fonctions manquantes et les réceptions restantes.
 
 L'application Next complète est accessible sur `http://127.0.0.1:3150/` avec
 une vraie authentification GoTrue, les autorisations serveur et une base locale

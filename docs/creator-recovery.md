@@ -104,7 +104,7 @@ réel de sessionStorage et les retours avant/arrière restent à exécuter dans 
 navigateurs autorisés : les tests Node et la compilation ne les prouvent pas.
 Le refus antérieur de pilotage navigateur n’est pas contourné.
 
-L’intégration connectée de cette récupération reste à vérifier après réparation
-de Docker. Les comptes, configurations privées, migrations, données existantes
+L’intégration connectée de cette récupération reste à vérifier ; les [services
+ont depuis été rétablis](local-recovery-2026-10-18.md). Les comptes, configurations privées, migrations, données existantes
 et environnements distants ne sont pas modifiés par ce jalon. Le goal et la
 réception complète du Creator restent ouverts.

@@ -7,11 +7,11 @@ Le contrôle complet passe 767 tests dans 43 fichiers, types, lint, format,
 build et smoke standalone. Les [preuves](publication-http-connected-proof.json)
 restent distinctes des anciennes simulations et de la préparation du banc.
 
-**État de reprise du 18 octobre :** les processus applicatifs sont arrêtés et
-Docker Desktop 4.90 échoue sur son socket Windows de démarrage. Les ports 3150
-et 3152 ne sont donc plus disponibles. La vérification HTTP après redémarrage
-reste **non exécutée** ; les résultats du 17 octobre ne la remplacent pas.
-Aucune donnée n’a été supprimée par les opérations de reprise.
+**Reprise exécutée le 18 octobre :** après arrêt complet et sauvegarde à froid
+vérifiée, Docker et les services conservés redémarrent normalement. Les ports
+3150/3152 sont disponibles ; huit contrôles après redémarrage passent contre
+le relevé d’origine. Le [bilan distinct](local-recovery-2026-10-18.md) conserve
+les preuves, la nouvelle observation annulée sans transfert et les limites.
 
 L’aperçu sans Docker a été relancé le 18 octobre sur `http://127.0.0.1:3140/`.
 L’accueil et son endpoint d’état répondent HTTP 200 ; ce dernier annonce
@@ -122,44 +122,35 @@ Tous les fichiers d’implémentation vérifiés restent identiques. Les 64 migr
 les huit fichiers voisins préalablement modifiés, les huit configurations privées
 et les références protégées sont inchangés ; le dépôt Engine est propre.
 
-## Reprise et blocage Docker actuel
+## Incident de démarrage et reprise exécutée
 
-Les instances et artefacts sont conservés dans
-`.local/local-admin-publication-1792259029889/`. Ne pas recréer les copies ou
-relancer leur préparation pour poursuivre : elles contiennent les transferts,
-historiques et clés utilisés par cette qualification. Les services existants
-doivent être redémarrés après rétablissement du moteur local.
+Les instances conservées restent dans `.local/local-admin-publication-1792259029889/`
+et `.local/local-admin-1792143739689/`. Aucun bootstrap ou préparateur PG n’est
+relancé : les bases, historiques, clés et comptes existants sont réutilisés.
 
-Le journal Docker du 18 octobre indique l’échec du renommage de
-`sailor-ingest.sock` vers `.stale`, avec « The file cannot be accessed by the system ».
-Le pipe `dockerDesktopLinuxEngine` est indisponible. Le démarrage normal et
-l’arrêt normal avec délai ont été tentés ; le second signale des processus
-encore présents. L’observation bornée suivante ne trouve pas de moteur stable.
-Ces observations établissent une erreur de démarrage Docker ; elles ne prouvent
-pas une nouvelle interdiction Smart App Control ou une restriction navigateur.
+Le premier relevé du 18 octobre observait un défaut de renommage de
+`sailor-ingest.sock` vers `.stale`, puis un arrêt normal encore incomplet.
+Ce relevé ne prouvait pas une nouvelle interdiction Smart App Control.
+Une inspection ultérieure confirme tous les processus Docker absents et WSL2
+arrêté. La sauvegarde à froid des deux disques et deux paramètres est alors
+copiée et vérifiée par taille/SHA-256, avant un seul nouveau démarrage normal.
+Le moteur devient prêt après une observation expirée puis une réponse positive.
 
-Docker a annoncé un correctif de cet incident à partir de 4.92 dans sa
-[discussion suivie par le mainteneur](https://github.com/docker/desktop-feedback/issues/460).
-La [version officielle 4.95](https://docs.docker.com/desktop/release-notes/#4950)
-est une cible de mise à jour proposée, sans garantie de résolution avant essai.
-Cette modification d’un logiciel global nécessite l’accord humain demandé
-séparément ; aucune mise à jour n’a été installée.
+Les [preuves de reprise](local-recovery-2026-10-18-proof.json) conservent huit
+contrôles du banc : vraie session, quatre opérations originales retrouvées,
+plan « inchangé » calculé par le nouveau worker puis annulé sans transfert,
+données conservées, clés identiques, limites Linux et publication principale
+fermée. Les 62 tables cible restent exactes, toutes les anciennes lignes des
+35 tables métier source sont préservées ; un plan et deux événements sont ajoutés.
 
-Avant une éventuelle mise à jour : obtenir un arrêt complet, vérifier la
-sauvegarde hors ligne des deux disques et de la configuration, puis vérifier
-checksum et signature de l’installateur officiel. Les deux VHDX mesurés totalisent
-environ 25 Go ; environ 85 Go sont libres sur C: au relevé. Docker exige l’arrêt
-complet pour une [sauvegarde cohérente de son disque](https://docs.docker.com/desktop/settings-and-maintenance/backup-and-restore/).
-L’arrêt incomplet ne satisfait pas ce prérequis. Aucun arrêt global forcé de WSL,
-réinitialisation, nettoyage, déplacement de socket ou suppression de volume
-n’est tenté. Un éventuel redémarrage Windows doit rester à l’initiative humaine.
-
-Après rétablissement : relancer les services conservés, puis l’application
-ordinaire et le banc avec leurs lanceurs respectifs. Le test de reprise préparé
-dans les artefacts compare les données et clés, relit les quatre opérations,
-prépare un plan « inchangé » avec le nouveau worker puis l’annule sans transfert.
-Il reste à exécuter avant de déclarer la reprise qualifiée.
-
+La proposition de mise à jour officielle reste distincte : aucune version
+n’est installée pendant cette reprise. Docker annonce un correctif à partir
+de 4.92 dans la [discussion du mainteneur](https://github.com/docker/desktop-feedback/issues/460),
+sans que le démarrage courant de 4.90 démontre une correction définitive.
+Aucun socket n’est déplacé, aucune protection désactivée et aucun arrêt forcé
+ou réinitialisation n’est effectué. La sauvegarde reste conservée ; sa restauration
+n’est pas exécutée. Les instructions officielles exigent un arrêt complet avant
+la [copie du disque Docker](https://docs.docker.com/desktop/settings-and-maintenance/backup-and-restore/).
 Les références Auth/SSR utilisées restent les
 [clients serveur Supabase](https://supabase.com/docs/guides/auth/server-side/creating-a-client).
 Aucune nouvelle migration n’est ajoutée, aucune application élève ou source

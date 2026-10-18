@@ -1,5 +1,13 @@
 # Roadmap
 
+**Reprise connectée, 18 octobre :** les [services conservés sont rétablis](local-recovery-2026-10-18.md)
+après sauvegarde à froid vérifiée et démarrage normal de Docker. Huit contrôles
+Engine, huit de reprise publication et sept d’accès/isolation passent ; 3150
+permet de nouveau les essais avec connexion et sauvegarde. Aucune mise à jour,
+migration ou activation distante. Les bilans d’arrêt ci-dessous sont historiques.
+Les champs utilisateurs V1 sont fixés par [D08](decisions.md#d08--champs-de-consultation-des-utilisateurs-v1) :
+nom, e-mail et activité, sans capacité Production encore opérationnelle.
+
 **Essais progressifs, 18 octobre :** la connexion désactivée en développement
 propose un accès à l’aperçu fictif. [Quatre tests SSR et cinq contrôles HTTP](login-preview-proof.json)
 passent ; contrôle complet **848 tests / 46 fichiers**. Ce lien ne rétablit pas

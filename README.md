@@ -4,6 +4,11 @@ NovLearn Admin sera l'application privée d'administration de NovLearn : gestion
 
 ## État du projet
 
+**Connexion et sauvegarde locales rétablies :** ouvrir
+[NovLearn Admin sur 3150](http://127.0.0.1:3150/login). Les identifiants d’essai
+sont dans `.local/local-admin-1792143739689/login.txt`. La [reprise du 18 octobre](docs/local-recovery-2026-10-18.md)
+vérifie Auth, persistance et Engine natif, sans activation distante.
+
 Un [exemple de statistiques](http://127.0.0.1:3140/tests/browser/statistics.html)
 permet aussi les retours d’interface : chiffres fictifs, période fixe et aucune
 lecture réelle. Le [contrat préparatoire](docs/activity-statistics.md) distingue
@@ -47,13 +52,14 @@ parcours avec `--engine --review` : demande, attestation explicite et historique
 Une approbation ne publie rien. Les identifiants d’essai sont dans le fichier
 ignoré `.local/local-admin-1792143739689/login.txt` ; utiliser le port **3150**.
 
-**Reprise du 18 octobre :** Docker Desktop est actuellement en erreur de
-démarrage, donc les instances locales sont arrêtées. Le [bilan de publication
-HTTP](docs/publication-http-connected.md) distingue les treize contrôles réussis
-du 17 octobre et la reprise encore non exécutée. La réparation globale proposée
-conserve les données et nécessite un accord séparé.
+**Reprise du 18 octobre :** après arrêt complet et sauvegarde à froid vérifiée,
+un démarrage normal de Docker rétablit les services existants. Les applications
+3150/3152 sont disponibles ; huit contrôles Engine, huit de reprise publication
+et sept d’accès/isolation passent. Aucun logiciel global n’est mis à jour.
+Le [bilan daté](docs/local-recovery-2026-10-18.md) distingue ces résultats de la
+réception navigateur encore ouverte et des travaux Production restants.
 
-**Disponible pendant cette panne :** l’aperçu sans Docker est relancé sur
+**Aperçu distinct sans connexion :** l’aperçu sans Docker reste proposé sur
 `http://127.0.0.1:3140/`. Il permet les essais manuels des écrans avec des exemples,
 sans connexion, sauvegarde ni calcul Engine. Ses réponses HTTP sont vérifiées ;
 la réception visuelle reste à réaliser dans le navigateur.

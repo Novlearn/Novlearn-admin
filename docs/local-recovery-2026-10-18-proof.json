@@ -1,0 +1,408 @@
+{
+  "result": "PASS for local restart, retained data checks, genuine Auth/HTTP and bounded native Engine; browser acceptance and complete delivery NOT CERTIFIED",
+  "date": "2026-10-18T16:07:45.697Z",
+  "baseAdminCommit": "287af75",
+  "coldBackup": {
+    "result": "PASS for cold file backup and byte/hash verification only",
+    "startedAt": "2026-10-18T13:04:32.5343690Z",
+    "completedAt": "2026-10-18T13:06:43.5523596Z",
+    "backupRoot": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\docker-cold-backup-20261018-150431",
+    "totalBytes": 24856494747,
+    "files": [
+      {
+        "name": "docker_data.vhdx",
+        "bytes": 24755830784,
+        "sourceSha256": "8838e1b84e447aa66e50f66d56d1bfd2568e36e40ce46ec026a7965c17c8a634",
+        "backupSha256": "8838e1b84e447aa66e50f66d56d1bfd2568e36e40ce46ec026a7965c17c8a634"
+      },
+      {
+        "name": "ext4.vhdx",
+        "bytes": 100663296,
+        "sourceSha256": "fe4ae40e9cfd7acc7ea2f46936bcd00f59948994b1f2696215b84ab630b37b2a",
+        "backupSha256": "fe4ae40e9cfd7acc7ea2f46936bcd00f59948994b1f2696215b84ab630b37b2a"
+      }
+    ],
+    "additionalPrivateConfigurationFiles": 2,
+    "exclusiveSourceReadLocksHeldThroughout": true,
+    "restoreExecuted": false,
+    "wholeVhdRehashedAfterRestart": false,
+    "privateManifestPath": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\docker-cold-backup-20261018-150431\\manifest.json"
+  },
+  "dockerNormalStart": {
+    "result": "READY for further inspection only",
+    "startedAt": "2026-10-18T13:07:17.891Z",
+    "observedAt": "2026-10-18T13:07:33.387Z",
+    "coldBackupRoot": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\docker-cold-backup-20261018-150431",
+    "previouslyObservedState": "No Docker process and docker-desktop WSL2 stopped",
+    "normalStartAttempts": 1,
+    "start": {
+      "exitCode": 0,
+      "errorCode": null
+    },
+    "ready": true,
+    "checks": [
+      {
+        "date": "2026-10-18T13:07:25.615Z",
+        "exitCode": null,
+        "errorCode": "ETIMEDOUT"
+      },
+      {
+        "date": "2026-10-18T13:07:33.387Z",
+        "exitCode": 0,
+        "errorCode": null
+      }
+    ],
+    "updateAttempted": false,
+    "socketOrProtectionModified": false,
+    "forcedProcessStop": false,
+    "applicationRestarted": false,
+    "sqlOrEngineExecuted": false,
+    "remoteOperationPerformed": false
+  },
+  "retainedServices": {
+    "result": "PASS for existing service recovery and selected row comparisons",
+    "date": "2026-10-18T13:09:47.542Z",
+    "containers": [
+      {
+        "name": "novlearn-admin-local-1792143739689-db",
+        "id": "390714b0c81fb19f94727e651e36acc2c9fe85f708a281e212ab0e3123632290",
+        "image": "public.ecr.aws/supabase/postgres@sha256:7374d196da7e301512cc5329e18040e0f7bb856287b323777cdadecccbc6c7e4",
+        "status": "exited",
+        "runningNow": true
+      },
+      {
+        "name": "novlearn-admin-local-1792143739689-auth",
+        "id": "a58c50849a4ef8b19042cfa2b30823fc5dbe0f7ed8e356eb165674a6e5be7f19",
+        "image": "public.ecr.aws/supabase/gotrue@sha256:1736a63078f5922b198c4cbe50f80ab9a2d3b54fe8b7b6cfb2e9dc5dbbc12c6b",
+        "status": "exited",
+        "runningNow": true
+      },
+      {
+        "name": "novlearn-admin-local-1792143739689-rest",
+        "id": "d781985a2df531caf810355316f12ecf20c9273ed5ffa4fa28365386f897fa79",
+        "image": "public.ecr.aws/supabase/postgrest@sha256:c7cd7e265a85b05248abf53f4473fcec7e327c282d0bd0cf60f1551996d09fcf",
+        "status": "exited",
+        "runningNow": true
+      },
+      {
+        "name": "novlearn-admin-local-1792143739689-api",
+        "id": "f062186f8bd4c084f49263010a2c854eefff9847432d8bee62c7141e9399c907",
+        "image": "public.ecr.aws/supabase/kong@sha256:1b53405d8680a09d6f44494b7990bf7da2ea43f84a258c59717d4539abf09f6d",
+        "status": "exited",
+        "runningNow": true
+      },
+      {
+        "name": "novlearn-admin-publication-local-1792259029889-db",
+        "id": "3729798b2484798e2aeecc3c7b6f6416ae04c56511263a1f230651c60dc97699",
+        "image": "public.ecr.aws/supabase/postgres@sha256:7374d196da7e301512cc5329e18040e0f7bb856287b323777cdadecccbc6c7e4",
+        "status": "exited",
+        "runningNow": true
+      },
+      {
+        "name": "novlearn-admin-publication-local-1792259029889-auth",
+        "id": "b15e6ac5141015a900b0c921f50787482221f5545f10b3a0405e036f94f0b10a",
+        "image": "public.ecr.aws/supabase/gotrue@sha256:1736a63078f5922b198c4cbe50f80ab9a2d3b54fe8b7b6cfb2e9dc5dbbc12c6b",
+        "status": "exited",
+        "runningNow": true
+      },
+      {
+        "name": "novlearn-admin-publication-local-1792259029889-rest",
+        "id": "f39ac1a1062b417411ea53f8756f156a797801f0f8c59f21485eb894bd916b34",
+        "image": "public.ecr.aws/supabase/postgrest@sha256:c7cd7e265a85b05248abf53f4473fcec7e327c282d0bd0cf60f1551996d09fcf",
+        "status": "exited",
+        "runningNow": true
+      },
+      {
+        "name": "novlearn-admin-publication-local-1792259029889-api",
+        "id": "2bbd6310a0c57497210d44e029c30fe81256f91146221baf07176417e8fd861e",
+        "image": "public.ecr.aws/supabase/kong@sha256:1b53405d8680a09d6f44494b7990bf7da2ea43f84a258c59717d4539abf09f6d",
+        "status": "exited",
+        "runningNow": true
+      },
+      {
+        "name": "novlearn-admin-publication-local-1792259029889-target-db",
+        "id": "7c259024c91f4b738bc63755d10fcdbf7be00a8d62c296a55febac218529c9e1",
+        "image": "public.ecr.aws/supabase/postgres@sha256:7374d196da7e301512cc5329e18040e0f7bb856287b323777cdadecccbc6c7e4",
+        "status": "exited",
+        "runningNow": true
+      },
+      {
+        "name": "novlearn-admin-publication-local-1792259029889-pg-proxy",
+        "id": "8198c758ad0aa2729054f3b4cd7694f040a185861afffa8e0010786323414975",
+        "image": "node:24.19.0-bookworm@sha256:4196d66a565c6f195728d9952f161f4adfe2ad753052a08b7ec7f1c5a6bda42b",
+        "status": "exited",
+        "runningNow": true
+      }
+    ],
+    "startedExistingContainers": 10,
+    "recreatedContainers": 0,
+    "health": [
+      {
+        "label": "main",
+        "origin": "http://127.0.0.1:55431",
+        "authHealthStatus": 200
+      },
+      {
+        "label": "publication-fixture",
+        "origin": "http://127.0.0.1:55432",
+        "authHealthStatus": 200
+      }
+    ],
+    "originalPublicationTargetTablesExact": 62,
+    "originalPublicationSourceBusinessTablesExact": 35,
+    "mainBusinessTablesSnapshottedAfterDockerRestart": 35,
+    "originalPrivateFilesUnchanged": 8,
+    "sqlMigrationsApplied": false,
+    "remoteOperationPerformed": false,
+    "applicationStarted": false,
+    "browserExecuted": false
+  },
+  "applications": {
+    "result": "PASS for application readiness only",
+    "date": "2026-10-18T13:11:34.044Z",
+    "apps": [
+      {
+        "port": 3150,
+        "processId": 37524,
+        "log": ".local/lot1a/retained-app-3150-1792329032296",
+        "startedAt": "2026-10-18T13:10:32.318Z",
+        "loginStatus": 200,
+        "engineContainer": "novlearn-admin-engine-1792329032500",
+        "engine": true,
+        "review": true
+      },
+      {
+        "port": 3152,
+        "processId": 26788,
+        "log": ".local/lot1a/retained-app-3152-1792329061296",
+        "startedAt": "2026-10-18T13:11:01.325Z",
+        "loginStatus": 200,
+        "engineContainer": "novlearn-admin-engine-1792329062312",
+        "engine": true,
+        "publicationFixture": true
+      }
+    ],
+    "existingDatabasesUsed": true,
+    "credentialsRotated": false,
+    "remoteActivation": false,
+    "browserExecuted": false,
+    "actualLoginExecuted": false
+  },
+  "nativeConnectedChecks": {
+    "result": "PASS",
+    "date": "2026-10-18T13:12:25.888Z",
+    "artifact": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\local-admin-1792143739689\\engine-adoption-1792329105083",
+    "checks": [
+      "Actual local Admin session on schema 64",
+      "Authenticated dashboard and catalogue respond",
+      "Full seven-element advanced definition generates through actual native worker for both seeds; public elements match historical captures exactly",
+      "New labelled seven-element draft persists via real Next/PostgREST",
+      "Actual full advanced multi-seed report covers correct/incorrect/invalid, reproducibility and public safety, signed and persisted under the new archive",
+      "New report appears as current in the authenticated detail page",
+      "Every preexisting readable receipt retains its exact payload and signature",
+      "Publication remains disabled"
+    ],
+    "created": {
+      "revision": 1,
+      "versionId": "b3ff2fd3-fb62-481f-8b5d-b34e973946cd",
+      "exerciseId": "9",
+      "fingerprint": "c721befcba4dbaf60f038731902adf4e9aeca2e0ba55bb18e830409d2be1e869"
+    },
+    "receiptId": "c4f93b87-a399-4627-a419-bd224d8c8315",
+    "engineArchiveSha256": "d4d3abc408ab37f2f8a5faa512964b48947828bae9209cb1460b47111ca582f9",
+    "projections": [
+      {
+        "seed": 0,
+        "httpElapsedMs": 4248.986799999999
+      },
+      {
+        "seed": 42,
+        "httpElapsedMs": 3800.690199999999
+      }
+    ],
+    "advancedReportHttpElapsedMs": 23123.8339,
+    "retainedOldReceipts": 14,
+    "realAuth": true,
+    "realPostgrest": true,
+    "realNextRoutes": true,
+    "nativeLinuxEngine": true,
+    "nativeLimitsChanged": false,
+    "definitionElements": 7,
+    "seeds": [0, 42],
+    "syntheticDraftOnly": true,
+    "existingRolesUntouched": true,
+    "oldReceiptsPreserved": true,
+    "browserExecution": false,
+    "humanAcceptance": false,
+    "publicationEnabled": false
+  },
+  "publicationRestart": {
+    "result": "PASS",
+    "date": "2026-10-18T13:12:59.802Z",
+    "checks": [
+      "Genuine fresh Auth session after the dedicated Next/Engine process restart",
+      "All four original HTTP operations retain their committed/cancelled facts",
+      "Fresh native Engine and physical target inspection on the restarted app observe the existing revision as unchanged",
+      "The new observation plan is cancelled without confirming or applying a transfer",
+      "All 62 target tables and every preexisting source business row remain exact",
+      "Main/fixture configurations, signing secrets and PostgreSQL credentials are unchanged",
+      "Actual restarted Linux worker retains the qualified resource/security profile",
+      "Main application remains available with publication disabled"
+    ],
+    "previousProcess": 35876,
+    "currentProcess": 26788,
+    "engineContainer": "novlearn-admin-engine-1792329062312",
+    "newPlan": "be694592-1fb2-454b-ae34-72b9d287976a",
+    "targetApplyExecuted": false,
+    "observedOriginalHttpTransfers": true,
+    "realAuth": true,
+    "nativeEngine": true,
+    "sourceAndTargetIdentifiersDistinct": true,
+    "privateConfigurationsUnchanged": true,
+    "mainInterrupted": false,
+    "browserExecution": false
+  },
+  "freshMainAccess": {
+    "result": "PASS",
+    "date": "2026-10-18T13:14:13.144Z",
+    "checks": [
+      "Anonymous session refused with HTTP 401",
+      "Actual Next login form POST accepts retained credentials and issues isolated local cookies",
+      "Fresh HTTP form session passes the protected session endpoint",
+      "Dashboard, catalogue, chapters, competences and flashcards respond in the authenticated session",
+      "The new saved draft and its signed report remain readable after a distinct fresh login",
+      "Real logout clears the test session and protected access is refused again",
+      "Both actual restarted native workers retain memory/pid cgroup-v2 limits, UID, no-new-privileges, read-only root and no network"
+    ],
+    "workers": [
+      {
+        "container": "novlearn-admin-engine-1792329032500",
+        "uid": 65534,
+        "cgroupV2": true,
+        "memoryMax": "402653184",
+        "swapMax": "0",
+        "pidsMax": "64",
+        "noNewPrivileges": "1",
+        "network": "none",
+        "readOnlyRoot": true,
+        "capDrop": ["ALL"]
+      },
+      {
+        "container": "novlearn-admin-engine-1792329062312",
+        "uid": 65534,
+        "cgroupV2": true,
+        "memoryMax": "402653184",
+        "swapMax": "0",
+        "pidsMax": "64",
+        "noNewPrivileges": "1",
+        "network": "none",
+        "readOnlyRoot": true,
+        "capDrop": ["ALL"]
+      }
+    ],
+    "retainedCredentialsUsed": true,
+    "newDraftReadAfterReconnection": true,
+    "browserExecuted": false,
+    "browserStorageCleanupExecuted": false,
+    "newBusinessMutationsPerformed": false,
+    "sqlMigrationsApplied": false,
+    "remoteOperationPerformed": false
+  },
+  "rowPreservation": {
+    "mainBusinessTablesWithEveryPreexistingRowPreserved": 35,
+    "mainBaselineScope": "After Docker restart, before Auth/API/app restart; not a pre-shutdown baseline",
+    "mainAddedRows": {
+      "public.exercises": 1,
+      "public.exercise_versions": 1,
+      "public.admin_content_events": 1,
+      "public.admin_exercise_test_runs": 1
+    },
+    "publicationSourceBusinessTablesWithEveryOriginalRowPreserved": 35,
+    "publicationSourceAddedRows": {
+      "novlearn_admin_private.publication_operations": 1,
+      "novlearn_admin_private.publication_operation_events": 2
+    },
+    "publicationTargetTablesExactlyEqualToOriginalBeforeShutdown": 62,
+    "newSyntheticMainDraft": {
+      "revision": 1,
+      "versionId": "b3ff2fd3-fb62-481f-8b5d-b34e973946cd",
+      "exerciseId": "9",
+      "fingerprint": "c721befcba4dbaf60f038731902adf4e9aeca2e0ba55bb18e830409d2be1e869"
+    },
+    "newSignedReport": "c4f93b87-a399-4627-a419-bd224d8c8315",
+    "newPublicationPlan": "be694592-1fb2-454b-ae34-72b9d287976a",
+    "newPublicationPlanCancelled": true,
+    "newTargetTransferApplied": false,
+    "authSessionTablesNotComparedInMainOrSource": true
+  },
+  "loginInstructionsMatchRetainedAccount": true,
+  "latestFullCheck": {
+    "result": "PASS",
+    "date": "2026-10-18T12:59:35.667Z",
+    "artifact": "C:\\Users\\balth\\AppData\\Local\\Temp\\novlearn-admin-check-1792328191266",
+    "exitCode": 0,
+    "tests": 848,
+    "files": 46,
+    "sourceFiles": 390,
+    "allCopiedSourcesStillMatch": true,
+    "fullCheckCommand": "npm run check",
+    "separateBuildDirectory": true,
+    "independentTemporaryProject": true,
+    "dependenciesCopied": true,
+    "applicationServersInterrupted": false,
+    "privateEnvironmentFilesCopied": false,
+    "rerunAfterDockerRestart": false,
+    "allPreviouslyCheckedCodeStillMatches": true,
+    "changedDocumentsSinceCheck": [
+      "docs/activity-statistics.md",
+      "docs/auth.md",
+      "docs/creator-recovery.md",
+      "docs/decisions.md",
+      "docs/local-admin.md",
+      "docs/progress.md",
+      "docs/publication-http-connected.md",
+      "docs/readiness-current.json",
+      "docs/readiness-current.md",
+      "docs/README.md",
+      "docs/recovery-cleanup.md",
+      "docs/roadmap.md",
+      "README.md"
+    ]
+  },
+  "preservation": {
+    "protectedFilesUnchanged": 4,
+    "privateAppFilesUnchanged": 8,
+    "siblingPreexistingChangedFilesPreserved": 8,
+    "qualifiedSqlFilesUnchanged": 64,
+    "engineRepositoryClean": true
+  },
+  "runtimeChecks": [
+    {
+      "port": 3140,
+      "route": "/__local/status",
+      "status": 200
+    },
+    {
+      "port": 3150,
+      "route": "/login",
+      "status": 200
+    },
+    {
+      "port": 3152,
+      "route": "/login",
+      "status": 200
+    }
+  ],
+  "scope": {
+    "softwareUpdated": false,
+    "protectionOrSocketModified": false,
+    "forcedProcessStop": false,
+    "remoteReadOrWritePerformed": false,
+    "sqlMigrationsApplied": false,
+    "newSyntheticDraftAndReceiptCreated": true,
+    "actualBrowserExecuted": false,
+    "browserStorageRecoveryOrCleanupExecuted": false,
+    "wholeEngineSourceSuiteRerun": false,
+    "goalComplete": false
+  }
+}

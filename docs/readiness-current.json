@@ -1,13 +1,13 @@
 {
-  "recordedAt": "2026-10-18T13:00:31.912Z",
+  "recordedAt": "2026-10-18T16:07:48.128Z",
   "scope": "Documentary traceability for all 20 original goal sections; not a functional test, receipt, permission or completion certificate",
   "referenceInputs": {
     "requestSha256": "fb9ac40863c57594878833b8a9fc0bd130a0cba9d0249d29c609051a54bded93",
     "cdcSha256": "b6bfea6d74b008e54ed61aa7598ccd01bd438d496cc22add15da2ff8abb04401",
-    "decisionsSha256": "15f316f04bca6f001e5b0de279d598706d9d9ac3c3251bafe7b5dbecbe8e709c"
+    "decisionsSha256": "e45ad0c99014ccc6521ae91b0d836262b10b757c489721004dbd8f1f6a401e1f"
   },
-  "baselineAdminCommitAtAssessment": "7d1240115d4b649148626790c023ca1830d44d88",
-  "implementationHasUncommittedChangesAtObservation": true,
+  "baselineAdminCommitAtAssessment": "287af75466d8a9623ab76ee76f146cd972e0ecb5",
+  "implementationHasUncommittedChangesAtObservation": false,
   "requestedSections": [
     {
       "id": 1,
@@ -106,8 +106,8 @@
     {
       "id": 3,
       "title": "Auth et sécurité",
-      "evidenceSummary": "Vrais comptes locaux, rôle serveur frais, refus et révocation dans [Auth locale](local-admin-proof.json) et [relecture](local-admin-review-proof.json).",
-      "remaining": "Reprise des services ; expiration réelle, MFA, provision opérationnel et réception Staging non certifiés."
+      "evidenceSummary": "Vrais comptes, session fraîche, sauvegarde et reconnexion après panne : [reprise locale](local-recovery-2026-10-18-proof.json). Refus/révocation antérieurs dans [Auth locale](local-admin-proof.json).",
+      "remaining": "Expiration réelle, MFA, provision opérationnel et réception Staging non certifiés."
     },
     {
       "id": 4,
@@ -136,8 +136,8 @@
     {
       "id": 8,
       "title": "Engine officiel",
-      "evidenceSummary": "[1 540 tests et qualification Linux](engine-numeric-cache-proof.json), puis [adoption locale](engine-admin-adoption-proof.json) de l’archive exacte d4d3abc4…a582f9.",
-      "remaining": "Docker indisponible aujourd’hui ; aucun nouveau calcul natif revendiqué. Qualification de l’hôte de déploiement et compatibilité élève restent des portes séparées."
+      "evidenceSummary": "[1 540 tests et qualification Linux](engine-numeric-cache-proof.json), [adoption](engine-admin-adoption-proof.json), puis huit contrôles natifs après [reprise](local-recovery-2026-10-18-proof.json).",
+      "remaining": "Hôte de déploiement, compatibilité élève et nouvelle capacité de tracé de formules restent des portes séparées. La suite source Engine n’est pas relancée pendant la reprise."
     },
     {
       "id": 9,
@@ -148,8 +148,8 @@
     {
       "id": 10,
       "title": "Validation et publication",
-      "evidenceSummary": "Relecture réelle locale ; [13 contrôles HTTP](publication-http-connected-proof.json), deux révisions, retour et conservation des historiques. [Lots](publication-batch-proof.json) qualifiés dans leur portée.",
-      "remaining": "Reprise après redémarrage et parcours HTTP multi-exercices complet non exécutés ; première publication réelle interdite sans accord distinct. Les attestations synthétiques ne valent pas validation pédagogique humaine."
+      "evidenceSummary": "[Treize contrôles HTTP locaux](publication-http-connected-proof.json), transferts/retour, puis [huit contrôles après redémarrage](local-recovery-2026-10-18-proof.json). [Lots SQL](publication-batch-proof.json) distincts.",
+      "remaining": "Parcours HTTP multi-exercices complet non exécuté ; première publication réelle interdite sans accord distinct. Les attestations synthétiques ne valent pas validation pédagogique humaine."
     },
     {
       "id": 11,
@@ -178,8 +178,8 @@
     {
       "id": 15,
       "title": "Utilisateurs",
-      "evidenceSummary": "Aucun écran ni lecteur Production opérationnel n’est livré ; la navigation ne propose pas de page vide.",
-      "remaining": "Liste/recherche/pagination, champs de profil autorisés, progression, activité et historique synthétique à implémenter après cadrage de la capacité et des données minimales."
+      "evidenceSummary": "Nom, e-mail et activité retenus par [D08](decisions.md). Aucun écran ni lecteur Production opérationnel n’est encore livré.",
+      "remaining": "Capacité bornée, liste/recherche/pagination, profils autorisés, progression, activité et historique synthétique à implémenter et qualifier."
     },
     {
       "id": 16,
@@ -196,8 +196,8 @@
     {
       "id": 18,
       "title": "Points d’arrêt",
-      "evidenceSummary": "Aucune écriture SQL distante ; ni push, ni déploiement, ni publication réelle. NovLearn limité au SQL local, Engine aux corrections autorisées.",
-      "remaining": "Accord pour une réparation logicielle globale ; autorisations distinctes pour les futures opérations distantes ou une nouvelle capacité Engine hors D05."
+      "evidenceSummary": "Aucune écriture SQL distante, push, déploiement ou publication réelle. [Reprise normale sans mise à jour](local-recovery-2026-10-18.md). NovLearn limité au SQL local, Engine aux corrections autorisées.",
+      "remaining": "Autorisations distinctes pour futures opérations distantes, éventuelle mise à jour globale ou nouvelle capacité Engine hors D05."
     },
     {
       "id": 19,
@@ -213,13 +213,14 @@
     }
   ],
   "referenceHashes": {
-    "activity-statistics.md": "143ffb13fc1d517d8ccf408c651fcb55b99be9717b1674ba42b3fcb1b7f3db7e",
+    "activity-statistics.md": "27db835965322ba8d88840e495b89fe53420b4fe3692ff8ca47309a05257f895",
+    "local-recovery-2026-10-18.md": "ab6e2a667d7b054b673a1b175044ed6504218a993fd9e8c6054b46fb970aac1f",
     "lot-1a-remote-reconciliation-current.md": "4a2a06adff60f7a6541f261af3bd00a63debc01197030717c389c7c22b813dfe",
-    "progress.md": "3a57f7d08cb25714c7a3598c9be213675edee817ec09c0ae4a1a847f6cc7bd7b",
+    "progress.md": "8828a8c727e39b1d2ff860c482b13aefb69e4ea25fffed2533275ccf4748fff8",
     "lot-1a-preparation.md": "3561164a62bc6690a46d2f472c42037c11bd9aacc40add77d44814abdc5dd271",
     "recovery-cleanup-proof.json": "cb414a4c150ceb55204fcc9fca07696d05463e71642b4b4db35fd62819fa2524",
+    "local-recovery-2026-10-18-proof.json": "5c9f10801159d1b94c66aebf2f4f45cb91e6a3447f6098968d85e03c83e0e26d",
     "local-admin-proof.json": "25e120631288ff66edd129411f5855da6d05a5a0c1753961e5592982f80ac432",
-    "local-admin-review-proof.json": "72bd632dfa49b92d172f7e3b6700ebe9c460019490aa4fdffc6869c4a8fc4ad9",
     "visual-implementation.md": "c1989019b7112e6b78cb75a3f0a7c33866b848fa1383820cda25c08cd06e68ea",
     "catalogue-local-proof.json": "2d5cdc385f1e3847df1731c895dd96530eb136c78833d18a2786d933ac90be16",
     "creator-local-proof.json": "078c421317a0b209e697b9016d218691766d10218f3fedcb07b7a9feb3abc606",
@@ -234,8 +235,8 @@
     "flashcards-local-proof.json": "7d8da9b502804ed2160680c78b9289b712e39fdd8790fa42d2c52103ffd996c2",
     "dashboard-local-proof.json": "6c930179bc83e3050f12965895fb89d8aca87e215d9622a4f1fc31b7b859c04b",
     "activity-statistics-proof.json": "56f1226d4bb982d162e4041bd5e3ac89ec0d9a2867c8f90798c561b316a2354e",
-    "roadmap.md": "a17e23b764b8c8fa4a74c809dd88bbf20f9f71a577fbe01f8fa61746a7ff478b",
-    "publication-http-connected.md": "7ba59899755437f337398293c7488926b0e48d37977bc7199a2e97b25966c131",
+    "decisions.md": "e45ad0c99014ccc6521ae91b0d836262b10b757c489721004dbd8f1f6a401e1f",
+    "roadmap.md": "76fc0abc6c90ced00426c03e29af3c4baa867567c14772aebb2115904a8109fe",
     "lot-1a-local-statistics-guard.md": "0bd4f19d706296ccb96f8ea246f186c4e52ddc7a23da69519f64c2a1978a7a92"
   },
   "unimplemented": [
@@ -247,9 +248,8 @@
   ],
   "notExecuted": [
     "Authorized browser acceptance of current recovery/cleanup",
-    "Connected cleanup/recovery after Docker restoration",
+    "Connected browser cleanup/recovery (services now restored)",
     "Real session expiry qualification",
-    "Post-restart publication qualification",
     "Full multi-exercise publication HTTP qualification",
     "Target deployment-host qualification",
     "Remote migration rehearsal/approval and controlled first publication"

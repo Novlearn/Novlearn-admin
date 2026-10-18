@@ -1,5 +1,8 @@
 # Documentation NovLearn Admin
 
+[Reprise locale du 18 octobre](local-recovery-2026-10-18.md) : sauvegarde à froid,
+connexion/sauvegarde/Engine rétablis sur 3150, données conservées et preuves HTTP.
+
 [Statistiques d’activité préparatoires](activity-statistics.md) : périodes UTC,
 contrat d’agrégats, rendu et exemple fictif ; pas de lecteur Production activé.
 

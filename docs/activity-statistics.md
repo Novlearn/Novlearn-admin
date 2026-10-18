@@ -96,7 +96,8 @@ TLS, limites de ressources, audit et cohérence de snapshot sur une copie.
 
 Après qualification seulement : lecteur serveur, Auth/permissions fraîches,
 route/page Admin, filtres restants, agrégations réelles et tests SQL/HTTP de
-cohérence, de refus et de préservation des données. Le choix des champs de
-consultation utilisateur reste demandé séparément. Aucune donnée nominative
-n’est ajoutée en attendant une réponse. Docker indisponible et l’absence de
-capacité SQL qualifiée restent explicitement bloquants pour cette intégration.
+cohérence, de refus et de préservation des données. [D08](decisions.md#d08--champs-de-consultation-des-utilisateurs-v1)
+retient nom, e-mail et activité pour la liste des utilisateurs ; cette capacité
+nominative reste distincte des agrégats. Les [services locaux sont rétablis](local-recovery-2026-10-18.md).
+L’absence de capacité SQL qualifiée et les agrégations réelles non implémentées
+restent les prérequis de ce raccordement ; Docker n’est plus le blocage courant.

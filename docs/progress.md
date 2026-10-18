@@ -1,5 +1,26 @@
 # Progression du goal NovLearn Admin
 
+## Services connectés rétablis — 18 octobre 2026
+
+La [reprise](local-recovery-2026-10-18.md) sauvegarde à froid les deux VHDX et
+deux paramètres Docker, puis redémarre normalement le moteur et les dix services
+conservés. Aucune mise à jour, réinitialisation ou intervention sur une protection.
+L’application sur 3150 permet de nouveau connexion, sauvegarde et Engine.
+
+Huit contrôles Engine, huit de reprise publication et sept d’accès/isolation
+passent. Les 62 tables de la cible sont exactement conservées ; toutes les
+anciennes lignes des 35 tables métier de chaque source comparée restent intactes.
+Un brouillon et son rapport de test, un plan de publication annulé et son
+historique sont ajoutés. Le relevé principal commence après le redémarrage de
+sa base, celui de publication précède l’arrêt ; leurs portées sont distinctes.
+Les configurations, SQL et modifications préexistantes contrôlées sont conservées.
+
+Les 848 tests du dernier contrôle complet ne sont pas relancés après cette
+reprise ; le code qualifié est revérifié identique. Les interactions navigateur,
+la récupération connectée et la publication HTTP multi-exercices restent ouvertes.
+[D08](decisions.md#d08--champs-de-consultation-des-utilisateurs-v1) retient désormais
+nom, e-mail et activité pour les utilisateurs ; aucune lecture distante activée.
+
 ## Accès aux essais depuis la connexion — 18 octobre 2026
 
 La page de connexion désactivée propose maintenant le lien vers l’aperçu, en
@@ -20,7 +41,7 @@ périodes UTC et contrôles de cohérence sans client Production ni nouvelle SQL
 Le banc comporte un exemple figé explicitement fictif, avec états indisponibles
 et tableau accessible. Les statistiques réelles, le rôle de lecture, les filtres
 pédagogiques, les utilisateurs et la qualification SQL/HTTP restent à réaliser.
-Les choix nominaux demandés ne sont pas présumés approuvés.
+Le choix nominatif a ensuite été précisé par D08 ; il n’active pas le lecteur.
 
 Le contrôle complet du 18 octobre à 12:50 UTC passe **844 tests / 45 fichiers**,
 types, lint, format, build et smoke HTTP. Les onze pages du banc compilent ;

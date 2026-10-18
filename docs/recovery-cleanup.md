@@ -25,6 +25,7 @@ un bouton d’abandon explicite.
 
 Les tests du protocole et le rendu serveur ne prouvent toujours pas les effets
 dans un navigateur réel. Le [relevé](recovery-cleanup-proof.json) distingue les
-contrôles exécutés, l’intégration connectée encore bloquée par Docker et la
-réception navigateur non exécutée. Aucune permission navigateur, configuration
+contrôles exécutés et l’intégration connectée non exécutée à ce jalon. Les
+[services sont depuis rétablis](local-recovery-2026-10-18.md), sans réception
+navigateur de cette récupération. Aucune permission navigateur, configuration
 globale, donnée, migration ou source Engine n’est modifiée.

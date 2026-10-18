@@ -1,5 +1,15 @@
 # Décisions et arbitrages
 
+## D08 — Champs de consultation des utilisateurs V1
+
+**Source : réponse explicite de l’utilisateur du 18 octobre 2026.**
+« Nom, e-mail et activité ».
+Retenir ces champs pour la future consultation des utilisateurs. Ce choix précise
+le périmètre nominatif ; il n’active ni client Production, ni secret privilégié,
+ni droit SQL ou lecture distante. La capacité technique minimisée, les contrôles
+Admin serveur, la pagination et les preuves sur copie restent à construire.
+Les statistiques agrégées restent distinctes de cette consultation nominative.
+
 ## D07 — Base NovLearn et construction de l’Admin
 
 **Source : instruction explicite de l’utilisateur du 14 octobre 2026.**
@@ -133,7 +143,7 @@ L'utilisateur autorise expressément l'exception ciblée à l'immutabilité du C
 3. Quels champs métier précis sont projetés lors de la publication, quels droits techniques les bornent et comment les effets indirects des triggers sont-ils exclus ? Le périmètre des deux tables est déjà validé.
 4. Quelle identité stable relie deux bases et deux historiques `bigint` ? UUID/addition progressive ou autre mapping ? Comment gérer les contenus Staging existants et les IDs réservés ?
 5. Quel stockage/version de moteur conserve le rejeu des nouvelles tentatives ? Pour l'historique, seules des preuves d'une définition/instance réellement utilisée peuvent justifier un rattachement ; sinon conserver « version inconnue ».
-6. Quels champs Production sont consultables nominativement, qui est autorisé à les voir, et quelles statistiques/agrégations sont réellement utiles ?
+6. Nom, e-mail et activité sont validés pour la consultation V1 (D08). Le périmètre technique de la capacité, sa minimisation et ses preuves restent à réaliser.
 7. Quelle capacité PostgreSQL réelle est approuvée pour lecture seulement et publication limitée, et où s'exécute-t-elle ?
 8. Qui provisionne le premier Admin Staging et quel mécanisme de MFA, révocation et audit est retenu ?
 9. Le transport isolé Engine est-il requis dès V1 ; quel runtime cible, quelles bornes de ressources, et quel seuil de qualification autorise le pilote ?

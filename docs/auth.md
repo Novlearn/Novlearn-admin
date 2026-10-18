@@ -2,7 +2,9 @@
 
 ## État réel
 
-**18 octobre :** l’instance connectée est arrêtée pendant la panne Docker.
+**18 octobre :** l’instance connectée est rétablie après la panne Docker ;
+[connexion, déconnexion et persistance réelles](local-recovery-2026-10-18.md)
+passent avec les comptes conservés.
 L’[aperçu des écrans](http://127.0.0.1:3140/) reste distinct, sans compte ni
 sauvegarde en base. La page de connexion désactivée propose ce lien uniquement
 en développement. Il disparaît dans le build Production ou quand Auth est
