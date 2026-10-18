@@ -1,5 +1,8 @@
 # Documentation NovLearn Admin
 
+[Fiche utilisateur locale](user-detail.md) : nom, e-mail, activité, progression
+enregistrée et historique synthétique ; SQL 67, vraie connexion et source séparée.
+
 [Statistiques connectées locales](activity-http.md) : page/API, vrai Auth et SQL,
 source synthétique séparée, permissions et conservation des données vérifiées.
 

@@ -7,9 +7,10 @@ UTC de 1 à 90 jours et la pagination par UUID. Les comptes invités gardent un
 libellé générique et leur e-mail est masqué avant la recherche. Les
 [preuves datées](users-readonly-proof.json) distinguent chaque niveau de contrôle.
 
-Le profil administratif détaillé, la progression, l’historique synthétique et
-la lecture Production du CDC §15.2 restent à réaliser. Ce jalon ne termine ni
-le Lot 8, ni le Lot 1A, ni le goal global. La réception navigateur reste ouverte.
+La [fiche détaillée locale](user-detail.md) ajoute depuis le profil, la progression
+et l’historique synthétique avec une capacité distincte SQL 67. Les preuves de
+ce document restent celles de la liste SQL 66. La lecture Production et la
+réception navigateur restent ouvertes ; aucun de ces jalons ne clôture le goal.
 
 ## Définition et affichage
 

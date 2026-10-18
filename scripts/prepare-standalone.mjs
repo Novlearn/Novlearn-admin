@@ -31,6 +31,8 @@ for (const name of [
   'activity-statistics-query.sql',
   'users-reader-audit.sql',
   'users-list-query.sql',
+  'user-detail-reader-audit.sql',
+  'user-detail-query.sql',
 ]) {
   const source = await readFile(new URL('scripts/' + name, root));
   const traced = await readFile(new URL('scripts/' + name, standalone));

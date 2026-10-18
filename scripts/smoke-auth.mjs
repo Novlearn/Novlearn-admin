@@ -86,6 +86,7 @@ try {
     '/admin/publication',
     '/admin/statistics',
     '/admin/users',
+    '/admin/users/a8100000-0000-4000-8000-000000000001',
   ]) {
     const admin = await fetch(`${origin}${path}`, {
       redirect: 'manual',
@@ -101,6 +102,7 @@ try {
     ['/api/admin/session', 'GET'],
     ['/api/admin/statistics', 'GET'],
     ['/api/admin/users', 'GET'],
+    ['/api/admin/users/a8100000-0000-4000-8000-000000000001', 'GET'],
     ['/api/admin/exercises', 'GET'],
     ['/api/admin/exercises', 'POST'],
     ['/api/admin/engine', 'POST'],

@@ -9,8 +9,9 @@ La page [Statistiques](http://127.0.0.1:3150/admin/statistics) est désormais
 permissions fraîches et filtres de période. Elle permet des essais progressifs ;
 la [liste Utilisateurs](http://127.0.0.1:3150/admin/users) permet maintenant
 [recherche, pagination et activité locales](docs/users-readonly.md), avec nom et
-e-mail autorisés. Les fonctions Production et les détails/progression/historique
-utilisateurs restent à construire.
+e-mail autorisés. Les [fiches détaillées](docs/user-detail.md) ajoutent historique
+et progression enregistrée, sans recalcul ni certification mathématique. Les
+fonctions Production et la réception navigateur restent ouvertes.
 
 La [capacité SQL analytique](docs/activity-readonly.md) est qualifiée sur copies :
 rôle limité, agrégats natifs, refus et restauration. Le [login TLS et lecteur serveur](docs/activity-pg.md)

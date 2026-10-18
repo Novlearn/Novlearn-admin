@@ -15,6 +15,11 @@ sont depuis qualifiées sur source synthétique. Le périmètre autorisé et la
 fermeture des accès distants restent inchangés ; détails/progression/historique
 et activation Production ne sont pas livrés par ce jalon.
 
+**Réalisation locale du 19 octobre :** les [fiches détaillées](user-detail.md)
+ajoutent activité, historique des tentatives et progression enregistrée (CDC §15.2),
+avec capacité distincte limitée aux métadonnées nécessaires. Les verdicts anciens
+ne deviennent pas certifiés ; la réception navigateur et Production restent ouvertes.
+
 ## D07 — Base NovLearn et construction de l’Admin
 
 **Source : instruction explicite de l’utilisateur du 14 octobre 2026.**
@@ -148,7 +153,7 @@ L'utilisateur autorise expressément l'exception ciblée à l'immutabilité du C
 3. Quels champs métier précis sont projetés lors de la publication, quels droits techniques les bornent et comment les effets indirects des triggers sont-ils exclus ? Le périmètre des deux tables est déjà validé.
 4. Quelle identité stable relie deux bases et deux historiques `bigint` ? UUID/addition progressive ou autre mapping ? Comment gérer les contenus Staging existants et les IDs réservés ?
 5. Quel stockage/version de moteur conserve le rejeu des nouvelles tentatives ? Pour l'historique, seules des preuves d'une définition/instance réellement utilisée peuvent justifier un rattachement ; sinon conserver « version inconnue ».
-6. Nom, e-mail et activité sont validés pour la consultation V1 (D08). La [liste locale minimisée](users-readonly.md) est qualifiée ; identité/source Production, profils détaillés, progression et historique restent ouverts.
+6. Nom, e-mail et activité sont validés pour la consultation V1 (D08). La [liste locale minimisée](users-readonly.md) est qualifiée ; les [fiches locales](user-detail.md) ajoutent progression et historique. Identité/source Production et réception restent ouvertes.
 7. Quelle capacité PostgreSQL réelle est approuvée pour lecture seulement et publication limitée, et où s'exécute-t-elle ?
 8. Qui provisionne le premier Admin Staging et quel mécanisme de MFA, révocation et audit est retenu ?
 9. Le transport isolé Engine est-il requis dès V1 ; quel runtime cible, quelles bornes de ressources, et quel seuil de qualification autorise le pilote ?

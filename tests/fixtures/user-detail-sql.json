@@ -1,0 +1,361 @@
+{
+  "history": {
+    "asOf": "2026-10-18T21:50:46.125299Z",
+    "page": {
+      "next": null,
+      "size": 25,
+      "total": "7",
+      "previous": null
+    },
+    "user": {
+      "id": "a8100000-0000-4000-8000-000000000001",
+      "name": "LOCAL ACTIVITY A",
+      "email": "activity-a@example.test",
+      "anonymous": false,
+      "nameTruncated": false
+    },
+    "view": "history",
+    "found": true,
+    "items": [
+      {
+        "id": "3",
+        "kind": "exercise",
+        "duelId": null,
+        "outcome": "abandoned",
+        "versionId": null,
+        "exerciseId": null,
+        "occurredAt": "2026-10-17T23:59:59.000000Z",
+        "currentTitle": null,
+        "titleTruncated": false
+      },
+      {
+        "id": "1",
+        "kind": "duel",
+        "duelId": "981000001",
+        "outcome": "correct",
+        "versionId": null,
+        "exerciseId": null,
+        "occurredAt": "2026-10-16T16:00:00.000000Z",
+        "currentTitle": null,
+        "titleTruncated": false
+      },
+      {
+        "id": "981100002",
+        "kind": "exercise",
+        "duelId": null,
+        "outcome": "abandoned",
+        "versionId": "a8200000-0000-4000-8000-000000000001",
+        "exerciseId": "981100001",
+        "occurredAt": "2026-10-16T12:00:00.123456Z",
+        "currentTitle": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀…",
+        "titleTruncated": true
+      },
+      {
+        "id": "981100002",
+        "kind": "duel",
+        "duelId": "981000001",
+        "outcome": "correct",
+        "versionId": null,
+        "exerciseId": null,
+        "occurredAt": "2026-10-16T12:00:00.123456Z",
+        "currentTitle": null,
+        "titleTruncated": false
+      },
+      {
+        "id": "981100001",
+        "kind": "exercise",
+        "duelId": null,
+        "outcome": "incorrect",
+        "versionId": null,
+        "exerciseId": "981100001",
+        "occurredAt": "2026-10-16T12:00:00.123456Z",
+        "currentTitle": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀…",
+        "titleTruncated": true
+      },
+      {
+        "id": "2",
+        "kind": "exercise",
+        "duelId": null,
+        "outcome": "incorrect",
+        "versionId": null,
+        "exerciseId": null,
+        "occurredAt": "2026-10-16T12:00:00.000000Z",
+        "currentTitle": null,
+        "titleTruncated": false
+      },
+      {
+        "id": "1",
+        "kind": "exercise",
+        "duelId": null,
+        "outcome": "correct",
+        "versionId": null,
+        "exerciseId": null,
+        "occurredAt": "2026-10-15T00:00:00.000000Z",
+        "currentTitle": null,
+        "titleTruncated": false
+      }
+    ],
+    "cursor": {
+      "after": null,
+      "before": null
+    },
+    "period": {
+      "from": "2026-10-15",
+      "until": "2026-10-18"
+    },
+    "userId": "a8100000-0000-4000-8000-000000000001",
+    "activity": {
+      "duelCorrect": "2",
+      "duelAttempts": "2",
+      "lastActivity": "2026-10-17T23:59:59.000000Z",
+      "duelIncorrect": "0",
+      "exerciseCorrect": "1",
+      "exerciseAttempts": "5",
+      "exerciseAbandoned": "2",
+      "exerciseIncorrect": "2",
+      "undatedDuelAttempts": "1",
+      "undatedExerciseAttempts": "1"
+    },
+    "schemaVersion": 1
+  },
+  "chapters": {
+    "asOf": "2026-10-18T21:50:46.137515Z",
+    "page": {
+      "next": null,
+      "size": 25,
+      "total": "3",
+      "previous": null
+    },
+    "user": {
+      "id": "a8100000-0000-4000-8000-000000000001",
+      "name": "LOCAL ACTIVITY A",
+      "email": "activity-a@example.test",
+      "anonymous": false,
+      "nameTruncated": false
+    },
+    "view": "chapters",
+    "found": true,
+    "items": [
+      {
+        "id": "981100001",
+        "kind": "chapter",
+        "label": "LOCAL USER DETAIL historical chapter",
+        "level": 40,
+        "issues": [],
+        "completed": "3",
+        "recordedAt": "2026-10-16T12:00:00.000000Z",
+        "labelTruncated": false
+      },
+      {
+        "id": "981100002",
+        "kind": "chapter",
+        "label": "éééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééé…",
+        "level": null,
+        "issues": ["missing-level", "missing-count", "missing-date"],
+        "completed": null,
+        "recordedAt": null,
+        "labelTruncated": true
+      },
+      {
+        "id": "981100003",
+        "kind": "chapter",
+        "label": "LOCAL USER DETAIL invalid legacy count",
+        "level": 10,
+        "issues": ["invalid-count", "future-date"],
+        "completed": null,
+        "recordedAt": "2099-01-01T00:00:00.000000Z",
+        "labelTruncated": false
+      }
+    ],
+    "cursor": {
+      "after": null,
+      "before": null
+    },
+    "period": {
+      "from": "2026-10-15",
+      "until": "2026-10-18"
+    },
+    "userId": "a8100000-0000-4000-8000-000000000001",
+    "activity": {
+      "duelCorrect": "2",
+      "duelAttempts": "2",
+      "lastActivity": "2026-10-17T23:59:59.000000Z",
+      "duelIncorrect": "0",
+      "exerciseCorrect": "1",
+      "exerciseAttempts": "5",
+      "exerciseAbandoned": "2",
+      "exerciseIncorrect": "2",
+      "undatedDuelAttempts": "1",
+      "undatedExerciseAttempts": "1"
+    },
+    "schemaVersion": 1
+  },
+  "competences": {
+    "asOf": "2026-10-18T21:50:46.147198Z",
+    "page": {
+      "next": null,
+      "size": 25,
+      "total": "3",
+      "previous": null
+    },
+    "user": {
+      "id": "a8100000-0000-4000-8000-000000000001",
+      "name": "LOCAL ACTIVITY A",
+      "email": "activity-a@example.test",
+      "anonymous": false,
+      "nameTruncated": false
+    },
+    "view": "competences",
+    "found": true,
+    "items": [
+      {
+        "id": "local_detail_unmatched",
+        "kind": "competence",
+        "label": "local_detail_unmatched",
+        "issues": ["unknown-competence", "missing-date"],
+        "points": "2",
+        "maximum": null,
+        "recordedAt": null,
+        "chapterName": null,
+        "labelTruncated": false,
+        "chapterNameTruncated": false
+      },
+      {
+        "id": "local_detail_￿",
+        "kind": "competence",
+        "label": "LOCAL USER DETAIL other competence",
+        "issues": [],
+        "points": "5",
+        "maximum": "20",
+        "recordedAt": "2026-10-17T11:00:00.000000Z",
+        "chapterName": "LOCAL USER DETAIL current chapter",
+        "labelTruncated": false,
+        "chapterNameTruncated": false
+      },
+      {
+        "id": "local_detail_😀",
+        "kind": "competence",
+        "label": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀…",
+        "issues": ["points-above-current-maximum"],
+        "points": "15",
+        "maximum": "10",
+        "recordedAt": "2026-10-17T10:00:00.000000Z",
+        "chapterName": "LOCAL USER DETAIL current chapter",
+        "labelTruncated": true,
+        "chapterNameTruncated": false
+      }
+    ],
+    "cursor": {
+      "after": null,
+      "before": null
+    },
+    "period": {
+      "from": "2026-10-15",
+      "until": "2026-10-18"
+    },
+    "userId": "a8100000-0000-4000-8000-000000000001",
+    "activity": {
+      "duelCorrect": "2",
+      "duelAttempts": "2",
+      "lastActivity": "2026-10-17T23:59:59.000000Z",
+      "duelIncorrect": "0",
+      "exerciseCorrect": "1",
+      "exerciseAttempts": "5",
+      "exerciseAbandoned": "2",
+      "exerciseIncorrect": "2",
+      "undatedDuelAttempts": "1",
+      "undatedExerciseAttempts": "1"
+    },
+    "schemaVersion": 1
+  },
+  "guest": {
+    "asOf": "2026-10-18T21:50:46.156397Z",
+    "page": {
+      "next": null,
+      "size": 25,
+      "total": "3",
+      "previous": null
+    },
+    "user": {
+      "id": "a8100000-0000-4000-8000-000000000002",
+      "name": "Compte invité",
+      "email": null,
+      "anonymous": true,
+      "nameTruncated": false
+    },
+    "view": "history",
+    "found": true,
+    "items": [
+      {
+        "id": "2",
+        "kind": "duel",
+        "duelId": "981000001",
+        "outcome": "incorrect",
+        "versionId": null,
+        "exerciseId": null,
+        "occurredAt": "2026-10-17T16:00:00.000000Z",
+        "currentTitle": null,
+        "titleTruncated": false
+      },
+      {
+        "id": "5",
+        "kind": "exercise",
+        "duelId": null,
+        "outcome": "incorrect",
+        "versionId": null,
+        "exerciseId": null,
+        "occurredAt": "2026-10-17T10:00:00.000000Z",
+        "currentTitle": null,
+        "titleTruncated": false
+      },
+      {
+        "id": "4",
+        "kind": "exercise",
+        "duelId": null,
+        "outcome": "correct",
+        "versionId": null,
+        "exerciseId": null,
+        "occurredAt": "2026-10-15T22:30:00.000000Z",
+        "currentTitle": null,
+        "titleTruncated": false
+      }
+    ],
+    "cursor": {
+      "after": null,
+      "before": null
+    },
+    "period": {
+      "from": "2026-10-15",
+      "until": "2026-10-18"
+    },
+    "userId": "a8100000-0000-4000-8000-000000000002",
+    "activity": {
+      "duelCorrect": "0",
+      "duelAttempts": "1",
+      "lastActivity": "2026-10-17T16:00:00.000000Z",
+      "duelIncorrect": "1",
+      "exerciseCorrect": "1",
+      "exerciseAttempts": "2",
+      "exerciseAbandoned": "0",
+      "exerciseIncorrect": "1",
+      "undatedDuelAttempts": "0",
+      "undatedExerciseAttempts": "0"
+    },
+    "schemaVersion": 1
+  },
+  "missing": {
+    "asOf": "2026-10-18T21:50:46.163904Z",
+    "view": "history",
+    "found": false,
+    "cursor": {
+      "after": null,
+      "before": null
+    },
+    "period": {
+      "from": "2026-10-15",
+      "until": "2026-10-18"
+    },
+    "userId": "ffffffff-ffff-ffff-ffff-ffffffffffff",
+    "schemaVersion": 1
+  }
+}

@@ -6,15 +6,18 @@ import {
   type UsersQuery,
 } from '@/lib/users';
 import { formatCount, overviewDate } from '@/lib/dashboard';
+import { userDetailHref } from '@/lib/user-detail';
 
 export function UsersListView({
   data,
   query,
   error,
+  detailsEnabled = false,
 }: {
   data: UsersPage | null;
   query: UsersQuery;
   error?: string;
+  detailsEnabled?: boolean;
 }) {
   const current = decodeUsersPage(data, query);
   const attempts = (count: string) =>
@@ -147,7 +150,23 @@ export function UsersListView({
                         scope="row"
                         className="max-w-xs break-words px-3 py-4 font-semibold"
                       >
-                        {user.name}
+                        {detailsEnabled ? (
+                          <Link
+                            prefetch={false}
+                            className="text-blue-700 hover:underline"
+                            href={userDetailHref({
+                              userId: user.id,
+                              period: query.period,
+                              view: 'history',
+                              after: null,
+                              before: null,
+                            })}
+                          >
+                            {user.name}
+                          </Link>
+                        ) : (
+                          user.name
+                        )}
                         {user.nameTruncated && (
                           <span className="mt-1 block text-xs font-normal text-slate-500">
                             Nom abrégé

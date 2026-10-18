@@ -46,6 +46,15 @@ it('renders only verified nominal data, an accessible table and the truthful sou
   expect(html).not.toContain('<script>ACTIVITY');
   expect(html).toContain('3 tentatives d’exercice');
   expect(html).toContain('action="/admin/users"');
+  expect(html).not.toContain('/admin/users/' + page().items[0].id);
+});
+it('links the verified name to detail only when its separate capability is enabled', () => {
+  const html = renderToStaticMarkup(
+    createElement(UsersListView, { data: page(), query, detailsEnabled: true }),
+  );
+  expect(html).toContain('/admin/users/' + page().items[0].id + '?from=');
+  expect(html).toContain('&amp;to=');
+  expect(html).not.toContain('<script>ACTIVITY');
 });
 it('does not turn unavailable data into an empty list or zero count', () => {
   const html = renderToStaticMarkup(

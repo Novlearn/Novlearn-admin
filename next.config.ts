@@ -4,6 +4,14 @@ const nextConfig: NextConfig = {
   output: 'standalone',
   serverExternalPackages: ['novlearn-exercise-engine'],
   outputFileTracingIncludes: {
+    '/admin/users/*': [
+      './scripts/user-detail-reader-audit.sql',
+      './scripts/user-detail-query.sql',
+    ],
+    '/api/admin/users/*': [
+      './scripts/user-detail-reader-audit.sql',
+      './scripts/user-detail-query.sql',
+    ],
     '/admin/users': [
       './scripts/users-reader-audit.sql',
       './scripts/users-list-query.sql',

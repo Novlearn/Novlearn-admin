@@ -1,5 +1,21 @@
 # Progression du goal NovLearn Admin
 
+## Fiches utilisateurs — 19 octobre 2026
+
+La [fiche locale](user-detail.md) raccorde profil, trois vues paginées, historique
+et progression enregistrée sur copie synthétique SQL 67. Rejeu neuf, restauration
+peuplée, 48 assertions de permissions, 24 cas SQL, sept bornes, 56 régressions
+historiques, 19 groupes PG/TLS (42 refus) et 16 groupes Auth/HTTP passent réellement.
+Les huit contrôles Engine passent après redémarrage ; 17 rapports antérieurs
+restent exacts. La chaîne complète passe **1 143 tests / 59 fichiers**, types, lint, format, build
+et smoke ; les 469 fichiers copiés restent identiques. Les [preuves](user-detail-proof.json)
+distinguent ces contrôles des essais PG/TLS/HTTP et de la réception navigateur.
+
+L’instance 3150 reste disponible. Les advisors locaux ont 0 erreur, 45 avertissements
+et 65 informations ; sept doublons de policies du nouveau rôle restent à réduire
+avec comparaison d’accès, sans considérer le Lot 1A comme terminé. Les restrictions
+de pilotage navigateur restent respectées ; aucun accès ni changement distant.
+
 ## Statistiques — parcours connecté local du 18 octobre
 
 La [page/API locale](activity-http.md) est raccordée avec source synthétique

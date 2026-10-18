@@ -3,6 +3,7 @@ import { readLocalUsersConfiguration } from '@/lib/users-config';
 import { readUsersQuery, type UsersPage } from '@/lib/users';
 import { loadLocalUsers } from '@/lib/users-server';
 import { UsersListView } from '@/components/users-list';
+import { readLocalUserDetailConfiguration } from '@/lib/user-detail-config';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
@@ -36,5 +37,12 @@ export default async function UsersPage({
         error = 'La liste n’a pas pu être chargée. Réessayez dans un instant.';
       }
   }
-  return <UsersListView data={data} query={query} error={error} />;
+  return (
+    <UsersListView
+      data={data}
+      query={query}
+      error={error}
+      detailsEnabled={!!readLocalUserDetailConfiguration(process.env)}
+    />
+  );
 }

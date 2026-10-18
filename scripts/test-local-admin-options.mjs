@@ -9,6 +9,7 @@ test('all features remain disabled without explicit local options', () =>
     review: false,
     statistics: false,
     users: false,
+    userDetail: false,
   }));
 test('explicit local review keeps its Engine dependency', () =>
   assert.deepEqual(
@@ -20,6 +21,7 @@ test('explicit local review keeps its Engine dependency', () =>
       review: true,
       statistics: false,
       users: false,
+      userDetail: false,
     },
   ));
 test('stopping a local process enables no feature', () =>
@@ -30,6 +32,7 @@ test('stopping a local process enables no feature', () =>
     review: false,
     statistics: false,
     users: false,
+    userDetail: false,
   }));
 test('statistics require their own explicit local switch', () => {
   const options = localAdminOptions(['.local/local-admin-123', '--statistics']);
@@ -49,6 +52,9 @@ for (const flags of [
   ['.local/local-admin-123', '--statistics', '--statistics'],
   ['.local/local-admin-123', '--users', '--users'],
   ['.local/local-admin-123', '--stop', '--users'],
+  ['.local/local-admin-123', '--user-detail'],
+  ['.local/local-admin-123', '--user-detail', '--user-detail'],
+  ['.local/local-admin-123', '--stop', '--users', '--user-detail'],
 ])
   test('refuse invalid options: ' + JSON.stringify(flags), () =>
     assert.throws(() => localAdminOptions(flags)),
@@ -61,6 +67,25 @@ test('users require an independent explicit switch', () => {
   assert.equal(options.engine, false);
   assert.equal(
     localAdminOptions(['.local/local-admin-123', '--statistics']).users,
+    false,
+  );
+});
+
+test('detail requires its own reviewed local switch and the list', () => {
+  const options = localAdminOptions([
+    '.local/local-admin-123',
+    '--users',
+    '--user-detail',
+  ]);
+  assert.equal(options.userDetail, true);
+  assert.equal(options.users, true);
+  assert.equal(options.engine, false);
+  assert.equal(
+    localAdminOptions(['.local/local-admin-123', '--users']).userDetail,
+    false,
+  );
+  assert.equal(
+    localAdminOptions(['.local/local-admin-123', '--statistics']).userDetail,
     false,
   );
 });

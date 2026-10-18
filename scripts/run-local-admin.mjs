@@ -50,6 +50,10 @@ if (options.stop) {
     ADMIN_LOCAL_USERS_REVIEW: '',
     ADMIN_LOCAL_USERS_PG_URL: '',
     ADMIN_LOCAL_USERS_PG_CA: '',
+    ADMIN_LOCAL_USER_DETAIL_ENABLED: 'false',
+    ADMIN_LOCAL_USER_DETAIL_REVIEW: '',
+    ADMIN_LOCAL_USER_DETAIL_PG_URL: '',
+    ADMIN_LOCAL_USER_DETAIL_PG_CA: '',
   });
   if (options.statistics) {
     const marker = JSON.parse(
@@ -112,6 +116,37 @@ if (options.stop) {
       ADMIN_LOCAL_USERS_REVIEW: 'isolated-sql66-users-http-v1',
       ADMIN_LOCAL_USERS_PG_URL: users.config.url,
       ADMIN_LOCAL_USERS_PG_CA: users.config.ca,
+    });
+  }
+  if (options.userDetail) {
+    const marker = JSON.parse(
+      await readFile('.local/lot1a/user-detail-http-current.json', 'utf8'),
+    );
+    const directory = path.resolve(marker.artifact);
+    assert.equal(
+      path.dirname(directory).toLowerCase(),
+      path.resolve('.local/lot1a').toLowerCase(),
+    );
+    assert.match(path.basename(directory), /^user-detail-http-\d+$/);
+    assert.equal(marker.phase, 'prepared');
+    const detail = JSON.parse(
+      await readFile(directory + '/private.json', 'utf8'),
+    );
+    assert.equal(detail.artifact, directory);
+    assert.equal(detail.physicalConnectionQualified, true);
+    const url = new URL(detail.config.url);
+    assert.equal(url.hostname, '127.0.0.1');
+    assert.equal(url.port, '55435');
+    assert.equal(url.pathname, '/activity_copy');
+    assert.equal(
+      decodeURIComponent(url.username),
+      'novlearn_admin_user_detail_service',
+    );
+    Object.assign(process.env, {
+      ADMIN_LOCAL_USER_DETAIL_ENABLED: 'true',
+      ADMIN_LOCAL_USER_DETAIL_REVIEW: 'isolated-sql67-user-detail-http-v1',
+      ADMIN_LOCAL_USER_DETAIL_PG_URL: detail.config.url,
+      ADMIN_LOCAL_USER_DETAIL_PG_CA: detail.config.ca,
     });
   }
   const { readAuthConfiguration } = await import('../src/lib/auth/config.ts');
@@ -203,6 +238,7 @@ if (options.stop) {
         review: options.review,
         statistics: options.statistics,
         users: options.users,
+        userDetail: options.userDetail,
         ...(engine
           ? {
               engineContainer: engine.container,
