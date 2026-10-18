@@ -4,6 +4,10 @@ NovLearn Admin sera l'application privée d'administration de NovLearn : gestion
 
 ## État du projet
 
+La [capacité SQL analytique](docs/activity-readonly.md) est qualifiée sur copies :
+rôle limité, agrégats natifs, refus et restauration. Son lecteur serveur et sa
+connexion PostgreSQL/TLS restent à raccorder ; aucun relevé Production n’est activé.
+
 **Connexion et sauvegarde locales rétablies :** ouvrir
 [NovLearn Admin sur 3150](http://127.0.0.1:3150/login). Les identifiants d’essai
 sont dans `.local/local-admin-1792143739689/login.txt`. La [reprise du 18 octobre](docs/local-recovery-2026-10-18.md)

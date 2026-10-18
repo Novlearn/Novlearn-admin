@@ -1,5 +1,27 @@
 # Progression du goal NovLearn Admin
 
+## Lecture analytique — qualification SQL locale du 18 octobre
+
+Le [rôle et les agrégats SQL](activity-readonly.md) disposent d’une migration 65
+dans NovLearn, sans modification des 64 fichiers antérieurs. Rejeu neuf et
+31 assertions de permissions passent ; trois agrégations, cinq bornes et le
+décodeur réel vérifient les résultats, dont comptes anonymes et période vide.
+Les suites existantes passent inchangées : 30 assertions d’intégration et 26 de
+sécurité. L’héritage PUBLIC est borné sans nouveau definer ni rôle privilégié.
+
+La migration sur copie déjà peuplée et sa restauration conservent 62 tables,
+73 relations, 77 fonctions et 11 séquences dans leurs comparaisons respectives.
+Les droits de création des 32 rôles préexistants restent effectifs ; l’ordre brut
+d’ACL diffère et reste conservé. Les échecs de fixture et de large object sont
+documentés dans la [preuve](activity-readonly-proof.json), sans critère retiré.
+
+Le vrai login PG/TLS, le lecteur/route/page et les utilisateurs nominaux restent
+à implémenter et qualifier. L’application 3150 est préservée ; aucun accès distant.
+Le contrôle complet passe **848 tests / 46 fichiers**, types, lint sans erreur,
+format, build et smoke sur copie indépendante. La migration seule est commitée
+localement dans NovLearn dans `26cb551`, sans push ni inclusion des modifications
+préexistantes. La preuve conserve séparément chaque portée de qualification.
+
 ## Services connectés rétablis — 18 octobre 2026
 
 La [reprise](local-recovery-2026-10-18.md) sauvegarde à froid les deux VHDX et

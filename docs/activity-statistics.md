@@ -1,8 +1,9 @@
 # Statistiques d’activité — contrat et affichage préparatoires
 
 Ce jalon prépare le contrat d’agrégats, les périodes et l’affichage du Lot 8.
-**Il ne livre pas encore les statistiques réelles de Production.** Aucun pilote
-Production, secret, rôle SQL, nouvelle migration ou route Admin n’est activé.
+**Il ne livre pas encore les statistiques réelles de Production.** Le rôle et la
+requête SQL sont depuis [qualifiés sur copies locales](activity-readonly.md),
+sans pilote Production, secret distant ou route Admin activée.
 La navigation de l’application connectée n’ajoute pas une page vide en attente
 de permissions. Le composant pourra être branché sur un lecteur qualifié.
 
@@ -86,18 +87,17 @@ exhaustif de fuite. Les configurations et sources SQL protégées restent identi
 
 ## Travail restant pour les données réelles
 
-Concevoir et qualifier une capacité distincte de publication et de consultation
-nominative. Les policies restrictives locales destinées à PUBLIC imposent des
-conditions d’identité : ajouter une policy permissive pour un nouveau rôle ne
-suffit pas. Toute exception doit préserver les refus des clients existants ;
-une fonction definer ne sera pas ajoutée pour simplement contourner cette règle.
-Vérifier droits effectifs, héritage PUBLIC, ACL de fonctions, colonnes minimales,
-TLS, limites de ressources, audit et cohérence de snapshot sur une copie.
+La [capacité SQL 65](activity-readonly.md) traite les policies restrictives,
+les grants minimaux et les chemins PUBLIC, sans fonction definer ajoutée.
+Les refus, agrégats, rollback et restauration sont vérifiés sur copies.
+Le vrai login PostgreSQL/TLS, les attestations de connexion et le raccordement
+serveur restent à qualifier avant toute utilisation de données réelles.
 
 Après qualification seulement : lecteur serveur, Auth/permissions fraîches,
 route/page Admin, filtres restants, agrégations réelles et tests SQL/HTTP de
 cohérence, de refus et de préservation des données. [D08](decisions.md#d08--champs-de-consultation-des-utilisateurs-v1)
 retient nom, e-mail et activité pour la liste des utilisateurs ; cette capacité
 nominative reste distincte des agrégats. Les [services locaux sont rétablis](local-recovery-2026-10-18.md).
-L’absence de capacité SQL qualifiée et les agrégations réelles non implémentées
-restent les prérequis de ce raccordement ; Docker n’est plus le blocage courant.
+Le login/TLS et le lecteur applicatif restent les prérequis de ce raccordement ;
+les premiers agrégats SQL sont qualifiés sur fixtures. Les filtres pédagogiques,
+classements d’exercices et autres métriques restent à compléter selon le CDC.

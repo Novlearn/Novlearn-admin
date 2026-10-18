@@ -1,5 +1,14 @@
 # Authentification, autorisations et accès Production
 
+## Lecture analytique SQL locale — 18 octobre
+
+La [migration 65 et la requête analytique](activity-readonly.md) sont qualifiées
+sur copies : colonnes minimales, rôle NOLOGIN non privilégié, refus effectifs,
+héritage PUBLIC borné, agrégats et restauration. Aucun nouveau definer n’est
+ajouté. Le login PG/TLS et le lecteur serveur restent à qualifier ; ni cette
+preuve ni le choix nominatif D08 n’activent un client ou secret Production.
+Les bases applicatives conservées restent sur leur schéma 64.
+
 ## Catalogue Admin local — D07
 
 Le [catalogue](catalogue.md) utilise des RPC invoker, RLS et la session réelle

@@ -1,5 +1,8 @@
 # Documentation NovLearn Admin
 
+[Lecture analytique SQL](activity-readonly.md) : migration locale 65, rôle limité,
+agrégats natifs, refus et restauration ; lecteur Production encore non raccordé.
+
 [Reprise locale du 18 octobre](local-recovery-2026-10-18.md) : sauvegarde à froid,
 connexion/sauvegarde/Engine rétablis sur 3150, données conservées et preuves HTTP.
 
