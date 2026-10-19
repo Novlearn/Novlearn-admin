@@ -1,5 +1,14 @@
 # Roadmap
 
+**Raccordement pédagogique du 19 octobre :** la [page et les API locales](pedagogy-connected.md)
+sont disponibles sur 3150, depuis Statistiques. Le lecteur TLS et les quatorze
+groupes HTTP réels passent ; la source SQL 69 synthétique reste distincte de
+l’activité générale. Les [preuves](pedagogy-connected-proof.json) séparent les
+résultats Engine et du contrôle complet. Réception navigateur, performances,
+33 avertissements SQL et portes distantes restent ouverts.
+
+Le relevé suivant décrit le socle antérieur à ce raccordement.
+
 **Socle pédagogique du 19 octobre :** les [requêtes, filtres et droits SQL](pedagogy-readonly.md)
 passent sur copies isolées. Le nouveau lecteur ne donne accès ni aux profils ni
 aux définitions/réponses. Login/TLS, API et interface restent à raccorder ; les

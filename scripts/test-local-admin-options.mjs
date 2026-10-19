@@ -10,6 +10,7 @@ test('all features remain disabled without explicit local options', () =>
     statistics: false,
     users: false,
     userDetail: false,
+    pedagogy: false,
   }));
 test('explicit local review keeps its Engine dependency', () =>
   assert.deepEqual(
@@ -22,6 +23,7 @@ test('explicit local review keeps its Engine dependency', () =>
       statistics: false,
       users: false,
       userDetail: false,
+      pedagogy: false,
     },
   ));
 test('stopping a local process enables no feature', () =>
@@ -33,6 +35,7 @@ test('stopping a local process enables no feature', () =>
     statistics: false,
     users: false,
     userDetail: false,
+    pedagogy: false,
   }));
 test('statistics require their own explicit local switch', () => {
   const options = localAdminOptions(['.local/local-admin-123', '--statistics']);
@@ -55,6 +58,9 @@ for (const flags of [
   ['.local/local-admin-123', '--user-detail'],
   ['.local/local-admin-123', '--user-detail', '--user-detail'],
   ['.local/local-admin-123', '--stop', '--users', '--user-detail'],
+  ['.local/local-admin-123', '--pedagogy'],
+  ['.local/local-admin-123', '--statistics', '--pedagogy', '--pedagogy'],
+  ['.local/local-admin-123', '--stop', '--statistics', '--pedagogy'],
 ])
   test('refuse invalid options: ' + JSON.stringify(flags), () =>
     assert.throws(() => localAdminOptions(flags)),
@@ -88,4 +94,18 @@ test('detail requires its own reviewed local switch and the list', () => {
     localAdminOptions(['.local/local-admin-123', '--statistics']).userDetail,
     false,
   );
+});
+test('pedagogy requires a separate explicit switch and statistics', () => {
+  assert.equal(
+    localAdminOptions(['.local/local-admin-123', '--statistics']).pedagogy,
+    false,
+  );
+  const options = localAdminOptions([
+    '.local/local-admin-123',
+    '--statistics',
+    '--pedagogy',
+  ]);
+  assert.equal(options.pedagogy, true);
+  assert.equal(options.statistics, true);
+  assert.equal(options.engine, false);
 });

@@ -1,0 +1,305 @@
+{
+  "result": "PASS for local pedagogical PG/TLS, API/SSR and genuine Auth/HTTP integration; full-chain result is separate",
+  "date": "2026-10-19T17:49:44.772Z",
+  "foundationProof": "pedagogy-readonly-proof.json",
+  "canonicalMigrationUnchanged": true,
+  "nativePostgres": {
+    "artifact": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\pedagogy-pg-1792430258159/run-1792431174541/proof.json",
+    "proof": {
+      "result": "PASS",
+      "date": "2026-10-19T17:33:15.466Z",
+      "checks": [
+        "Actual login with verified certificate, TLS 1.2+ and expected physical identity",
+        "Session login: actual private-read/write/creation/role 42501 denials in read-write transactions",
+        "Assumed reader: actual private-read/write/creation/role 42501 denials in read-write transactions",
+        "Actual server-side timeout cancels a query",
+        "Wrong password refused by SCRAM",
+        "Untrusted CA refused",
+        "Wrong certificate hostname refused",
+        "Plaintext refused by HBA",
+        "Other database refused by HBA",
+        "Actual server reader aggregates retained data plus disjoint labelled fixtures without modifying old rows",
+        "Actual chapter filter resolves current unambiguous aliases",
+        "Actual competence filter and overlapping attribution retain unexpanded totals",
+        "Actual difficulty and classic/flash metadata filters",
+        "Actual combined filters and recorded-success ordering",
+        "Duel response rows and completed matches remain separate metrics",
+        "A valid empty selection is distinct from a failed connection",
+        "Bigint page survives actual parameterized PostgreSQL without JavaScript rounding",
+        "Invalid trusted period metadata rejected",
+        "Reused pool lease resets and re-audits physical identities",
+        "Audited reference search finds current chapter aliases",
+        "Audited competence search is case insensitive and returns bounded metadata only",
+        "Reference substring search treats wildcard characters as literal text"
+      ],
+      "writeAndPrivateReadDenials": 46,
+      "realLogin": true,
+      "realTls": true,
+      "realServerReader": true,
+      "sourceLabel": "local-copy",
+      "browserExecuted": false,
+      "remoteOperations": false,
+      "artifact": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\pedagogy-pg-1792430258159",
+      "run": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\pedagogy-pg-1792430258159/run-1792431174541",
+      "container": "novlearn-admin-user-detail-restore-1792414439728",
+      "sourceHashes": {
+        "src/lib/pedagogy-references.ts": "1b575fc3285c828da4736a16d7cc724de4e3e5c3359f9226ebda370e40963d14",
+        "scripts/pedagogy-references-query.sql": "37ef88ea9757f1e7d14538a8e322d48a60b863be8288004314d5fc9edc83476a",
+        "src/lib/pedagogy-pg.ts": "d3e02ef7881893c90a8904198d2e0218a507f2441eaebafaa158e49e50bdd356",
+        "src/lib/pedagogy-config.ts": "f24dc0682aefd9d33139865ac797210d3379c44e5ca05b8295aebad99f9df7c1",
+        "src/lib/pedagogy-statistics.ts": "6f4fed17a62ca37fa21e718fc1ccef7275f64bf6d782513871d6a81607ca4023",
+        "scripts/pedagogy-reader-audit.sql": "8866dadb5569ab76b8c1409a900c5aad9b3faf1a596c4eba3423ab0cb100d6c0",
+        "scripts/pedagogy-statistics-query.sql": "4f624427e1a242b53e5cef77e4c6e0ac1ed14ca6223cf6efefdcfcd5d832f164",
+        "scripts/test-pedagogy-pg-local.mjs": "82441909c9890772858a1716919acfcf4eb822b799112b2f000e650fa4d9b8b1",
+        "scripts/test-pedagogy-pg-worker.mjs": "959afae03a5dae7a2cd3c69b1bdd20d57659c9d7d556353090025bbcdfde98ba",
+        "tests/fixtures/pedagogy-local.sql": "adf49a3633e9af59c69a8c550736bd256f81733f4b83c31d29783ed48f3fb540"
+      },
+      "effectivePrivilegeDriftsRejected": ["reader-email", "login-temporary"],
+      "preexistingRowsPreservedAcrossSeedTables": 62,
+      "allRowsSequencesAndMetadataExactAfterTests": true,
+      "newSyntheticAuthAccounts": 4,
+      "oldCredentialsOrCertificatesRotated": false,
+      "mainApplicationModified": false,
+      "newPedagogyHttpExecuted": false,
+      "referenceBoundaryProof": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\pedagogy-pg-1792430258159/run-1792431174541/reference-boundary-proof.json"
+    }
+  },
+  "referenceBoundaries": {
+    "artifact": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\pedagogy-pg-1792430258159/run-1792431174541/reference-boundary-proof.json",
+    "cases": 4,
+    "moreThan200Choices": true,
+    "exactIdPrioritized": true,
+    "literalSearch": true,
+    "untruncatedUnicodeSearch": true,
+    "transactionRolledBackAndSnapshotExact": true
+  },
+  "sourcePreparation": {
+    "artifact": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\pedagogy-http-1792431337671/preparation-proof.json",
+    "proof": {
+      "result": "PASS for separate SQL69 source and host verified-TLS reader",
+      "date": "2026-10-19T17:36:05.907Z",
+      "artifact": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\pedagogy-http-1792431337671",
+      "names": {
+        "db": "novlearn-admin-pedagogy-http-1792431337671-db",
+        "proxy": "novlearn-admin-pedagogy-http-1792431337671-proxy",
+        "network": "novlearn-admin-activity-http-1792344949001-internal",
+        "edge": "novlearn-admin-activity-http-1792344949001-edge"
+      },
+      "nativeProof": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\pedagogy-pg-1792430258159/run-1792431174541/proof.json",
+      "sourceDumpSha256": "3289cb7535d8f6b8247c803354f05cfe974c984ee8d9426f6df09c724b6be7e2",
+      "tableRowsExact": 62,
+      "sequencesExact": 11,
+      "customRolesAndScramExact": 10,
+      "originalNativeSourceExact": true,
+      "mainDatabasesModified": false,
+      "existingCredentialsRotated": false,
+      "dbPortsPublished": false,
+      "proxyLoopbackPort": 55436,
+      "newPedagogyHttpExecuted": false,
+      "browserExecuted": false,
+      "remoteOperations": false
+    }
+  },
+  "http": {
+    "artifact": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\pedagogy-http-1792431337671/http-1792431662811/proof.json",
+    "proof": {
+      "result": "PASS",
+      "date": "2026-10-19T17:41:25.908Z",
+      "artifact": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\pedagogy-http-1792431337671/http-1792431662811",
+      "checks": [
+        "Anonymous page and both APIs refuse access",
+        "Real non-Admin with editable metadata admin claim remains forbidden",
+        "HTTP report matches physical SQL aggregates exactly with no identity or definitions",
+        "Combined pedagogical filters execute through real HTTP and SQL",
+        "Successful empty filters and exact bigint pages remain distinct from failures",
+        "Literal and case-insensitive metadata searches pass through audited SQL reader",
+        "Source overrides and duplicate or private query fields are refused",
+        "Actual server-rendered page exposes filters and truthful source and Engine limitations",
+        "Same valid cookie is refused after actual profile-role revocation",
+        "Warm report and reference pools refuse actual excess rights then recover after exact restoration",
+        "Source proxy outage yields 503 and reconnects without fake zero statistics",
+        "Existing general statistics, users and profile reads work and main publication stays disabled",
+        "Only newly opened test sessions were signed out",
+        "All source rows and 35 main business tables preserved except known synthetic Admin update timestamp"
+      ],
+      "actualAuthSessions": true,
+      "accountsCreated": false,
+      "sourceTablesExact": 62,
+      "sourceSequencesAndMetadataExact": true,
+      "mainBusinessTablesCompared": 35,
+      "onlyPermittedMainDifference": "Existing synthetic Admin updated_at after role revocation/restoration",
+      "newTestSessionsClosed": true,
+      "browserExecuted": false,
+      "remoteOperations": false
+    }
+  },
+  "restart": {
+    "result": "PASS",
+    "date": "2026-10-19T17:40:45.594Z",
+    "newProcessId": 39928,
+    "previousAttemptFailedBeforeReady": true,
+    "reason": "Node ESM could not resolve extensionless TypeScript import in new CLI branch; fixed by explicit local endpoint validation before normal startup",
+    "mainBusinessTablesExact": 35,
+    "loginStatus": 200,
+    "pedagogy": true,
+    "noForceKill": true,
+    "databaseServicesRestarted": false
+  },
+  "engineAfterRestart": {
+    "artifact": ".local/local-admin-1792143739689/engine-adoption-1792431707650/proof.json",
+    "proof": {
+      "result": "PASS",
+      "date": "2026-10-19T17:42:33.306Z",
+      "artifact": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\local-admin-1792143739689\\engine-adoption-1792431707650",
+      "checks": [
+        "Actual local Admin session on schema 64",
+        "Authenticated dashboard and catalogue respond",
+        "Full seven-element advanced definition generates through actual native worker for both seeds; public elements match historical captures exactly",
+        "New labelled seven-element draft persists via real Next/PostgREST",
+        "Actual full advanced multi-seed report covers correct/incorrect/invalid, reproducibility and public safety, signed and persisted under the new archive",
+        "New report appears as current in the authenticated detail page",
+        "Every preexisting readable receipt retains its exact payload and signature",
+        "Publication remains disabled"
+      ],
+      "created": {
+        "revision": 1,
+        "versionId": "af29b753-41de-43e2-b89b-5d238ee2d310",
+        "exerciseId": "14",
+        "fingerprint": "bcedf408b402ecb4089bea5a3b24f603b528521e618962f8ce34a31e6ea59c3f"
+      },
+      "receiptId": "74cd9705-7814-43c4-ab4f-d012469bf6db",
+      "engineArchiveSha256": "d4d3abc408ab37f2f8a5faa512964b48947828bae9209cb1460b47111ca582f9",
+      "projections": [
+        { "seed": 0, "httpElapsedMs": 7537.3256 },
+        { "seed": 42, "httpElapsedMs": 4191.4989000000005 }
+      ],
+      "advancedReportHttpElapsedMs": 27831.054900000003,
+      "retainedOldReceipts": 19,
+      "realAuth": true,
+      "realPostgrest": true,
+      "realNextRoutes": true,
+      "nativeLinuxEngine": true,
+      "nativeLimitsChanged": false,
+      "definitionElements": 7,
+      "seeds": [0, 42],
+      "syntheticDraftOnly": true,
+      "existingRolesUntouched": true,
+      "oldReceiptsPreserved": true,
+      "browserExecution": false,
+      "humanAcceptance": false,
+      "publicationEnabled": false
+    }
+  },
+  "advisors": {
+    "date": "2026-10-19T17:41:48.938Z",
+    "artifact": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\pedagogy-advisors-1792431707654",
+    "total": 100,
+    "levels": { "INFO": 67, "WARN": 33 },
+    "rules": {
+      "unindexed_foreign_keys": 24,
+      "auth_rls_initplan": 14,
+      "unused_index": 37,
+      "multiple_permissive_policies": 17,
+      "rls_enabled_no_policy": 6,
+      "function_search_path_mutable": 2
+    },
+    "errors": 0,
+    "globalSqlCertification": false,
+    "remoteOperations": false
+  },
+  "unitTests": {
+    "lastTargetedTests": 173,
+    "lastTargetedFiles": 8,
+    "localLauncherPolicyTests": 24,
+    "scope": "Targeted tests, separate from unchanged complete check"
+  },
+  "fullCheck": {
+    "result": "PASS",
+    "date": "2026-10-19T17:49:15.996Z",
+    "artifact": "C:\\Users\\balth\\AppData\\Local\\Temp\\novlearn-admin-check-1792431873781",
+    "exitCode": 0,
+    "tests": 1284,
+    "files": 66,
+    "sourceFiles": 510,
+    "allCopiedSourcesStillMatch": true,
+    "fullCheckCommand": "npm run check",
+    "separateBuildDirectory": true,
+    "independentTemporaryProject": true,
+    "dependenciesCopied": true,
+    "applicationServersInterrupted": false,
+    "privateEnvironmentFilesCopied": false,
+    "sourceSnapshotManifest": "C:\\Users\\balth\\AppData\\Local\\Temp\\novlearn-admin-check-1792431873781/source-hashes.json",
+    "sourceSnapshotIncludesCurrentConnectedCode": true,
+    "evidenceAddedAfterCompletion": [
+      "docs/pedagogy-connected-proof.json",
+      "docs/readiness-current.json"
+    ],
+    "postCheckChangesAreEvidenceOnly": true
+  },
+  "newPedagogyUiDelivered": true,
+  "newPedagogyHttpExecuted": true,
+  "browserExecuted": false,
+  "remoteOperations": false,
+  "globalSqlCertification": false,
+  "goalComplete": false,
+  "intermediateAttempts": [
+    {
+      "stage": "normal main process restart",
+      "result": "FAIL before readiness",
+      "reason": "Node ESM extensionless TypeScript import from launcher",
+      "artifact": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\pedagogy-http-1792431337671/app-error.log",
+      "correctedBy": "Explicit local endpoint and certificate validation in launcher, no source-module import",
+      "subsequentResult": "PASS after owner-context process absence, free ports and exact business-table comparison"
+    }
+  ],
+  "remaining": [
+    "Authorized browser acceptance and accessibility",
+    "Realistic performance plans and volumes",
+    "33 SQL advisor warnings (no blanket SQL security certificate)",
+    "Remaining metrics and current Production version indicator",
+    "Production analytics identity/source activation",
+    "MFA, operational provisioning and strict session expiry/revocation",
+    "Remote history reconciliation, student compatibility, migration and publication approval",
+    "Deployment-host qualification"
+  ],
+  "currentAvailability": {
+    "result": "PASS for actual existing login, pedagogical page availability and preservation",
+    "date": "2026-10-19T17:45:34.020Z",
+    "observations": [
+      { "route": "/api/admin/session", "status": 200 },
+      { "route": "/admin/statistics", "status": 200 },
+      {
+        "route": "/admin/statistics/pedagogy?from=2026-10-15&to=2026-10-17",
+        "status": 200
+      },
+      {
+        "servedClientScriptsScanned": 7,
+        "actualPrivateValuesAbsent": true,
+        "exhaustiveSecurityScan": false
+      },
+      { "origin": "http://127.0.0.1:3150", "loginStatus": 200 },
+      { "origin": "http://127.0.0.1:3152", "loginStatus": 200 }
+    ],
+    "actualExistingSyntheticAdminLogin": true,
+    "newTestSessionClosed": true,
+    "mainPublicationStatus": 503,
+    "currentProcessId": 39928,
+    "currentEngineContainer": "novlearn-admin-engine-1792431615700",
+    "newPedagogyUiDelivered": true,
+    "protectedAdminFilesExact": 4,
+    "privateAppConfigurationsExact": 8,
+    "preexistingNovlearnDirtyFilesExact": 8,
+    "engineRepositoryClean": true,
+    "documentReferencesExact": true,
+    "canonicalMigrationUnchanged": true,
+    "remoteOperations": false,
+    "browserExecuted": false
+  },
+  "preservation": {
+    "protectedAdminFilesExact": 4,
+    "privateAppConfigurationsExact": 8,
+    "preexistingNovlearnDirtyFilesExact": 8,
+    "engineRepositoryClean": true,
+    "canonicalMigrationSha256": "1e222b92124becfc9b340afb3300d1ca1c95c40646ccd26aede11f5e36145ede"
+  }
+}

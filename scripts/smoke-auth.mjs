@@ -85,6 +85,7 @@ try {
     '/admin/flashcards',
     '/admin/publication',
     '/admin/statistics',
+    '/admin/statistics/pedagogy',
     '/admin/users',
     '/admin/users/a8100000-0000-4000-8000-000000000001',
   ]) {
@@ -101,6 +102,8 @@ try {
   for (const [path, method] of [
     ['/api/admin/session', 'GET'],
     ['/api/admin/statistics', 'GET'],
+    ['/api/admin/statistics/pedagogy', 'GET'],
+    ['/api/admin/statistics/pedagogy/references?kind=chapter', 'GET'],
     ['/api/admin/users', 'GET'],
     ['/api/admin/users/a8100000-0000-4000-8000-000000000001', 'GET'],
     ['/api/admin/exercises', 'GET'],
@@ -127,6 +130,16 @@ try {
   assert.equal((await fetch(`${origin}/auth/login`)).status, 405);
   assert.equal((await fetch(`${origin}/auth/logout`)).status, 405);
   assert.equal((await fetch(`${origin}/api/admin/publication`)).status, 405);
+  for (const name of [
+    'pedagogy-reader-audit.sql',
+    'pedagogy-statistics-query.sql',
+    'pedagogy-references-query.sql',
+  ])
+    assert.equal(
+      (await fetch(`${origin}/scripts/${name}`, { redirect: 'manual' })).status,
+      404,
+      name,
+    );
   console.log(
     'PASS: standalone CSS, disabled login, protected redirect, direct Auth endpoints, no-store and security headers.',
   );

@@ -54,6 +54,11 @@ if (options.stop) {
     ADMIN_LOCAL_USER_DETAIL_REVIEW: '',
     ADMIN_LOCAL_USER_DETAIL_PG_URL: '',
     ADMIN_LOCAL_USER_DETAIL_PG_CA: '',
+    ADMIN_LOCAL_PEDAGOGY_ENABLED: 'false',
+    ADMIN_LOCAL_PEDAGOGY_REVIEW: '',
+    ADMIN_LOCAL_PEDAGOGY_PG_URL: '',
+    ADMIN_LOCAL_PEDAGOGY_PG_CA: '',
+    ADMIN_PEDAGOGY_ENABLED: 'false',
   });
   if (options.statistics) {
     const marker = JSON.parse(
@@ -149,6 +154,42 @@ if (options.stop) {
       ADMIN_LOCAL_USER_DETAIL_PG_CA: detail.config.ca,
     });
   }
+  if (options.pedagogy) {
+    const marker = JSON.parse(
+      await readFile('.local/lot1a/pedagogy-http-current.json', 'utf8'),
+    );
+    const directory = path.resolve(marker.artifact);
+    assert.equal(
+      path.dirname(directory).toLowerCase(),
+      path.resolve('.local/lot1a').toLowerCase(),
+    );
+    assert.match(path.basename(directory), /^pedagogy-http-\d+$/);
+    assert.equal(marker.phase, 'prepared');
+    const pedagogy = JSON.parse(
+      await readFile(directory + '/private.json', 'utf8'),
+    );
+    assert.equal(pedagogy.artifact, directory);
+    assert.equal(pedagogy.physicalConnectionQualified, true);
+    const url = new URL(pedagogy.config.url);
+    assert.equal(url.hostname, '127.0.0.1');
+    assert.equal(url.port, '55436');
+    assert.equal(url.pathname, '/activity_copy');
+    assert.equal(
+      decodeURIComponent(url.username),
+      'novlearn_admin_pedagogy_service',
+    );
+    assert.equal(url.search, '');
+    assert.equal(url.hash, '');
+    assert(pedagogy.config.ca.includes('-----BEGIN CERTIFICATE-----'));
+    const env = {
+      ...process.env,
+      ADMIN_LOCAL_PEDAGOGY_ENABLED: 'true',
+      ADMIN_LOCAL_PEDAGOGY_REVIEW: 'isolated-sql69-pedagogy-http-v1',
+      ADMIN_LOCAL_PEDAGOGY_PG_URL: pedagogy.config.url,
+      ADMIN_LOCAL_PEDAGOGY_PG_CA: pedagogy.config.ca,
+    };
+    Object.assign(process.env, env);
+  }
   const { readAuthConfiguration } = await import('../src/lib/auth/config.ts');
   assert.equal(readAuthConfiguration(process.env)?.local, true);
   // Clear inherited signing/transport settings; only explicit local files may enable them.
@@ -239,6 +280,7 @@ if (options.stop) {
         statistics: options.statistics,
         users: options.users,
         userDetail: options.userDetail,
+        pedagogy: options.pedagogy,
         ...(engine
           ? {
               engineContainer: engine.container,

@@ -1,5 +1,9 @@
 # Statistiques pédagogiques — socle SQL local
 
+**Relevé du socle conservé.** Le [raccordement ultérieur](pedagogy-connected.md)
+ajoute login/TLS, page et API qualifiés sur copie locale distincte. Les limites
+et résultats ci-dessous décrivent l’étape précédant ce raccordement.
+
 **Les requêtes et permissions sont qualifiées sur des copies synthétiques.**
 Ce jalon prépare les filtres du CDC §6.3/6.4 et les agrégations du §15.1.
 Il ne livre pas encore le lecteur serveur, le login PostgreSQL/TLS, les routes

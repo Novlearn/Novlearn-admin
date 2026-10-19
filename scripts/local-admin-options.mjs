@@ -14,6 +14,7 @@ export function localAdminOptions(args) {
           '--statistics',
           '--users',
           '--user-detail',
+          '--pedagogy',
         ].includes(flag),
     )
   )
@@ -23,8 +24,12 @@ export function localAdminOptions(args) {
     review = flags.includes('--review'),
     statistics = flags.includes('--statistics'),
     users = flags.includes('--users'),
-    userDetail = flags.includes('--user-detail');
-  if (stop && (engine || review || statistics || users || userDetail))
+    userDetail = flags.includes('--user-detail'),
+    pedagogy = flags.includes('--pedagogy');
+  if (
+    stop &&
+    (engine || review || statistics || users || userDetail || pedagogy)
+  )
     throw Error('Stop does not enable local features');
   if (review && !engine)
     throw Error(
@@ -32,5 +37,16 @@ export function localAdminOptions(args) {
     );
   if (userDetail && !users)
     throw Error('Local user detail requires the explicit users capability');
-  return { workspace, stop, engine, review, statistics, users, userDetail };
+  if (pedagogy && !statistics)
+    throw Error('Local pedagogy requires the explicit statistics capability');
+  return {
+    workspace,
+    stop,
+    engine,
+    review,
+    statistics,
+    users,
+    userDetail,
+    pedagogy,
+  };
 }

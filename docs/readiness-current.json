@@ -1,94 +1,34 @@
 {
-  "recordedAt": "2026-10-19T12:59:03.011Z",
+  "recordedAt": "2026-10-19T17:49:44.772Z",
   "scope": "Documentary traceability for all 20 original goal sections; not a functional test, receipt, permission or completion certificate",
   "referenceInputs": {
     "requestSha256": "fb9ac40863c57594878833b8a9fc0bd130a0cba9d0249d29c609051a54bded93",
     "cdcSha256": "b6bfea6d74b008e54ed61aa7598ccd01bd438d496cc22add15da2ff8abb04401",
     "decisionsSha256": "dac872dd9755c30734c067b8df52be8b5d595dbd9e01f5e5e1dcd27fca9ff028"
   },
-  "baselineAdminCommitAtAssessment": "d15fd1f8887b454abc8ba02c420156f211bfc3fd",
+  "baselineAdminCommitAtAssessment": "e86f0aebf1833683054ac6171f0a23d1727113fc",
   "implementationHasUncommittedChangesAtObservation": true,
   "requestedSections": [
-    {
-      "id": 1,
-      "title": "Audit de démarrage"
-    },
-    {
-      "id": 2,
-      "title": "Architecture technique"
-    },
-    {
-      "id": 3,
-      "title": "Authentification et sécurité"
-    },
-    {
-      "id": 4,
-      "title": "Interface générale"
-    },
-    {
-      "id": 5,
-      "title": "Gestion des exercices"
-    },
-    {
-      "id": 6,
-      "title": "Creator visuel"
-    },
-    {
-      "id": 7,
-      "title": "MathLive"
-    },
-    {
-      "id": 8,
-      "title": "Intégration de l'Exercise Engine"
-    },
-    {
-      "id": 9,
-      "title": "Prévisualisation et tests"
-    },
-    {
-      "id": 10,
-      "title": "Validation éditoriale et publication"
-    },
-    {
-      "id": 11,
-      "title": "Chapitres"
-    },
-    {
-      "id": 12,
-      "title": "Compétences"
-    },
-    {
-      "id": 13,
-      "title": "Flashcards"
-    },
-    {
-      "id": 14,
-      "title": "Dashboard et statistiques"
-    },
-    {
-      "id": 15,
-      "title": "Utilisateurs"
-    },
-    {
-      "id": 16,
-      "title": "Qualité et tests"
-    },
-    {
-      "id": 17,
-      "title": "Organisation du travail autonome"
-    },
-    {
-      "id": 18,
-      "title": "Points d'arrêt obligatoires"
-    },
-    {
-      "id": 19,
-      "title": "Conditions de réussite"
-    },
-    {
-      "id": 20,
-      "title": "Rapport et suivi"
-    }
+    { "id": 1, "title": "Audit de démarrage" },
+    { "id": 2, "title": "Architecture technique" },
+    { "id": 3, "title": "Authentification et sécurité" },
+    { "id": 4, "title": "Interface générale" },
+    { "id": 5, "title": "Gestion des exercices" },
+    { "id": 6, "title": "Creator visuel" },
+    { "id": 7, "title": "MathLive" },
+    { "id": 8, "title": "Intégration de l'Exercise Engine" },
+    { "id": 9, "title": "Prévisualisation et tests" },
+    { "id": 10, "title": "Validation éditoriale et publication" },
+    { "id": 11, "title": "Chapitres" },
+    { "id": 12, "title": "Compétences" },
+    { "id": 13, "title": "Flashcards" },
+    { "id": 14, "title": "Dashboard et statistiques" },
+    { "id": 15, "title": "Utilisateurs" },
+    { "id": 16, "title": "Qualité et tests" },
+    { "id": 17, "title": "Organisation du travail autonome" },
+    { "id": 18, "title": "Points d'arrêt obligatoires" },
+    { "id": 19, "title": "Conditions de réussite" },
+    { "id": 20, "title": "Rapport et suivi" }
   ],
   "assessedSections": [
     {
@@ -172,8 +112,8 @@
     {
       "id": 14,
       "title": "Dashboard et statistiques",
-      "evidenceSummary": "Agrégats **Staging** : [Dashboard](dashboard-local-proof.json). Contrat/rendu fictif et [rôle/premiers agrégats SQL natifs](activity-readonly-proof.json) qualifiés sur copies.",
-      "remaining": "Page/API SQL locales et permissions [qualifiées](activity-http-proof.json). Source/activation Production, filtres pédagogiques, classements et autres métriques restent à réaliser."
+      "evidenceSummary": "Dashboard Staging et activité générale locale qualifiés. Filtres pédagogiques, regroupements/tri, lecture TLS minimisée et page/API Auth réels : [raccordement pédagogique](pedagogy-connected-proof.json).",
+      "remaining": "Source/activation Production, métriques restantes, plans sur volume représentatif et réception navigateur restent ouverts."
     },
     {
       "id": 15,
@@ -218,7 +158,7 @@
     "local-recovery-2026-10-18.md": "ab6e2a667d7b054b673a1b175044ed6504218a993fd9e8c6054b46fb970aac1f",
     "users-readonly.md": "af41c90a92f9f5f8baa0f9ad6094b0c87d6d54f07a1bff828e4494efe829ae20",
     "lot-1a-remote-reconciliation-current.md": "4a2a06adff60f7a6541f261af3bd00a63debc01197030717c389c7c22b813dfe",
-    "progress.md": "75e5be3fb3f59a1f6ae98f7d4de3a42b4462e33afbb6c549a51e928c9e56fa55",
+    "progress.md": "e3a1764287a0b1aefa55278c9703d759ad705d480374406a57481ede482ad549",
     "lot-1a-preparation.md": "3561164a62bc6690a46d2f472c42037c11bd9aacc40add77d44814abdc5dd271",
     "recovery-cleanup-proof.json": "cb414a4c150ceb55204fcc9fca07696d05463e71642b4b4db35fd62819fa2524",
     "local-recovery-2026-10-18-proof.json": "5c9f10801159d1b94c66aebf2f4f45cb91e6a3447f6098968d85e03c83e0e26d",
@@ -239,7 +179,7 @@
     "activity-readonly-proof.json": "c362635524c4dc6cfe81cdbc489e2130a3e3285f8346462e5075915fddb51401",
     "activity-http-proof.json": "c4ae58e794d8944ecf0947935e799b834bb1742336984c5cd8c51201af35b806",
     "users-readonly-proof.json": "2a2ba32df2dca5050be282939596ed3a0a9e22695a56d4d6c6560f64ab5a8da2",
-    "roadmap.md": "081e12367ec3a9f82f31031345160ab38974fdf460559e800cab5feb38485108",
+    "roadmap.md": "c5c0c0f0d192dc029079b7831b4e73f49bd6aa71cd65101053f1df9e082fa3ce",
     "activity-readonly.md": "0bc4135dfe48409cb19a8f2ad0b98e9593c65f83f46bc12b53a4a8e6fd1fbdff",
     "activity-pg.md": "ce3ae62c070f728174bc2cae7817d1ed727d42fd1e2e09d162cadd188b028aec",
     "lot-1a-local-statistics-guard.md": "0bd4f19d706296ccb96f8ea246f186c4e52ddc7a23da69519f64c2a1978a7a92",
@@ -251,11 +191,14 @@
     "local-recovery-2026-10-19-proof.json": "f935d3d3a3b3f0200cdea45d18dc77bf4bb97d6e5138ec167d96ac7512fca6e2",
     "local-recovery-2026-10-19.md": "7e625334869f521382afa5603d3c409900a90b4c606e2ed762daa80791a5a870",
     "publication-batch.md": "beec1f869e0be19898cb1d854bed9d4fd9f13c1e4a349922e0a1869d233e0a2f",
-    "pedagogy-readonly.md": "5d5b9802608be864abee90d7e31a85f434fdd98940116d72c18e9bdbff2aa8d6",
-    "pedagogy-readonly-proof.json": "a6cb1786154b7284b7be36e02db37aad4cf688306a3a58b880b37c6933dedef4"
+    "pedagogy-readonly.md": "383e5d41bebed490288bfac01a89db8260b8322cc33fbe13316a26b08b125c3f",
+    "pedagogy-readonly-proof.json": "a6cb1786154b7284b7be36e02db37aad4cf688306a3a58b880b37c6933dedef4",
+    "pedagogy-connected.md": "756ab136bc5c65062eab6a0f937b62edcd02483da6294869bea16916056c73b5",
+    "pedagogy-connected-proof.json": "28f4b5e1f3623216b2921db5ee38a608234ce7fa50a2b0ab535f81d7fa621598",
+    "local-admin.md": "ff799a6d56bcc2ac59885eb56d1d1084ee847c5372bb8f31ecfab171751ac2d3"
   },
   "unimplemented": [
-    "Production analytics identity/source activation and remaining metrics/pedagogical filters (local SQL role, login/TLS, server reader and Auth/HTTP page/API qualified)",
+    "Production analytics identity/source activation and remaining metrics (local general and pedagogical filters, grouping/ranking, PG/TLS and Auth/HTTP page/API qualified)",
     "Production user identity/source activation (local list and detailed recorded progression/history qualified)",
     "Current Production active-version indicator",
     "Official Engine formula sampling and dependent curve rendering",
@@ -267,14 +210,14 @@
     "Real session expiry qualification",
     "Target deployment-host qualification",
     "Remote migration rehearsal/approval and controlled first publication",
-    "Full SQL advisor remediation and global security qualification (SQL68: 32 warnings and 65 infos)"
+    "Full SQL advisor remediation and global security qualification (SQL69: 33 warnings and 67 infos)"
   ],
   "remoteWritesPerformed": false,
   "privilegedProductionKeysRetrieved": false,
   "goalComplete": false,
   "currentLocalServices": {
     "result": "PASS for actual local login availability",
-    "date": "2026-10-19T10:38:53.970Z",
+    "date": "2026-10-19T17:45:34.020Z",
     "observations": [
       {
         "origin": "http://127.0.0.1:3150",
@@ -295,17 +238,15 @@
     "mainPublicationStatus": 503,
     "remoteOperations": false,
     "browserExecuted": false,
-    "observedAt": "2026-10-19T12:59:02.982Z",
+    "observedAt": "2026-10-19T17:45:34.020Z",
     "latestLoginChecks": [
-      {
-        "origin": "http://127.0.0.1:3150",
-        "loginStatus": 200
-      },
-      {
-        "origin": "http://127.0.0.1:3152",
-        "loginStatus": 200
-      }
-    ]
+      { "origin": "http://127.0.0.1:3150", "loginStatus": 200 },
+      { "origin": "http://127.0.0.1:3152", "loginStatus": 200 }
+    ],
+    "currentMainProcessId": 39928,
+    "currentMainEngineContainer": "novlearn-admin-engine-1792431615700",
+    "actualExistingSyntheticAdminLogin": true,
+    "newPedagogyUiDelivered": true
   },
   "latestLocalQualification": {
     "sql68Proof": "reader-policies-proof.json",
@@ -313,12 +254,24 @@
     "recoveryProof": "local-recovery-2026-10-19-proof.json",
     "globalGoalComplete": false,
     "pedagogySqlProof": "pedagogy-readonly-proof.json",
-    "pedagogyConnectedUiDelivered": false,
+    "pedagogyConnectedUiDelivered": true,
     "latestFullCheck": {
-      "tests": 1187,
-      "files": 60,
-      "artifact": "C:\\Users\\balth\\AppData\\Local\\Temp\\novlearn-admin-check-1792416910198",
-      "scope": "Full Admin checks; separate native SQL69 qualification; new pedagogy login/HTTP/UI not delivered"
-    }
+      "result": "PASS",
+      "date": "2026-10-19T17:49:15.996Z",
+      "artifact": "C:\\Users\\balth\\AppData\\Local\\Temp\\novlearn-admin-check-1792431873781",
+      "exitCode": 0,
+      "tests": 1284,
+      "files": 66,
+      "sourceFiles": 510,
+      "allCopiedSourcesStillMatch": true,
+      "fullCheckCommand": "npm run check",
+      "separateBuildDirectory": true,
+      "independentTemporaryProject": true,
+      "dependenciesCopied": true,
+      "applicationServersInterrupted": false,
+      "privateEnvironmentFilesCopied": false,
+      "scope": "Current connected pedagogical milestone: all unchanged complete checks on exact source snapshot; two JSON evidence records populated after successful completion"
+    },
+    "pedagogyConnectedProof": "pedagogy-connected-proof.json"
   }
 }

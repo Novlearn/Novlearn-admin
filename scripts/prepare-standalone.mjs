@@ -33,9 +33,14 @@ for (const name of [
   'users-list-query.sql',
   'user-detail-reader-audit.sql',
   'user-detail-query.sql',
+  'pedagogy-reader-audit.sql',
+  'pedagogy-statistics-query.sql',
+  'pedagogy-references-query.sql',
 ]) {
   const source = await readFile(new URL('scripts/' + name, root));
   const traced = await readFile(new URL('scripts/' + name, standalone));
   assert(source.equals(traced), 'Standalone SQL source differs: ' + name);
 }
-console.log('Standalone assets and exact activity/users SQL sources prepared.');
+console.log(
+  'Standalone assets and exact statistics/users SQL sources prepared.',
+);

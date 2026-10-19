@@ -1,5 +1,11 @@
 # Application locale connectée — 16 octobre 2026
 
+**19 octobre :** les [résultats pédagogiques](pedagogy-connected.md) sont
+disponibles depuis Statistiques sur 3150, avec filtres, recherche de références,
+regroupements et tri. L’activation locale explicite ajoute `--pedagogy` à
+`--engine --review --statistics --users --user-detail`. La source pédagogique
+synthétique reste distincte de l’activité générale et de Production.
+
 **État du 18 octobre après reprise :** l’instance sur 3150 est de nouveau
 disponible avec les mêmes identifiants, sauvegarde et Engine. La [reprise locale](local-recovery-2026-10-18.md)
 vérifie les vraies connexions, persistance et calculs après sauvegarde à froid,

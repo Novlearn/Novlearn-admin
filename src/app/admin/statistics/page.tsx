@@ -1,4 +1,6 @@
 import { requireAdminPage } from '@/lib/auth/require-admin';
+import Link from 'next/link';
+import { readLocalPedagogyConfiguration } from '@/lib/pedagogy-config';
 import { readLocalActivityConfiguration } from '@/lib/activity-config';
 import {
   readStatisticsPeriod,
@@ -40,11 +42,22 @@ export default async function StatisticsPage({
       }
   }
   return (
-    <ActivityStatisticsView
-      data={data}
-      period={period}
-      environment="local-copy"
-      error={error}
-    />
+    <div className="space-y-5">
+      {readLocalPedagogyConfiguration(process.env) && (
+        <Link
+          href="/admin/statistics/pedagogy"
+          prefetch={false}
+          className="button"
+        >
+          Explorer les résultats pédagogiques
+        </Link>
+      )}
+      <ActivityStatisticsView
+        data={data}
+        period={period}
+        environment="local-copy"
+        error={error}
+      />
+    </div>
   );
 }

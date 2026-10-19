@@ -4,6 +4,16 @@ const nextConfig: NextConfig = {
   output: 'standalone',
   serverExternalPackages: ['novlearn-exercise-engine'],
   outputFileTracingIncludes: {
+    '/admin/statistics/pedagogy': [
+      './scripts/pedagogy-reader-audit.sql',
+      './scripts/pedagogy-statistics-query.sql',
+      './scripts/pedagogy-references-query.sql',
+    ],
+    '/api/admin/statistics/pedagogy{,/**}': [
+      './scripts/pedagogy-reader-audit.sql',
+      './scripts/pedagogy-statistics-query.sql',
+      './scripts/pedagogy-references-query.sql',
+    ],
     '/admin/users/*': [
       './scripts/user-detail-reader-audit.sql',
       './scripts/user-detail-query.sql',

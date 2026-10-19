@@ -1,0 +1,220 @@
+{
+  "asOf": "2026-10-19T11:36:36.859009Z",
+  "groups": {
+    "page": "1",
+    "rows": [
+      {
+        "id": "ab100000-0000-4000-8000-000000000001",
+        "label": "Analyse",
+        "counts": {
+          "correct": "2",
+          "abandoned": "1",
+          "incorrect": "3",
+          "duelAttempts": "3",
+          "unclassified": "0",
+          "activeAccounts": "2",
+          "completedDuels": "1",
+          "exerciseAttempts": "3"
+        },
+        "truncated": false
+      },
+      {
+        "id": null,
+        "label": "Chapitre non résolu",
+        "counts": {
+          "correct": "1",
+          "abandoned": "0",
+          "incorrect": "2",
+          "duelAttempts": "0",
+          "unclassified": "0",
+          "activeAccounts": "2",
+          "completedDuels": "1",
+          "exerciseAttempts": "3"
+        },
+        "truncated": false
+      },
+      {
+        "id": "ab100000-0000-4000-8000-000000000002",
+        "label": "Probabilités",
+        "counts": {
+          "correct": "0",
+          "abandoned": "1",
+          "incorrect": "0",
+          "duelAttempts": "0",
+          "unclassified": "0",
+          "activeAccounts": "1",
+          "completedDuels": "0",
+          "exerciseAttempts": "1"
+        },
+        "truncated": false
+      }
+    ],
+    "size": 25,
+    "total": "3",
+    "hasMore": false
+  },
+  "period": {
+    "from": "2026-10-15",
+    "until": "2026-10-18"
+  },
+  "totals": {
+    "correct": "3",
+    "abandoned": "2",
+    "incorrect": "5",
+    "duelAttempts": "3",
+    "unclassified": "0",
+    "activeAccounts": "3",
+    "completedDuels": "2",
+    "exerciseAttempts": "7"
+  },
+  "filters": {
+    "mode": "all",
+    "sort": "attempts",
+    "chapter": null,
+    "groupBy": "chapter",
+    "competence": null,
+    "difficulty": null,
+    "exerciseType": null
+  },
+  "quality": {
+    "noCompetenceAttempts": "2",
+    "unknownCompetenceLinks": "2",
+    "missingExerciseAttempts": "1",
+    "unresolvedChapterAttempts": "3"
+  },
+  "references": {
+    "chapters": [
+      {
+        "id": "ab100000-0000-4000-8000-000000000001",
+        "label": "Analyse",
+        "truncated": false
+      },
+      {
+        "id": "a9ca00a1-0506-4961-8f8c-b97728c5ccf8",
+        "label": "Convexité",
+        "truncated": false
+      },
+      {
+        "id": "6620686b-8975-4c12-942a-c0dc4fc21063",
+        "label": "Dérivation et Fonctions",
+        "truncated": false
+      },
+      {
+        "id": "dd707618-7e9e-44ca-83fe-1030c5ae11e2",
+        "label": "Limites et continuité",
+        "truncated": false
+      },
+      {
+        "id": "6d31bfe1-aa4e-42f9-b231-313f56857012",
+        "label": "Logarithme néperien",
+        "truncated": false
+      },
+      {
+        "id": "cfd0be89-0e93-427f-a8ba-a564f56d1278",
+        "label": "Primitives et équadiff",
+        "truncated": false
+      },
+      {
+        "id": "ab100000-0000-4000-8000-000000000002",
+        "label": "Probabilités",
+        "truncated": false
+      },
+      {
+        "id": "028263b8-cde7-426c-b5aa-5241348d40b4",
+        "label": "Probas",
+        "truncated": false
+      },
+      {
+        "id": "3c9fc037-aab8-4ce2-842b-65cb010e66e8",
+        "label": "Stats",
+        "truncated": false
+      },
+      {
+        "id": "0b7215e6-be14-47db-8725-c4274780f462",
+        "label": "Suites numériques",
+        "truncated": false
+      }
+    ],
+    "competences": [
+      {
+        "id": "skill_a",
+        "label": "Analyse · Dérivation",
+        "truncated": false
+      },
+      {
+        "id": "calculer_limite_point",
+        "label": "Limites et continuité · Calculer une limite en un point",
+        "truncated": false
+      },
+      {
+        "id": "dresser_tableau_signes_variations",
+        "label": "Limites et continuité · Dresser un tableau de signes et variations",
+        "truncated": false
+      },
+      {
+        "id": "determiner_max_min",
+        "label": "Limites et continuité · Déterminer des maximums et minimums",
+        "truncated": false
+      },
+      {
+        "id": "identifier_asymptote",
+        "label": "Limites et continuité · Identifier une asymptote horizontale/verticale",
+        "truncated": false
+      },
+      {
+        "id": "savoir_si_fonction_continue",
+        "label": "Limites et continuité · Savoir si une fonction est continue",
+        "truncated": false
+      },
+      {
+        "id": "utiliser_limites_usuelles",
+        "label": "Limites et continuité · Utiliser les limites usuelles",
+        "truncated": false
+      },
+      {
+        "id": "skill_b",
+        "label": "Probabilités · Suites",
+        "truncated": false
+      },
+      {
+        "id": "calculer_des_termes",
+        "label": "Suites numériques · Calculer des termes",
+        "truncated": false
+      },
+      {
+        "id": "definir_une_suite",
+        "label": "Suites numériques · Définir une suite",
+        "truncated": false
+      },
+      {
+        "id": "determiner_une_limite_suite",
+        "label": "Suites numériques · Déterminer une limite",
+        "truncated": false
+      },
+      {
+        "id": "interpreter_graphiquement_suite",
+        "label": "Suites numériques · Interpréter graphiquement une suite",
+        "truncated": false
+      },
+      {
+        "id": "modeliser_situation_suite",
+        "label": "Suites numériques · Modéliser une situation par une suite",
+        "truncated": false
+      },
+      {
+        "id": "reconnaitre_suites_arith_geo",
+        "label": "Suites numériques · Reconnaître des suites arithmétiques/géométriques",
+        "truncated": false
+      },
+      {
+        "id": "etudier_variations_suite",
+        "label": "Suites numériques · Étudier les variations (croissance/décroissance)",
+        "truncated": false
+      }
+    ],
+    "moreChapters": false,
+    "moreCompetences": false
+  },
+  "schemaVersion": 1,
+  "environment": "local-copy"
+}
