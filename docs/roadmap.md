@@ -1,5 +1,10 @@
 # Roadmap
 
+**Socle pédagogique du 19 octobre :** les [requêtes, filtres et droits SQL](pedagogy-readonly.md)
+passent sur copies isolées. Le nouveau lecteur ne donne accès ni aux profils ni
+aux définitions/réponses. Login/TLS, API et interface restent à raccorder ; les
+filtres pédagogiques ne sont pas encore disponibles dans l’application.
+
 **Reprise du 19 octobre :** [connexion et services locaux rétablis](local-recovery-2026-10-19.md),
 SQL 68 et parcours de publication par lot qualifiés sur copies synthétiques.
 Aucune activation distante ; voir les preuves et limites datées.

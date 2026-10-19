@@ -1,0 +1,420 @@
+{
+  "result": "PASS for local pedagogy aggregate SQL foundation only; server/TLS/HTTP/UI not yet implemented",
+  "date": "2026-10-19T12:59:02.979Z",
+  "canonicalMigration": {
+    "file": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn/supabase/migrations/20261019111336_novlearn_admin_pedagogy_readonly.sql",
+    "sha256": "1e222b92124becfc9b340afb3300d1ca1c95c40646ccd26aede11f5e36145ede",
+    "cliVersion": "2.98.2",
+    "committed": true,
+    "appliedOnlyToIsolatedFixtures": true,
+    "connectedApplicationSourceUpgraded": false,
+    "remoteApplied": false,
+    "commit": "31a3d7a137f4a5626ec492c9e8a69a3f11cf42d8"
+  },
+  "freshReplay": {
+    "artifact": "../Novlearn/.local/admin-sql-replay/novlearn-admin-lot1a-replay-20261019113447497",
+    "migrations": 69,
+    "network": "none",
+    "hashesStillMatch": true
+  },
+  "native": {
+    "artifact": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\pedagogy-readonly-1792409794167/proof.json",
+    "proof": {
+      "result": "PASS for native pedagogy SQL, permissions and actual decoder",
+      "date": "2026-10-19T11:36:50.000Z",
+      "artifact": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\pedagogy-readonly-1792409794167",
+      "container": "novlearn-admin-lot1a-replay-20261019113447497",
+      "migrationFile": "20261019111336_novlearn_admin_pedagogy_readonly.sql",
+      "migrationSha256": "1e222b92124becfc9b340afb3300d1ca1c95c40646ccd26aede11f5e36145ede",
+      "sourceHashes": {
+        "scripts/pedagogy-statistics-query.sql": "4f624427e1a242b53e5cef77e4c6e0ac1ed14ca6223cf6efefdcfcd5d832f164",
+        "scripts/pedagogy-reader-audit.sql": "8866dadb5569ab76b8c1409a900c5aad9b3faf1a596c4eba3423ab0cb100d6c0",
+        "scripts/test-pedagogy-readonly-local.mjs": "664dac73b08cae6fdbd9a81edeb7eb1358660476de53d9a68f6a5cc80367ce41",
+        "tests/fixtures/pedagogy-local.sql": "adf49a3633e9af59c69a8c550736bd256f81733f4b83c31d29783ed48f3fb540",
+        "src/lib/pedagogy-statistics.ts": "6f4fed17a62ca37fa21e718fc1ccef7275f64bf6d782513871d6a81607ca4023"
+      },
+      "nativeCases": [
+        "all-chapters",
+        "overlapping-competences",
+        "exercise-ranking",
+        "recorded-success-ranking",
+        "chapter-alias",
+        "competence-fallback",
+        "combined-filters",
+        "hard",
+        "flash",
+        "unknown-difficulty",
+        "unknown-type",
+        "exercise-mode",
+        "duel-mode",
+        "missing-filter-reference",
+        "utc-invariance",
+        "page-one",
+        "page-two",
+        "page-beyond"
+      ],
+      "invalidBounds": [
+        "reverse",
+        "too-long",
+        "future",
+        "bad-difficulty",
+        "bad-type",
+        "bad-mode",
+        "bad-group",
+        "bad-sort",
+        "zero-page",
+        "oversized-page",
+        "oversized-competence"
+      ],
+      "actualWriteAndPrivateReadDenials": 23,
+      "sourceColumns": 32,
+      "rlsTables": 7,
+      "overlappingCompetencesDoNotInflateTotals": true,
+      "ambiguousChapterNotInvented": true,
+      "missingAndUnknownMetadataVisible": true,
+      "currentMetadataOnly": true,
+      "utcInvariance": true,
+      "paginationExact": true,
+      "closeBigintSuccessRatiosOrderedExactly": true,
+      "forgedApiRoleContexts": 2,
+      "apiCannotAssumePhysicalReader": true,
+      "schemaRecordedVerdictsNonNull": true,
+      "nullRecordedVerdictPositiveFixtureExecuted": false,
+      "fullRowsAclPoliciesFunctionsRolesAndSequencesExactAfterRollback": true,
+      "tableRowsCompared": 62,
+      "sequencesCompared": 11,
+      "realLoginOrTlsExecuted": false,
+      "browserExecuted": false,
+      "remoteOperations": false
+    }
+  },
+  "populatedUpgrade": {
+    "artifact": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\pedagogy-upgrade-1792409832812/proof.json",
+    "proof": {
+      "result": "PASS for populated SQL69 upgrade and unchanged prior-role access",
+      "date": "2026-10-19T11:37:27.043Z",
+      "artifact": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\pedagogy-upgrade-1792409832812",
+      "container": "novlearn-admin-user-detail-restore-1792409702977",
+      "migrationFile": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn\\supabase\\migrations\\20261019111336_novlearn_admin_pedagogy_readonly.sql",
+      "migrationSha256": "1e222b92124becfc9b340afb3300d1ca1c95c40646ccd26aede11f5e36145ede",
+      "sourceHashes": {
+        "scripts/test-pedagogy-upgrade-local.mjs": "c59909e861394c234b209c9766bcb0b22ffe41154bf0646ec7a1abe8d781744d",
+        "scripts/reader-policies-snapshot.sql": "8c158f428b2b7542b2ea0ec14aa1ee6f6878523320cd983158fe8a79cc793730"
+      },
+      "nativeQueryProof": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\pedagogy-readonly-1792409794167\\proof.json",
+      "oldPhysicalRoles": 22,
+      "claimContexts": 8,
+      "tablesPerContext": 10,
+      "actualQueriesPerMatrix": 1760,
+      "oldRoleMatricesExact": true,
+      "negativePreflights": 9,
+      "allNegativeFixturesRolledBack": true,
+      "dryRunExact": true,
+      "duplicateApplicationRefused": true,
+      "newPhysicalRoleUnprivileged": true,
+      "only32ColumnSelectAndTwoSchemaUsageGrantsAdded": true,
+      "noMembershipOrLoginAdded": true,
+      "preexistingMetadataAclRolesAndCredentialDigestsExact": true,
+      "tableRowsCompared": 62,
+      "sequencesCompared": 11,
+      "allRowsAndSequencesExact": true,
+      "realLoginOrTlsExecuted": false,
+      "browserExecuted": false,
+      "remoteOperations": false
+    }
+  },
+  "restoration": {
+    "artifact": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin/.local/lot1a/pedagogy-restore-1792414436784/restore-proof.json",
+    "proof": {
+      "pedagogyThreeGroupingsExactExceptAsOf": true,
+      "result": "PASS for SQL-69 populated logical restoration",
+      "date": "2026-10-19T12:54:22.817Z",
+      "source": "novlearn-admin-user-detail-restore-1792409702977",
+      "restored": "novlearn-admin-user-detail-restore-1792414439728",
+      "dumpSha256": "f7e5d32b61d37d2c7ff3b0bdb3b05886fc4e2c338824b8bd195c38c8442ee609",
+      "tableRowsExact": 62,
+      "nonemptyProgressRows": 4,
+      "nonemptyCompetenceScores": 4,
+      "relationsCompared": 73,
+      "functionsCompared": 77,
+      "sequencesCompared": 11,
+      "sequenceStatesExact": true,
+      "orderedFullAclRlsOwnersAndFunctionMetadataExact": true,
+      "allNineCustomRolesAndMembershipsExact": true,
+      "scramPasswordDigestsExact": true,
+      "restoredPermissionAssertions": 48,
+      "temporaryExerciseMetadataFixtureUsed": true,
+      "initialPermissionAttemptFailedForEmptyExerciseStock": false,
+      "previousTargetPreserved": null,
+      "immutableBackupReused": false,
+      "permissionFixturesUseExplicitIds": true,
+      "allThreeViewsExactExceptAsOf": true,
+      "tlsConfigurationRestored": false,
+      "mainApplicationModified": false,
+      "remoteOperations": false
+    }
+  },
+  "priorReaderAndHistoricalRegressions": {
+    "artifact": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\pedagogy-prior-readers-1792414376854/proof.json",
+    "proof": {
+      "result": "PASS for unchanged prior readers and SQL regressions on strengthened SQL69",
+      "date": "2026-10-19T12:53:14.890Z",
+      "container": "novlearn-admin-lot1a-replay-20261019113447497",
+      "results": [
+        {
+          "script": "scripts/test-activity-readonly-local.mjs",
+          "proof": {
+            "result": "PASS for native isolated SQL permission and aggregate qualification",
+            "date": "2026-10-19T12:52:59.319Z",
+            "container": "novlearn-admin-lot1a-replay-20261019113447497",
+            "database": "postgres",
+            "artifact": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\activity-readonly-check-1792414377096",
+            "log": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\activity-readonly-check-1792414377096/native-check.log",
+            "postgresImageDigest": "public.ecr.aws/supabase/postgres@sha256:7374d196da7e301512cc5329e18040e0f7bb856287b323777cdadecccbc6c7e4",
+            "driverSha256": "46a6128e100d6892b207709a5ead956ca2d6012b85d8f88fbf1ab8d516138858",
+            "querySha256": "a0dd6194dc41b0f0eaffa6904e2c25c86e88f7def1c8779760821bdd065117e0",
+            "fixtureSha256": "b398be1debd19b4674f9f1af4a17ccbff2e585db476517620e45371b068b78b8",
+            "permissionAssertions": 31,
+            "aggregateExecutions": 3,
+            "boundedQueryExecutions": 5,
+            "expectedTotals": {
+              "activeAccounts": "2",
+              "exerciseAttempts": "5",
+              "duelAttempts": "2",
+              "completedDuels": "1",
+              "accountsCreated": "1",
+              "correct": "2",
+              "incorrect": "2",
+              "abandoned": "1",
+              "unclassified": "0"
+            },
+            "utcSessionTimezoneInvariant": true,
+            "emptyPeriodVerified": true,
+            "invalidBoundsReturnNoRow": true,
+            "actualDomainDecoderAccepted": true,
+            "tableSnapshotsCompared": 62,
+            "allTableRowsPreserved": true,
+            "fixtureTransactionRolledBack": true,
+            "sequenceValuesCompared": false,
+            "sequenceScope": "nextval is not transactional; this pristine fixture may advance sequences, without changing table rows",
+            "realLoginOrTlsExecuted": false,
+            "productionReaderActivated": false,
+            "remoteDatabaseOperationPerformed": false,
+            "existingApplicationModified": false,
+            "browserExecuted": false
+          },
+          "log": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\pedagogy-prior-readers-1792414376854/test-activity-readonly-local.mjs.log"
+        },
+        {
+          "script": "scripts/test-users-readonly-local.mjs",
+          "proof": {
+            "result": "PASS for native nominal SQL, bounds and decoder checks",
+            "date": "2026-10-19T12:53:04.249Z",
+            "container": "novlearn-admin-lot1a-replay-20261019113447497",
+            "artifact": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\users-readonly-check-1792414380203",
+            "sourceHashes": {
+              "scripts/users-list-query.sql": "3bd4cdfdad6913ab7576e69b29482324b0adb52607869182c0298b7abd5f5f50",
+              "scripts/test-users-readonly-local.sql": "97ff778999147d3777ed6f5432b0a3f7ebe6dfbd6ebc784f4258dd722b80d73b",
+              "scripts/test-users-readonly-local.mjs": "e68bf057da46db78d3dbd3c830767e6cb34d77b24668bfeddb28abad44491f89",
+              "src/lib/users.ts": "c55a405fc0b1d738a04881337d20597922e9b1e9f728cc685a1a81023205ec7c"
+            },
+            "permissionAssertions": 35,
+            "actualUserQueries": 14,
+            "boundedQueries": 7,
+            "actualDomainDecoderAccepted": true,
+            "literalSearchVerified": true,
+            "unicodeTruncationFlagVerified": true,
+            "timezoneInvariant": true,
+            "anonymousNameEmailMasked": true,
+            "tableRowsPreserved": 62,
+            "fixtureRolledBack": true,
+            "sequencesCompared": false,
+            "sequenceScope": "Non-transactional nextval can advance in this pristine fixture; table rows remain exact",
+            "realLoginOrTlsExecuted": false,
+            "applicationModified": false,
+            "remoteOperations": false,
+            "browserExecuted": false
+          },
+          "log": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\pedagogy-prior-readers-1792414376854/test-users-readonly-local.mjs.log"
+        },
+        {
+          "script": "scripts/test-user-detail-readonly-local.mjs",
+          "proof": {
+            "result": "PASS for native user detail SQL, permissions and actual decoder",
+            "date": "2026-10-19T12:53:08.995Z",
+            "artifact": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\user-detail-readonly-1792414384864",
+            "container": "novlearn-admin-lot1a-replay-20261019113447497",
+            "sourceHashes": {
+              "scripts/user-detail-query.sql": "4834a4b8d8f8f3b5c63e1abd17efe1dfec5bb54a19eb151a5246ed69df95917f",
+              "scripts/test-user-detail-readonly-local.sql": "b12c7013a5b3604a3929ed380d875a65e403af8124bdc7451d2fc0a7ececfef3",
+              "scripts/test-user-detail-readonly-local.mjs": "d872b089ee355efc8c0f3222ee063c8dcce4d18d744c4cb0ef8c107cbb2e24b2",
+              "tests/fixtures/user-detail-local.sql": "32c6b8135db3b271de1f40a12cc624549e96cbd75b6ebd2e3740ca1202479edf",
+              "tests/fixtures/preview-definition.json": "a6d0cb399add10e9199c851a64fd9a6bf97145415358c6435904c45bdb4b89f9",
+              "src/lib/user-detail.ts": "e211bcc4b129c2d288826fd28d2ecc28ed58e22fbf205edbf227f0fb741803bc"
+            },
+            "permissionAssertions": 48,
+            "nativeCases": 24,
+            "bounds": 7,
+            "threeViewsPagedInBothDirections": true,
+            "microsecondTiesPreserved": true,
+            "unicodeCursorOrderMatchesPostgres": true,
+            "currentProgressIndependentOfPeriod": true,
+            "knownAndUnknownVersionReferences": true,
+            "syntheticVersionCertificationClaimed": false,
+            "invalidLegacyValuesNotTurnedIntoZeros": true,
+            "guestIdentityMasked": true,
+            "missingUserDistinguishedFromFailure": true,
+            "tableRowsPreserved": 62,
+            "fixtureRolledBack": true,
+            "sequencesCompared": false,
+            "realLoginOrTlsExecuted": false,
+            "browserExecuted": false,
+            "remoteOperations": false
+          },
+          "log": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\pedagogy-prior-readers-1792414376854/test-user-detail-readonly-local.mjs.log"
+        },
+        {
+          "script": ".local/lot1a/regress-activity-sql.mjs",
+          "proof": {
+            "result": "PASS for unchanged local SQL regression suites",
+            "date": "2026-10-19T12:53:14.872Z",
+            "container": "novlearn-admin-lot1a-replay-20261019113447497",
+            "sourceHashes": {
+              "test-novlearn-admin-local.mjs": "ebb0544016906a0dae76dc4c665482ef1f88f7589a51273c24628bd0c7808b89",
+              "test-novlearn-admin-security-local.mjs": "83f7ba28f908fad4007577bebf3f324556f4359e9f0be4fae7de19eaee7969cd",
+              "local-database-url.mjs": "416ce7051ddbaa3d98d59313cb5653794ea2ff70742e281d1ea255777e36d286"
+            },
+            "sourceHashesStillMatch": true,
+            "results": [
+              {
+                "script": "test-novlearn-admin-local.mjs",
+                "scriptModified": false,
+                "assertions": 30,
+                "log": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\activity-regression-1792414389247/test-novlearn-admin-local.mjs-1792414392179.log",
+                "exitCode": 0,
+                "runner": "novlearn-admin-activity-regression-1792414389517",
+                "network": "same isolated loopback namespace as the new SQL fixture"
+              },
+              {
+                "script": "test-novlearn-admin-security-local.mjs",
+                "scriptModified": false,
+                "assertions": 26,
+                "log": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\activity-regression-1792414389247/test-novlearn-admin-security-local.mjs-1792414394868.log",
+                "exitCode": 0,
+                "runner": "novlearn-admin-activity-regression-1792414392183",
+                "network": "same isolated loopback namespace as the new SQL fixture"
+              }
+            ],
+            "remoteOperationPerformed": false,
+            "existingApplicationModified": false
+          },
+          "log": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\pedagogy-prior-readers-1792414376854/regress-activity-sql.mjs.log"
+        }
+      ],
+      "oldScriptsModified": false,
+      "remoteOperations": false
+    }
+  },
+  "domainTests": {
+    "command": "node node_modules/vitest/vitest.mjs run tests/pedagogy-statistics.test.ts",
+    "passed": 44,
+    "executed": true
+  },
+  "currentServices": {
+    "observedAt": "2026-10-19T12:59:02.982Z",
+    "services": [
+      {
+        "origin": "http://127.0.0.1:3150",
+        "loginStatus": 200
+      },
+      {
+        "origin": "http://127.0.0.1:3152",
+        "loginStatus": 200
+      }
+    ]
+  },
+  "fullCheck": {
+    "result": "PASS",
+    "date": "2026-10-19T16:59:39.769Z",
+    "artifact": "C:\\Users\\balth\\AppData\\Local\\Temp\\novlearn-admin-check-1792416910198",
+    "exitCode": 0,
+    "tests": 1187,
+    "files": 60,
+    "sourceFiles": 486,
+    "allCopiedSourcesStillMatch": true,
+    "fullCheckCommand": "npm run check",
+    "separateBuildDirectory": true,
+    "independentTemporaryProject": true,
+    "dependenciesCopied": true,
+    "applicationServersInterrupted": false,
+    "privateEnvironmentFilesCopied": false,
+    "executedForCurrentCode": true,
+    "postCheckChanges": "Evidence JSON only; implementation and tests still match the checked copy",
+    "smokeAuthDisabled": true,
+    "newPedagogyHttpExecutedByFullCheck": false
+  },
+  "intermediateAttempts": [
+    {
+      "result": "FAIL before first query",
+      "artifact": ".local/lot1a/pedagogy-readonly-1792408814404/all-chapters.log",
+      "reason": "Fixture difficulty legacy-x violated existing CHECK; changed fixture to allowed NULL, without schema/test relaxation",
+      "originalStateRecheckedExact": true
+    },
+    {
+      "result": "FAIL before first query",
+      "artifact": ".local/lot1a/pedagogy-readonly-1792408835625/all-chapters.log",
+      "reason": "Fixture NULL verdict violated existing NOT NULL; all fixture verdicts now obey the schema, with abandoned-only case for an absent success denominator",
+      "originalStateRecheckedExact": true
+    },
+    {
+      "result": "Syntax check failed before execution",
+      "reason": "Metadata fields briefly inserted into an argument array; corrected before the new native run",
+      "observedInToolOutput": true
+    },
+    {
+      "result": "Automatic approval review deadline expired before process creation",
+      "operation": "Unchanged prior-reader regression helper",
+      "safetyFindingReported": false,
+      "oneExplicitlyAllowedRetryExecuted": true,
+      "retryResult": "PASS for all four suites"
+    },
+    {
+      "result": "Automatic approval review deadline expired before process creation",
+      "operation": "Isolated full Admin check",
+      "safetyFindingReported": false,
+      "oneExplicitlyAllowedRetryExecuted": true,
+      "retryResult": "PASS: 1187 tests, types, lint, format, build and smoke"
+    }
+  ],
+  "initialCandidate": {
+    "sha256": "c06eb37ca6cde34f26ba4c93271986bda3d30831f9cb17d7a23d7f1e5d0d748a",
+    "nativeProof": ".local/lot1a/pedagogy-readonly-1792409082147/proof.json",
+    "upgradeProof": ".local/lot1a/pedagogy-upgrade-1792409272429/proof.json",
+    "restoreProof": ".local/lot1a/pedagogy-restore-1792409381841/restore-proof.json",
+    "supersededByStricterPublicConfinement": true,
+    "previousCopiesAndProofsRetained": true
+  },
+  "remaining": [
+    "Qualified physical login, verified TLS and a dedicated server reader",
+    "Fresh Admin page/API authorization and local-only activation",
+    "Actual connected HTTP permission, outage and drift checks",
+    "UI for filters/grouping/rankings and bounded reference choices",
+    "SQL69 advisors and realistic performance plans",
+    "Authorized browser reception and separately approved Production source"
+  ],
+  "goalComplete": false,
+  "globalSqlCertification": false,
+  "newPedagogyLoginProvisioned": false,
+  "newPedagogyHttpExecuted": false,
+  "newPedagogyUiDelivered": false,
+  "browserExecuted": false,
+  "remoteOperations": false,
+  "preservation": {
+    "protectedAdminFilesExact": 4,
+    "privateAppConfigurationsExact": 8,
+    "oldCanonicalMigrationsExact": 68,
+    "preexistingNovlearnDirtyFilesExact": 8,
+    "engineRepositoryClean": true,
+    "newPedagogyAppSourceActivated": false
+  }
+}

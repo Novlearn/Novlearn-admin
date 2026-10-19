@@ -1,5 +1,10 @@
 # Progression du goal NovLearn Admin
 
+**Socle pédagogique du 19 octobre :** les [requêtes, filtres et droits SQL](pedagogy-readonly.md)
+passent sur copies isolées. Le nouveau lecteur ne donne accès ni aux profils ni
+aux définitions/réponses. Login/TLS, API et interface restent à raccorder ; les
+filtres pédagogiques ne sont pas encore disponibles dans l’application.
+
 ## Reprise et qualifications locales — 19 octobre 2026
 
 Les [services conservés sont disponibles](local-recovery-2026-10-19.md) après

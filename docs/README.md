@@ -1,5 +1,8 @@
 # Documentation NovLearn Admin
 
+[Statistiques pédagogiques — socle SQL](pedagogy-readonly.md) : filtres,
+répartition et classement qualifiés sur copies ; raccordement serveur/UI restant.
+
 [Reprise locale du 19 octobre](local-recovery-2026-10-19.md) : connexion et Engine
 disponibles, données conservées, parcours HTTP par lot réel et limites restantes.
 
