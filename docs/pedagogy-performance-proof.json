@@ -1,0 +1,1216 @@
+{
+  "result": "PASS for final optimized pedagogy query on bounded synthetic workload, native permissions and actual pool/HTTP; full check recorded separately",
+  "date": "2026-10-19T18:34:21.502Z",
+  "canonicalQuery": {
+    "file": "scripts/pedagogy-statistics-query.sql",
+    "sha256": "c12775bfc93a843a04146a8685d452f70d9ad4196afeadf41e427d00df32132f",
+    "exactlyMatchesMeasuredCandidateBytes": true
+  },
+  "priorConnectedProof": "pedagogy-connected-proof.json",
+  "canonicalMigrationChanged": false,
+  "rolePermissionsChanged": false,
+  "timeoutCriteriaRelaxed": false,
+  "applicationRestarted": false,
+  "performance": {
+    "artifact": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\pedagogy-performance-1792432841371/run-1792433859200/proof.json",
+    "proof": {
+      "result": "PASS for bounded native SQL performance on specified synthetic workload only",
+      "date": "2026-10-19T18:19:16.901Z",
+      "artifact": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\pedagogy-performance-1792432841371",
+      "run": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\pedagogy-performance-1792432841371/run-1792433859200",
+      "container": "novlearn-admin-pedagogy-perf-1792432841371",
+      "sourceDumpSha256": "3289cb7535d8f6b8247c803354f05cfe974c984ee8d9426f6df09c724b6be7e2",
+      "queryFile": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\pedagogy-performance-1792432841371\\candidate-inline-safe-page.sql",
+      "sourceHashes": {
+        "scripts/test-pedagogy-performance-local.mjs": "243d5021612605e157c8c1e29f9d33f513f598a9a2da51ba90b145f98501d4d2",
+        "tests/fixtures/pedagogy-performance.sql": "36d8a776e23bb8fbb269db74cad86224940883b62c57b7435d3ba58faa0c7f78",
+        "src/lib/pedagogy-statistics.ts": "6f4fed17a62ca37fa21e718fc1ccef7275f64bf6d782513871d6a81607ca4023",
+        "src/lib/activity-statistics.ts": "4743e04707ccf424f6ddb4ea502dddc18796e00a1c359f85242d8eb60b3d6dfe",
+        "scripts/pedagogy-reader-audit.sql": "8866dadb5569ab76b8c1409a900c5aad9b3faf1a596c4eba3423ab0cb100d6c0",
+        "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\pedagogy-performance-1792432841371\\candidate-inline-safe-page.sql": "c12775bfc93a843a04146a8685d452f70d9ad4196afeadf41e427d00df32132f"
+      },
+      "candidateQueryUsed": true,
+      "physicalLoginAndReaderAudited": true,
+      "roleColumnReads": 32,
+      "postgresImage": "public.ecr.aws/supabase/postgres@sha256:7374d196da7e301512cc5329e18040e0f7bb856287b323777cdadecccbc6c7e4",
+      "limits": {
+        "cpus": 2,
+        "memoryBytes": 1073741824,
+        "swapBytes": 0,
+        "pids": 256,
+        "statementTimeoutMs": 10000,
+        "workMemUnmodified": true,
+        "jitUnmodified": true
+      },
+      "workload": {
+        "addedAccounts": 500,
+        "addedChapters": 300,
+        "addedCompetences": 600,
+        "addedExercises": 2000,
+        "addedDuels": 2000,
+        "addedExerciseAttempts": 50000,
+        "addedDuelAttempts": 50000,
+        "periodDays": 90,
+        "nullTimestamps": true,
+        "abandonment": true,
+        "ambiguousOrMissingMetadata": true,
+        "duplicateAndUnknownSkillLinks": true
+      },
+      "measurements": [
+        {
+          "case": "wide-chapter-attempts",
+          "repetition": 1,
+          "executionMs": 2933.939,
+          "planningMs": 21.661,
+          "topPlan": "Result",
+          "tempReadBlocks": 15017,
+          "tempWrittenBlocks": 11493,
+          "sharedHitBlocks": 50833,
+          "sharedReadBlocks": 0,
+          "parameters": {
+            "period": {
+              "from": "2026-07-21",
+              "to": "2026-10-18",
+              "until": "2026-10-19",
+              "days": 90
+            },
+            "chapter": null,
+            "competence": null,
+            "difficulty": null,
+            "exerciseType": null,
+            "mode": "all",
+            "groupBy": "chapter",
+            "sort": "attempts",
+            "page": "1"
+          },
+          "oracleExact": true
+        },
+        {
+          "case": "wide-chapter-attempts",
+          "repetition": 2,
+          "executionMs": 1795.199,
+          "planningMs": 11.081,
+          "topPlan": "Result",
+          "tempReadBlocks": 15017,
+          "tempWrittenBlocks": 11493,
+          "sharedHitBlocks": 50833,
+          "sharedReadBlocks": 0,
+          "parameters": {
+            "period": {
+              "from": "2026-07-21",
+              "to": "2026-10-18",
+              "until": "2026-10-19",
+              "days": 90
+            },
+            "chapter": null,
+            "competence": null,
+            "difficulty": null,
+            "exerciseType": null,
+            "mode": "all",
+            "groupBy": "chapter",
+            "sort": "attempts",
+            "page": "1"
+          },
+          "oracleExact": true
+        },
+        {
+          "case": "wide-chapter-success",
+          "repetition": 1,
+          "executionMs": 1765.18,
+          "planningMs": 10.69,
+          "topPlan": "Result",
+          "tempReadBlocks": 15017,
+          "tempWrittenBlocks": 11493,
+          "sharedHitBlocks": 50836,
+          "sharedReadBlocks": 0,
+          "parameters": {
+            "period": {
+              "from": "2026-07-21",
+              "to": "2026-10-18",
+              "until": "2026-10-19",
+              "days": 90
+            },
+            "chapter": null,
+            "competence": null,
+            "difficulty": null,
+            "exerciseType": null,
+            "mode": "all",
+            "groupBy": "chapter",
+            "sort": "success",
+            "page": "1"
+          },
+          "oracleExact": true
+        },
+        {
+          "case": "wide-chapter-success",
+          "repetition": 2,
+          "executionMs": 2487.301,
+          "planningMs": 14.815,
+          "topPlan": "Result",
+          "tempReadBlocks": 15017,
+          "tempWrittenBlocks": 11493,
+          "sharedHitBlocks": 50836,
+          "sharedReadBlocks": 0,
+          "parameters": {
+            "period": {
+              "from": "2026-07-21",
+              "to": "2026-10-18",
+              "until": "2026-10-19",
+              "days": 90
+            },
+            "chapter": null,
+            "competence": null,
+            "difficulty": null,
+            "exerciseType": null,
+            "mode": "all",
+            "groupBy": "chapter",
+            "sort": "success",
+            "page": "1"
+          },
+          "oracleExact": true
+        },
+        {
+          "case": "wide-competence-attempts",
+          "repetition": 1,
+          "executionMs": 2912.585,
+          "planningMs": 13.753,
+          "topPlan": "Result",
+          "tempReadBlocks": 18728,
+          "tempWrittenBlocks": 17891,
+          "sharedHitBlocks": 50833,
+          "sharedReadBlocks": 0,
+          "parameters": {
+            "period": {
+              "from": "2026-07-21",
+              "to": "2026-10-18",
+              "until": "2026-10-19",
+              "days": 90
+            },
+            "chapter": null,
+            "competence": null,
+            "difficulty": null,
+            "exerciseType": null,
+            "mode": "all",
+            "groupBy": "competence",
+            "sort": "attempts",
+            "page": "1"
+          },
+          "oracleExact": true
+        },
+        {
+          "case": "wide-competence-attempts",
+          "repetition": 2,
+          "executionMs": 3442.954,
+          "planningMs": 16.902,
+          "topPlan": "Result",
+          "tempReadBlocks": 18728,
+          "tempWrittenBlocks": 17891,
+          "sharedHitBlocks": 50833,
+          "sharedReadBlocks": 0,
+          "parameters": {
+            "period": {
+              "from": "2026-07-21",
+              "to": "2026-10-18",
+              "until": "2026-10-19",
+              "days": 90
+            },
+            "chapter": null,
+            "competence": null,
+            "difficulty": null,
+            "exerciseType": null,
+            "mode": "all",
+            "groupBy": "competence",
+            "sort": "attempts",
+            "page": "1"
+          },
+          "oracleExact": true
+        },
+        {
+          "case": "wide-competence-success",
+          "repetition": 1,
+          "executionMs": 2683.075,
+          "planningMs": 10.818,
+          "topPlan": "Result",
+          "tempReadBlocks": 18728,
+          "tempWrittenBlocks": 17891,
+          "sharedHitBlocks": 50836,
+          "sharedReadBlocks": 0,
+          "parameters": {
+            "period": {
+              "from": "2026-07-21",
+              "to": "2026-10-18",
+              "until": "2026-10-19",
+              "days": 90
+            },
+            "chapter": null,
+            "competence": null,
+            "difficulty": null,
+            "exerciseType": null,
+            "mode": "all",
+            "groupBy": "competence",
+            "sort": "success",
+            "page": "1"
+          },
+          "oracleExact": true
+        },
+        {
+          "case": "wide-competence-success",
+          "repetition": 2,
+          "executionMs": 2617.608,
+          "planningMs": 15.231,
+          "topPlan": "Result",
+          "tempReadBlocks": 18728,
+          "tempWrittenBlocks": 17891,
+          "sharedHitBlocks": 50836,
+          "sharedReadBlocks": 0,
+          "parameters": {
+            "period": {
+              "from": "2026-07-21",
+              "to": "2026-10-18",
+              "until": "2026-10-19",
+              "days": 90
+            },
+            "chapter": null,
+            "competence": null,
+            "difficulty": null,
+            "exerciseType": null,
+            "mode": "all",
+            "groupBy": "competence",
+            "sort": "success",
+            "page": "1"
+          },
+          "oracleExact": true
+        },
+        {
+          "case": "wide-exercise-attempts",
+          "repetition": 1,
+          "executionMs": 2246.269,
+          "planningMs": 12.577,
+          "topPlan": "Result",
+          "tempReadBlocks": 14233,
+          "tempWrittenBlocks": 10162,
+          "sharedHitBlocks": 50833,
+          "sharedReadBlocks": 0,
+          "parameters": {
+            "period": {
+              "from": "2026-07-21",
+              "to": "2026-10-18",
+              "until": "2026-10-19",
+              "days": 90
+            },
+            "chapter": null,
+            "competence": null,
+            "difficulty": null,
+            "exerciseType": null,
+            "mode": "all",
+            "groupBy": "exercise",
+            "sort": "attempts",
+            "page": "1"
+          },
+          "oracleExact": true
+        },
+        {
+          "case": "wide-exercise-attempts",
+          "repetition": 2,
+          "executionMs": 1695.413,
+          "planningMs": 9.653,
+          "topPlan": "Result",
+          "tempReadBlocks": 14233,
+          "tempWrittenBlocks": 10162,
+          "sharedHitBlocks": 50833,
+          "sharedReadBlocks": 0,
+          "parameters": {
+            "period": {
+              "from": "2026-07-21",
+              "to": "2026-10-18",
+              "until": "2026-10-19",
+              "days": 90
+            },
+            "chapter": null,
+            "competence": null,
+            "difficulty": null,
+            "exerciseType": null,
+            "mode": "all",
+            "groupBy": "exercise",
+            "sort": "attempts",
+            "page": "1"
+          },
+          "oracleExact": true
+        },
+        {
+          "case": "wide-exercise-success",
+          "repetition": 1,
+          "executionMs": 1699.697,
+          "planningMs": 9.337,
+          "topPlan": "Result",
+          "tempReadBlocks": 14233,
+          "tempWrittenBlocks": 10162,
+          "sharedHitBlocks": 50836,
+          "sharedReadBlocks": 0,
+          "parameters": {
+            "period": {
+              "from": "2026-07-21",
+              "to": "2026-10-18",
+              "until": "2026-10-19",
+              "days": 90
+            },
+            "chapter": null,
+            "competence": null,
+            "difficulty": null,
+            "exerciseType": null,
+            "mode": "all",
+            "groupBy": "exercise",
+            "sort": "success",
+            "page": "1"
+          },
+          "oracleExact": true
+        },
+        {
+          "case": "wide-exercise-success",
+          "repetition": 2,
+          "executionMs": 2314.863,
+          "planningMs": 15.283,
+          "topPlan": "Result",
+          "tempReadBlocks": 14233,
+          "tempWrittenBlocks": 10162,
+          "sharedHitBlocks": 50836,
+          "sharedReadBlocks": 0,
+          "parameters": {
+            "period": {
+              "from": "2026-07-21",
+              "to": "2026-10-18",
+              "until": "2026-10-19",
+              "days": 90
+            },
+            "chapter": null,
+            "competence": null,
+            "difficulty": null,
+            "exerciseType": null,
+            "mode": "all",
+            "groupBy": "exercise",
+            "sort": "success",
+            "page": "1"
+          },
+          "oracleExact": true
+        },
+        {
+          "case": "narrow-three-days",
+          "repetition": 1,
+          "executionMs": 326.845,
+          "planningMs": 15.222,
+          "topPlan": "Result",
+          "tempReadBlocks": 0,
+          "tempWrittenBlocks": 0,
+          "sharedHitBlocks": 1336,
+          "sharedReadBlocks": 0,
+          "parameters": {
+            "period": {
+              "from": "2026-10-15",
+              "to": "2026-10-17",
+              "until": "2026-10-18",
+              "days": 3
+            },
+            "chapter": null,
+            "competence": null,
+            "difficulty": null,
+            "exerciseType": null,
+            "mode": "all",
+            "groupBy": "exercise",
+            "sort": "attempts",
+            "page": "1"
+          },
+          "oracleExact": true
+        },
+        {
+          "case": "narrow-three-days",
+          "repetition": 2,
+          "executionMs": 346.645,
+          "planningMs": 10.769,
+          "topPlan": "Result",
+          "tempReadBlocks": 0,
+          "tempWrittenBlocks": 0,
+          "sharedHitBlocks": 1336,
+          "sharedReadBlocks": 0,
+          "parameters": {
+            "period": {
+              "from": "2026-10-15",
+              "to": "2026-10-17",
+              "until": "2026-10-18",
+              "days": 3
+            },
+            "chapter": null,
+            "competence": null,
+            "difficulty": null,
+            "exerciseType": null,
+            "mode": "all",
+            "groupBy": "exercise",
+            "sort": "attempts",
+            "page": "1"
+          },
+          "oracleExact": true
+        },
+        {
+          "case": "combined",
+          "repetition": 1,
+          "executionMs": 180.593,
+          "planningMs": 9.009,
+          "topPlan": "Result",
+          "tempReadBlocks": 407,
+          "tempWrittenBlocks": 407,
+          "sharedHitBlocks": 912,
+          "sharedReadBlocks": 0,
+          "parameters": {
+            "period": {
+              "from": "2026-07-21",
+              "to": "2026-10-18",
+              "until": "2026-10-19",
+              "days": 90
+            },
+            "chapter": "ac100000-0000-4000-8000-000000000023",
+            "competence": "perf_skill_23",
+            "difficulty": "medium",
+            "exerciseType": "classic",
+            "mode": "exercise",
+            "groupBy": "exercise",
+            "sort": "attempts",
+            "page": "1"
+          },
+          "oracleExact": true
+        },
+        {
+          "case": "combined",
+          "repetition": 2,
+          "executionMs": 147.959,
+          "planningMs": 11.088,
+          "topPlan": "Result",
+          "tempReadBlocks": 407,
+          "tempWrittenBlocks": 407,
+          "sharedHitBlocks": 912,
+          "sharedReadBlocks": 0,
+          "parameters": {
+            "period": {
+              "from": "2026-07-21",
+              "to": "2026-10-18",
+              "until": "2026-10-19",
+              "days": 90
+            },
+            "chapter": "ac100000-0000-4000-8000-000000000023",
+            "competence": "perf_skill_23",
+            "difficulty": "medium",
+            "exerciseType": "classic",
+            "mode": "exercise",
+            "groupBy": "exercise",
+            "sort": "attempts",
+            "page": "1"
+          },
+          "oracleExact": true
+        },
+        {
+          "case": "duels",
+          "repetition": 1,
+          "executionMs": 1318.244,
+          "planningMs": 8.833,
+          "topPlan": "Result",
+          "tempReadBlocks": 9063,
+          "tempWrittenBlocks": 8661,
+          "sharedHitBlocks": 50215,
+          "sharedReadBlocks": 0,
+          "parameters": {
+            "period": {
+              "from": "2026-07-21",
+              "to": "2026-10-18",
+              "until": "2026-10-19",
+              "days": 90
+            },
+            "chapter": null,
+            "competence": null,
+            "difficulty": null,
+            "exerciseType": null,
+            "mode": "duel",
+            "groupBy": "competence",
+            "sort": "attempts",
+            "page": "1"
+          },
+          "oracleExact": true
+        },
+        {
+          "case": "duels",
+          "repetition": 2,
+          "executionMs": 1907.972,
+          "planningMs": 14.153,
+          "topPlan": "Result",
+          "tempReadBlocks": 9063,
+          "tempWrittenBlocks": 8661,
+          "sharedHitBlocks": 50215,
+          "sharedReadBlocks": 0,
+          "parameters": {
+            "period": {
+              "from": "2026-07-21",
+              "to": "2026-10-18",
+              "until": "2026-10-19",
+              "days": 90
+            },
+            "chapter": null,
+            "competence": null,
+            "difficulty": null,
+            "exerciseType": null,
+            "mode": "duel",
+            "groupBy": "competence",
+            "sort": "attempts",
+            "page": "1"
+          },
+          "oracleExact": true
+        },
+        {
+          "case": "unknown-metadata",
+          "repetition": 1,
+          "executionMs": 346.552,
+          "planningMs": 10.863,
+          "topPlan": "Result",
+          "tempReadBlocks": 774,
+          "tempWrittenBlocks": 774,
+          "sharedHitBlocks": 52181,
+          "sharedReadBlocks": 0,
+          "parameters": {
+            "period": {
+              "from": "2026-07-21",
+              "to": "2026-10-18",
+              "until": "2026-10-19",
+              "days": 90
+            },
+            "chapter": null,
+            "competence": null,
+            "difficulty": "unknown",
+            "exerciseType": "unknown",
+            "mode": "all",
+            "groupBy": "chapter",
+            "sort": "attempts",
+            "page": "1"
+          },
+          "oracleExact": true
+        },
+        {
+          "case": "unknown-metadata",
+          "repetition": 2,
+          "executionMs": 328.594,
+          "planningMs": 9.482,
+          "topPlan": "Result",
+          "tempReadBlocks": 774,
+          "tempWrittenBlocks": 774,
+          "sharedHitBlocks": 52181,
+          "sharedReadBlocks": 0,
+          "parameters": {
+            "period": {
+              "from": "2026-07-21",
+              "to": "2026-10-18",
+              "until": "2026-10-19",
+              "days": 90
+            },
+            "chapter": null,
+            "competence": null,
+            "difficulty": "unknown",
+            "exerciseType": "unknown",
+            "mode": "all",
+            "groupBy": "chapter",
+            "sort": "attempts",
+            "page": "1"
+          },
+          "oracleExact": true
+        },
+        {
+          "case": "unknown-skill",
+          "repetition": 1,
+          "executionMs": 437.05,
+          "planningMs": 14.097,
+          "topPlan": "Result",
+          "tempReadBlocks": 774,
+          "tempWrittenBlocks": 1161,
+          "sharedHitBlocks": 50833,
+          "sharedReadBlocks": 0,
+          "parameters": {
+            "period": {
+              "from": "2026-07-21",
+              "to": "2026-10-18",
+              "until": "2026-10-19",
+              "days": 90
+            },
+            "chapter": null,
+            "competence": "perf_missing",
+            "difficulty": null,
+            "exerciseType": null,
+            "mode": "all",
+            "groupBy": "competence",
+            "sort": "attempts",
+            "page": "1"
+          },
+          "oracleExact": true
+        },
+        {
+          "case": "unknown-skill",
+          "repetition": 2,
+          "executionMs": 422.533,
+          "planningMs": 11.169,
+          "topPlan": "Result",
+          "tempReadBlocks": 774,
+          "tempWrittenBlocks": 1161,
+          "sharedHitBlocks": 50833,
+          "sharedReadBlocks": 0,
+          "parameters": {
+            "period": {
+              "from": "2026-07-21",
+              "to": "2026-10-18",
+              "until": "2026-10-19",
+              "days": 90
+            },
+            "chapter": null,
+            "competence": "perf_missing",
+            "difficulty": null,
+            "exerciseType": null,
+            "mode": "all",
+            "groupBy": "competence",
+            "sort": "attempts",
+            "page": "1"
+          },
+          "oracleExact": true
+        },
+        {
+          "case": "empty-filter",
+          "repetition": 1,
+          "executionMs": 316.585,
+          "planningMs": 13.867,
+          "topPlan": "Result",
+          "tempReadBlocks": 0,
+          "tempWrittenBlocks": 773,
+          "sharedHitBlocks": 50818,
+          "sharedReadBlocks": 0,
+          "parameters": {
+            "period": {
+              "from": "2026-07-21",
+              "to": "2026-10-18",
+              "until": "2026-10-19",
+              "days": 90
+            },
+            "chapter": null,
+            "competence": "perf_nonexistent",
+            "difficulty": null,
+            "exerciseType": null,
+            "mode": "all",
+            "groupBy": "chapter",
+            "sort": "attempts",
+            "page": "1"
+          },
+          "oracleExact": true
+        },
+        {
+          "case": "empty-filter",
+          "repetition": 2,
+          "executionMs": 324.146,
+          "planningMs": 10.529,
+          "topPlan": "Result",
+          "tempReadBlocks": 0,
+          "tempWrittenBlocks": 773,
+          "sharedHitBlocks": 50818,
+          "sharedReadBlocks": 0,
+          "parameters": {
+            "period": {
+              "from": "2026-07-21",
+              "to": "2026-10-18",
+              "until": "2026-10-19",
+              "days": 90
+            },
+            "chapter": null,
+            "competence": "perf_nonexistent",
+            "difficulty": null,
+            "exerciseType": null,
+            "mode": "all",
+            "groupBy": "chapter",
+            "sort": "attempts",
+            "page": "1"
+          },
+          "oracleExact": true
+        },
+        {
+          "case": "second-page",
+          "repetition": 1,
+          "executionMs": 2353.496,
+          "planningMs": 18.137,
+          "topPlan": "Result",
+          "tempReadBlocks": 14233,
+          "tempWrittenBlocks": 10162,
+          "sharedHitBlocks": 50833,
+          "sharedReadBlocks": 0,
+          "parameters": {
+            "period": {
+              "from": "2026-07-21",
+              "to": "2026-10-18",
+              "until": "2026-10-19",
+              "days": 90
+            },
+            "chapter": null,
+            "competence": null,
+            "difficulty": null,
+            "exerciseType": null,
+            "mode": "all",
+            "groupBy": "exercise",
+            "sort": "attempts",
+            "page": "2"
+          },
+          "oracleExact": true
+        },
+        {
+          "case": "second-page",
+          "repetition": 2,
+          "executionMs": 1821.701,
+          "planningMs": 14.377,
+          "topPlan": "Result",
+          "tempReadBlocks": 14233,
+          "tempWrittenBlocks": 10162,
+          "sharedHitBlocks": 50833,
+          "sharedReadBlocks": 0,
+          "parameters": {
+            "period": {
+              "from": "2026-07-21",
+              "to": "2026-10-18",
+              "until": "2026-10-19",
+              "days": 90
+            },
+            "chapter": null,
+            "competence": null,
+            "difficulty": null,
+            "exerciseType": null,
+            "mode": "all",
+            "groupBy": "exercise",
+            "sort": "attempts",
+            "page": "2"
+          },
+          "oracleExact": true
+        },
+        {
+          "case": "bigint-page",
+          "repetition": 1,
+          "executionMs": 2148.008,
+          "planningMs": 9.72,
+          "topPlan": "Result",
+          "tempReadBlocks": 14233,
+          "tempWrittenBlocks": 10162,
+          "sharedHitBlocks": 50833,
+          "sharedReadBlocks": 0,
+          "parameters": {
+            "period": {
+              "from": "2026-07-21",
+              "to": "2026-10-18",
+              "until": "2026-10-19",
+              "days": 90
+            },
+            "chapter": null,
+            "competence": null,
+            "difficulty": null,
+            "exerciseType": null,
+            "mode": "all",
+            "groupBy": "exercise",
+            "sort": "attempts",
+            "page": "9007199254740993"
+          },
+          "oracleExact": true
+        },
+        {
+          "case": "bigint-page",
+          "repetition": 2,
+          "executionMs": 1717.476,
+          "planningMs": 9.517,
+          "topPlan": "Result",
+          "tempReadBlocks": 14233,
+          "tempWrittenBlocks": 10162,
+          "sharedHitBlocks": 50833,
+          "sharedReadBlocks": 0,
+          "parameters": {
+            "period": {
+              "from": "2026-07-21",
+              "to": "2026-10-18",
+              "until": "2026-10-19",
+              "days": 90
+            },
+            "chapter": null,
+            "competence": null,
+            "difficulty": null,
+            "exerciseType": null,
+            "mode": "all",
+            "groupBy": "exercise",
+            "sort": "attempts",
+            "page": "9007199254740993"
+          },
+          "oracleExact": true
+        }
+      ],
+      "existingRestoredRowsPreservedAcrossTables": 62,
+      "allSeededRowsSequencesAndMetadataExact": true,
+      "applicationInstancesModified": false,
+      "remoteOperations": false,
+      "browserExecuted": false,
+      "coldCacheOrProductionSlaCertified": false
+    }
+  },
+  "pool": {
+    "artifact": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\pedagogy-performance-1792432841371/pool-1792434014725/proof.json",
+    "proof": {
+      "result": "PASS for actual verified-TLS pool with two concurrent large-data reads",
+      "date": "2026-10-19T18:20:30.428Z",
+      "measurements": [
+        {
+          "case": "wide-competence-success",
+          "round": 1,
+          "elapsedMs": 3726.532704,
+          "oracleExact": true
+        },
+        {
+          "case": "wide-exercise-attempts",
+          "round": 1,
+          "elapsedMs": 2776.956483,
+          "oracleExact": true
+        },
+        {
+          "case": "wide-competence-success",
+          "round": 2,
+          "elapsedMs": 3185.9164680000004,
+          "oracleExact": true
+        },
+        {
+          "case": "wide-exercise-attempts",
+          "round": 2,
+          "elapsedMs": 2233.3589550000006,
+          "oracleExact": true
+        }
+      ],
+      "realServerReader": true,
+      "realTls": true,
+      "maximumConcurrentCalls": 2,
+      "reusedPoolAcrossRounds": true,
+      "statementTimeoutUnchanged": 10000,
+      "clientQueryTimeoutUnchanged": 12000,
+      "poolMaximumUnchanged": 2,
+      "remoteOperations": false,
+      "browserExecuted": false,
+      "productionSlaCertified": false,
+      "artifact": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\pedagogy-performance-1792432841371/pool-1792434014725",
+      "container": "novlearn-admin-pedagogy-perf-1792432841371",
+      "sourceHashes": {
+        "src/lib/pedagogy-pg.ts": "d3e02ef7881893c90a8904198d2e0218a507f2441eaebafaa158e49e50bdd356",
+        "src/lib/pedagogy-config.ts": "f24dc0682aefd9d33139865ac797210d3379c44e5ca05b8295aebad99f9df7c1",
+        "src/lib/pedagogy-statistics.ts": "6f4fed17a62ca37fa21e718fc1ccef7275f64bf6d782513871d6a81607ca4023",
+        "src/lib/pedagogy-references.ts": "1b575fc3285c828da4736a16d7cc724de4e3e5c3359f9226ebda370e40963d14",
+        "scripts/pedagogy-reader-audit.sql": "8866dadb5569ab76b8c1409a900c5aad9b3faf1a596c4eba3423ab0cb100d6c0",
+        "scripts/pedagogy-statistics-query.sql": "c12775bfc93a843a04146a8685d452f70d9ad4196afeadf41e427d00df32132f",
+        "scripts/test-pedagogy-performance-pool-local.mjs": "b3e45fce174c6c0bd424a444b3e500b65d3515bb08c5432769a1c84056426eb9",
+        "scripts/test-pedagogy-performance-pool-worker.mjs": "6c6481e4ecface6d9549f07d6188fe6480b4bcc9d9a9e464e1b021b0ff13b375"
+      },
+      "nativeOracleProof": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\pedagogy-performance-1792432841371/run-1792433859200/proof.json",
+      "allSeededRowsSequencesAndMetadataExact": true,
+      "tlsPhysicalConfigurationProvisionedOnlyOnPerformanceCopy": true,
+      "originalCredentialsAndCertificatePreserved": true,
+      "hostPortPublished": false,
+      "applicationModified": false
+    }
+  },
+  "nativeSql": {
+    "artifact": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\pedagogy-readonly-1792433859001/proof.json",
+    "proof": {
+      "result": "PASS for native pedagogy SQL, permissions and actual decoder",
+      "date": "2026-10-19T18:17:53.126Z",
+      "artifact": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\pedagogy-readonly-1792433859001",
+      "container": "novlearn-admin-lot1a-replay-20261019113447497",
+      "migrationFile": "20261019111336_novlearn_admin_pedagogy_readonly.sql",
+      "migrationSha256": "1e222b92124becfc9b340afb3300d1ca1c95c40646ccd26aede11f5e36145ede",
+      "sourceHashes": {
+        "scripts/pedagogy-statistics-query.sql": "c12775bfc93a843a04146a8685d452f70d9ad4196afeadf41e427d00df32132f",
+        "scripts/pedagogy-reader-audit.sql": "8866dadb5569ab76b8c1409a900c5aad9b3faf1a596c4eba3423ab0cb100d6c0",
+        "scripts/test-pedagogy-readonly-local.mjs": "aa773045cc5193ae04d3fbbbe8563fe77b016c1fdd7d86566b61641a5a3c51cf",
+        "tests/fixtures/pedagogy-local.sql": "adf49a3633e9af59c69a8c550736bd256f81733f4b83c31d29783ed48f3fb540",
+        "src/lib/pedagogy-statistics.ts": "6f4fed17a62ca37fa21e718fc1ccef7275f64bf6d782513871d6a81607ca4023"
+      },
+      "nativeCases": [
+        "all-chapters",
+        "overlapping-competences",
+        "exercise-ranking",
+        "recorded-success-ranking",
+        "chapter-alias",
+        "competence-fallback",
+        "combined-filters",
+        "hard",
+        "flash",
+        "unknown-difficulty",
+        "unknown-type",
+        "exercise-mode",
+        "duel-mode",
+        "missing-filter-reference",
+        "utc-invariance",
+        "page-one",
+        "page-two",
+        "page-beyond"
+      ],
+      "invalidBounds": [
+        "reverse",
+        "too-long",
+        "future",
+        "bad-difficulty",
+        "bad-type",
+        "bad-mode",
+        "bad-group",
+        "bad-sort",
+        "zero-page",
+        "negative-page",
+        "min-int64-page",
+        "max-int64-page",
+        "oversized-page",
+        "oversized-competence"
+      ],
+      "actualWriteAndPrivateReadDenials": 23,
+      "sourceColumns": 32,
+      "rlsTables": 7,
+      "overlappingCompetencesDoNotInflateTotals": true,
+      "ambiguousChapterNotInvented": true,
+      "missingAndUnknownMetadataVisible": true,
+      "currentMetadataOnly": true,
+      "utcInvariance": true,
+      "paginationExact": true,
+      "closeBigintSuccessRatiosOrderedExactly": true,
+      "forgedApiRoleContexts": 2,
+      "apiCannotAssumePhysicalReader": true,
+      "schemaRecordedVerdictsNonNull": true,
+      "nullRecordedVerdictPositiveFixtureExecuted": false,
+      "fullRowsAclPoliciesFunctionsRolesAndSequencesExactAfterRollback": true,
+      "tableRowsCompared": 62,
+      "sequencesCompared": 11,
+      "realLoginOrTlsExecuted": false,
+      "browserExecuted": false,
+      "remoteOperations": false
+    }
+  },
+  "serverPg": {
+    "artifact": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\pedagogy-pg-1792430258159/run-1792433971177/proof.json",
+    "proof": {
+      "result": "PASS",
+      "date": "2026-10-19T18:19:52.320Z",
+      "checks": [
+        "Actual login with verified certificate, TLS 1.2+ and expected physical identity",
+        "Session login: actual private-read/write/creation/role 42501 denials in read-write transactions",
+        "Assumed reader: actual private-read/write/creation/role 42501 denials in read-write transactions",
+        "Actual server-side timeout cancels a query",
+        "Wrong password refused by SCRAM",
+        "Untrusted CA refused",
+        "Wrong certificate hostname refused",
+        "Plaintext refused by HBA",
+        "Other database refused by HBA",
+        "Actual server reader aggregates retained data plus disjoint labelled fixtures without modifying old rows",
+        "Actual chapter filter resolves current unambiguous aliases",
+        "Actual competence filter and overlapping attribution retain unexpanded totals",
+        "Actual difficulty and classic/flash metadata filters",
+        "Actual combined filters and recorded-success ordering",
+        "Duel response rows and completed matches remain separate metrics",
+        "A valid empty selection is distinct from a failed connection",
+        "Bigint page survives actual parameterized PostgreSQL without JavaScript rounding",
+        "Invalid trusted period metadata rejected",
+        "Reused pool lease resets and re-audits physical identities",
+        "Audited reference search finds current chapter aliases",
+        "Audited competence search is case insensitive and returns bounded metadata only",
+        "Reference substring search treats wildcard characters as literal text"
+      ],
+      "writeAndPrivateReadDenials": 46,
+      "realLogin": true,
+      "realTls": true,
+      "realServerReader": true,
+      "sourceLabel": "local-copy",
+      "browserExecuted": false,
+      "remoteOperations": false,
+      "artifact": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\pedagogy-pg-1792430258159",
+      "run": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\pedagogy-pg-1792430258159/run-1792433971177",
+      "container": "novlearn-admin-user-detail-restore-1792414439728",
+      "sourceHashes": {
+        "src/lib/pedagogy-references.ts": "1b575fc3285c828da4736a16d7cc724de4e3e5c3359f9226ebda370e40963d14",
+        "scripts/pedagogy-references-query.sql": "37ef88ea9757f1e7d14538a8e322d48a60b863be8288004314d5fc9edc83476a",
+        "src/lib/pedagogy-pg.ts": "d3e02ef7881893c90a8904198d2e0218a507f2441eaebafaa158e49e50bdd356",
+        "src/lib/pedagogy-config.ts": "f24dc0682aefd9d33139865ac797210d3379c44e5ca05b8295aebad99f9df7c1",
+        "src/lib/pedagogy-statistics.ts": "6f4fed17a62ca37fa21e718fc1ccef7275f64bf6d782513871d6a81607ca4023",
+        "scripts/pedagogy-reader-audit.sql": "8866dadb5569ab76b8c1409a900c5aad9b3faf1a596c4eba3423ab0cb100d6c0",
+        "scripts/pedagogy-statistics-query.sql": "c12775bfc93a843a04146a8685d452f70d9ad4196afeadf41e427d00df32132f",
+        "scripts/test-pedagogy-pg-local.mjs": "82441909c9890772858a1716919acfcf4eb822b799112b2f000e650fa4d9b8b1",
+        "scripts/test-pedagogy-pg-worker.mjs": "959afae03a5dae7a2cd3c69b1bdd20d57659c9d7d556353090025bbcdfde98ba",
+        "tests/fixtures/pedagogy-local.sql": "adf49a3633e9af59c69a8c550736bd256f81733f4b83c31d29783ed48f3fb540"
+      },
+      "effectivePrivilegeDriftsRejected": ["reader-email", "login-temporary"],
+      "preexistingRowsPreservedAcrossSeedTables": 62,
+      "allRowsSequencesAndMetadataExactAfterTests": true,
+      "newSyntheticAuthAccounts": 4,
+      "oldCredentialsOrCertificatesRotated": false,
+      "mainApplicationModified": false,
+      "newPedagogyHttpExecuted": false,
+      "referenceBoundaryProof": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\pedagogy-pg-1792430258159/run-1792433971177/reference-boundary-proof.json"
+    }
+  },
+  "http": {
+    "artifact": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\pedagogy-http-1792431337671/http-1792433969248/proof.json",
+    "proof": {
+      "result": "PASS",
+      "date": "2026-10-19T18:19:46.826Z",
+      "artifact": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\pedagogy-http-1792431337671/http-1792433969248",
+      "checks": [
+        "Anonymous page and both APIs refuse access",
+        "Real non-Admin with editable metadata admin claim remains forbidden",
+        "HTTP report matches physical SQL aggregates exactly with no identity or definitions",
+        "Combined pedagogical filters execute through real HTTP and SQL",
+        "Successful empty filters and exact bigint pages remain distinct from failures",
+        "Literal and case-insensitive metadata searches pass through audited SQL reader",
+        "Source overrides and duplicate or private query fields are refused",
+        "Actual server-rendered page exposes filters and truthful source and Engine limitations",
+        "Same valid cookie is refused after actual profile-role revocation",
+        "Warm report and reference pools refuse actual excess rights then recover after exact restoration",
+        "Source proxy outage yields 503 and reconnects without fake zero statistics",
+        "Existing general statistics, users and profile reads work and main publication stays disabled",
+        "Only newly opened test sessions were signed out",
+        "All source rows and 35 main business tables preserved except known synthetic Admin update timestamp"
+      ],
+      "actualAuthSessions": true,
+      "accountsCreated": false,
+      "sourceTablesExact": 62,
+      "sourceSequencesAndMetadataExact": true,
+      "mainBusinessTablesCompared": 35,
+      "onlyPermittedMainDifference": "Existing synthetic Admin updated_at after role revocation/restoration",
+      "newTestSessionsClosed": true,
+      "browserExecuted": false,
+      "remoteOperations": false
+    }
+  },
+  "scope": {
+    "storedSyntheticResponsesAdded": 100000,
+    "datedResponsesAddedInPeriod": 99000,
+    "finishedDuelsAdded": 1334,
+    "sqlMeasurements": 28,
+    "actualPoolMeasurements": 4,
+    "sqlStatementTimeoutMs": 10000,
+    "clientQueryTimeoutMs": 12000,
+    "maximumPoolConnections": 2,
+    "postgresCpuLimit": 2,
+    "postgresMemoryBytes": 1073741824,
+    "postgresSwapBytes": 0,
+    "worstSqlObservedMs": 3442.954,
+    "worstPoolObservedMs": 3726.532704,
+    "oracleChecksExact": true,
+    "cacheColdnessCertified": false,
+    "productionSlaCertified": false
+  },
+  "intermediateAttempts": [
+    {
+      "phase": "initial seed",
+      "result": "FAIL",
+      "artifact": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\pedagogy-performance-1792432841371/seed.log",
+      "reason": "Existing monthly-score trigger rejects correct answer with NULL attempted_at",
+      "correction": "Keep NULL dates with false verdict in those fixture rows; no trigger or constraint changed",
+      "rollbackInspection": {
+        "result": "PASS for exact rollback inspection",
+        "date": "2026-10-19T18:01:59.644Z",
+        "noOtherClientBackend": true,
+        "rowsExact": true,
+        "sequenceStatesExact": true,
+        "policiesExact": true,
+        "metadataExact": true
+      }
+    },
+    {
+      "phase": "original query",
+      "artifact": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\pedagogy-performance-1792432841371/run-1792432959536/failure.json",
+      "result": "FAIL",
+      "reason": "statement timeout at unchanged 10 seconds",
+      "allDataPreserved": true
+    },
+    {
+      "phase": "materialized duels candidate",
+      "artifact": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\pedagogy-performance-1792432841371/run-1792433107685/failure.json",
+      "result": "FAIL",
+      "reason": "Same statement timeout; isolated CTE diagnostics confirm raw-activity bottleneck",
+      "allDataPreserved": true
+    },
+    {
+      "phase": "first inline-bounds candidate",
+      "result": "NOT qualified",
+      "performanceArtifact": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\pedagogy-performance-1792432841371/run-1792433391802/proof.json",
+      "nativeRegressionArtifact": ".local/lot1a/pedagogy-readonly-1792433597922",
+      "reason": "28 performance cases passed, but unchanged oversized-page SQL case failed with bigint overflow",
+      "correction": "Retain separate materialized pagination and add three int64 boundary tests",
+      "finalNativeBounds": 14
+    }
+  ],
+  "fullCheck": {
+    "result": "PASS",
+    "date": "2026-10-19T18:32:02.917Z",
+    "artifact": "C:\\Users\\balth\\AppData\\Local\\Temp\\novlearn-admin-check-1792434426920",
+    "exitCode": 0,
+    "tests": 1284,
+    "files": 66,
+    "sourceFiles": 516,
+    "allCopiedSourcesStillMatch": true,
+    "fullCheckCommand": "npm run check",
+    "separateBuildDirectory": true,
+    "independentTemporaryProject": true,
+    "dependenciesCopied": true,
+    "applicationServersInterrupted": false,
+    "privateEnvironmentFilesCopied": false,
+    "sourceSnapshotManifest": "C:\\Users\\balth\\AppData\\Local\\Temp\\novlearn-admin-check-1792434426920/source-hashes.json",
+    "sourceSnapshotIncludesCurrentOptimization": true,
+    "evidenceAddedAfterCompletion": [
+      "docs/pedagogy-performance-proof.json",
+      "docs/readiness-current.json"
+    ],
+    "postCheckChangesAreEvidenceOnly": true
+  },
+  "remaining": [
+    "Real Production volumes, cold caches, external network and deployment host",
+    "33 previously observed SQL69 advisor warnings and global SQL qualification",
+    "Authorized browser acceptance of MathLive, recovery and navigation",
+    "Remaining Production identity/source activation, metrics and active-version indicator",
+    "MFA, provisioning, real session-expiry/revocation qualification",
+    "Remote history reconciliation, student compatibility and separate migration/publication/deployment approvals"
+  ],
+  "browserExecuted": false,
+  "remoteOperations": false,
+  "globalSqlCertification": false,
+  "goalComplete": false,
+  "currentAvailability": {
+    "result": "PASS for actual existing login, pedagogical page availability and preservation",
+    "date": "2026-10-19T18:30:29.469Z",
+    "observations": [
+      { "route": "/api/admin/session", "status": 200 },
+      { "route": "/admin/statistics", "status": 200 },
+      {
+        "route": "/admin/statistics/pedagogy?from=2026-10-15&to=2026-10-17",
+        "status": 200
+      },
+      {
+        "servedClientScriptsScanned": 7,
+        "actualPrivateValuesAbsent": true,
+        "exhaustiveSecurityScan": false
+      },
+      { "origin": "http://127.0.0.1:3150", "loginStatus": 200 },
+      { "origin": "http://127.0.0.1:3152", "loginStatus": 200 }
+    ],
+    "actualExistingSyntheticAdminLogin": true,
+    "newTestSessionClosed": true,
+    "mainPublicationStatus": 503,
+    "currentProcessId": 39928,
+    "currentEngineContainer": "novlearn-admin-engine-1792431615700",
+    "newPedagogyUiDelivered": true,
+    "protectedAdminFilesExact": 4,
+    "privateAppConfigurationsExact": 8,
+    "preexistingNovlearnDirtyFilesExact": 8,
+    "engineRepositoryClean": true,
+    "documentReferencesExact": true,
+    "canonicalMigrationUnchanged": true,
+    "remoteOperations": false,
+    "browserExecuted": false
+  },
+  "preservation": {
+    "protectedAdminFilesExact": 4,
+    "privateAppConfigurationsExact": 8,
+    "preexistingNovlearnDirtyFilesExact": 8,
+    "engineRepositoryClean": true,
+    "canonicalMigrationSha256": "1e222b92124becfc9b340afb3300d1ca1c95c40646ccd26aede11f5e36145ede"
+  }
+}

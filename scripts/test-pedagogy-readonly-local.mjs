@@ -414,6 +414,9 @@ for (const [label, change] of [
   ['bad-group', { 7: 'users' }],
   ['bad-sort', { 8: 'email' }],
   ['zero-page', { 9: '0' }],
+  ['negative-page', { 9: '-1' }],
+  ['min-int64-page', { 9: '-9223372036854775808' }],
+  ['max-int64-page', { 9: '9223372036854775807' }],
   ['oversized-page', { 9: '368934881474191033' }],
   ['oversized-competence', { 3: 'x'.repeat(201) }],
 ]) {

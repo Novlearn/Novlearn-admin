@@ -1,7 +1,7 @@
 -- Fixed aggregate query, never caller-supplied SQL or identifiers.
 -- UTC start, exclusive end, chapter UUID, competence text, difficulty, type,
 -- activity mode, grouping, ordering, decimal page. All counts remain text.
-WITH bounds AS MATERIALIZED (
+WITH bounds AS NOT MATERIALIZED (
  SELECT $1::date AS first_day,$2::date AS until_day,$3::uuid AS chapter,
    $4::text AS competence,$5::text AS difficulty,$6::text AS exercise_type,
    $7::text AS mode,$8::text AS grouping,$9::text AS ordering,$10::bigint AS page,
@@ -14,6 +14,8 @@ WITH bounds AS MATERIALIZED (
    AND ($6::text IS NULL OR $6::text IN ('classic','flash','unknown'))
    AND $7::text IN ('all','exercise','duel') AND $8::text IN ('chapter','competence','exercise')
    AND $9::text IN ('attempts','success') AND $10::bigint BETWEEN 1 AND 368934881474191032
+), pagination AS MATERIALIZED (
+ SELECT page FROM bounds
 ), raw_activity AS MATERIALIZED (
  SELECT 'exercise'::text AS kind,a.id AS row_id,a.exercise_id,a.user_id AS account_id,
    CASE WHEN a.is_abandoned IS TRUE THEN 'abandoned'
@@ -123,7 +125,7 @@ WITH bounds AS MATERIALIZED (
    (g.exercise_attempts+g.duel_attempts) DESC,g.group_id COLLATE "C" ASC NULLS LAST) AS position
  FROM grouped g CROSS JOIN bounds b
 ), page_rows AS (
- SELECT * FROM ordered ORDER BY position LIMIT 25 OFFSET (SELECT (page-1)*25 FROM bounds)
+ SELECT * FROM ordered ORDER BY position LIMIT 25 OFFSET (SELECT (page-1)*25 FROM pagination)
 )
 SELECT jsonb_build_object(
  'schemaVersion',1,'asOf',to_char(b.as_of AT TIME ZONE 'UTC','YYYY-MM-DD"T"HH24:MI:SS.US"Z"'),
@@ -138,7 +140,7 @@ SELECT jsonb_build_object(
      FROM (SELECT id,label FROM competence_refs ORDER BY label COLLATE "C",id COLLATE "C" LIMIT 200) r),'[]'::jsonb),
    'moreChapters',(SELECT count(*)>200 FROM chapter_refs),'moreCompetences',(SELECT count(*)>200 FROM competence_refs)),
  'groups',jsonb_build_object('page',b.page::text,'size',25,'total',(SELECT count(*)::text FROM grouped),
-   'hasMore',b.page*25<(SELECT count(*) FROM grouped),
+   'hasMore',(SELECT page*25 FROM pagination)<(SELECT count(*) FROM grouped),
    'rows',coalesce((SELECT jsonb_agg(jsonb_build_object('id',group_id,'label',left(label,200),
      'truncated',char_length(label)>200,'counts',jsonb_build_object(
        'exerciseAttempts',exercise_attempts::text,'duelAttempts',duel_attempts::text,'completedDuels',completed_duels::text,

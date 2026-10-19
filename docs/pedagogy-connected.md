@@ -1,5 +1,11 @@
 # Résultats pédagogiques — raccordement local
 
+**Suivi du 19 octobre :** les [requêtes sont mesurées et optimisées](pedagogy-performance.md)
+sur 100 000 réponses synthétiques. Le timeout reste inchangé, les droits et les
+bornes de pagination sont revalidés, puis le vrai pool TLS et les API repassent.
+Les preuves du raccordement initial ci-dessous conservent leur date ; le suivi
+possède ses propres empreintes et sa propre qualification.
+
 La page `/admin/statistics/pedagogy` et les deux API protégées sont raccordées
 sur l’instance locale 3150. Depuis **Statistiques**, le lien **Explorer les
 résultats pédagogiques** ouvre les filtres et les regroupements. La connexion
@@ -97,7 +103,7 @@ deux fonctions à search path mutable restent à analyser. Le résultat SQL 68
 revendiquer une certification SQL globale ; les critères restent inchangés.
 
 La réception visuelle/accessibilité, MathLive et navigation dans une session
-navigateur autorisée, les plans sur un volume représentatif, les métriques
+navigateur autorisée, les mesures sur la volumétrie réelle et l’hôte cible, les métriques
 restantes, la source Production et la version active cible restent ouverts.
 MFA/provisionnement, réconciliation de l’historique SQL distant, compatibilité
 élève, première application/publication distante et déploiement exigent leurs

@@ -1,5 +1,12 @@
 # Roadmap
 
+**Performance pédagogique du 19 octobre :** une [requête optimisée et mesurée](pedagogy-performance.md)
+remplace le plan qui dépassait dix secondes sur 100 000 réponses synthétiques.
+Les 28 mesures passent (maximum 3,443 s), puis quatre lectures du vrai pool TLS
+avec deux appels simultanés (maximum observé 3,727 s). Les bornes SQL sont
+renforcées à quatorze cas négatifs ; permissions et API restent qualifiées.
+La volumétrie réelle, les caches froids et l’hôte cible restent à vérifier.
+
 **Raccordement pédagogique du 19 octobre :** la [page et les API locales](pedagogy-connected.md)
 sont disponibles sur 3150, depuis Statistiques. Le lecteur TLS et les quatorze
 groupes HTTP réels passent ; la source SQL 69 synthétique reste distincte de
