@@ -1,12 +1,12 @@
 {
-  "recordedAt": "2026-10-18T22:42:37.136Z",
+  "recordedAt": "2026-10-19T10:00:08.843Z",
   "scope": "Documentary traceability for all 20 original goal sections; not a functional test, receipt, permission or completion certificate",
   "referenceInputs": {
     "requestSha256": "fb9ac40863c57594878833b8a9fc0bd130a0cba9d0249d29c609051a54bded93",
     "cdcSha256": "b6bfea6d74b008e54ed61aa7598ccd01bd438d496cc22add15da2ff8abb04401",
     "decisionsSha256": "dac872dd9755c30734c067b8df52be8b5d595dbd9e01f5e5e1dcd27fca9ff028"
   },
-  "baselineAdminCommitAtAssessment": "db58c849e6bec42ffa1c5c5096c0b77328b033b4",
+  "baselineAdminCommitAtAssessment": "8766d535b4947d1dbb5f3cbafca94f7236f94783",
   "implementationHasUncommittedChangesAtObservation": true,
   "requestedSections": [
     {
@@ -218,7 +218,7 @@
     "local-recovery-2026-10-18.md": "ab6e2a667d7b054b673a1b175044ed6504218a993fd9e8c6054b46fb970aac1f",
     "users-readonly.md": "af41c90a92f9f5f8baa0f9ad6094b0c87d6d54f07a1bff828e4494efe829ae20",
     "lot-1a-remote-reconciliation-current.md": "4a2a06adff60f7a6541f261af3bd00a63debc01197030717c389c7c22b813dfe",
-    "progress.md": "0922e8c9c293cd3587d9d086f300f129d6ffc5b91e899648d74822817f7f9f55",
+    "progress.md": "46eb02c2b3d8888dd0c08b76fd718f2410cac0240cb95f91437d2c653e02c39b",
     "lot-1a-preparation.md": "3561164a62bc6690a46d2f472c42037c11bd9aacc40add77d44814abdc5dd271",
     "recovery-cleanup-proof.json": "cb414a4c150ceb55204fcc9fca07696d05463e71642b4b4db35fd62819fa2524",
     "local-recovery-2026-10-18-proof.json": "5c9f10801159d1b94c66aebf2f4f45cb91e6a3447f6098968d85e03c83e0e26d",
@@ -239,12 +239,14 @@
     "activity-readonly-proof.json": "c362635524c4dc6cfe81cdbc489e2130a3e3285f8346462e5075915fddb51401",
     "activity-http-proof.json": "c4ae58e794d8944ecf0947935e799b834bb1742336984c5cd8c51201af35b806",
     "users-readonly-proof.json": "2a2ba32df2dca5050be282939596ed3a0a9e22695a56d4d6c6560f64ab5a8da2",
-    "roadmap.md": "3410895e75eaf63ab7e9a35598e972f199ba72732f711364d409e7274064ba5c",
+    "roadmap.md": "2db0bdd1f180ad72b41774ea4690f806d48e8d6a02b2a5dc15f11e508eeb053e",
     "activity-readonly.md": "0bc4135dfe48409cb19a8f2ad0b98e9593c65f83f46bc12b53a4a8e6fd1fbdff",
     "activity-pg.md": "ce3ae62c070f728174bc2cae7817d1ed727d42fd1e2e09d162cadd188b028aec",
     "lot-1a-local-statistics-guard.md": "0bd4f19d706296ccb96f8ea246f186c4e52ddc7a23da69519f64c2a1978a7a92",
     "user-detail.md": "1f23e0419a662a186f11dabc73d0aa8e882a577c01176a2ddaf6ed0f0c465fdc",
-    "user-detail-proof.json": "330af4dbf3708b0154fb7153f9a7662c3e88f2b6dfcb11f10a2fa3957123b74f"
+    "user-detail-proof.json": "330af4dbf3708b0154fb7153f9a7662c3e88f2b6dfcb11f10a2fa3957123b74f",
+    "reader-policies.md": "f265e48a96c82edf0b4d58af4474337ceb95b7fd19e30fe7a8d287777a489ae6",
+    "reader-policies-proof.json": "a258a061018092c600010697138da09b30c09275404ae4e0745c6f2d30cee3a2"
   },
   "unimplemented": [
     "Production analytics identity/source activation and remaining metrics/pedagogical filters (local SQL role, login/TLS, server reader and Auth/HTTP page/API qualified)",
@@ -260,9 +262,32 @@
     "Full multi-exercise publication HTTP qualification",
     "Target deployment-host qualification",
     "Remote migration rehearsal/approval and controlled first publication",
-    "Full SQL advisor remediation and global security qualification (SQL67: 45 warnings and 65 infos)"
+    "Full SQL advisor remediation and global security qualification (SQL67: 45 warnings and 65 infos)",
+    "SQL68 native qualification, fresh replay, logical restoration and connected regressions after Docker recovery"
   ],
   "remoteWritesPerformed": false,
   "privilegedProductionKeysRetrieved": false,
-  "goalComplete": false
+  "goalComplete": false,
+  "currentLocalServices": {
+    "observedAt": "2026-10-19T09:50:55.569Z",
+    "observations": [
+      {
+        "url": "http://127.0.0.1:3150/login",
+        "status": null,
+        "errorCode": "ECONNREFUSED"
+      },
+      {
+        "url": "http://127.0.0.1:55431/health",
+        "status": null,
+        "errorCode": "ECONNREFUSED"
+      },
+      {
+        "url": "http://127.0.0.1:3152/login",
+        "status": null,
+        "errorCode": "ECONNREFUSED"
+      }
+    ],
+    "backendStartFailed": true,
+    "qualificationDoesNotProveCurrentAvailability": true
+  }
 }

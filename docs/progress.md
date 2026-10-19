@@ -1,5 +1,19 @@
 # Progression du goal NovLearn Admin
 
+## Consolidation SQL — préparation et panne du 19 octobre
+
+La [correction des policies](reader-policies.md) vise treize doublons SELECT des
+trois lecteurs, sans nouvelle colonne ni mutation. La CLI a créé SQL 68 ; le
+pilote de comparaison RLS et de conservation est préparé et contrôlé statiquement.
+Sa première exécution s'arrête avant SQL : le moteur Docker est indisponible.
+Le démarrage normal reproduit à 09:44:59 UTC l'erreur du socket interne ; aucun
+socket, droit ou réglage n'est modifié. Les services 3150/3152 et Auth refusent
+la connexion à 09:50 UTC. Fermeture « Quit » et lancement utilisateur normal sont
+demandés ; aucun test SQL 68 n'est déclaré réussi, aucun distant n'est modifié.
+Le contrôle complet hors ligne passe 1 143 tests / 59 fichiers, types, lint,
+format, build et smoke Auth désactivée ; 473 sources restent identiques. La
+migration reste non appliquée et hors commit, en attente des essais natifs.
+
 ## Fiches utilisateurs — 19 octobre 2026
 
 La [fiche locale](user-detail.md) raccorde profil, trois vues paginées, historique

@@ -1,5 +1,8 @@
 # Documentation NovLearn Admin
 
+[Consolidation des policies et panne Docker du 19 octobre](reader-policies.md) :
+correction SQL 68 préparée, qualification native non exécutée et reprise attendue.
+
 [Fiche utilisateur locale](user-detail.md) : nom, e-mail, activité, progression
 enregistrée et historique synthétique ; SQL 67, vraie connexion et source séparée.
 

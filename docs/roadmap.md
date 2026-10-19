@@ -1,5 +1,12 @@
 # Roadmap
 
+**19 octobre :** la [consolidation des policies](reader-policies.md) est préparée
+pour SQL 68 ; ses tests natifs restent non exécutés à cause de la panne de
+démarrage Docker. Les ports Admin/Auth ne répondent plus au dernier relevé.
+Le jalon précédent des [fiches locales](user-detail.md) passe SQL 67, PG/TLS,
+Auth/HTTP et 1 143 tests ; il constitue une preuve datée, pas une garantie de
+disponibilité après l'arrêt des services. Aucun nouveau lot n'est déclaré terminé.
+
 **Utilisateurs locaux, 18 octobre :** [liste/recherche/activité](users-readonly.md)
 raccordées avec identité SQL distincte et lecture minimisée. Rejeu 66, restauration,
 35 assertions SQL, 16 groupes PG/TLS et 13 groupes Auth/HTTP passent. Les 62 tables

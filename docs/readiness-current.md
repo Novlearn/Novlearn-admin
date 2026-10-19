@@ -1,5 +1,10 @@
 # État de livraison — 19 octobre 2026
 
+**Interruption du 19 octobre :** le [démarrage Docker échoue](reader-policies.md)
+et les ports Admin/Auth ne répondent plus au relevé de 09:50 UTC. Les preuves
+fonctionnelles ci-dessous précèdent cet arrêt. SQL 68 est préparé mais non appliqué
+et non qualifié ; reprise des services et essais natifs restent nécessaires.
+
 **NovLearn Admin n’est pas terminé.** Les fonctions de contenu disposent de
 preuves locales, mais les statistiques/utilisateurs Production ne sont pas
 opérationnels et plusieurs réceptions restent ouvertes. Le contrat et l’affichage
