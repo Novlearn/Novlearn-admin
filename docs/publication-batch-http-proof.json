@@ -1,0 +1,111 @@
+{
+  "result": "PASS for local multi-exercise HTTP publication",
+  "date": "2026-10-19T10:32:51.977Z",
+  "artifact": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\local-admin-publication-1792259029889/batch-http-1792405809445",
+  "checks": [
+    "Retained synthetic accounts sign in; anonymous, non-Admin and foreign-origin publication requests are refused without target writes",
+    "Three new canonical fixtures acquire real bounded-Engine reports and explicitly synthetic review through Next/Auth/REST; no target fixture or taxonomy is inserted",
+    "Actual controller and transport prepare three independent local diffs; authenticated batch SSR carries the selected identities without confirmation tokens or target writes",
+    "Closing the second real HTTP response after headers halts the batch before the third send; two target exercises exist and no unchecked automatic retry occurs",
+    "A fresh controller reconstructed only from the URL observes all three durable operations without confirmation capabilities or target writes; repeated confirmation is idempotent",
+    "Only the remaining plan is explicitly cancelled, freshly prepared, reviewed and confirmed; all three per-exercise outcomes are durable",
+    "Exactly three new target exercises/revisions are published by stable catalogue identity; all 60 excluded tables, old rows, Auth histories and signed receipts retain their exact contents"
+  ],
+  "sourceHashes": {
+    "scripts/test-publication-batch-http-local.mjs": "380a6317869945455249171a0a0ea62e21357bce35a8ed11c115dd89e36ac3b7",
+    "src/lib/publication-batch.ts": "b39fa535ec776a01793f7e41d35f846424cae2c4ad7719e2a9d318c7527734c1",
+    "src/lib/publication-view.ts": "069cbfc49e9fd1da02f4be248f94d581eb2856827ee32f5950cba1068efdd980",
+    "src/app/admin/publication/batch/page.tsx": "39afa07a131c9329cfe9c5e05867761388112ec4e69ea5216930da77ac97f58a",
+    "src/components/publication-batch-panel.tsx": "977a289c012205f64e7bc8c52bf01e15ea9e2ce55cbd4e4a127b0effaaf54426",
+    "tests/fixtures/preview-definition.json": "a6d0cb399add10e9199c851a64fd9a6bf97145415358c6435904c45bdb4b89f9"
+  },
+  "sourceFixturesCreated": 3,
+  "accountsReused": true,
+  "newAccountsCreated": 0,
+  "realNext": true,
+  "realAuth": true,
+  "realPostgrest": true,
+  "nativeLinuxEngine": true,
+  "engineArchiveSha256": "d4d3abc408ab37f2f8a5faa512964b48947828bae9209cb1460b47111ca582f9",
+  "controllerAndTransportActualSources": true,
+  "batchId": "a6fc21c5-c629-4837-9ed1-34fbf16722fa",
+  "sourceVersions": [
+    "9b26cdd2-a0ca-4eae-a8cc-dbbd301db58b",
+    "9e847554-fc19-40c8-8ac8-762768303c84",
+    "6a485245-7fcd-4436-b7ca-71886da7664f"
+  ],
+  "receiptIds": [
+    "d3d2bd7c-d8e5-40d6-aebe-fe2d362d3ddc",
+    "9c448336-2857-41fc-a05c-62b9609e29d9",
+    "e601c591-058e-4b4e-a680-3791854b7736"
+  ],
+  "initialOperations": [
+    "c4cb2fac-2a23-4f7b-8b48-9ad15914dc4d",
+    "0e61bb65-d709-4b42-a3be-60ee97c6be0e",
+    "ada3a494-b5e0-4ed4-9a68-92063384df61"
+  ],
+  "finalOperations": [
+    "c4cb2fac-2a23-4f7b-8b48-9ad15914dc4d",
+    "0e61bb65-d709-4b42-a3be-60ee97c6be0e",
+    "2c312f48-576e-4e5f-98b6-55763864690b"
+  ],
+  "secondClientResponseClosedAfterHeaders": true,
+  "postgresCommitAcknowledgementLossSimulated": false,
+  "targetNewExercises": 3,
+  "targetNewVersions": 3,
+  "targetExcludedTablesExact": 60,
+  "preexistingSourceBusinessRowsPreserved": true,
+  "preexistingTargetRowsPreserved": true,
+  "confirmationsAbsentFromCheckpoint": true,
+  "runtimeLimitsChanged": false,
+  "sourceFixtureReviewSynthetic": true,
+  "syntheticCurrentCookieSessionsClosed": true,
+  "browserExecuted": false,
+  "humanAcceptance": false,
+  "strictStolenJwtRevocationTested": false,
+  "publicationOutsideLocalFixtureTested": false,
+  "remoteOperations": false,
+  "previousFailedRun": {
+    "artifact": ".local/local-admin-publication-1792259029889/batch-http-1792405672488",
+    "audit": {
+      "result": "PASS for failure containment only",
+      "date": "2026-10-19T10:30:03.848Z",
+      "targetTablesExact": 62,
+      "preexistingSourceBusinessRowsPreserved": 35,
+      "onlyNewDraftRetained": {
+        "versionId": "b178cdf0-0ba3-49cd-b3a9-b23325280b93",
+        "exerciseId": "10"
+      },
+      "newDraftCreatedAuditEvents": 1,
+      "newReceipts": 0,
+      "newPublicationOperations": 0,
+      "sessionsClosed": true,
+      "testSucceeded": false,
+      "nextAttemptRequiresSeparateArtifact": true,
+      "reason": "The preview and review APIs require a safe integer epoch; the publication batch API uses decimal text. Original criteria unchanged."
+    },
+    "previewEpochTypeCorrected": true,
+    "provisioningFlagsExpectedDisabledOnDisk": true,
+    "criteriaRelaxed": false
+  },
+  "fullCheck": {
+    "result": "PASS",
+    "date": "2026-10-19T10:44:51.928Z",
+    "artifact": "C:\\Users\\balth\\AppData\\Local\\Temp\\novlearn-admin-check-1792406395706",
+    "exitCode": 0,
+    "tests": 1143,
+    "files": 59,
+    "sourceFiles": 477,
+    "allCopiedSourcesStillMatch": true,
+    "fullCheckCommand": "npm run check",
+    "separateBuildDirectory": true,
+    "independentTemporaryProject": true,
+    "dependenciesCopied": true,
+    "applicationServersInterrupted": false,
+    "privateEnvironmentFilesCopied": false,
+    "executedForCurrentCode": true,
+    "postCheckChanges": "Evidence JSON and status documentation only; runtime/test sources match checked copies",
+    "smokeAuthDisabled": true,
+    "nativeSqlAndHttpRunsSeparate": true
+  }
+}

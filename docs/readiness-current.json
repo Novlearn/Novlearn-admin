@@ -1,12 +1,12 @@
 {
-  "recordedAt": "2026-10-19T10:00:08.843Z",
+  "recordedAt": "2026-10-19T10:38:54.014Z",
   "scope": "Documentary traceability for all 20 original goal sections; not a functional test, receipt, permission or completion certificate",
   "referenceInputs": {
     "requestSha256": "fb9ac40863c57594878833b8a9fc0bd130a0cba9d0249d29c609051a54bded93",
     "cdcSha256": "b6bfea6d74b008e54ed61aa7598ccd01bd438d496cc22add15da2ff8abb04401",
     "decisionsSha256": "dac872dd9755c30734c067b8df52be8b5d595dbd9e01f5e5e1dcd27fca9ff028"
   },
-  "baselineAdminCommitAtAssessment": "8766d535b4947d1dbb5f3cbafca94f7236f94783",
+  "baselineAdminCommitAtAssessment": "d15fd1f8887b454abc8ba02c420156f211bfc3fd",
   "implementationHasUncommittedChangesAtObservation": true,
   "requestedSections": [
     {
@@ -149,7 +149,7 @@
       "id": 10,
       "title": "Validation et publication",
       "evidenceSummary": "[Treize contrôles HTTP locaux](publication-http-connected-proof.json), transferts/retour, puis [huit contrôles après redémarrage](local-recovery-2026-10-18-proof.json). [Lots SQL](publication-batch-proof.json) distincts.",
-      "remaining": "Parcours HTTP multi-exercices complet non exécuté ; première publication réelle interdite sans accord distinct. Les attestations synthétiques ne valent pas validation pédagogique humaine."
+      "remaining": "Parcours HTTP par lot local qualifié (trois exercices, réponse perdue et reprise). Réception navigateur et première publication distante soumises à validation ; relecture synthétique sans validation pédagogique humaine."
     },
     {
       "id": 11,
@@ -218,7 +218,7 @@
     "local-recovery-2026-10-18.md": "ab6e2a667d7b054b673a1b175044ed6504218a993fd9e8c6054b46fb970aac1f",
     "users-readonly.md": "af41c90a92f9f5f8baa0f9ad6094b0c87d6d54f07a1bff828e4494efe829ae20",
     "lot-1a-remote-reconciliation-current.md": "4a2a06adff60f7a6541f261af3bd00a63debc01197030717c389c7c22b813dfe",
-    "progress.md": "46eb02c2b3d8888dd0c08b76fd718f2410cac0240cb95f91437d2c653e02c39b",
+    "progress.md": "f44364afcf4be2ff27b2c997d720a93152c8e1e978d948b72879fcba0f643ef2",
     "lot-1a-preparation.md": "3561164a62bc6690a46d2f472c42037c11bd9aacc40add77d44814abdc5dd271",
     "recovery-cleanup-proof.json": "cb414a4c150ceb55204fcc9fca07696d05463e71642b4b4db35fd62819fa2524",
     "local-recovery-2026-10-18-proof.json": "5c9f10801159d1b94c66aebf2f4f45cb91e6a3447f6098968d85e03c83e0e26d",
@@ -239,14 +239,18 @@
     "activity-readonly-proof.json": "c362635524c4dc6cfe81cdbc489e2130a3e3285f8346462e5075915fddb51401",
     "activity-http-proof.json": "c4ae58e794d8944ecf0947935e799b834bb1742336984c5cd8c51201af35b806",
     "users-readonly-proof.json": "2a2ba32df2dca5050be282939596ed3a0a9e22695a56d4d6c6560f64ab5a8da2",
-    "roadmap.md": "2db0bdd1f180ad72b41774ea4690f806d48e8d6a02b2a5dc15f11e508eeb053e",
+    "roadmap.md": "3318016c1b0a168687d949f237329b60297b600e0a19eb2ee0e5ef4d2bd61b9c",
     "activity-readonly.md": "0bc4135dfe48409cb19a8f2ad0b98e9593c65f83f46bc12b53a4a8e6fd1fbdff",
     "activity-pg.md": "ce3ae62c070f728174bc2cae7817d1ed727d42fd1e2e09d162cadd188b028aec",
     "lot-1a-local-statistics-guard.md": "0bd4f19d706296ccb96f8ea246f186c4e52ddc7a23da69519f64c2a1978a7a92",
-    "user-detail.md": "1f23e0419a662a186f11dabc73d0aa8e882a577c01176a2ddaf6ed0f0c465fdc",
+    "user-detail.md": "312a643be46e2fca0ff3cba3744b321d5d1954f503fc111e4d6dddee4f4a846e",
     "user-detail-proof.json": "330af4dbf3708b0154fb7153f9a7662c3e88f2b6dfcb11f10a2fa3957123b74f",
-    "reader-policies.md": "f265e48a96c82edf0b4d58af4474337ceb95b7fd19e30fe7a8d287777a489ae6",
-    "reader-policies-proof.json": "a258a061018092c600010697138da09b30c09275404ae4e0745c6f2d30cee3a2"
+    "reader-policies.md": "3f912c776f103d629c94c473a1e3348d8a7fc557ed685d3b9deb516ca2de7675",
+    "reader-policies-proof.json": "7fdaeddd109399b490b9f7a2dcd077e72b720c26590231065063f0b292b81a30",
+    "publication-batch-http-proof.json": "626f14552dc362d75699f7fb7f0913f7f4721526c451311e2783ff787311da59",
+    "local-recovery-2026-10-19-proof.json": "f935d3d3a3b3f0200cdea45d18dc77bf4bb97d6e5138ec167d96ac7512fca6e2",
+    "local-recovery-2026-10-19.md": "7e625334869f521382afa5603d3c409900a90b4c606e2ed762daa80791a5a870",
+    "publication-batch.md": "beec1f869e0be19898cb1d854bed9d4fd9f13c1e4a349922e0a1869d233e0a2f"
   },
   "unimplemented": [
     "Production analytics identity/source activation and remaining metrics/pedagogical filters (local SQL role, login/TLS, server reader and Auth/HTTP page/API qualified)",
@@ -259,35 +263,41 @@
     "Authorized browser acceptance of current recovery/cleanup",
     "Connected browser cleanup/recovery (services now restored)",
     "Real session expiry qualification",
-    "Full multi-exercise publication HTTP qualification",
     "Target deployment-host qualification",
     "Remote migration rehearsal/approval and controlled first publication",
-    "Full SQL advisor remediation and global security qualification (SQL67: 45 warnings and 65 infos)",
-    "SQL68 native qualification, fresh replay, logical restoration and connected regressions after Docker recovery"
+    "Full SQL advisor remediation and global security qualification (SQL68: 32 warnings and 65 infos)"
   ],
   "remoteWritesPerformed": false,
   "privilegedProductionKeysRetrieved": false,
   "goalComplete": false,
   "currentLocalServices": {
-    "observedAt": "2026-10-19T09:50:55.569Z",
+    "result": "PASS for actual local login availability",
+    "date": "2026-10-19T10:38:53.970Z",
     "observations": [
       {
-        "url": "http://127.0.0.1:3150/login",
-        "status": null,
-        "errorCode": "ECONNREFUSED"
+        "origin": "http://127.0.0.1:3150",
+        "loginStatus": 200,
+        "processId": 14900,
+        "engineContainer": "novlearn-admin-engine-1792405457840",
+        "local": true
       },
       {
-        "url": "http://127.0.0.1:55431/health",
-        "status": null,
-        "errorCode": "ECONNREFUSED"
-      },
-      {
-        "url": "http://127.0.0.1:3152/login",
-        "status": null,
-        "errorCode": "ECONNREFUSED"
+        "origin": "http://127.0.0.1:3152",
+        "loginStatus": 200,
+        "processId": 29968,
+        "engineContainer": "novlearn-admin-engine-1792405458742",
+        "local": true
       }
     ],
-    "backendStartFailed": true,
-    "qualificationDoesNotProveCurrentAvailability": true
+    "mainPublicationDisabled": true,
+    "mainPublicationStatus": 503,
+    "remoteOperations": false,
+    "browserExecuted": false
+  },
+  "latestLocalQualification": {
+    "sql68Proof": "reader-policies-proof.json",
+    "batchHttpProof": "publication-batch-http-proof.json",
+    "recoveryProof": "local-recovery-2026-10-19-proof.json",
+    "globalGoalComplete": false
   }
 }

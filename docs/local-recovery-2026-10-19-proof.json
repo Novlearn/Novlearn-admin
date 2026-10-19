@@ -1,0 +1,44 @@
+{
+  "result": "PASS for actual local login availability",
+  "date": "2026-10-19T10:38:53.970Z",
+  "observations": [
+    {
+      "origin": "http://127.0.0.1:3150",
+      "loginStatus": 200,
+      "processId": 14900,
+      "engineContainer": "novlearn-admin-engine-1792405457840",
+      "local": true
+    },
+    {
+      "origin": "http://127.0.0.1:3152",
+      "loginStatus": 200,
+      "processId": 29968,
+      "engineContainer": "novlearn-admin-engine-1792405458742",
+      "local": true
+    }
+  ],
+  "mainPublicationDisabled": true,
+  "mainPublicationStatus": 503,
+  "remoteOperations": false,
+  "browserExecuted": false,
+  "fullCheck": {
+    "result": "PASS",
+    "date": "2026-10-19T10:44:51.928Z",
+    "artifact": "C:\\Users\\balth\\AppData\\Local\\Temp\\novlearn-admin-check-1792406395706",
+    "exitCode": 0,
+    "tests": 1143,
+    "files": 59,
+    "sourceFiles": 477,
+    "allCopiedSourcesStillMatch": true,
+    "fullCheckCommand": "npm run check",
+    "separateBuildDirectory": true,
+    "independentTemporaryProject": true,
+    "dependenciesCopied": true,
+    "applicationServersInterrupted": false,
+    "privateEnvironmentFilesCopied": false,
+    "executedForCurrentCode": true,
+    "postCheckChanges": "Evidence JSON and status documentation only; runtime/test sources match checked copies",
+    "smokeAuthDisabled": true,
+    "nativeSqlAndHttpRunsSeparate": true
+  }
+}

@@ -1,5 +1,9 @@
 # Authentification Admin — préparation locale du Lot 1B
 
+**Reprise du 19 octobre :** [connexion et services locaux rétablis](local-recovery-2026-10-19.md),
+SQL 68 et parcours de publication par lot qualifiés sur copies synthétiques.
+Aucune activation distante ; voir les preuves et limites datées.
+
 ## État réel
 
 **18 octobre :** l’instance connectée est rétablie après la panne Docker ;

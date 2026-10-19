@@ -1,6 +1,18 @@
 # Progression du goal NovLearn Admin
 
-## Consolidation SQL — préparation et panne du 19 octobre
+## Reprise et qualifications locales — 19 octobre 2026
+
+Les [services conservés sont disponibles](local-recovery-2026-10-19.md) après
+intervention utilisateur sur Docker. Connexion réelle, huit contrôles Engine
+(18 anciens reçus conservés), SQL 68, restauration, 56 assertions historiques,
+19 groupes PG/TLS et 16 Auth/HTTP passent. Les [advisors](reader-policies.md)
+confirment treize avertissements supprimés ; 32 WARN et 65 INFO restent ouverts.
+Le [parcours HTTP de publication par lot](publication-batch-http-proof.json)
+passe sept groupes avec trois transferts locaux, arrêt sur réponse perdue et
+reprise sans doublon. Les échecs initiaux restent documentés. Aucun distant
+activé ; réception navigateur et objectifs restants du CDC toujours ouverts.
+
+## Relevé antérieur — préparation et panne du 19 octobre
 
 La [correction des policies](reader-policies.md) vise treize doublons SELECT des
 trois lecteurs, sans nouvelle colonne ni mutation. La CLI a créé SQL 68 ; le

@@ -1,5 +1,9 @@
 # Fiche utilisateur — intégration locale du 19 octobre 2026
 
+**Reprise du 19 octobre :** [connexion et services locaux rétablis](local-recovery-2026-10-19.md),
+SQL 68 et parcours de publication par lot qualifiés sur copies synthétiques.
+Aucune activation distante ; voir les preuves et limites datées.
+
 La [liste Utilisateurs](http://127.0.0.1:3150/admin/users) ouvre maintenant une
 fiche avec nom, e-mail, activité, historique synthétique et progression, conformément
 au CDC §15.2 et au choix nominatif D08. Les trois vues consultent une vraie base

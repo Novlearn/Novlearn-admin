@@ -1,13 +1,17 @@
 # NovLearn Admin
 
+**Reprise du 19 octobre :** [connexion et services locaux rétablis](docs/local-recovery-2026-10-19.md),
+SQL 68 et parcours de publication par lot qualifiés sur copies synthétiques.
+Aucune activation distante ; voir les preuves et limites datées.
+
 NovLearn Admin sera l'application privée d'administration de NovLearn : gestion du contenu pédagogique, validation des exercices et, à terme, consultation contrôlée de données de production. Elle vit dans un repository distinct de l'application élève et de l'ancien Creator.
 
 ## État du projet
 
-**Interruption locale du 19 octobre :** Docker échoue au démarrage ; l'Admin et
-Auth ne répondent plus sur leurs ports locaux au dernier contrôle. La
-[reprise et la correction SQL préparée](docs/reader-policies.md) distinguent cette
-panne des fonctionnalités précédemment qualifiées. Aucun résultat SQL 68 n'est acquis.
+**Reprise locale du 19 octobre :** Docker et les services conservés répondent.
+La [correction SQL 68](docs/reader-policies.md) passe ses contrôles natifs,
+restauration, PG/TLS et Auth/HTTP. Treize avertissements SQL sont corrigés ;
+32 restent ouverts. La connexion locale permet les essais progressifs.
 
 La page [Statistiques](http://127.0.0.1:3150/admin/statistics) est désormais
 [raccordée à une base SQL locale synthétique](docs/activity-http.md), avec

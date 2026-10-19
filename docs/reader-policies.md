@@ -1,81 +1,78 @@
-# Consolidation des lectures SQL — préparation du 19 octobre 2026
+# Consolidation des lectures SQL — qualification locale du 19 octobre 2026
 
-**La correction SQL 68 est préparée, mais sa qualification native n'est pas
-exécutée.** Aucun doublon n'est encore considéré comme corrigé sur une base.
-La [preuve de suivi](reader-policies-proof.json) distingue cette préparation des
-essais SQL 67 précédemment réussis.
+**SQL 68 est qualifié sur copies locales synthétiques.** Les treize doublons
+SELECT visés ont disparu des advisors : 45 avertissements avant, 32 après, avec
+65 informations et zéro erreur. Ce résultat ne clôture ni le Lot 1A ni le goal.
+Les [preuves détaillées](reader-policies-proof.json) conservent aussi l'échec
+initial avant SQL et les limites de chaque vérification.
 
-## Modification proposée
+## Modification
 
-La migration locale canonique créée par Supabase CLI 2.98.2 est
-`Novlearn/supabase/migrations/20261019093842_consolidate_novlearn_admin_reader_policies.sql`,
-SHA-256 `0e93f2931501ecb3f7575be0467d4f454fd43a061420a566d8abc4268479863f`.
-Les 67 migrations antérieures ne sont pas réécrites.
+La migration canonique appartient à NovLearn :
 
-Les advisors ont identifié des policies SELECT permissives redondantes pour
-les trois lecteurs statistiques, liste et fiche. PostgreSQL combine ces
-policies par OR, puis les policies restrictives par AND ; les grants restent
-une condition d'accès distincte. Voir le [contrat PostgreSQL 17](https://www.postgresql.org/docs/17/ddl-rowsecurity.html).
+`supabase/migrations/20261019093842_consolidate_novlearn_admin_reader_policies.sql`
+(SHA-256 `0e93f2931501ecb3f7575be0467d4f454fd43a061420a566d8abc4268479863f`).
+Commit local `b5159ae2d54ab23a9d401d55099b497ca7464f54` ; aucun push ni distant.
+Les 67 migrations antérieures, les huit fichiers NovLearn déjà modifiés et
+les configurations applicatives gardent leurs empreintes.
 
-Le projet de correction supprime treize alternatives `USING (true)` limitées
-aux rôles nominaux. Pour cinq tables, leur exception d'identité physique est
-intégrée à la policy SELECT publique existante, avec son ancien prédicat
-conservé pour les autres rôles. Pour chapitres et compétences, la lecture
-publique existante est déjà inconditionnelle. Aucun grant, rôle, policy
-restrictive ou de mutation, fonction, contrainte ni donnée n'est modifié.
+Les treize alternatives permissives SELECT limitées aux lecteurs statistiques,
+liste et fiche sont supprimées. Pour cinq tables, leur exception d'identité
+physique rejoint la policy publique existante ; l'ancien prédicat reste
+inchangé pour les autres rôles. Chapitres et compétences étaient déjà lisibles
+par la policy existante. Les policies restrictives, grants, DML, rôles,
+fonctions et données ne sont pas modifiés. Les contrôles préalables épinglent
+rôles, commandes, noms et prédicats ; toute dérive ou réapplication échoue.
 
-Le prérequis épingle les trois rôles non privilégiés, les noms, commandes,
-rôles et expressions des policies, ainsi que l'absence d'alternative publique
-inattendue. Le `search_path` est fixé à `pg_catalog` ; les anciennes sous-requêtes
-restent qualifiées. Une dérive ou une réapplication doit échouer dans la transaction.
+PostgreSQL combine les policies permissives par OR puis les restrictives par AND ;
+les grants restent une condition distincte. Voir le
+[contrat PostgreSQL 17](https://www.postgresql.org/docs/17/ddl-rowsecurity.html).
 
-## Qualification à exécuter
+## Vérifications réellement exécutées
 
-Le pilote `scripts/test-reader-policies-local.mjs` n'accepte qu'une restauration
-synthétique explicitement nommée et isolée sans réseau. Il prépare :
+- Sur restauration SQL 67 peuplée : 22 rôles, huit contextes de claims et dix
+  tables, soit 1 760 requêtes par matrice avant/après ; résultats identiques,
+  dont invités, comptes permanents et claims forgés. Quatre prérequis négatifs,
+  dry-run annulé et refus de réapplication passent.
+- Les 62 tables, 11 séquences et métadonnées ACL/rôles/empreintes de mots de
+  passe restent exactes. Seules treize policies supprimées et cinq expressions
+  SELECT changent, conformément au contrôle à blanc.
+- Rejeu neuf de 68 migrations sans réseau. Suites historiques inchangées :
+  56 assertions. Fiche : 48 permissions, 24 cas et sept bornes ; liste :
+  35 permissions ; statistiques : 31 permissions, avec requêtes réelles.
+- Nouvelle sauvegarde/restauration peuplée : 62 tables, 73 relations,
+  77 fonctions, 11 séquences et huit rôles applicatifs/empreintes SCRAM exacts ;
+  48 permissions restaurées et trois vues identiques hors date d'observation.
+  La configuration TLS n'est pas incluse dans cette restauration logique.
+- Copie PG/TLS conservée puis source HTTP synthétique : sauvegardes distinctes,
+  contrôle à blanc, lignes et configuration SQL préservées. Les vrais essais
+  PG/TLS passent 19 groupes, 42 refus d'écriture et deux dérives refusées ;
+  les 16 groupes Auth/HTTP passent ensuite sur SQL 68.
+- Advisors CLI 2.98.2 réellement exécutés sur 127.0.0.1 avec TLS vérifié et
+  transactions en lecture seule : 97 constats, dont 32 WARN et 65 INFO. Les
+  treize doublons visés disparaissent ; seize autres doublons permissifs,
+  quatorze avertissements initplan et deux search_path restent ouverts.
+- Après redémarrage : huit contrôles Engine réels, archive verrouillée inchangée,
+  worker Linux borné et les 18 anciens reçus exacts. La suite source Engine
+  complète précédemment certifiée n'est pas réexécutée dans ce jalon.
 
-- Une matrice de dix tables, huit contextes de claims et tous les rôles existants
-  hors rôles intégrés `pg_*`, avec projections réellement autorisées et refus SQL.
-- La comparaison exacte des multisets de lignes visibles avant/après, avec cas
-  nominaux positifs, compte permanent, invité et claims forgés.
-- Quatre dérives intentionnelles annulées, un dry-run annulé et le refus de
-  réapplication ; comparaison des 62 tables, séquences, ACL, rôles, appartenances,
-  empreintes SCRAM, fonctions et toutes les policies hors changement attendu.
+Le contrôle complet Admin et ses limites sont référencés dans le relevé JSON.
+Les essais sur fixture vide annulent les lignes ; certains incréments de
+séquences non transactionnels peuvent persister uniquement dans cette fixture.
+Les comparaisons de migration et restauration peuplées portent aussi sur les
+états de séquences et passent exactement.
 
-Ces critères sont des **contrôles préparés**, pas des résultats obtenus.
+## Panne et reprise
 
-Le contrôle complet du code préparé passe réellement **1 143 tests / 59 fichiers**,
-intégrité de l’archive Engine, types, lint, format, build autonome et smoke avec
-Auth désactivée. Les 473 fichiers copiés restent identiques au retour. Cette
-commande ne lance pas le nouveau pilote Docker et ne valide donc aucun de ses
-cas SQL. Le seul avertissement lint `<img>` préexistant est conservé.
-Les huit configurations applicatives, quatre fichiers Admin protégés, huit
-modifications NovLearn préexistantes et 67 migrations antérieures gardent leurs
-empreintes. Le dépôt Engine reste propre. Ce contrôle hors ligne ne compare
-aucune donnée en base et ne certifie pas leur état après l’arrêt.
-Restent aussi nécessaires : rejeu neuf des 68 migrations, restauration logique,
-régressions SQL inchangées, vrais lecteurs PG/TLS et Auth/HTTP, puis advisors.
-La migration ne doit pas être appliquée à la source connectée avant ces étapes.
+Le premier essai s'arrêtait à docker inspect, avant SQL. À 09:44:59 UTC,
+Docker échouait sur le renommage de sailor-ingest.sock vers .stale. Ce message
+ne prouvait pas une interdiction Smart App Control. Après correction et
+démarrage normal par l'utilisateur, l'API Docker répond et les services
+conservés redémarrent sans recréation. Deux tentatives supplémentaires de
+lancement applicatif ont été refusées par des ports déjà utilisés ; les
+processus initiaux sont confirmés et conservés. Aucune protection, socket ou
+configuration système n'est modifié ; aucun reset ou arrêt forcé.
 
-## Panne locale observée
-
-Le premier lancement du pilote échoue dès l'inspection Docker, avant connexion
-à PostgreSQL ou application SQL : le pipe `dockerDesktopLinuxEngine` est absent.
-Un démarrage normal de Desktop a ensuite été demandé une seule fois.
-
-À **09:44:59 UTC le 19 octobre**, le journal Docker 4.90 indique l'échec du
-renommage de `sailor-ingest.sock` en `.stale`, puis l'arrêt du backend. WSL décrit
-`docker-desktop` comme arrêté. Le message ne démontre pas une interdiction Smart
-App Control ou une erreur de notre migration. Un [signalement comparable chez
-Docker](https://github.com/docker/desktop-feedback/issues/676) décrit la même
-signature ; il ne prouve pas la cause particulière de cette machine.
-
-La commande normale d'arrêt a été demandée sans `--force`. La fermeture par
-« Quit », puis un lancement normal depuis le menu Démarrer sont demandés à
-l'utilisateur. Aucun socket, ACL, réglage de protection, donnée Docker ou
-environnement distant n'est modifié. Aucune réinitialisation ni contournement
-par un autre lanceur n'est tenté. L'état réel sera réinspecté avant toute reprise.
-
-Les qualifications SQL 67 et du code du jalon précédent restent des preuves
-datées. Elles ne prouvent ni le test de SQL 68, ni la disponibilité actuelle des
-services après cet arrêt. Le Lot 1A et le goal restent ouverts.
+La [reprise du 19 octobre](local-recovery-2026-10-19.md) indique comment tester.
+Réception navigateur, mises en service distantes, métriques manquantes,
+MFA/révocation stricte et autres findings SQL restent ouverts.

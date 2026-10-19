@@ -1,7 +1,10 @@
 # Documentation NovLearn Admin
 
-[Consolidation des policies et panne Docker du 19 octobre](reader-policies.md) :
-correction SQL 68 préparée, qualification native non exécutée et reprise attendue.
+[Reprise locale du 19 octobre](local-recovery-2026-10-19.md) : connexion et Engine
+disponibles, données conservées, parcours HTTP par lot réel et limites restantes.
+
+[Consolidation des policies SQL 68](reader-policies.md) : matrice de 1 760 requêtes,
+rejeu neuf, restauration et lecteurs réels qualifiés ; treize avertissements corrigés.
 
 [Fiche utilisateur locale](user-detail.md) : nom, e-mail, activité, progression
 enregistrée et historique synthétique ; SQL 67, vraie connexion et source séparée.

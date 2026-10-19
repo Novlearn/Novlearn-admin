@@ -1,5 +1,17 @@
 # Publication par lots — implémentation locale
 
+**Mise à jour du 19 octobre :** le [parcours HTTP réel par lot](publication-batch-http-proof.json)
+passe maintenant sept groupes sur l'instance synthétique SQL 64 : trois révisions
+et vrais comptes conservés, Next/PostgREST/TLS/Engine, perte de réponse après
+les en-têtes du deuxième transfert, arrêt avant le troisième, reprise en lecture
+sans doublon puis nouvelle confirmation explicite. Les 60 tables cibles exclues
+et les anciennes lignes sont exactes. Aucun nouveau compte ou référentiel cible
+créé ; relecture synthétique explicitement étiquetée. Un premier essai échoué
+a laissé un brouillon et son audit, conservés et contrôlés. Les constats plus
+anciens ci-dessous décrivent leurs bancs datés, dont les simulations et fixtures
+SQL 62 ; ils ne limitent pas la portée de ce nouvel essai HTTP natif. Aucun
+parcours navigateur ou distant n'est déclaré exécuté.
+
 Le catalogue permet de sélectionner jusqu'à **cinq révisions**, une par exercice,
 approuvées ou déjà publiées et non archivées. La page
 `/admin/publication/batch` présente les diffs, la confirmation de chaque exercice

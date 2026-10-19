@@ -1,123 +1,684 @@
 {
-  "recordedAt": "2026-10-19T09:59:21.363Z",
-  "scope": "Prepared SQL68 SELECT consolidation; native qualification pending after Docker startup failure",
-  "result": "NOT QUALIFIED; no SQL68 application",
+  "recordedAt": "2026-10-19T10:38:53.977Z",
+  "scope": "Qualified local SQL68 SELECT consolidation and recovery; no remote activation",
+  "result": "PASS for stated local qualification scopes",
   "canonicalMigration": {
     "file": "../Novlearn/supabase/migrations/20261019093842_consolidate_novlearn_admin_reader_policies.sql",
     "sha256": "0e93f2931501ecb3f7575be0467d4f454fd43a061420a566d8abc4268479863f",
     "cliVersion": "2.98.2",
     "created": true,
-    "applied": false,
-    "committed": false
+    "applied": true,
+    "committed": true,
+    "appliedOnlyToSyntheticLocalCopies": true,
+    "commit": "b5159ae2d54ab23a9d401d55099b497ca7464f54",
+    "remoteApplied": false
   },
-  "preparedControls": {
-    "redundantPoliciesTargeted": 13,
-    "publicSelectPredicatesTargeted": 5,
-    "allExistingNonBuiltinRoles": true,
-    "claimContextsPerRole": 8,
-    "tablesPerContext": 10,
-    "realRowMultisetComparisonPrepared": true,
-    "negativePreflights": 4,
-    "rollbackDryRunPrepared": true,
-    "reapplicationRefusalPrepared": true
+  "nativeQualificationExecuted": true,
+  "nativeQualificationSucceeded": true,
+  "freshReplay": {
+    "migrations": 68,
+    "artifact": "../Novlearn/.local/admin-sql-replay/novlearn-admin-lot1a-replay-20261019102545693",
+    "network": "none",
+    "manifestHashesStable": true
   },
-  "nativeQualificationExecuted": false,
-  "nativeQualificationSucceeded": false,
-  "runtimeAttempt": {
-    "result": "FAIL before SQL: Docker API unavailable",
-    "observedAt": "2026-10-19T09:52:20.889Z",
-    "command": "node scripts/test-reader-policies-local.mjs novlearn-admin-user-detail-restore-1792361931187 ../Novlearn/supabase/migrations/20261019093842_consolidate_novlearn_admin_reader_policies.sql",
-    "exitCode": 1,
-    "failedAt": "docker inspect before source snapshot or any SQL connection",
-    "dockerEnginePipeAbsent": true,
-    "sqlExecuted": false,
-    "migrationApplied": false
-  },
-  "sourceHashes": {
-    "scripts/test-reader-policies-local.mjs": "cb6a76329781437a5997fdb84227b4b7ec0e6e32aa651317ed92117d34d86814",
-    "scripts/reader-policies-snapshot.sql": "8c158f428b2b7542b2ea0ec14aa1ee6f6878523320cd983158fe8a79cc793730",
-    "scripts/user-detail-local-fixture.mjs": "20a0a866f2a1c33bf5ae67bd14b9c51f9a51d22123f8517e4dcc6d97448af516"
-  },
-  "staticChecks": {
-    "syntax": {
-      "executed": true,
-      "result": "PASS"
-    },
-    "targetedLint": {
-      "executed": true,
-      "result": "PASS"
-    },
-    "fullCheck": {
+  "native": {
+    "artifact": ".local/lot1a/reader-policies-upgrade-1792405418216/proof.json",
+    "proof": {
       "result": "PASS",
-      "date": "2026-10-19T09:56:10.943Z",
-      "artifact": "C:\\Users\\balth\\AppData\\Local\\Temp\\novlearn-admin-check-1792403562540",
-      "exitCode": 0,
-      "tests": 1143,
-      "files": 59,
-      "sourceFiles": 473,
-      "allCopiedSourcesStillMatch": true,
-      "fullCheckCommand": "npm run check",
-      "separateBuildDirectory": true,
-      "independentTemporaryProject": true,
-      "dependenciesCopied": true,
-      "applicationServersInterrupted": false,
-      "privateEnvironmentFilesCopied": false,
-      "executedForCurrentCode": true,
-      "finalDocumentationOnly": true,
-      "nativeSqlDriverExecuted": false,
-      "smokeAuthDisabled": true
+      "date": "2026-10-19T10:23:48.227Z",
+      "artifact": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\reader-policies-upgrade-1792405418216",
+      "container": "novlearn-admin-user-detail-restore-1792361931187",
+      "migrationFile": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn\\supabase\\migrations\\20261019093842_consolidate_novlearn_admin_reader_policies.sql",
+      "migrationSha256": "0e93f2931501ecb3f7575be0467d4f454fd43a061420a566d8abc4268479863f",
+      "sourceHashes": {
+        "scripts/test-reader-policies-local.mjs": "cb6a76329781437a5997fdb84227b4b7ec0e6e32aa651317ed92117d34d86814",
+        "scripts/reader-policies-snapshot.sql": "8c158f428b2b7542b2ea0ec14aa1ee6f6878523320cd983158fe8a79cc793730",
+        "scripts/user-detail-local-fixture.mjs": "20a0a866f2a1c33bf5ae67bd14b9c51f9a51d22123f8517e4dcc6d97448af516"
+      },
+      "rolesTested": 22,
+      "claimsContextsPerRole": 8,
+      "tablesPerContext": 10,
+      "actualQueriesPerMatrix": 1760,
+      "exactBeforeAfterRoleMatrices": true,
+      "nonemptyNominalAndPermanentPositiveCases": true,
+      "actualGuestRestrictions": true,
+      "negativePreflights": 4,
+      "allNegativeFixturesRolledBack": true,
+      "dryRunExact": true,
+      "duplicateApplicationRefused": true,
+      "redundantSelectPoliciesRemoved": 13,
+      "publicSelectPredicatesConsolidated": 5,
+      "allOtherPoliciesExact": true,
+      "tableRowsCompared": 62,
+      "sequencesCompared": 11,
+      "functionsCompared": 72,
+      "relationsCompared": 73,
+      "allMetadataAclRolesAndPasswordDigestsExact": true,
+      "allDataAndSequencesExact": true,
+      "snapshotTempHelperUsageGrantedOnlyInsideRollback": true,
+      "realLoginOrTlsExecuted": false,
+      "browserExecuted": false,
+      "remoteOperations": false
     }
+  },
+  "restoration": {
+    "artifact": ".local/lot1a/reader-policies-restore-1792405846000/restore-proof.json",
+    "proof": {
+      "result": "PASS for SQL-68 populated logical restoration",
+      "date": "2026-10-19T10:31:24.272Z",
+      "source": "novlearn-admin-user-detail-restore-1792361931187",
+      "restored": "novlearn-admin-user-detail-restore-1792405864306",
+      "dumpSha256": "5d2f10ee357434175dd618e25413bd6f2727b68a35ce4cf6bb2059580bc2af4e",
+      "tableRowsExact": 62,
+      "nonemptyProgressRows": 4,
+      "nonemptyCompetenceScores": 4,
+      "relationsCompared": 73,
+      "functionsCompared": 77,
+      "sequencesCompared": 11,
+      "sequenceStatesExact": true,
+      "orderedFullAclRlsOwnersAndFunctionMetadataExact": true,
+      "allEightCustomRolesAndMembershipsExact": true,
+      "scramPasswordDigestsExact": true,
+      "restoredPermissionAssertions": 48,
+      "temporaryExerciseMetadataFixtureUsed": true,
+      "initialPermissionAttemptFailedForEmptyExerciseStock": false,
+      "previousTargetPreserved": null,
+      "immutableBackupReused": false,
+      "permissionFixturesUseExplicitIds": true,
+      "allThreeViewsExactExceptAsOf": true,
+      "tlsConfigurationRestored": false,
+      "mainApplicationModified": false,
+      "remoteOperations": false
+    }
+  },
+  "detailSql": {
+    "artifact": ".local/lot1a/user-detail-readonly-1792405652314/proof.json",
+    "proof": {
+      "result": "PASS for native user detail SQL, permissions and actual decoder",
+      "date": "2026-10-19T10:27:35.722Z",
+      "artifact": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\user-detail-readonly-1792405652314",
+      "container": "novlearn-admin-lot1a-replay-20261019102545693",
+      "sourceHashes": {
+        "scripts/user-detail-query.sql": "4834a4b8d8f8f3b5c63e1abd17efe1dfec5bb54a19eb151a5246ed69df95917f",
+        "scripts/test-user-detail-readonly-local.sql": "b12c7013a5b3604a3929ed380d875a65e403af8124bdc7451d2fc0a7ececfef3",
+        "scripts/test-user-detail-readonly-local.mjs": "d872b089ee355efc8c0f3222ee063c8dcce4d18d744c4cb0ef8c107cbb2e24b2",
+        "tests/fixtures/user-detail-local.sql": "32c6b8135db3b271de1f40a12cc624549e96cbd75b6ebd2e3740ca1202479edf",
+        "tests/fixtures/preview-definition.json": "a6d0cb399add10e9199c851a64fd9a6bf97145415358c6435904c45bdb4b89f9",
+        "src/lib/user-detail.ts": "e211bcc4b129c2d288826fd28d2ecc28ed58e22fbf205edbf227f0fb741803bc"
+      },
+      "permissionAssertions": 48,
+      "nativeCases": 24,
+      "bounds": 7,
+      "threeViewsPagedInBothDirections": true,
+      "microsecondTiesPreserved": true,
+      "unicodeCursorOrderMatchesPostgres": true,
+      "currentProgressIndependentOfPeriod": true,
+      "knownAndUnknownVersionReferences": true,
+      "syntheticVersionCertificationClaimed": false,
+      "invalidLegacyValuesNotTurnedIntoZeros": true,
+      "guestIdentityMasked": true,
+      "missingUserDistinguishedFromFailure": true,
+      "tableRowsPreserved": 62,
+      "fixtureRolledBack": true,
+      "sequencesCompared": false,
+      "realLoginOrTlsExecuted": false,
+      "browserExecuted": false,
+      "remoteOperations": false
+    }
+  },
+  "usersSql": {
+    "artifact": ".local/lot1a/users-readonly-check-1792405906779/proof.json",
+    "proof": {
+      "result": "PASS for native nominal SQL, bounds and decoder checks",
+      "date": "2026-10-19T10:31:50.225Z",
+      "container": "novlearn-admin-lot1a-replay-20261019102545693",
+      "artifact": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\users-readonly-check-1792405906779",
+      "sourceHashes": {
+        "scripts/users-list-query.sql": "3bd4cdfdad6913ab7576e69b29482324b0adb52607869182c0298b7abd5f5f50",
+        "scripts/test-users-readonly-local.sql": "97ff778999147d3777ed6f5432b0a3f7ebe6dfbd6ebc784f4258dd722b80d73b",
+        "scripts/test-users-readonly-local.mjs": "e68bf057da46db78d3dbd3c830767e6cb34d77b24668bfeddb28abad44491f89",
+        "src/lib/users.ts": "c55a405fc0b1d738a04881337d20597922e9b1e9f728cc685a1a81023205ec7c"
+      },
+      "permissionAssertions": 35,
+      "actualUserQueries": 14,
+      "boundedQueries": 7,
+      "actualDomainDecoderAccepted": true,
+      "literalSearchVerified": true,
+      "unicodeTruncationFlagVerified": true,
+      "timezoneInvariant": true,
+      "anonymousNameEmailMasked": true,
+      "tableRowsPreserved": 62,
+      "fixtureRolledBack": true,
+      "sequencesCompared": false,
+      "sequenceScope": "Non-transactional nextval can advance in this pristine fixture; table rows remain exact",
+      "realLoginOrTlsExecuted": false,
+      "applicationModified": false,
+      "remoteOperations": false,
+      "browserExecuted": false
+    }
+  },
+  "statisticsSql": {
+    "artifact": ".local/lot1a/activity-readonly-check-1792405910449/proof.json",
+    "proof": {
+      "result": "PASS for native isolated SQL permission and aggregate qualification",
+      "date": "2026-10-19T10:31:52.624Z",
+      "container": "novlearn-admin-lot1a-replay-20261019102545693",
+      "database": "postgres",
+      "artifact": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\activity-readonly-check-1792405910449",
+      "log": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\activity-readonly-check-1792405910449/native-check.log",
+      "postgresImageDigest": "public.ecr.aws/supabase/postgres@sha256:7374d196da7e301512cc5329e18040e0f7bb856287b323777cdadecccbc6c7e4",
+      "driverSha256": "46a6128e100d6892b207709a5ead956ca2d6012b85d8f88fbf1ab8d516138858",
+      "querySha256": "a0dd6194dc41b0f0eaffa6904e2c25c86e88f7def1c8779760821bdd065117e0",
+      "fixtureSha256": "b398be1debd19b4674f9f1af4a17ccbff2e585db476517620e45371b068b78b8",
+      "permissionAssertions": 31,
+      "aggregateExecutions": 3,
+      "boundedQueryExecutions": 5,
+      "expectedTotals": {
+        "activeAccounts": "2",
+        "exerciseAttempts": "5",
+        "duelAttempts": "2",
+        "completedDuels": "1",
+        "accountsCreated": "1",
+        "correct": "2",
+        "incorrect": "2",
+        "abandoned": "1",
+        "unclassified": "0"
+      },
+      "utcSessionTimezoneInvariant": true,
+      "emptyPeriodVerified": true,
+      "invalidBoundsReturnNoRow": true,
+      "actualDomainDecoderAccepted": true,
+      "tableSnapshotsCompared": 62,
+      "allTableRowsPreserved": true,
+      "fixtureTransactionRolledBack": true,
+      "sequenceValuesCompared": false,
+      "sequenceScope": "nextval is not transactional; this pristine fixture may advance sequences, without changing table rows",
+      "realLoginOrTlsExecuted": false,
+      "productionReaderActivated": false,
+      "remoteDatabaseOperationPerformed": false,
+      "existingApplicationModified": false,
+      "browserExecuted": false
+    }
+  },
+  "regression": {
+    "artifact": ".local/lot1a/activity-regression-1792405682432/regression-proof.json",
+    "proof": {
+      "result": "PASS for unchanged local SQL regression suites",
+      "date": "2026-10-19T10:28:07.838Z",
+      "container": "novlearn-admin-lot1a-replay-20261019102545693",
+      "sourceHashes": {
+        "test-novlearn-admin-local.mjs": "ebb0544016906a0dae76dc4c665482ef1f88f7589a51273c24628bd0c7808b89",
+        "test-novlearn-admin-security-local.mjs": "83f7ba28f908fad4007577bebf3f324556f4359e9f0be4fae7de19eaee7969cd",
+        "local-database-url.mjs": "416ce7051ddbaa3d98d59313cb5653794ea2ff70742e281d1ea255777e36d286"
+      },
+      "sourceHashesStillMatch": true,
+      "results": [
+        {
+          "script": "test-novlearn-admin-local.mjs",
+          "scriptModified": false,
+          "assertions": 30,
+          "log": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\activity-regression-1792405682432/test-novlearn-admin-local.mjs-1792405684539.log",
+          "exitCode": 0,
+          "runner": "novlearn-admin-activity-regression-1792405682564",
+          "network": "same isolated loopback namespace as the new SQL fixture"
+        },
+        {
+          "script": "test-novlearn-admin-security-local.mjs",
+          "scriptModified": false,
+          "assertions": 26,
+          "log": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\activity-regression-1792405682432/test-novlearn-admin-security-local.mjs-1792405687831.log",
+          "exitCode": 0,
+          "runner": "novlearn-admin-activity-regression-1792405684543",
+          "network": "same isolated loopback namespace as the new SQL fixture"
+        }
+      ],
+      "remoteOperationPerformed": false,
+      "existingApplicationModified": false
+    }
+  },
+  "pg": {
+    "artifact": ".local/lot1a/user-detail-pg-1792406031125/proof.json",
+    "proof": {
+      "result": "PASS",
+      "date": "2026-10-19T10:34:12.100Z",
+      "checks": [
+        "Actual login with verified certificate and TLS 1.2+",
+        "Session login: twenty-one actual 42501 denials in read-write transactions",
+        "Assumed reader: twenty-one actual 42501 denials in read-write transactions",
+        "Server timeout cancels an actual query",
+        "Wrong password refused by SCRAM",
+        "Untrusted CA refused",
+        "Wrong certificate hostname refused",
+        "Plaintext refused by HBA",
+        "Other database refused by HBA",
+        "Actual audited detail reader returns known identity and historical attempts without invented versions",
+        "Nonempty chapter progress preserves missing values, negative-count warning and future date",
+        "Nonempty competence progress keeps raw points above current maximum and unknown taxonomy",
+        "Guest profile remains anonymous on the actual connection",
+        "Actual absent account returns null rather than a fabricated empty profile",
+        "Pool lease is reset and audited before reuse",
+        "Empty activity is separate from current progression and account absence",
+        "Actual history cursor directions retain ordering and complete boundaries",
+        "Invalid trusted period metadata rejected before SQL checkout",
+        "Previously qualified list reader and its original TLS credentials still work on SQL 67"
+      ],
+      "realLogin": true,
+      "realTls": true,
+      "realServerReader": true,
+      "writeDenials": 42,
+      "remoteAccess": false,
+      "browserExecuted": false,
+      "effectivePrivilegeDriftsRejected": [
+        "reader-birth-date",
+        "login-temporary"
+      ],
+      "container": "novlearn-admin-users-restore-1792348367322",
+      "artifact": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\user-detail-pg-1792406031125",
+      "postgresImageDigest": "public.ecr.aws/supabase/postgres@sha256:7374d196da7e301512cc5329e18040e0f7bb856287b323777cdadecccbc6c7e4",
+      "nodeImage": "node:24.19.0-bookworm@sha256:4196d66a565c6f195728d9952f161f4adfe2ad753052a08b7ec7f1c5a6bda42b",
+      "sourceHashes": {
+        "src/lib/user-detail-pg.ts": "b1baccad7124c64dc4b9e91d34430ec8114c87a1f3d63043be7bbc721d88f450",
+        "src/lib/user-detail-config.ts": "6b10ccdd20d1dcd148167a063f9e9655a9e6e9f92b8853d0eb7f8226607de536",
+        "src/lib/user-detail.ts": "e211bcc4b129c2d288826fd28d2ecc28ed58e22fbf205edbf227f0fb741803bc",
+        "scripts/user-detail-reader-audit.sql": "f8a88b25806c5e7bcd2f9e816270344bba18f83317dbf13dcffdd51efd3188d8",
+        "scripts/user-detail-query.sql": "4834a4b8d8f8f3b5c63e1abd17efe1dfec5bb54a19eb151a5246ed69df95917f",
+        "scripts/test-user-detail-pg-worker.mjs": "aa8e5e9b308c263de6f25345a3a48f7783454e7bc2eda4eddf062b804ce32a3b",
+        "scripts/test-user-detail-pg-local.mjs": "015c53ec05187cb7c5c1b9d361daa31250e96cd8895fef7445fe847e6bbeaf1e",
+        "scripts/user-detail-local-fixture.mjs": "20a0a866f2a1c33bf5ae67bd14b9c51f9a51d22123f8517e4dcc6d97448af516",
+        "tests/fixtures/user-detail-progress-local.sql": "9769c111f0fc0f266666ed70220534c278aad85d54385089f1376002ffa286da",
+        "src/lib/users-pg.ts": "6bd80b516c0cd08e76ea1fa651b41bd12101f2bf8a43fd79bafe245a4f79851f",
+        "src/lib/users.ts": "c55a405fc0b1d738a04881337d20597922e9b1e9f728cc685a1a81023205ec7c",
+        "src/lib/users-config.ts": "cbcedc7d2ee25acaa555845e565dfb428b0ec86923b28c5fad3f97c0fb46f0a5",
+        "scripts/users-reader-audit.sql": "36b3764735cd1ff4ee30b57907a62a330bb3caa6ecf01140d572ab27a630fa4e",
+        "scripts/users-list-query.sql": "3bd4cdfdad6913ab7576e69b29482324b0adb52607869182c0298b7abd5f5f50"
+      },
+      "tableSnapshotsCompared": 62,
+      "allTableRowsPreserved": true,
+      "existingApplicationModified": false,
+      "productionReaderActivated": false,
+      "remoteDatabaseOperationPerformed": false,
+      "fixtureLoginCreatedAfterSql67": true,
+      "previousTlsCertificateAndCredentialsPreserved": true,
+      "additiveFixtureRows": 11,
+      "allPreexistingRowsComparedInsideSeedTransaction": true,
+      "fixtureHbaRequiresScramAndTls": true,
+      "fixtureNetwork": "none",
+      "publishedPorts": []
+    }
+  },
+  "http": {
+    "artifact": ".local/lot1a/user-detail-http-1792362119837/http-1792406045566/proof.json",
+    "proof": {
+      "result": "PASS",
+      "date": "2026-10-19T10:34:50.431Z",
+      "artifact": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\user-detail-http-1792362119837/http-1792406045566",
+      "checks": [
+        "Anonymous API and profile page are denied before any detail is returned",
+        "Actual non-Admin with a forged metadata admin claim remains forbidden",
+        "Actual HTTP profile returns exact minimized identity and known historical attempts without guessed versions",
+        "Both nonempty current-progress views expose missing data, invalid legacy counts and current-scale warnings without invented zeros",
+        "Three authenticated server pages and list-to-profile links render actual data and clear source/certification labels without SQL secrets",
+        "Seven invalid UUID, view, duplicate, oversized and source-override requests are rejected",
+        "All three HTTP views apply their actual bounded cursor ordering; history supports both directions",
+        "An empty historical period keeps the profile and leaves current progression unchanged",
+        "Actual absence is an API 404 and a not-found page, never an empty or unavailable profile",
+        "Actual guest detail masks nominal identity",
+        "Fresh profile-role authorization revokes and restores the same session; only the synthetic account updated_at changes",
+        "Warm reader detects unexpected birth-date privileges and recovers only after their removal",
+        "Actual SQL transport loss fails explicitly while catalogue works, then the reader reconnects",
+        "Existing users and statistics remain correct and the main publication capability stays disabled",
+        "Main cookie does not authenticate the publication app and both private SQL files remain unserved",
+        "Logout clears this cookie session and its subsequent detail access"
+      ],
+      "sourceHashes": {
+        "src/lib/user-detail-config.ts": "6b10ccdd20d1dcd148167a063f9e9655a9e6e9f92b8853d0eb7f8226607de536",
+        "src/lib/user-detail-pg.ts": "b1baccad7124c64dc4b9e91d34430ec8114c87a1f3d63043be7bbc721d88f450",
+        "src/lib/user-detail-server.ts": "339226796431f0337061d1eb70957cc6f668d411fc1b599cb3ddcecfbf7e67ae",
+        "src/lib/user-detail.ts": "e211bcc4b129c2d288826fd28d2ecc28ed58e22fbf205edbf227f0fb741803bc",
+        "src/components/user-detail.tsx": "d1d0e49862e13c343681a7ea00cb5687d4d694e2132b1f65f66dcb278160084b",
+        "src/components/users-list.tsx": "a1158d3dc22b5e27b99edfd1c0e6b67c63a21316daa5ebe3a2bd67b0fd71430d",
+        "src/app/admin/users/page.tsx": "c45a44910df5d1a37ce41126aba8c6bed1eb51602f2748e74f9819f1811f282d",
+        "src/app/admin/users/[userId]/page.tsx": "562358333a18ddd0c989d33bed9895095cd975750335d3cf01ea046c67010335",
+        "src/app/admin/users/[userId]/not-found.tsx": "0fadf68a65fcdb4ccae83645e2ac36a7c1a77eb93841e775b1383d5c50f94ac3",
+        "src/app/api/admin/users/[userId]/route.ts": "049228ea8f8a711e367f6eab70afd3d34b96017ec7c01f64326b93aa41e4a206",
+        "scripts/user-detail-reader-audit.sql": "f8a88b25806c5e7bcd2f9e816270344bba18f83317dbf13dcffdd51efd3188d8",
+        "scripts/user-detail-query.sql": "4834a4b8d8f8f3b5c63e1abd17efe1dfec5bb54a19eb151a5246ed69df95917f",
+        "scripts/test-user-detail-http-local.mjs": "6a6dc4552491d63f0374e73d79c2246d52dc45c263262ffa27686db8f4297857"
+      },
+      "realAuth": true,
+      "realHttp": true,
+      "realSql": true,
+      "activityTablesPreserved": 62,
+      "mainBusinessTablesExactBeforeIntentionalRoleTest": 35,
+      "mainBusinessTablesComparedAfterRoleTest": 35,
+      "onlySyntheticAdminUpdatedAtChanged": true,
+      "existingAccountsReused": true,
+      "newAccountsCreated": 0,
+      "strictStolenJwtRevocationTested": false,
+      "browserExecuted": false,
+      "remoteOperations": false
+    }
+  },
+  "engine": {
+    "artifact": ".local/local-admin-1792143739689/engine-adoption-1792406120123/proof.json",
+    "proof": {
+      "result": "PASS",
+      "date": "2026-10-19T10:36:03.994Z",
+      "artifact": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\local-admin-1792143739689\\engine-adoption-1792406120123",
+      "checks": [
+        "Actual local Admin session on schema 64",
+        "Authenticated dashboard and catalogue respond",
+        "Full seven-element advanced definition generates through actual native worker for both seeds; public elements match historical captures exactly",
+        "New labelled seven-element draft persists via real Next/PostgREST",
+        "Actual full advanced multi-seed report covers correct/incorrect/invalid, reproducibility and public safety, signed and persisted under the new archive",
+        "New report appears as current in the authenticated detail page",
+        "Every preexisting readable receipt retains its exact payload and signature",
+        "Publication remains disabled"
+      ],
+      "created": {
+        "revision": 1,
+        "versionId": "2d50a691-54c3-4c16-ae45-1df81df77759",
+        "exerciseId": "13",
+        "fingerprint": "81f3878e84565662d4bae42aa5921cc93a06a8340d4b9f0ecd7462de1b79b844"
+      },
+      "receiptId": "d7fdd590-0f19-4347-9921-7b75dd556ed0",
+      "engineArchiveSha256": "d4d3abc408ab37f2f8a5faa512964b48947828bae9209cb1460b47111ca582f9",
+      "projections": [
+        {
+          "seed": 0,
+          "httpElapsedMs": 5869.3505000000005
+        },
+        {
+          "seed": 42,
+          "httpElapsedMs": 4046.3893000000007
+        }
+      ],
+      "advancedReportHttpElapsedMs": 29101.2505,
+      "retainedOldReceipts": 18,
+      "realAuth": true,
+      "realPostgrest": true,
+      "realNextRoutes": true,
+      "nativeLinuxEngine": true,
+      "nativeLimitsChanged": false,
+      "definitionElements": 7,
+      "seeds": [0, 42],
+      "syntheticDraftOnly": true,
+      "existingRolesUntouched": true,
+      "oldReceiptsPreserved": true,
+      "browserExecution": false,
+      "humanAcceptance": false,
+      "publicationEnabled": false
+    }
+  },
+  "advisors": {
+    "artifact": ".local/lot1a/reader-policies-advisors-1792406119163/summary.json",
+    "proof": {
+      "date": "2026-10-19T10:35:20.510Z",
+      "artifact": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\reader-policies-advisors-1792406119163",
+      "total": 97,
+      "levels": {
+        "INFO": 65,
+        "WARN": 32
+      },
+      "rules": {
+        "unindexed_foreign_keys": 24,
+        "auth_rls_initplan": 14,
+        "unused_index": 35,
+        "multiple_permissive_policies": 16,
+        "rls_enabled_no_policy": 6,
+        "function_search_path_mutable": 2
+      },
+      "errors": 0,
+      "previousSql67Warnings": 45,
+      "warningsRemoved": 13,
+      "globalSqlCertification": false,
+      "remoteOperations": false
+    }
+  },
+  "preservation": {
+    "artifact": ".local/lot1a/reader-policies-final-preservation.json",
+    "proof": {
+      "result": "PASS",
+      "date": "2026-10-19T10:36:39.419Z",
+      "canonicalCommit": "b5159ae2d54ab23a9d401d55099b497ca7464f54",
+      "canonicalMigration": "supabase/migrations/20261019093842_consolidate_novlearn_admin_reader_policies.sql",
+      "canonicalSha256": "0e93f2931501ecb3f7575be0467d4f454fd43a061420a566d8abc4268479863f",
+      "previousMigrationsExact": 67,
+      "originalNovlearnDirtyFilesExact": 8,
+      "protectedAdminFilesExact": 4,
+      "privateAppConfigurationsExact": 8,
+      "engineRepositoryClean": true,
+      "remoteOperations": false
+    }
+  },
+  "connectedCopyUpgrade": {
+    "result": "PASS for guarded SQL-68 upgrade of retained local fixture",
+    "date": "2026-10-19T10:33:28.318Z",
+    "container": "novlearn-admin-activity-http-1792344949001-db",
+    "artifact": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\reader-policies-retained-1792406005271",
+    "migrationSha256": "0e93f2931501ecb3f7575be0467d4f454fd43a061420a566d8abc4268479863f",
+    "backupSha256": "5f855d0eb603f9ade70a9f129cfc3048239f9ff1c5409b9e6339fc5989c8f5a5",
+    "tablesExact": 62,
+    "sequencesExact": 11,
+    "allMetadataAclRolesAndPasswordDigestsExact": true,
+    "policiesMatchQualifiedUpgrade": true,
+    "applicationConfigurationChanged": false,
+    "remoteOperations": false
+  },
+  "pgCopyUpgrade": {
+    "result": "PASS for guarded SQL-68 upgrade of retained local fixture",
+    "date": "2026-10-19T10:33:04.914Z",
+    "container": "novlearn-admin-users-restore-1792348367322",
+    "artifact": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\reader-policies-retained-1792405981663",
+    "migrationSha256": "0e93f2931501ecb3f7575be0467d4f454fd43a061420a566d8abc4268479863f",
+    "backupSha256": "80e509206f9c2d6645e075166a9bf69667d95f6a10902adc0b00cc5d9a04ed5e",
+    "tablesExact": 62,
+    "sequencesExact": 11,
+    "allMetadataAclRolesAndPasswordDigestsExact": true,
+    "policiesMatchQualifiedUpgrade": true,
+    "applicationConfigurationChanged": false,
+    "remoteOperations": false
   },
   "currentServiceObservation": {
-    "date": "2026-10-19T09:50:55.569Z",
+    "result": "PASS for actual local login availability",
+    "date": "2026-10-19T10:38:53.970Z",
     "observations": [
       {
-        "url": "http://127.0.0.1:3150/login",
-        "status": null,
-        "errorCode": "ECONNREFUSED"
+        "origin": "http://127.0.0.1:3150",
+        "loginStatus": 200,
+        "processId": 14900,
+        "engineContainer": "novlearn-admin-engine-1792405457840",
+        "local": true
       },
       {
-        "url": "http://127.0.0.1:55431/health",
-        "status": null,
-        "errorCode": "ECONNREFUSED"
-      },
-      {
-        "url": "http://127.0.0.1:3152/login",
-        "status": null,
-        "errorCode": "ECONNREFUSED"
+        "origin": "http://127.0.0.1:3152",
+        "loginStatus": 200,
+        "processId": 29968,
+        "engineContainer": "novlearn-admin-engine-1792405458742",
+        "local": true
       }
-    ]
+    ],
+    "mainPublicationDisabled": true,
+    "mainPublicationStatus": 503,
+    "remoteOperations": false,
+    "browserExecuted": false
   },
-  "docker": {
-    "version": "4.90.0",
-    "normalStartAttempts": 1,
-    "startCommand": "docker desktop start --detach",
-    "startCommandExitCode": 0,
-    "engineReady": false,
-    "backendCrashAt": "2026-10-19T09:44:59Z",
-    "error": "sailor-ingest.sock rename to .stale: The file cannot be accessed by the system",
-    "wslDistributionState": "Stopped",
-    "normalStopRequested": true,
-    "normalStopObservedComplete": false,
-    "userQuitAndNormalStartRequested": true,
-    "socketModified": false,
-    "protectionModified": false,
-    "forceStopAttempted": false,
-    "factoryResetAttempted": false,
-    "softwareUpdated": false,
-    "latestApiObservation": {
-      "date": "2026-10-19T09:57:15.848Z",
-      "engineReady": false,
+  "priorPreparationAndOutage": {
+    "recordedAt": "2026-10-19T09:59:21.363Z",
+    "scope": "Prepared SQL68 SELECT consolidation; native qualification pending after Docker startup failure",
+    "result": "NOT QUALIFIED; no SQL68 application",
+    "canonicalMigration": {
+      "file": "../Novlearn/supabase/migrations/20261019093842_consolidate_novlearn_admin_reader_policies.sql",
+      "sha256": "0e93f2931501ecb3f7575be0467d4f454fd43a061420a566d8abc4268479863f",
+      "cliVersion": "2.98.2",
+      "created": true,
+      "applied": false,
+      "committed": false
+    },
+    "preparedControls": {
+      "redundantPoliciesTargeted": 13,
+      "publicSelectPredicatesTargeted": 5,
+      "allExistingNonBuiltinRoles": true,
+      "claimContextsPerRole": 8,
+      "tablesPerContext": 10,
+      "realRowMultisetComparisonPrepared": true,
+      "negativePreflights": 4,
+      "rollbackDryRunPrepared": true,
+      "reapplicationRefusalPrepared": true
+    },
+    "nativeQualificationExecuted": false,
+    "nativeQualificationSucceeded": false,
+    "runtimeAttempt": {
+      "result": "FAIL before SQL: Docker API unavailable",
+      "observedAt": "2026-10-19T09:52:20.889Z",
+      "command": "node scripts/test-reader-policies-local.mjs novlearn-admin-user-detail-restore-1792361931187 ../Novlearn/supabase/migrations/20261019093842_consolidate_novlearn_admin_reader_policies.sql",
       "exitCode": 1,
-      "timeout": null,
-      "version": null
+      "failedAt": "docker inspect before source snapshot or any SQL connection",
+      "dockerEnginePipeAbsent": true,
+      "sqlExecuted": false,
+      "migrationApplied": false
+    },
+    "sourceHashes": {
+      "scripts/test-reader-policies-local.mjs": "cb6a76329781437a5997fdb84227b4b7ec0e6e32aa651317ed92117d34d86814",
+      "scripts/reader-policies-snapshot.sql": "8c158f428b2b7542b2ea0ec14aa1ee6f6878523320cd983158fe8a79cc793730",
+      "scripts/user-detail-local-fixture.mjs": "20a0a866f2a1c33bf5ae67bd14b9c51f9a51d22123f8517e4dcc6d97448af516"
+    },
+    "staticChecks": {
+      "syntax": {
+        "executed": true,
+        "result": "PASS"
+      },
+      "targetedLint": {
+        "executed": true,
+        "result": "PASS"
+      },
+      "fullCheck": {
+        "result": "PASS",
+        "date": "2026-10-19T09:56:10.943Z",
+        "artifact": "C:\\Users\\balth\\AppData\\Local\\Temp\\novlearn-admin-check-1792403562540",
+        "exitCode": 0,
+        "tests": 1143,
+        "files": 59,
+        "sourceFiles": 473,
+        "allCopiedSourcesStillMatch": true,
+        "fullCheckCommand": "npm run check",
+        "separateBuildDirectory": true,
+        "independentTemporaryProject": true,
+        "dependenciesCopied": true,
+        "applicationServersInterrupted": false,
+        "privateEnvironmentFilesCopied": false,
+        "executedForCurrentCode": true,
+        "finalDocumentationOnly": true,
+        "nativeSqlDriverExecuted": false,
+        "smokeAuthDisabled": true
+      }
+    },
+    "currentServiceObservation": {
+      "date": "2026-10-19T09:50:55.569Z",
+      "observations": [
+        {
+          "url": "http://127.0.0.1:3150/login",
+          "status": null,
+          "errorCode": "ECONNREFUSED"
+        },
+        {
+          "url": "http://127.0.0.1:55431/health",
+          "status": null,
+          "errorCode": "ECONNREFUSED"
+        },
+        {
+          "url": "http://127.0.0.1:3152/login",
+          "status": null,
+          "errorCode": "ECONNREFUSED"
+        }
+      ]
+    },
+    "docker": {
+      "version": "4.90.0",
+      "normalStartAttempts": 1,
+      "startCommand": "docker desktop start --detach",
+      "startCommandExitCode": 0,
+      "engineReady": false,
+      "backendCrashAt": "2026-10-19T09:44:59Z",
+      "error": "sailor-ingest.sock rename to .stale: The file cannot be accessed by the system",
+      "wslDistributionState": "Stopped",
+      "normalStopRequested": true,
+      "normalStopObservedComplete": false,
+      "userQuitAndNormalStartRequested": true,
+      "socketModified": false,
+      "protectionModified": false,
+      "forceStopAttempted": false,
+      "factoryResetAttempted": false,
+      "softwareUpdated": false,
+      "latestApiObservation": {
+        "date": "2026-10-19T09:57:15.848Z",
+        "engineReady": false,
+        "exitCode": 1,
+        "timeout": null,
+        "version": null
+      }
+    },
+    "previousQualifiedCode": {
+      "artifact": "C:\\Users\\balth\\AppData\\Local\\Temp\\novlearn-admin-check-1792363071394",
+      "tests": 1143,
+      "files": 59,
+      "scope": "Previous SQL67 feature; does not qualify SQL68 or current service availability"
+    },
+    "preservedPreexistingFileHashes": {
+      ".env.example": "bef315e2915404a579ed290b3f31ec738565219eacb46c4f83e16295314854cf",
+      "docs/audit-current-2026-10-15.md": "8ff3bf843fb6221ff8c7cb34435afc67372b25163eb4edbf1268dcae7b38f26a",
+      "CDC_reference.md": "b6bfea6d74b008e54ed61aa7598ccd01bd438d496cc22add15da2ff8abb04401",
+      "docs/system-design.md": "59e40e03702a673632213c354268b11334836fe4b46a1c69a1d7be127d84b2d9"
+    },
+    "goalComplete": false,
+    "browserExecuted": false,
+    "remoteDatabaseOperations": false,
+    "remaining": [
+      "Re-establish Docker through normal supported startup",
+      "Execute actual SQL68 role/claim matrix and preservation checks",
+      "Fresh 68-migration replay and populated logical restoration",
+      "Unchanged SQL, PG/TLS and Auth/HTTP regressions",
+      "Run local advisors and compare findings",
+      "Only then upgrade the connected synthetic activity source and commit qualified SQL"
+    ],
+    "offlinePreservation": {
+      "artifact": ".local/lot1a/reader-policies-preservation-proof.json",
+      "proof": {
+        "result": "PASS for offline file/configuration checks only",
+        "date": "2026-10-19T09:58:11.667Z",
+        "protectedAdminFiles": 4,
+        "privateAppConfigurations": 8,
+        "preexistingNovlearnDirtyFiles": 8,
+        "priorCanonicalMigrationsCompared": 67,
+        "newMigrationUncommitted": true,
+        "newMigrationApplied": false,
+        "engineRepositoryClean": true,
+        "databasesCompared": false,
+        "engineRuntimeTested": false,
+        "remoteOperations": false
+      }
     }
   },
-  "previousQualifiedCode": {
-    "artifact": "C:\\Users\\balth\\AppData\\Local\\Temp\\novlearn-admin-check-1792363071394",
+  "pgProofUnchangedWorkerLabel": "The unchanged worker still labels its last check SQL 67; the guarded upgrade proof establishes this execution used SQL 68.",
+  "fullCheck": {
+    "result": "PASS",
+    "date": "2026-10-19T10:44:51.928Z",
+    "artifact": "C:\\Users\\balth\\AppData\\Local\\Temp\\novlearn-admin-check-1792406395706",
+    "exitCode": 0,
     "tests": 1143,
     "files": 59,
-    "scope": "Previous SQL67 feature; does not qualify SQL68 or current service availability"
+    "sourceFiles": 477,
+    "allCopiedSourcesStillMatch": true,
+    "fullCheckCommand": "npm run check",
+    "separateBuildDirectory": true,
+    "independentTemporaryProject": true,
+    "dependenciesCopied": true,
+    "applicationServersInterrupted": false,
+    "privateEnvironmentFilesCopied": false,
+    "executedForCurrentCode": true,
+    "postCheckChanges": "Evidence JSON and status documentation only; runtime/test sources match checked copies",
+    "smokeAuthDisabled": true,
+    "nativeSqlAndHttpRunsSeparate": true
   },
   "preservedPreexistingFileHashes": {
     ".env.example": "bef315e2915404a579ed290b3f31ec738565219eacb46c4f83e16295314854cf",
@@ -125,32 +686,41 @@
     "CDC_reference.md": "b6bfea6d74b008e54ed61aa7598ccd01bd438d496cc22add15da2ff8abb04401",
     "docs/system-design.md": "59e40e03702a673632213c354268b11334836fe4b46a1c69a1d7be127d84b2d9"
   },
+  "globalSqlCertification": false,
   "goalComplete": false,
   "browserExecuted": false,
   "remoteDatabaseOperations": false,
   "remaining": [
-    "Re-establish Docker through normal supported startup",
-    "Execute actual SQL68 role/claim matrix and preservation checks",
-    "Fresh 68-migration replay and populated logical restoration",
-    "Unchanged SQL, PG/TLS and Auth/HTTP regressions",
-    "Run local advisors and compare findings",
-    "Only then upgrade the connected synthetic activity source and commit qualified SQL"
+    "32 existing advisor warnings and 65 information findings remain; no global SQL certificate",
+    "Manual authorized browser reception, accessibility and MathLive interaction",
+    "MFA, strict JWT revocation and Production user/statistics source activation",
+    "Remote migration reconciliation, restore/student compatibility and separately approved staging/production application"
   ],
-  "offlinePreservation": {
-    "artifact": ".local/lot1a/reader-policies-preservation-proof.json",
-    "proof": {
-      "result": "PASS for offline file/configuration checks only",
-      "date": "2026-10-19T09:58:11.667Z",
-      "protectedAdminFiles": 4,
-      "privateAppConfigurations": 8,
-      "preexistingNovlearnDirtyFiles": 8,
-      "priorCanonicalMigrationsCompared": 67,
-      "newMigrationUncommitted": true,
-      "newMigrationApplied": false,
-      "engineRepositoryClean": true,
-      "databasesCompared": false,
-      "engineRuntimeTested": false,
-      "remoteOperations": false
+  "intermediateAttempts": [
+    {
+      "result": "FAIL before SQL",
+      "operation": "First replay used retained digest-pinned Auth container; unchanged replay script requires literal installed v2.197.0 tag",
+      "resolution": "Read existing official Auth 2.197.0 executable from local user stack; no service/data change; unchanged guard retained; fresh 68 replay passed"
+    },
+    {
+      "result": "FAIL before execution",
+      "operation": "New private restoration helper had duplicate variable declaration",
+      "resolution": "Declaration corrected; syntax checked; separate populated SQL68 restoration then actually passed"
+    },
+    {
+      "result": "FAIL before migration",
+      "operation": "First retained PG fixture snapshot was requested before PostgreSQL became ready",
+      "resolution": "Verified same retained instance ready; next guarded backup/dry-run/upgrade passed; no automatic duplicate migration"
+    },
+    {
+      "result": "FAIL for additional launcher attempts",
+      "operation": "Restricted-context process observation missed the two already-started owner-context processes; extra starts failed on occupied Engine bridge ports",
+      "resolution": "Original processes verified in owner context and retained; no forced stop or database recreation"
+    },
+    {
+      "result": "Documentation literal encoding corrected after check",
+      "operation": "Two new Markdown files contained malformed backtick delimiters",
+      "resolution": "Only documentation normalized and formatted; runtime/test sources unchanged; original full-check scope retained"
     }
-  }
+  ]
 }
