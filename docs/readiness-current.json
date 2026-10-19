@@ -222,8 +222,8 @@
       {
         "origin": "http://127.0.0.1:3150",
         "loginStatus": 200,
-        "processId": 14900,
-        "engineContainer": "novlearn-admin-engine-1792405457840",
+        "processId": 39928,
+        "engineContainer": "novlearn-admin-engine-1792431615700",
         "local": true
       },
       {
@@ -246,7 +246,26 @@
     "currentMainProcessId": 39928,
     "currentMainEngineContainer": "novlearn-admin-engine-1792431615700",
     "actualExistingSyntheticAdminLogin": true,
-    "newPedagogyUiDelivered": true
+    "newPedagogyUiDelivered": true,
+    "previousServiceObservation": {
+      "date": "2026-10-19T10:38:53.970Z",
+      "observations": [
+        {
+          "origin": "http://127.0.0.1:3150",
+          "loginStatus": 200,
+          "processId": 14900,
+          "engineContainer": "novlearn-admin-engine-1792405457840",
+          "local": true
+        },
+        {
+          "origin": "http://127.0.0.1:3152",
+          "loginStatus": 200,
+          "processId": 29968,
+          "engineContainer": "novlearn-admin-engine-1792405458742",
+          "local": true
+        }
+      ]
+    }
   },
   "latestLocalQualification": {
     "sql68Proof": "reader-policies-proof.json",
