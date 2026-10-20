@@ -4,6 +4,11 @@ Le [parcours court a été confirmé par l’utilisateur](local-reception-2026-1
 Les soucis d’interface sont reportés à sa demande ; les autres contrôles de ce
 guide restent à réceptionner selon leur portée.
 
+La [récupération du titre après rechargement](recovery-reception-2026-10-21.md)
+est aussi confirmée par l’utilisateur le 21 octobre. Il n’est pas nécessaire
+de répéter ce parcours pour cette réception ; les autres interactions gardent
+leur portée distincte.
+
 L’application connectée est disponible sur
 [http://127.0.0.1:3150/login](http://127.0.0.1:3150/login).
 Elle utilise des comptes et données d’essai sur cet ordinateur. Les brouillons
@@ -66,7 +71,8 @@ d’identifiants, les cookies ou la configuration privée.
 Le [bilan de livraison](readiness-current.md) distingue ce qui est implémenté,
 testé localement et encore à réceptionner. Le [correctif des sessions expirées](auth-expiry-local.md)
 et le [bilan SQL 71](legacy-search-path.md) conservent les essais et échecs réels.
-Le contrôle complet de référence du 20 octobre passe 1 432 tests, les types,
-lint, format, build, intégrité Engine et smoke HTTP. La nouvelle expiration
+Le dernier [contrôle complet du 20 octobre](mcp-resume-2026-10-20.md) passe
+1 505 tests / 76 fichiers, les types, lint, format, build, intégrité Engine et
+smoke HTTP. Il n’est pas réexécuté pour consigner le retour humain. L’expiration
 naturelle complète de 3 600 secondes passe réellement ; les preuves conservent
 l’échec initial et le correctif, sans modifier les délais ni les protections.

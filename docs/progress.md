@@ -1,5 +1,7 @@
 # Progression du goal NovLearn Admin
 
+**21 octobre — récupération reçue par l’utilisateur :** « oui la récupération fonctionne bien » valide le parcours demandé sur 3150 : activer la copie, modifier le titre sans sauvegarder, recharger et récupérer ce titre. [Réception et portée](recovery-reception-2026-10-21.md). Aucun nouveau test automatisé ni changement de code/distant ; les autres interactions navigateur et les portes SQL restent distinctes.
+
 **21 octobre — écarts Staging testés localement :** les 45 migrations historiques puis les 26 migrations Admin passent sur une nouvelle base synthétique reproduisant onze contrats de colonnes et huit index observés. **286 assertions SQL** passent sans modifier les suites existantes ; anciennes valeurs de 49 tables et états des 13 séquences avant delta préservés. Conteneur borné, sans réseau, arrêté normalement ; bases applicatives et distant inchangés. Ce test partiel ne remplace pas une restauration fidèle de Staging et ne clôture pas le Lot 1A. [Portée et preuves](observed-schema-local-2026-10-21.md).
 
 **21 octobre — accès local rétabli :** les deux processus Next/Engine sont relancés après constat de refus sur3150, avec les mêmes quatorze dépendances et sans recréer les bases. La vraie connexion, sept groupes d’accès, huit contrôles Engine et la préparation native de publication suivie de son annulation passent. Les 22 anciens rapports et toutes les anciennes lignes métier des cinq bases sont conservés ; aucun transfert cible ni distant. [Preuves de reprise](mcp-resume-2026-10-20.md).

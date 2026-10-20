@@ -8,21 +8,28 @@ les statistiques et les utilisateurs synthétiques. Les identifiants restent dan
 le fichier privé indiqué par le [guide d’essai](local-user-testing.md).
 La publication ordinaire reste fermée ; son banc de qualification est séparé.
 
-Le commit `4ab94d1` conserve la dernière réalisation fonctionnelle : deux
-compteurs, huit rapports SQL/TLS/HTTP, 28 mesures de charge et contrôle général
-de 1 432 tests / 75 fichiers, build et smoke réussis. La nouvelle expiration
-naturelle de 3 600 secondes passe. Voir les [preuves](completed-work-local-proof.json).
-Le [parcours court](local-reception-2026-10-20.md) est ensuite accepté par
+La [récupération du titre après rechargement](recovery-reception-2026-10-21.md)
+est acceptée sur le retour humain du 21 octobre. Cette confirmation complète
+le parcours court ; elle ne qualifie pas toutes les interactions navigateur.
+
+Le [dernier contrôle complet](mcp-resume-2026-10-20.md) passe 1 505 tests /
+76 fichiers, types, lint, format, build, intégrité Engine et smoke. Les
+[deux compteurs](completed-work-local-proof.json), huit rapports SQL/TLS/HTTP,
+28 mesures de charge et l’expiration naturelle de 3 600 secondes ont leurs
+preuves distinctes. Les [286 assertions SQL supplémentaires](observed-schema-local-2026-10-21.md)
+qualifient les écarts sélectionnés sur une base synthétique ; elles ne
+remplacent pas une restauration fidèle de Staging.
+Le [parcours court](local-reception-2026-10-20.md) est accepté par
 l’utilisateur ; la réception plus large garde ses contrôles distincts.
 
 ## Actions qui restent nécessaires
 
-| Étape                   | Travail concret                                                                                                                                                                    | Condition pour avancer                                                                                                                 |
-| ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| Réception locale        | Sur 3150 : connexion, brouillon, fraction MathLive, sauvegarde/réouverture ; puis aperçu Engine, clavier, focus, mobile et récupération d’une saisie selon le guide                | Parcours court accepté ; réception élargie restante. Le pilotage automatisé précédemment refusé reste respecté                         |
-| Historique SQL          | Archives001–025 identifiées dans Novlearn ; rapprocher leur provenance et les écarts du schéma vivant                                                                              | Le relevé élargi du 20 octobre et les archives ne suffisent pas, seuls, à qualifier un delta distant sûr                               |
-| Exploitation Staging    | Choisir l’hôte, le premier Admin, la politique MFA/récupération, les identités PG distinctes et le stockage des secrets ; qualifier sauvegarde/restauration et compatibilité élève | Dossier et autorisation propres à Staging ; aucune clé privilégiée générale utilisée comme lecteur limité                              |
-| Staging puis Production | Revoir les changements réellement nécessaires après réconciliation, faire valider le plan et ses vérifications ; qualifier Staging avant de proposer Production                    | Accords explicites et séparés ; pas d’application automatique des fichiers locaux, de réparation d’historique ou de publication réelle |
+| Étape                   | Travail concret                                                                                                                                                                    | Condition pour avancer                                                                                                                                  |
+| ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Réception locale        | Sur 3150 : connexion, brouillon, fraction MathLive, sauvegarde/réouverture ; puis aperçu Engine, clavier, focus, mobile et récupération d’une saisie selon le guide                | Parcours court et titre récupéré après rechargement acceptés ; autres interactions restantes. Le pilotage automatisé précédemment refusé reste respecté |
+| Historique SQL          | Archives001–025 identifiées dans Novlearn ; rapprocher leur provenance et les écarts du schéma vivant                                                                              | Le relevé élargi du 20 octobre et les archives ne suffisent pas, seuls, à qualifier un delta distant sûr                                                |
+| Exploitation Staging    | Choisir l’hôte, le premier Admin, la politique MFA/récupération, les identités PG distinctes et le stockage des secrets ; qualifier sauvegarde/restauration et compatibilité élève | Dossier et autorisation propres à Staging ; aucune clé privilégiée générale utilisée comme lecteur limité                                               |
+| Staging puis Production | Revoir les changements réellement nécessaires après réconciliation, faire valider le plan et ses vérifications ; qualifier Staging avant de proposer Production                    | Accords explicites et séparés ; pas d’application automatique des fichiers locaux, de réparation d’historique ou de publication réelle                  |
 
 Les courbes de formules restent signalées comme indisponibles : le contrat
 Engine fournit des formules non vérifiées sans points calculés. Les figures,

@@ -1,5 +1,7 @@
 # Récupération facultative de la saisie Creator
 
+**Réception humaine du 21 octobre :** le [titre modifié est récupéré après rechargement](recovery-reception-2026-10-21.md), selon le retour explicite de l’utilisateur sur 3150. Ce parcours connecté est accepté dans cette portée ; les autres observations navigateur ci-dessous ne sont pas présumées exécutées. Aucun nouveau test automatisé ni changement du code.
+
 **Complément du 18 octobre :** le [refus de nettoyage](recovery-cleanup.md)
 est signalé aussi lorsque l’accès au stockage lui-même est bloqué. Les preuves
 ci-dessous restent celles du premier jalon de récupération.
@@ -104,7 +106,9 @@ réel de sessionStorage et les retours avant/arrière restent à exécuter dans 
 navigateurs autorisés : les tests Node et la compilation ne les prouvent pas.
 Le refus antérieur de pilotage navigateur n’est pas contourné.
 
-L’intégration connectée de cette récupération reste à vérifier ; les [services
-ont depuis été rétablis](local-recovery-2026-10-18.md). Les comptes, configurations privées, migrations, données existantes
+Le parcours connecté de récupération du titre après rechargement est depuis
+[accepté par l’utilisateur](recovery-reception-2026-10-21.md) ; les autres
+interactions restent à réceptionner. Les [services ont été rétablis](local-recovery-2026-10-18.md).
+Les comptes, configurations privées, migrations, données existantes
 et environnements distants ne sont pas modifiés par ce jalon. Le goal et la
 réception complète du Creator restent ouverts.

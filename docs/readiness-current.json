@@ -124,8 +124,8 @@
     {
       "id": 6,
       "title": "Creator visuel",
-      "evidenceSummary": "Édition canonique des vingt types, variables, contraintes, questions, politiques ; [Creator](creator-local-proof.json), [récupération](creator-recovery-proof.json). [Parcours court accepté par l’utilisateur](local-reception-2026-10-20.md) : connexion, brouillon, fraction MathLive, sauvegarde et réouverture.",
-      "remaining": "Réception de la récupération en navigateur et avec la sauvegarde connectée ; courbes de formules non prises en charge faute de points calculés officiels."
+      "evidenceSummary": "Édition canonique des vingt types, variables, contraintes, questions, politiques ; [Creator](creator-local-proof.json), [récupération](creator-recovery-proof.json). [Parcours court accepté par l’utilisateur](local-reception-2026-10-20.md) : connexion, brouillon, fraction MathLive, sauvegarde et réouverture. [Titre récupéré après rechargement accepté par l’utilisateur](recovery-reception-2026-10-21.md).",
+      "remaining": "Autres interactions de récupération/navigation à réceptionner ; courbes de formules non prises en charge faute de points calculés officiels."
     },
     {
       "id": 7,
@@ -184,8 +184,8 @@
     {
       "id": 16,
       "title": "Qualité et tests",
-      "evidenceSummary": "Contrôle complet [1505 tests / 76 fichiers](mcp-resume-2026-10-20.json), types, lint, format, build, intégrité Engine et smoke ; 71 migrations/restaurations locales qualifiées séparément. Les échecs précédents restent conservés.",
-      "remaining": "Réception navigateur/récupération connectée, hôte cible et qualifications distantes ouvertes."
+      "evidenceSummary": "Contrôle complet [1505 tests / 76 fichiers](mcp-resume-2026-10-20.json), types, lint, format, build, intégrité Engine et smoke ; 71 migrations/restaurations locales qualifiées séparément. Les échecs précédents restent conservés. [Titre récupéré après rechargement accepté par l’utilisateur](recovery-reception-2026-10-21.md).",
+      "remaining": "Autres parcours navigateur, nettoyage/récupération hors du titre après rechargement, hôte cible et qualifications distantes ouverts."
     },
     {
       "id": 17,
@@ -218,7 +218,7 @@
     "local-recovery-2026-10-18.md": "ab6e2a667d7b054b673a1b175044ed6504218a993fd9e8c6054b46fb970aac1f",
     "users-readonly.md": "af41c90a92f9f5f8baa0f9ad6094b0c87d6d54f07a1bff828e4494efe829ae20",
     "lot-1a-remote-reconciliation-current.md": "4a2a06adff60f7a6541f261af3bd00a63debc01197030717c389c7c22b813dfe",
-    "progress.md": "e28ae29a76a76a258d58d0e46d30da8bfbeffd191024749dfe01489556fa63ee",
+    "progress.md": "61036ab95cbf94e9e9f836c7071feaad4b206f844c03782975dfb7f04973aa01",
     "lot-1a-preparation.md": "3561164a62bc6690a46d2f472c42037c11bd9aacc40add77d44814abdc5dd271",
     "recovery-cleanup-proof.json": "cb414a4c150ceb55204fcc9fca07696d05463e71642b4b4db35fd62819fa2524",
     "local-recovery-2026-10-18-proof.json": "5c9f10801159d1b94c66aebf2f4f45cb91e6a3447f6098968d85e03c83e0e26d",
@@ -239,7 +239,7 @@
     "activity-readonly-proof.json": "c362635524c4dc6cfe81cdbc489e2130a3e3285f8346462e5075915fddb51401",
     "activity-http-proof.json": "c4ae58e794d8944ecf0947935e799b834bb1742336984c5cd8c51201af35b806",
     "users-readonly-proof.json": "2a2ba32df2dca5050be282939596ed3a0a9e22695a56d4d6c6560f64ab5a8da2",
-    "roadmap.md": "612a9e22b12eba61328186359fc99f943dd9a5c91bbfa7abd90f2d76ced58a06",
+    "roadmap.md": "4fc0df253ee2916af4f8a0796bbbe8ecd02731dda88ecca9df43e18f8932eebd",
     "activity-readonly.md": "0bc4135dfe48409cb19a8f2ad0b98e9593c65f83f46bc12b53a4a8e6fd1fbdff",
     "activity-pg.md": "ce3ae62c070f728174bc2cae7817d1ed727d42fd1e2e09d162cadd188b028aec",
     "lot-1a-local-statistics-guard.md": "0bd4f19d706296ccb96f8ea246f186c4e52ddc7a23da69519f64c2a1978a7a92",
@@ -267,7 +267,7 @@
     "active-version-connected.md": "5b105582074182c67738694ede5f9b417fb4d88abd225bcfcb31d29d3bff9f36",
     "active-version-connected-proof.json": "d6d3809c0abc4a5229f5b4fa3e1f1d656792fcbb1a431ac42114a5007970654b",
     "completed-work-local-proof.json": "fa299648e3c6e8bbe6ded6f263d76ccf0eb70b8f8e5d11669884909147773728",
-    "local-handover.md": "8e19a67c56a3e076bf0f67ff46458dadeded627f50963ae43c4b1637ca276a8d",
+    "local-handover.md": "5978817f587cbce006c9e13df10c0100e13d8903ecb7fa723d261616629b53a2",
     "sql-findings-triage.json": "246e4045b6499812b0aed284513af1fa734ab50b9a37952dddd109cb47e155df",
     "local-reception-2026-10-20.json": "082d92242f3e96ef2ed9517be6cb5e3396215b7eda56034c7d14d50f385b3e27",
     "local-reception-2026-10-20.md": "b55e2180f01abc7600597d98bb00bb53674524cecf4fd23b3d9314fd9831ba11",
@@ -281,7 +281,11 @@
     "observed-schema-local-2026-10-21.md": "7b3f8693ec458727865535d4e9255bb92f4bac3121e6d0270a3250779dc28ec2",
     "observed-schema-local-2026-10-21.json": "3b5b7223916941762bf18e2e214321bee8ced1e5a3e22d2debd4865eba4bdaae",
     "observed-staging-shape-2026-10-20.json": "978a7c9616b6edbb5cc7d9ff72ee3ae4b20d2509db2c87955cbcdcd08940e8e3",
-    "observed-staging-shape-2026-10-20.sql": "77a623dd3a287065803c968d5654922cd490023623ec6b98ed2f5a3a9246b272"
+    "observed-staging-shape-2026-10-20.sql": "77a623dd3a287065803c968d5654922cd490023623ec6b98ed2f5a3a9246b272",
+    "creator-recovery.md": "ee99fddcd3c8a8bd8c3350b24ebac9da3c1200803e10823dc34e848de37dafde",
+    "local-user-testing.md": "804715828c0d8e96d0f5983afe4b1283d83000435b0d988f1dceead4a9dc6c58",
+    "recovery-reception-2026-10-21.md": "f9bf72a8378861bd785935639c941055c0f06d74c688f1ae11ce976a23856918",
+    "recovery-reception-2026-10-21.json": "ac1c9dfd1d357cbc331d4f0e71dadde1c63e1c1cc568e99af64c85db68eb36fd"
   },
   "unimplemented": [
     "Production analytics identity/source activation and remaining metrics (local general and pedagogical filters, grouping/ranking, PG/TLS and Auth/HTTP page/API qualified)",
@@ -291,8 +295,7 @@
     "Operational identity policy for MFA/recovery remains undecided; no implicit local MFA activation"
   ],
   "notExecuted": [
-    "Authorized browser acceptance of current recovery/cleanup",
-    "Connected browser cleanup/recovery (services now restored)",
+    "Other browser recovery/navigation and cleanup paths beyond the human-confirmed title recovery after reload",
     "Target deployment-host qualification",
     "Remote migration rehearsal/approval and controlled first publication",
     "Global SQL advisor remediation/security qualification remains open: SQL71 comparable copies 30 WARN/67 INFO; unchanged application target SQL70 previously 33 WARN/67 INFO",
@@ -551,11 +554,12 @@
     "document": "local-handover.md",
     "sqlFindingClassification": "sql-findings-triage.json",
     "basedOnAdminCommit": "4ab94d1610d10374c5cfb492a3f8d855a6965899",
-    "humanReception": "ACCEPTED for the short user-reported flow; broader reception and deferred UI issues remain",
+    "humanReception": "ACCEPTED for the initial short flow and title recovery after reload; other browser reception and deferred UI issues remain",
     "functionalChanges": false,
     "remoteOperations": false,
     "browserExecuted": false,
-    "manualReceptionProof": "local-reception-2026-10-20.json"
+    "manualReceptionProof": "local-reception-2026-10-20.json",
+    "manualRecoveryProof": "recovery-reception-2026-10-21.json"
   },
   "manualReception": {
     "recordedAt": "2026-10-20T19:17:37.829Z",
@@ -577,9 +581,16 @@
     "remaining": [
       "Complete keyboard, focus and accessibility reception",
       "Mobile reception",
-      "Recovery of unsaved browser state",
-      "Other element types and publication reception"
-    ]
+      "Other element types and publication reception",
+      "Other recovered fields, browser navigation and cleanup beyond the accepted title recovery after reload"
+    ],
+    "recoveryAfterReload": {
+      "proof": "recovery-reception-2026-10-21.json",
+      "recordedAt": "2026-10-20T22:23:39Z",
+      "result": "ACCEPTED for the reported title recovery after reload",
+      "userQuote": "oui la récupération fonctionne bien",
+      "automationExecuted": false
+    }
   },
   "currentRemoteSchemaObservation": {
     "document": "remote-readiness-2026-10-20.md",
