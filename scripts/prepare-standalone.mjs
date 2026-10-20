@@ -27,6 +27,8 @@ if (hasPublic) {
   );
 }
 for (const name of [
+  'active-version-reader-audit.sql',
+  'active-version-query.sql',
   'activity-reader-audit.sql',
   'activity-statistics-query.sql',
   'users-reader-audit.sql',

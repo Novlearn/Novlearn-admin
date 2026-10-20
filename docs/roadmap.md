@@ -1,5 +1,11 @@
 # Roadmap
 
+**20 octobre — préparation de la version cible :** [SQL 70 et l’indicateur](active-version-readonly.md)
+passent le rejeu neuf, l’upgrade d’une copie et les tests ciblés. Login/TLS et
+Auth/HTTP réels restent à qualifier avant activation locale. Docker est
+indisponible et les services 3150/3152 arrêtés au relevé de 11:33 UTC ; les
+disponibilités antérieures ci-dessous ne décrivent pas l’état courant.
+
 **Performance pédagogique du 19 octobre :** une [requête optimisée et mesurée](pedagogy-performance.md)
 remplace le plan qui dépassait dix secondes sur 100 000 réponses synthétiques.
 Les 28 mesures passent (maximum 3,443 s), puis quatre lectures du vrai pool TLS

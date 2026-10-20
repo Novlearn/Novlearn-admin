@@ -20,6 +20,15 @@ import {
 } from '@/lib/catalogue';
 import { requireCatalogueClient, versionColumns } from '@/lib/catalogue-server';
 import { isCurrentTestReceipt } from '@/lib/test-receipt-state';
+import {
+  ActiveVersionCard,
+  type ActiveVersionObservation,
+} from '@/components/active-version-card';
+import { activeCatalogId, comparableVersion } from '@/lib/active-version';
+import { readLocalActiveVersionConfiguration } from '@/lib/active-version-config';
+import { loadLocalActiveVersion } from '@/lib/active-version-server';
+
+export const dynamic = 'force-dynamic';
 
 export default async function ExercisePage({
   params,
@@ -69,6 +78,30 @@ export default async function ExercisePage({
   if (versionResult?.error) throw new Error('Version unavailable');
   if (versionId && !versionResult?.data) notFound();
   const version = versionResult?.data;
+  let targetObservation: ActiveVersionObservation = { kind: 'disabled' };
+  if (readLocalActiveVersionConfiguration(process.env)) {
+    if (!activeCatalogId(parent.catalog_id))
+      targetObservation = { kind: 'identity-unavailable' };
+    else {
+      try {
+        targetObservation = {
+          kind: 'observed',
+          snapshot: await loadLocalActiveVersion(parent.catalog_id),
+        };
+      } catch {
+        targetObservation = { kind: 'unavailable' };
+      }
+    }
+  }
+  const comparable = version
+    ? comparableVersion({
+        revision: version.revision,
+        definitionSha256: version.definition_sha256,
+        engineContract: version.engine_contract,
+        generationVersion: version.generation_version,
+        canonicalizationVersion: version.canonicalization_version,
+      })
+    : null;
   const editable =
     version?.editorial_status === 'draft' && !parent.admin_archived_at;
   const canonical = version && draftEnvelope(version.definition);
@@ -371,59 +404,76 @@ export default async function ExercisePage({
             </section>
           )}
         </div>
-        <aside className="card">
-          <h2 className="text-lg font-semibold">Historique des versions</h2>
-          <p className="mt-2 text-xs leading-5 text-slate-500">
-            Version active Staging : {parent.active_version_id ?? 'aucune'}. La
-            publication en Production est une opération distincte.
-          </p>
-          <ul className="mt-5 space-y-4">
-            {history?.map((item) => (
-              <li key={item.id} className="border-t border-slate-100 pt-4">
-                <Link
-                  href={`/admin/exercises/${id}?version=${item.id}&history=${versionPage}`}
-                  className={`text-sm font-semibold ${item.id === versionId ? 'text-blue-700' : 'text-slate-700'}`}
-                >
-                  Version {item.revision}
-                </Link>
-                <div className="mt-2">
-                  <EditorialBadge
-                    status={item.editorial_status as EditorialStatus}
-                  />
-                </div>
-                {version && item.id !== versionId && (
-                  <Link
-                    href={`/admin/exercises/${id}?version=${versionId}&compare=${item.id}&history=${versionPage}`}
-                    className="mt-2 block text-xs text-blue-700"
-                  >
-                    Comparer à cette version
-                  </Link>
-                )}
-              </li>
-            ))}
-          </ul>
-          {!history?.length && (
-            <p className="mt-4 text-sm text-slate-500">
-              Aucune révision canonique.
+        <aside className="space-y-5">
+          <ActiveVersionCard
+            observation={targetObservation}
+            selected={comparable}
+            exerciseId={id}
+            refreshQuery={{
+              version: versionId,
+              compare:
+                typeof query.compare === 'string' ? query.compare : undefined,
+              history: String(versionPage),
+            }}
+          />
+          <section className="card">
+            <h2 className="text-lg font-semibold">Historique des versions</h2>
+            <p className="mt-2 text-xs leading-5 text-slate-500">
+              Version active Staging : {parent.active_version_id ?? 'aucune'}.
+              La publication en Production est une opération distincte.
             </p>
-          )}
-          <nav
-            aria-label="Pagination des versions"
-            className="mt-5 flex justify-between text-xs text-blue-700"
-          >
-            {versionPage > 1 ? (
-              <Link href={`/admin/exercises/${id}?history=${versionPage - 1}`}>
-                ← Précédentes
-              </Link>
-            ) : (
-              <span />
+            <ul className="mt-5 space-y-4">
+              {history?.map((item) => (
+                <li key={item.id} className="border-t border-slate-100 pt-4">
+                  <Link
+                    href={`/admin/exercises/${id}?version=${item.id}&history=${versionPage}`}
+                    className={`text-sm font-semibold ${item.id === versionId ? 'text-blue-700' : 'text-slate-700'}`}
+                  >
+                    Version {item.revision}
+                  </Link>
+                  <div className="mt-2">
+                    <EditorialBadge
+                      status={item.editorial_status as EditorialStatus}
+                    />
+                  </div>
+                  {version && item.id !== versionId && (
+                    <Link
+                      href={`/admin/exercises/${id}?version=${versionId}&compare=${item.id}&history=${versionPage}`}
+                      className="mt-2 block text-xs text-blue-700"
+                    >
+                      Comparer à cette version
+                    </Link>
+                  )}
+                </li>
+              ))}
+            </ul>
+            {!history?.length && (
+              <p className="mt-4 text-sm text-slate-500">
+                Aucune révision canonique.
+              </p>
             )}
-            {versionPage * 25 < (count ?? 0) && (
-              <Link href={`/admin/exercises/${id}?history=${versionPage + 1}`}>
-                Suivantes →
-              </Link>
-            )}
-          </nav>
+            <nav
+              aria-label="Pagination des versions"
+              className="mt-5 flex justify-between text-xs text-blue-700"
+            >
+              {versionPage > 1 ? (
+                <Link
+                  href={`/admin/exercises/${id}?history=${versionPage - 1}`}
+                >
+                  ← Précédentes
+                </Link>
+              ) : (
+                <span />
+              )}
+              {versionPage * 25 < (count ?? 0) && (
+                <Link
+                  href={`/admin/exercises/${id}?history=${versionPage + 1}`}
+                >
+                  Suivantes →
+                </Link>
+              )}
+            </nav>
+          </section>
         </aside>
       </div>
     </div>

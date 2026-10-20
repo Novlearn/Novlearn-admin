@@ -1,5 +1,19 @@
 # Progression du goal NovLearn Admin
 
+**Contrôle complet du 20 octobre réussi :** 1 387 tests / 72 fichiers, types,
+lint, format, build et smoke ; le [lecteur cible reste en préparation](active-version-readonly.md).
+L’[aperçu 3140](http://127.0.0.1:3140/) est accessible avec des exemples fictifs,
+sans Auth, base ou Engine. Le relevé 11:43 UTC confirme 3150/3152 arrêtés et
+Docker absent ; aucune connexion réelle actuelle n’est déclarée réussie.
+
+**20 octobre — version active et disponibilité :** la [lecture de la version cible](active-version-readonly.md)
+est préparée, fermée par défaut. Rejeu neuf de 70 migrations, upgrade d’une copie
+peuplée, six observations natives, 16 refus SQL et 103 tests ciblés passent.
+Le test physique PG/TLS reste non validé, sa préparation conservée. Docker n’est
+plus joignable ; 3150/3152 refusent la connexion à 11:33 UTC. Les résultats de
+disponibilité du 19 octobre ci-dessous sont historiques. Aucun reset, accès
+distant ou contournement de sécurité ; reprise normale Docker demandée.
+
 **Performance pédagogique du 19 octobre :** une [requête optimisée et mesurée](pedagogy-performance.md)
 remplace le plan qui dépassait dix secondes sur 100 000 réponses synthétiques.
 Les 28 mesures passent (maximum 3,443 s), puis quatre lectures du vrai pool TLS

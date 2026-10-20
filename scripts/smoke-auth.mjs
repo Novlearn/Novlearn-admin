@@ -107,6 +107,7 @@ try {
     ['/api/admin/users', 'GET'],
     ['/api/admin/users/a8100000-0000-4000-8000-000000000001', 'GET'],
     ['/api/admin/exercises', 'GET'],
+    ['/api/admin/exercises/1/target-version', 'GET'],
     ['/api/admin/exercises', 'POST'],
     ['/api/admin/engine', 'POST'],
     ['/api/admin/preview', 'POST'],
@@ -131,6 +132,8 @@ try {
   assert.equal((await fetch(`${origin}/auth/logout`)).status, 405);
   assert.equal((await fetch(`${origin}/api/admin/publication`)).status, 405);
   for (const name of [
+    'active-version-reader-audit.sql',
+    'active-version-query.sql',
     'pedagogy-reader-audit.sql',
     'pedagogy-statistics-query.sql',
     'pedagogy-references-query.sql',

@@ -1,12 +1,12 @@
 {
-  "recordedAt": "2026-10-19T18:34:21.502Z",
+  "recordedAt": "2026-10-20T11:44:35.390Z",
   "scope": "Documentary traceability for all 20 original goal sections; not a functional test, receipt, permission or completion certificate",
   "referenceInputs": {
     "requestSha256": "fb9ac40863c57594878833b8a9fc0bd130a0cba9d0249d29c609051a54bded93",
     "cdcSha256": "b6bfea6d74b008e54ed61aa7598ccd01bd438d496cc22add15da2ff8abb04401",
     "decisionsSha256": "dac872dd9755c30734c067b8df52be8b5d595dbd9e01f5e5e1dcd27fca9ff028"
   },
-  "baselineAdminCommitAtAssessment": "c24bb636157ce1e98b19649c4e11836d12c9636b",
+  "baselineAdminCommitAtAssessment": "d15d61021867f742638bed52c1ebe81cef29ac94",
   "implementationHasUncommittedChangesAtObservation": true,
   "requestedSections": [
     { "id": 1, "title": "Audit de démarrage" },
@@ -58,8 +58,8 @@
     {
       "id": 5,
       "title": "Gestion des exercices",
-      "evidenceSummary": "CRUD, conflits, versions, duplication et archivage dans [catalogue](catalogue-local-proof.json) et parcours Auth/REST réels.",
-      "remaining": "La fiche affiche la version active **Staging** ; l’indication courante de la version active **Production** reste à raccorder à une capacité autorisée."
+      "evidenceSummary": "CRUD, conflits, versions, duplication et archivage dans [catalogue](catalogue-local-proof.json) et parcours Auth/REST réels. [Version cible préparée](active-version-readonly-proof.json) : 70 migrations, copie peuplée, six observations/16 refus natifs et 103 tests ciblés.",
+      "remaining": "Indicateur de cible fermé par défaut ; login/TLS et Auth/HTTP réels restent à qualifier avant activation locale. L’accès Production et sa mise en service restent soumis aux portes distinctes."
     },
     {
       "id": 6,
@@ -158,7 +158,7 @@
     "local-recovery-2026-10-18.md": "ab6e2a667d7b054b673a1b175044ed6504218a993fd9e8c6054b46fb970aac1f",
     "users-readonly.md": "af41c90a92f9f5f8baa0f9ad6094b0c87d6d54f07a1bff828e4494efe829ae20",
     "lot-1a-remote-reconciliation-current.md": "4a2a06adff60f7a6541f261af3bd00a63debc01197030717c389c7c22b813dfe",
-    "progress.md": "24c0724f533452c834d4843856b0b2dab4a8822ac9ff9def597d818109badc25",
+    "progress.md": "2c836a10eeb08fabc3b1e624063078a9af00ec52c13edb4092b5d44e07ba3650",
     "lot-1a-preparation.md": "3561164a62bc6690a46d2f472c42037c11bd9aacc40add77d44814abdc5dd271",
     "recovery-cleanup-proof.json": "cb414a4c150ceb55204fcc9fca07696d05463e71642b4b4db35fd62819fa2524",
     "local-recovery-2026-10-18-proof.json": "5c9f10801159d1b94c66aebf2f4f45cb91e6a3447f6098968d85e03c83e0e26d",
@@ -179,7 +179,7 @@
     "activity-readonly-proof.json": "c362635524c4dc6cfe81cdbc489e2130a3e3285f8346462e5075915fddb51401",
     "activity-http-proof.json": "c4ae58e794d8944ecf0947935e799b834bb1742336984c5cd8c51201af35b806",
     "users-readonly-proof.json": "2a2ba32df2dca5050be282939596ed3a0a9e22695a56d4d6c6560f64ab5a8da2",
-    "roadmap.md": "1ae5c81f6a3657177ab2ed420b864d12a63f9cfa58e1f7b92b93bb93b9f9ae89",
+    "roadmap.md": "28eb764071c5f0aa010fabb39cf9e3408f6f2ee0b29fefe86061815e0da0ddfa",
     "activity-readonly.md": "0bc4135dfe48409cb19a8f2ad0b98e9593c65f83f46bc12b53a4a8e6fd1fbdff",
     "activity-pg.md": "ce3ae62c070f728174bc2cae7817d1ed727d42fd1e2e09d162cadd188b028aec",
     "lot-1a-local-statistics-guard.md": "0bd4f19d706296ccb96f8ea246f186c4e52ddc7a23da69519f64c2a1978a7a92",
@@ -197,7 +197,9 @@
     "pedagogy-connected-proof.json": "28f4b5e1f3623216b2921db5ee38a608234ce7fa50a2b0ab535f81d7fa621598",
     "local-admin.md": "ff799a6d56bcc2ac59885eb56d1d1084ee847c5372bb8f31ecfab171751ac2d3",
     "pedagogy-performance.md": "9108e009389a0e65d880478874bb19604ace9943364cb9cd301615097fdafd10",
-    "pedagogy-performance-proof.json": "3a4ed57d4fef63ee64d9010230023a7f08ce9da995484c28477ee379a029b619"
+    "pedagogy-performance-proof.json": "3a4ed57d4fef63ee64d9010230023a7f08ce9da995484c28477ee379a029b619",
+    "active-version-readonly.md": "8f53869ba704b191dc02133339c41b37dcfc246d7b0ce3ffd808e7ce29b61016",
+    "active-version-readonly-proof.json": "1aeb4f3aadb439fc44abd47bee82e6995a87cdda9ae3b78ba7447cc428ef6736"
   },
   "unimplemented": [
     "Production analytics identity/source activation and remaining metrics (local general and pedagogical filters, grouping/ranking, PG/TLS and Auth/HTTP page/API qualified)",
@@ -212,12 +214,116 @@
     "Real session expiry qualification",
     "Target deployment-host qualification",
     "Remote migration rehearsal/approval and controlled first publication",
-    "Full SQL advisor remediation and global security qualification (SQL69: 33 warnings and 67 infos)"
+    "Full SQL advisor remediation and global security qualification (SQL69: 33 warnings and 67 infos)",
+    "Active target version physical login/TLS and actual authorized HTTP qualification on preserved copy/application target"
   ],
   "remoteWritesPerformed": false,
   "privilegedProductionKeysRetrieved": false,
   "goalComplete": false,
   "currentLocalServices": {
+    "result": "UNAVAILABLE for actual application listeners",
+    "date": "2026-10-20T11:43:14.563Z",
+    "observations": [
+      {
+        "port": 3150,
+        "route": "/login",
+        "status": null,
+        "errorCode": "ECONNREFUSED",
+        "scope": "local listener observation only"
+      },
+      {
+        "port": 3152,
+        "route": "/login",
+        "status": null,
+        "errorCode": "ECONNREFUSED",
+        "scope": "local listener observation only"
+      }
+    ],
+    "dockerLinuxNamedPipeAvailable": false,
+    "authenticatedLoginTested": false,
+    "syntheticUiPreview": {
+      "result": "PASS for synthetic UI HTTP availability only",
+      "at": "2026-10-20T11:39:51.725Z",
+      "runtime": {
+        "pid": 7744,
+        "at": "2026-10-20T11:38:23.685Z",
+        "origin": "http://127.0.0.1:3140",
+        "synthetic": true,
+        "database": false,
+        "engine": false
+      },
+      "status": { "synthetic": true, "database": false, "engine": false },
+      "checks": [
+        { "route": "/", "status": 200 },
+        { "route": "/tests/browser/index.html", "status": 200 },
+        { "route": "/logo/novlearn-principal-ui.svg", "status": 200 },
+        { "route": "/logo/novlearn-logo-ui.svg", "status": 200 },
+        { "route": "/api/admin/engine", "status": 503, "method": "POST" },
+        { "route": "/api/admin/exercises", "status": 503, "method": "POST" },
+        {
+          "route": "/.local/local-admin-1792143739689/private.json",
+          "status": 403
+        },
+        { "route": "/.env", "status": 404 }
+      ],
+      "authenticatedLoginTested": false,
+      "realEngineTested": false,
+      "databaseMutations": false,
+      "browserExecuted": false,
+      "remoteOperations": false
+    },
+    "browserExecuted": false,
+    "remoteOperations": false
+  },
+  "latestLocalQualification": {
+    "sql68Proof": "reader-policies-proof.json",
+    "batchHttpProof": "publication-batch-http-proof.json",
+    "recoveryProof": "local-recovery-2026-10-19-proof.json",
+    "globalGoalComplete": false,
+    "pedagogySqlProof": "pedagogy-readonly-proof.json",
+    "pedagogyConnectedUiDelivered": true,
+    "latestFullCheck": {
+      "result": "PASS",
+      "date": "2026-10-20T11:41:07.381Z",
+      "artifact": "C:\\Users\\balth\\AppData\\Local\\Temp\\novlearn-admin-check-1792496246511",
+      "exitCode": 0,
+      "tests": 1387,
+      "files": 72,
+      "sourceFiles": 536,
+      "allCopiedSourcesStillMatch": true,
+      "fullCheckCommand": "npm run check",
+      "separateBuildDirectory": true,
+      "independentTemporaryProject": true,
+      "dependenciesCopied": true,
+      "applicationServersInterrupted": false,
+      "privateEnvironmentFilesCopied": false,
+      "scope": "Active target version reader preparation, kept disabled; five documentation/evidence files updated after exact-source complete check. No real TLS/HTTP runtime qualification."
+    },
+    "pedagogyConnectedProof": "pedagogy-connected-proof.json",
+    "pedagogyPerformanceProof": "pedagogy-performance-proof.json",
+    "pedagogySyntheticPerformanceQualified": true,
+    "currentSqlQuerySha256": "c12775bfc93a843a04146a8685d452f70d9ad4196afeadf41e427d00df32132f",
+    "activeVersionPreparationProof": "active-version-readonly-proof.json",
+    "activeVersionConnectedQualified": false,
+    "previousFullCheck": {
+      "result": "PASS",
+      "date": "2026-10-19T18:32:02.917Z",
+      "artifact": "C:\\Users\\balth\\AppData\\Local\\Temp\\novlearn-admin-check-1792434426920",
+      "exitCode": 0,
+      "tests": 1284,
+      "files": 66,
+      "sourceFiles": 516,
+      "allCopiedSourcesStillMatch": true,
+      "fullCheckCommand": "npm run check",
+      "separateBuildDirectory": true,
+      "independentTemporaryProject": true,
+      "dependenciesCopied": true,
+      "applicationServersInterrupted": false,
+      "privateEnvironmentFilesCopied": false,
+      "scope": "Final optimized pedagogical SQL and performance harness: complete checks on exact source snapshot; only two JSON evidence records populated after completion"
+    }
+  },
+  "previousLocalServiceObservation": {
     "result": "PASS for actual local login availability",
     "date": "2026-10-19T18:30:29.469Z",
     "observations": [
@@ -268,34 +374,5 @@
         }
       ]
     }
-  },
-  "latestLocalQualification": {
-    "sql68Proof": "reader-policies-proof.json",
-    "batchHttpProof": "publication-batch-http-proof.json",
-    "recoveryProof": "local-recovery-2026-10-19-proof.json",
-    "globalGoalComplete": false,
-    "pedagogySqlProof": "pedagogy-readonly-proof.json",
-    "pedagogyConnectedUiDelivered": true,
-    "latestFullCheck": {
-      "result": "PASS",
-      "date": "2026-10-19T18:32:02.917Z",
-      "artifact": "C:\\Users\\balth\\AppData\\Local\\Temp\\novlearn-admin-check-1792434426920",
-      "exitCode": 0,
-      "tests": 1284,
-      "files": 66,
-      "sourceFiles": 516,
-      "allCopiedSourcesStillMatch": true,
-      "fullCheckCommand": "npm run check",
-      "separateBuildDirectory": true,
-      "independentTemporaryProject": true,
-      "dependenciesCopied": true,
-      "applicationServersInterrupted": false,
-      "privateEnvironmentFilesCopied": false,
-      "scope": "Final optimized pedagogical SQL and performance harness: complete checks on exact source snapshot; only two JSON evidence records populated after completion"
-    },
-    "pedagogyConnectedProof": "pedagogy-connected-proof.json",
-    "pedagogyPerformanceProof": "pedagogy-performance-proof.json",
-    "pedagogySyntheticPerformanceQualified": true,
-    "currentSqlQuerySha256": "c12775bfc93a843a04146a8685d452f70d9ad4196afeadf41e427d00df32132f"
   }
 }
