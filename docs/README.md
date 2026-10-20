@@ -4,10 +4,13 @@
 brouillon, Creator, MathLive, vrai Engine, sauvegarde et retours à relever.
 
 [Expiration et correctif Auth](auth-expiry-local.md) : vrais essais conservés,
-25 tests de l’adaptateur et recontrôle de la paire expirée ; nouvelle expiration
-complète en cours. [SQL 71](legacy-search-path.md) : prérequis, restauration,
+25 tests de l’adaptateur, recontrôle de la paire expirée et nouvelle expiration
+naturelle complète réussie. [SQL 71](legacy-search-path.md) : prérequis, restauration,
 rejeu neuf et advisors comparables. Le [bilan actuel](readiness-current.md)
 distingue ces résultats des jalons historiques ci-dessous.
+
+[Réception et mise en service](local-handover.md) : actions humaines restantes,
+frontières Staging/Production et classement des avertissements SQL conservés.
 
 [Statistiques pédagogiques](pedagogy-connected.md) : filtres, répartition et
 classement raccordés localement, avec lecteur TLS et page/API Auth qualifiés. Le

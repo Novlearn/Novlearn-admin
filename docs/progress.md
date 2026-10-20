@@ -1,5 +1,14 @@
 # Progression du goal NovLearn Admin
 
+**20 octobre — réception et classement SQL :** le [dossier de passage](local-handover.md)
+précise les étapes qui dépendent d’observations ou décisions humaines. Les
+97 constats conservés sur la copie SQL 71 sont classés : 30 avertissements de
+performance et 67 informations, sans nouvelle exécution SQL, changement de
+policy/index ou certification globale. Le parcours manuel connecté a été
+demandé ; son résultat reste inconnu. Les 427 sources hors documentation sont
+exactes au contrôle complet de 1 432 tests ; format, liens, matrice et accès
+HTTP anonymes sont vérifiés séparément. Aucun distant ni nouveau lot activé.
+
 **20 octobre — palier local vérifié :** les [deux compteurs D09](completed-work-local.md)
 et la [nouvelle expiration naturelle de 3 600 secondes](auth-expiry-local.md)
 passent réellement. Le contrôle complet passe **1 432 tests / 75 fichiers**,

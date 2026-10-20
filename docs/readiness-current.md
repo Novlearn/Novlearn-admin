@@ -232,13 +232,15 @@ La sauvegarde à froid, les services conservés et la reprise de publication
 contre le relevé d’origine sont désormais vérifiés. Aucun environnement distant
 n’est activé. Le prochain travail porte sur les fonctions et réceptions restantes :
 
-1. Compléter filtres et métriques autour de la page/API SQL locale qualifiée,
-   réception des fiches/progression/historique locaux (D08), constats advisors et
-   version cible courante, avec permissions et minimisation vérifiées.
+1. Réceptionner les filtres, les deux compteurs D09, les fiches/progression/
+   historique D08 et l’indicateur de version cible déjà qualifiés localement.
+   Le [dossier de réception](local-handover.md) classe les constats advisors
+   conservés sans les transformer en nouvelles migrations automatiques.
 2. Réceptionner le parcours de récupération,
    MathLive et navigation dans un navigateur autorisé. Le HTTP ne prouve pas
    les effets du stockage navigateur.
-3. Qualifier expiration, MFA et exploitation ; traiter séparément toute nouvelle
+3. L’expiration naturelle complète est qualifiée. Décider la politique
+   MFA/récupération et l’exploitation ; traiter séparément toute nouvelle
    capacité Engine proposée.
 4. Avant application distante : réconciliation SQL, sauvegarde/restauration/PITR,
    compatibilité élève, identités/secrets séparés, hébergement approuvé et accord
