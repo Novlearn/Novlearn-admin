@@ -70,6 +70,10 @@ export async function verifyPublicationEngine(
       ).some((key) => source.payload[key] !== certifiedEngineIdentity[key])
     )
       throw new PublicationVerificationError();
+    // Reject a changed definition or invalid approved receipt before spending
+    // an Engine job. The fresh official replay and final comparison still run.
+    if (!matchingPublicationReport(source, source.source.report))
+      throw new PublicationVerificationError();
     const definition = JSON.parse(source.payload.definitionJson);
     const seeds = source.source.report.seeds.map((seed) => seed.seed);
     const report = await testPreview(

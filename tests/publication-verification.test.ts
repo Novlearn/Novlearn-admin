@@ -127,7 +127,23 @@ it('refuses a new definition even if its own fresh test succeeds', async () => {
   await expect(
     verifyPublicationEngine(input, new AbortController().signal),
   ).rejects.toThrow('Current Engine verification failed');
+  expect(fake.run).not.toHaveBeenCalled();
 });
+it.each(['passed', 'digest', 'duplicate-seed'])(
+  'rejects an invalid approved %s receipt before any official operation',
+  async (kind) => {
+    const input = source();
+    if (kind === 'passed') input.source.report.passed = false;
+    if (kind === 'digest')
+      input.source.report.definitionDigest = 'a'.repeat(64);
+    if (kind === 'duplicate-seed')
+      input.source.report.seeds[1].seed = input.source.report.seeds[0].seed;
+    await expect(
+      verifyPublicationEngine(input, new AbortController().signal),
+    ).rejects.toThrow('Current Engine verification failed');
+    expect(fake.run).not.toHaveBeenCalled();
+  },
+);
 it('masks worker failures and preserves cancellation without a success receipt', async () => {
   fake.run.mockRejectedValue(Error('PRIVATE ENGINE DETAIL'));
   await expect(

@@ -100,7 +100,7 @@
     {
       "id": 2,
       "title": "Architecture",
-      "evidenceSummary": "Next, TypeScript strict, services serveur et archive Engine verrouillés ; dernier palier complet validé : [1 432 tests et vérifications](completed-work-local-proof.json). Les lecteurs locaux minimisés sont qualifiés séparément. Nouvelle révision : [1493 tests passent, 1 timeout de publication](staging-schema-export-proof.json) ; contrôle global en échec.",
+      "evidenceSummary": "Next, TypeScript strict, services serveur et archive Engine verrouillés ; contrôle complet [1505 tests / 76 fichiers](mcp-resume-2026-10-20.json). Les lecteurs locaux minimisés sont qualifiés séparément.",
       "remaining": "Capacité de lecture Production et hébergement à concevoir/qualifier ; aucune clé générale ne vaut un droit limité."
     },
     {
@@ -184,7 +184,7 @@
     {
       "id": 16,
       "title": "Qualité et tests",
-      "evidenceSummary": "Dernier palier complet validé [1 432 tests / 75 fichiers](completed-work-local-proof.json), types, lint, format, build, intégrité Engine et smoke ; [71 migrations](legacy-search-path-proof.json), restauration et contrôles SQL réels. Les échecs initiaux restent conservés. Nouvelle révision : [1493 tests passent, 1 timeout de publication](staging-schema-export-proof.json) ; contrôle global en échec.",
+      "evidenceSummary": "Contrôle complet [1505 tests / 76 fichiers](mcp-resume-2026-10-20.json), types, lint, format, build, intégrité Engine et smoke ; 71 migrations/restaurations locales qualifiées séparément. Les échecs précédents restent conservés.",
       "remaining": "Réception navigateur/récupération connectée, hôte cible et qualifications distantes ouvertes."
     },
     {
@@ -218,7 +218,7 @@
     "local-recovery-2026-10-18.md": "ab6e2a667d7b054b673a1b175044ed6504218a993fd9e8c6054b46fb970aac1f",
     "users-readonly.md": "af41c90a92f9f5f8baa0f9ad6094b0c87d6d54f07a1bff828e4494efe829ae20",
     "lot-1a-remote-reconciliation-current.md": "4a2a06adff60f7a6541f261af3bd00a63debc01197030717c389c7c22b813dfe",
-    "progress.md": "65bd555056b286249d682011c889b830d43c59c24fd58055712c26e0132f3060",
+    "progress.md": "5232714858bda8c0d12e9fa5780441f0b56bd840129abc7a9becf5710240242e",
     "lot-1a-preparation.md": "3561164a62bc6690a46d2f472c42037c11bd9aacc40add77d44814abdc5dd271",
     "recovery-cleanup-proof.json": "cb414a4c150ceb55204fcc9fca07696d05463e71642b4b4db35fd62819fa2524",
     "local-recovery-2026-10-18-proof.json": "5c9f10801159d1b94c66aebf2f4f45cb91e6a3447f6098968d85e03c83e0e26d",
@@ -239,7 +239,7 @@
     "activity-readonly-proof.json": "c362635524c4dc6cfe81cdbc489e2130a3e3285f8346462e5075915fddb51401",
     "activity-http-proof.json": "c4ae58e794d8944ecf0947935e799b834bb1742336984c5cd8c51201af35b806",
     "users-readonly-proof.json": "2a2ba32df2dca5050be282939596ed3a0a9e22695a56d4d6c6560f64ab5a8da2",
-    "roadmap.md": "c44784b815d9c8a5b05c4b4416b5943a9c884a00ab7744f24675720af78fda3e",
+    "roadmap.md": "d516be6e84bf09f43fdcfc4fda76f5c92ec2ab7662d72c60a6b338277b3f8f29",
     "activity-readonly.md": "0bc4135dfe48409cb19a8f2ad0b98e9593c65f83f46bc12b53a4a8e6fd1fbdff",
     "activity-pg.md": "ce3ae62c070f728174bc2cae7817d1ed727d42fd1e2e09d162cadd188b028aec",
     "lot-1a-local-statistics-guard.md": "0bd4f19d706296ccb96f8ea246f186c4e52ddc7a23da69519f64c2a1978a7a92",
@@ -274,8 +274,10 @@
     "remote-readiness-2026-10-20.json": "bd52183c053a2331027fbe30ec41d3587fd09b20a9c558d0b68f168415c4cdee",
     "remote-readiness-2026-10-20.md": "3967ffc81b6f578ac110c6306c66d0e8803488dbcd1096b652e6c76d94523d5a",
     "migration-archives-2026-10-20.json": "1d516967f7acb50702be1e0d605584727b2436fe49c3feffc3168611315221a1",
-    "staging-schema-export.md": "14ebbe708c6f575a33f6384b865cce7deb472d2e83de6df321b6117870d05179",
-    "staging-schema-export-proof.json": "24d63cee7717a51071dbb499016dec1ebd9763f5e200a4cf13d655b04972815c"
+    "staging-schema-export.md": "0f05395040a35edc3d91b39e92f3bd5a9502841e668659419eeb0ab1379e7cea",
+    "staging-schema-export-proof.json": "5908893960ac87a23063c078acc64ccbfa551bdb1a7defd8997c8d4fe4267114",
+    "mcp-resume-2026-10-20.md": "48da91944f1390e0d4435914bcadd5f64c505ba77bdf193708b3843cb1ad337c",
+    "mcp-resume-2026-10-20.json": "187ab63add95804bb4907c60a0298259e9b0977e1a75d820af3d2e31978abe02"
   },
   "unimplemented": [
     "Production analytics identity/source activation and remaining metrics (local general and pedagogical filters, grouping/ranking, PG/TLS and Auth/HTTP page/API qualified)",
@@ -588,7 +590,7 @@
     "document": "staging-schema-export.md",
     "proof": "staging-schema-export-proof.json",
     "operatorConfiguration": ".local/staging-schema-export/source.json",
-    "state": "Private configuration shape accepted; direct connection fails before authentication (IPv6 unavailable); exact Staging Session pooler endpoint pending",
+    "state": "STOPPED by user; pooler login/client TLS verified, backend pg_stat_ssl false; no pg_dump",
     "actualStagingExportExecuted": false,
     "restorationExecuted": false,
     "remoteWrites": false,
@@ -641,6 +643,52 @@
       "partialArtifact": ".local/staging-schema-export/export-1792530252706",
       "failureSha256": "f9cb62ad1b6550a9cac71d0267c5177dcc8db4343981f649c0e2c29fecd816a4",
       "nextStep": "Obtain exact Staging Session pooler host/port/user from Dashboard Connect; retain TLS verification and read-only requirements; no host guessed or project setting changed"
+    },
+    "actualStagingConnectionEstablished": true
+  },
+  "currentMcpResume": {
+    "document": "mcp-resume-2026-10-20.md",
+    "proof": "mcp-resume-2026-10-20.json",
+    "completeAdminCheck": {
+      "result": "PASS",
+      "date": "2026-10-20T21:49:03.089Z",
+      "artifact": "C:\\Users\\balth\\AppData\\Local\\Temp\\novlearn-admin-check-1792532557934",
+      "exitCode": 0,
+      "tests": 1505,
+      "files": 76,
+      "failedTests": 0,
+      "failedFiles": 0,
+      "sourceFiles": 585,
+      "allCopiedSourcesStillMatch": true,
+      "fullCheckCommand": "npm run check",
+      "separateBuildDirectory": true,
+      "independentTemporaryProject": true,
+      "dependenciesCopied": true,
+      "applicationServersInterrupted": false,
+      "privateEnvironmentFilesCopied": false,
+      "proofSha256": "ad203e6f4fb06827ce276894be16b03051822297c21ad512795f102f3a3087a7",
+      "documentaryOnlyAfterCheck": [
+        "docs/mcp-resume-2026-10-20.json",
+        "docs/mcp-resume-2026-10-20.md",
+        "docs/staging-schema-export-proof.json",
+        "docs/progress.md",
+        "docs/roadmap.md",
+        "docs/readiness-current.json",
+        "docs/readiness-current.md"
+      ]
+    },
+    "remoteWrites": false,
+    "goalComplete": false,
+    "currentLocalRuntime": {
+      "proof": "mcp-resume-2026-10-20.json",
+      "login": "PASS: existing local credentials and logout",
+      "engine": "PASS:8 native HTTP checks;22 previous receipts preserved",
+      "publication": "PASS: fresh native prepare then cancel; no target transfer",
+      "applicationOrigins": [
+        "http://127.0.0.1:3150",
+        "http://127.0.0.1:3152"
+      ],
+      "remoteOperations": false
     }
   }
 }
