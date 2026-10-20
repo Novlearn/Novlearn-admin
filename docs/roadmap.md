@@ -1,5 +1,20 @@
 # Roadmap
 
+**20 octobre — expiration et SQL 71 :** le [correctif Auth](auth-expiry-local.md)
+refuse correctement une session réellement expirée et permet la déconnexion.
+Les 25 tests de l’adaptateur et cinq observations HTTP passent ; une nouvelle
+expiration complète d’une heure reste en cours, sans succès anticipé.
+La [migration SQL 71](legacy-search-path.md) passe onze gardes, annulation,
+restauration et rejeu neuf des 71 SQL ; 30 + 26 assertions canoniques et six
+contrôles Auth/amis passent. Advisors comparables : 32 puis 30 avertissements,
+zéro erreur ; les bases applicatives restent SQL 64/70 inchangées.
+Le contrôle complet passe ensuite **1 422 tests / 75 fichiers**, intégrité
+Engine, types, lint, format, build, onze SQL standalone et smoke. Les 567 sources
+sont exactes à sa fin ; seules neuf preuves documentaires sont complétées après.
+Les deux timeouts initiaux restent tracés et les délais/assertions inchangés.
+L’expiration complète reste en cours. Aucun distant,
+aucun contournement de sécurité ni clôture du goal/Lot 1A.
+
 **20 octobre — indicateur de version active connecté :** [lecteur et permissions](active-version-connected.md)
 sont qualifiés sur la cible locale conservée : huit groupes PG/TLS, 17 refus,
 douze groupes Auth/HTTP, sept groupes sur 3150 et huit contrôles Engine après

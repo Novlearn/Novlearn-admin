@@ -12,6 +12,23 @@ import {
 } from './config';
 import { privateHeaders } from './http';
 
+function isEndedRefreshSession(error: {
+  name: string;
+  status?: number;
+  code?: string;
+}) {
+  return (
+    error.status === 400 &&
+    error.name === 'AuthApiError' &&
+    [
+      'refresh_token_not_found',
+      'refresh_token_already_used',
+      'session_not_found',
+      'session_expired',
+    ].includes(error.code ?? '')
+  );
+}
+
 export function asAuthGateway(client: SupabaseClient): AuthGateway {
   return {
     async getVerifiedUser() {
@@ -20,7 +37,8 @@ export function asAuthGateway(client: SupabaseClient): AuthGateway {
         if (
           error.status === 401 ||
           error.status === 403 ||
-          error.name === 'AuthSessionMissingError'
+          error.name === 'AuthSessionMissingError' ||
+          isEndedRefreshSession(error)
         )
           return null;
         throw new Error('Auth unavailable');
@@ -49,6 +67,11 @@ export function asAuthGateway(client: SupabaseClient): AuthGateway {
     },
     async signOut() {
       const { error } = await client.auth.signOut({ scope: 'local' });
+      if (error && isEndedRefreshSession(error)) {
+        // Auth-js removes the ended session on a terminal refresh failure.
+        // Complete local sign-out on the cleared client; still require success.
+        return !(await client.auth.signOut({ scope: 'local' })).error;
+      }
       return !error;
     },
   };

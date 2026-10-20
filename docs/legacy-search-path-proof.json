@@ -1,0 +1,123 @@
+{
+  "result": "PASS for SQL71 on isolated local copies only",
+  "recordedAt": "2026-10-20T17:17:20.185Z",
+  "migration": {
+    "file": "20261020135725_novlearn_admin_legacy_function_search_path.sql",
+    "sha256": "345ec0bc24d7b1a339606841eb36d0b074c3eab620b690fd33878d73585e830f",
+    "canonicalCommitExecutedOnNewCopyOnly": true,
+    "localCommit": "74381ee3989375bd563386b73ed55f88f952da46"
+  },
+  "rawProof": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\legacy-search-path-1792514315892/proof.json",
+  "rawProofSha256": "2b6ceaed51f31a1be718dba8856d247310750b6bb5a0e5d1b8c8a259f0e921e6",
+  "freshReplay": {
+    "result": "PASS",
+    "at": "2026-10-20T17:00:00.099Z",
+    "artifact": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\fresh-sql71-1792515457973",
+    "container": "novlearn-admin-lot1a-replay-20261020165554035",
+    "containerId": "fe4f862c8b272c996fe61ee17d44040c3f0824707f7fa645a4a03f1c0d3f30aa",
+    "freshReplay": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn\\.local\\admin-sql-replay\\novlearn-admin-lot1a-replay-20261020165554035",
+    "migrations": 71,
+    "manifestSha256": "8d042b981aa16a07b5b53e42efad91f854303d40f33e6cbf9775e86a532621c7",
+    "canonicalAssertions": {
+      "integration": 30,
+      "security": 26,
+      "total": 56
+    },
+    "canonicalTestsUnmodified": true,
+    "canonicalTestsNotRepeatedAfterHarnessCountError": true,
+    "sourceHashes": {
+      "../Novlearn/scripts/test-novlearn-admin-local.mjs": "ebb0544016906a0dae76dc4c665482ef1f88f7589a51273c24628bd0c7808b89",
+      "../Novlearn/scripts/test-novlearn-admin-security-local.mjs": "83f7ba28f908fad4007577bebf3f324556f4359e9f0be4fae7de19eaee7969cd",
+      "../Novlearn/scripts/local-database-url.mjs": "416ce7051ddbaa3d98d59313cb5653794ea2ff70742e281d1ea255777e36d286"
+    },
+    "sourceLogSha256": "d8c83885f18d2cdc667df7bb06fa4438e9f229ce23b051b00fc5c9cea62be49e",
+    "friendRegression": "PASS: 6 ACL/workflow checks and 62 unchanged table snapshots; proof=C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\friend-trigger-1792515600050",
+    "network": "none",
+    "publishedPorts": false,
+    "cpus": 2,
+    "memoryBytes": 1073741824,
+    "swapBytes": 0,
+    "pids": 256,
+    "oldDatabasesModified": false,
+    "remoteOperations": false,
+    "rawProof": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\fresh-sql71-1792515457973/proof.json",
+    "rawProofSha256": "d3435077bdf687de6dccd49baebbabcd8334f30aef19a1ae0ffaadfc06abaed9"
+  },
+  "preconditions": 11,
+  "preservedTables": 62,
+  "preservedSequences": 11,
+  "changedFunctionSettingsOnly": 2,
+  "advisors": {
+    "before": {
+      "ERROR": 0,
+      "WARN": 32,
+      "INFO": 67
+    },
+    "after": {
+      "INFO": 67,
+      "WARN": 30
+    },
+    "errors": 0,
+    "otherFindingsExact": true,
+    "baselineContainer": "novlearn-admin-legacy-path-advisor-baseline-179251431589202",
+    "comparisonUsesIdenticalRoleInventory": true,
+    "tlsVerifyFull": true,
+    "defaultTransactionReadOnly": true,
+    "cli": "2.98.2"
+  },
+  "rawMigrationProofIncludesHarnessFailuresAndRecovery": true,
+  "applicationSourceSql": 64,
+  "applicationTargetSql": 70,
+  "applicationTargetAdvisorWarningsStill33": true,
+  "preexistingFilesAndEightPrivateConfigsExact": true,
+  "remoteOperations": false,
+  "globalGoalComplete": false,
+  "globalLot1aCertified": false,
+  "completeAdminCheck": {
+    "result": "PASS",
+    "date": "2026-10-20T17:16:09.175Z",
+    "artifact": "C:\\Users\\balth\\AppData\\Local\\Temp\\novlearn-admin-check-1792516070840",
+    "exitCode": 0,
+    "tests": 1422,
+    "files": 75,
+    "failedTests": 0,
+    "failedFiles": 0,
+    "sourceFiles": 567,
+    "allCopiedSourcesStillMatch": true,
+    "fullCheckCommand": "npm run check",
+    "separateBuildDirectory": true,
+    "independentTemporaryProject": true,
+    "dependenciesCopied": true,
+    "applicationServersInterrupted": false,
+    "privateEnvironmentFilesCopied": false,
+    "rawProof": "C:\\Users\\balth\\AppData\\Local\\Temp\\novlearn-admin-check-1792516070840/proof.json",
+    "rawProofSha256": "9d3097fa6e23c97db8cac8ef8191a4eb5d74da502a236d6a3e3f93a2e445eb42",
+    "postCheckUpdatedDocumentation": [
+      "docs/auth.md",
+      "docs/auth-expiry-local.md",
+      "docs/auth-expiry-local-proof.json",
+      "docs/legacy-search-path.md",
+      "docs/legacy-search-path-proof.json",
+      "docs/progress.md",
+      "docs/readiness-current.md",
+      "docs/readiness-current.json",
+      "docs/roadmap.md"
+    ],
+    "scope": "Full unchanged check on the exact Auth correction, SQL71 verification scripts and bounded scheduling; only these nine documents are completed afterward"
+  },
+  "initialCompleteCheck": {
+    "result": "FAIL",
+    "artifact": "C:/Users/balth/AppData/Local/Temp/novlearn-admin-check-1792515686029",
+    "rawProofSha256": "ad4dd02024ec037e710497e742d13e2f4623ded68e6bd02860fa91e464aa3899",
+    "logSha256": "25eea0aa0529df604c6444a59b3bdee2a912718bd4a02ff6657ea3ca4685b564",
+    "testsPassed": 1420,
+    "testsFailed": 2,
+    "filesPassed": 74,
+    "filesFailed": 1,
+    "failedFile": "tests/publication-verification.test.ts",
+    "reason": "two real five-second unit-test timeouts; complete command stopped before types/lint/build/smoke",
+    "fullCheckContinuedAfterFailure": false
+  },
+  "newSqlFixtureContainersStoppedNormallyAfterQualification": true,
+  "newSqlFixtureVolumesAndPartialRestoreRetained": true
+}

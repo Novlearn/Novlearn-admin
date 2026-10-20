@@ -8,8 +8,9 @@ export default defineConfig({
     environment: 'node',
     include: ['tests/**/*.test.ts'],
     clearMocks: true,
-    // Official SDK tests are CPU-intensive. Bound parallel workers rather than
-    // relaxing per-test deadlines or Engine assertions on development machines.
-    maxWorkers: 4,
+    // Official SDK files are CPU/memory-intensive. Two concurrent workers keep
+    // them within the development host's budget; every deadline and assertion
+    // remains unchanged, including the default five-second test deadline.
+    maxWorkers: 2,
   },
 });

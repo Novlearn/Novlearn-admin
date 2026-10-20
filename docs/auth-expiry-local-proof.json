@@ -1,0 +1,91 @@
+{
+  "result": "Partial: adapter and original expired-pair recheck pass; fresh complete natural-expiry run pending",
+  "recordedAt": "2026-10-20T17:17:20.173Z",
+  "baselineAdminCommit": "3e4cf1c10f705d70f7bbe4e033bb59bc8c1f81d8",
+  "firstNaturalRun": {
+    "result": "FAIL",
+    "failure": ".local/lot1a/auth-expiry-1792504454823/failure.txt",
+    "failureSha256": "764edd3edb1c9039c4b3c2c4388e5e0a6671ba03c36f350309ed4a44eeeaaf46",
+    "harness": ".local/lot1a/auth-expiry-1792504454823/harness-at-first-failure.mjs",
+    "harnessSha256": "7f6df8a8a1ad1e20e4952c65091ada3e83e674950be4048a63a23944bae48976",
+    "reason": "actual 503 instead of required 401 for a naturally expired non-refreshable session",
+    "clockOrTtlChanged": false
+  },
+  "adapterTests": {
+    "result": "PASS",
+    "tests": 25,
+    "file": "tests/supabase-auth.test.ts",
+    "sourceSha256": "52b76ad342e6d2fb830d73aef8d1a9721cfdb7aa38b228ae9a8850cefb233276"
+  },
+  "originalExpiredPairRecheck": {
+    "result": "PASS",
+    "rawProof": ".local/lot1a/auth-expiry-1792504454823/recheck-1792515199000/proof.json",
+    "rawProofSha256": "5666e3f0db90b7ac57d635b88b08aa7964ec7d813032efbd9e0fa9767def3a73",
+    "observations": 5,
+    "healthyNaturalRenewalQualifiedByThisRecheck": false
+  },
+  "newNaturalRun": {
+    "result": "WAITING; no expiry success claimed",
+    "artifact": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\auth-expiry-1792514630815",
+    "processId": 18820,
+    "startedAt": "2026-10-20T16:43:51.313Z",
+    "observationAfter": "2026-10-20T17:45:02.000Z",
+    "rawWaitingProof": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\auth-expiry-1792514630815/waiting.json",
+    "rawWaitingProofSha256": "4123da0461950b4d2e84e5700d65188cf267fc5adb97853ecaf615a7fd9cbe2e"
+  },
+  "dataAndConfigurationPreserved": true,
+  "remoteOperations": false,
+  "browserExecuted": false,
+  "globalGoalComplete": false,
+  "remaining": [
+    "fresh complete natural-expiry result",
+    "MFA and operational identity policy",
+    "Staging/Production gates",
+    "browser reception"
+  ],
+  "completeAdminCheck": {
+    "result": "PASS",
+    "date": "2026-10-20T17:16:09.175Z",
+    "artifact": "C:\\Users\\balth\\AppData\\Local\\Temp\\novlearn-admin-check-1792516070840",
+    "exitCode": 0,
+    "tests": 1422,
+    "files": 75,
+    "failedTests": 0,
+    "failedFiles": 0,
+    "sourceFiles": 567,
+    "allCopiedSourcesStillMatch": true,
+    "fullCheckCommand": "npm run check",
+    "separateBuildDirectory": true,
+    "independentTemporaryProject": true,
+    "dependenciesCopied": true,
+    "applicationServersInterrupted": false,
+    "privateEnvironmentFilesCopied": false,
+    "rawProof": "C:\\Users\\balth\\AppData\\Local\\Temp\\novlearn-admin-check-1792516070840/proof.json",
+    "rawProofSha256": "9d3097fa6e23c97db8cac8ef8191a4eb5d74da502a236d6a3e3f93a2e445eb42",
+    "postCheckUpdatedDocumentation": [
+      "docs/auth.md",
+      "docs/auth-expiry-local.md",
+      "docs/auth-expiry-local-proof.json",
+      "docs/legacy-search-path.md",
+      "docs/legacy-search-path-proof.json",
+      "docs/progress.md",
+      "docs/readiness-current.md",
+      "docs/readiness-current.json",
+      "docs/roadmap.md"
+    ],
+    "scope": "Full unchanged check on the exact Auth correction, SQL71 verification scripts and bounded scheduling; only these nine documents are completed afterward"
+  },
+  "initialCompleteCheck": {
+    "result": "FAIL",
+    "artifact": "C:/Users/balth/AppData/Local/Temp/novlearn-admin-check-1792515686029",
+    "rawProofSha256": "ad4dd02024ec037e710497e742d13e2f4623ded68e6bd02860fa91e464aa3899",
+    "logSha256": "25eea0aa0529df604c6444a59b3bdee2a912718bd4a02ff6657ea3ca4685b564",
+    "testsPassed": 1420,
+    "testsFailed": 2,
+    "filesPassed": 74,
+    "filesFailed": 1,
+    "failedFile": "tests/publication-verification.test.ts",
+    "reason": "two real five-second unit-test timeouts; complete command stopped before types/lint/build/smoke",
+    "fullCheckContinuedAfterFailure": false
+  }
+}

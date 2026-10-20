@@ -122,6 +122,38 @@ describe('adaptateur Auth Supabase', () => {
     } as never);
     await expect(gateway.getVerifiedUser()).rejects.toThrow('Auth unavailable');
   });
+  it.each([
+    'refresh_token_not_found',
+    'refresh_token_already_used',
+    'session_not_found',
+    'session_expired',
+  ])(
+    'refuse une session terminée (%s) sans consulter les profils',
+    async (code) => {
+      const { gateway, raw } = client();
+      raw.auth.getUser.mockResolvedValueOnce({
+        data: { user: null },
+        error: { name: 'AuthApiError', status: 400, code },
+      } as never);
+      expect(await gateway.getVerifiedUser()).toBeNull();
+      expect(raw.from).not.toHaveBeenCalled();
+    },
+  );
+  it.each([
+    { name: 'AuthApiError', status: 400, code: 'unexpected_failure' },
+    { name: 'AuthApiError', status: 400 },
+    { name: 'AuthApiError', status: 429, code: 'over_request_rate_limit' },
+    { name: 'AuthApiError', status: 500, code: 'session_expired' },
+    { name: 'FetchError', status: 400, code: 'session_expired' },
+  ])('conserve les pannes et erreurs inconnues : %j', async (error) => {
+    const { gateway, raw } = client();
+    raw.auth.getUser.mockResolvedValueOnce({
+      data: { user: null },
+      error,
+    } as never);
+    await expect(gateway.getVerifiedUser()).rejects.toThrow('Auth unavailable');
+    expect(raw.from).not.toHaveBeenCalled();
+  });
   it('ne remplace pas une erreur RLS par un rôle de JWT', async () => {
     const { gateway, query } = client();
     query.maybeSingle.mockResolvedValueOnce({
@@ -141,6 +173,48 @@ describe('adaptateur Auth Supabase', () => {
     });
     expect(await gateway.signOut()).toBe(true);
     expect(raw.auth.signOut).toHaveBeenCalledWith({ scope: 'local' });
+  });
+  it.each([
+    'refresh_token_not_found',
+    'refresh_token_already_used',
+    'session_not_found',
+    'session_expired',
+  ])(
+    'termine la déconnexion locale après session terminée (%s)',
+    async (code) => {
+      const { gateway, raw } = client();
+      raw.auth.signOut.mockResolvedValueOnce({
+        error: { name: 'AuthApiError', status: 400, code },
+      } as never);
+      expect(await gateway.signOut()).toBe(true);
+      expect(raw.auth.signOut.mock.calls).toEqual([
+        [{ scope: 'local' }],
+        [{ scope: 'local' }],
+      ]);
+    },
+  );
+  it('ne déclare pas la déconnexion réussie si sa finalisation échoue', async () => {
+    const { gateway, raw } = client();
+    raw.auth.signOut
+      .mockResolvedValueOnce({
+        error: { name: 'AuthApiError', status: 400, code: 'session_expired' },
+      } as never)
+      .mockResolvedValueOnce({ error: { status: 500 } } as never);
+    expect(await gateway.signOut()).toBe(false);
+    expect(raw.auth.signOut).toHaveBeenCalledTimes(2);
+  });
+  it.each([
+    { name: 'AuthApiError', status: 400, code: 'unexpected_failure' },
+    { name: 'AuthApiError', status: 429, code: 'over_request_rate_limit' },
+    { name: 'AuthApiError', status: 500, code: 'session_expired' },
+    { name: 'FetchError', status: 400, code: 'session_expired' },
+  ])('ne relance pas une panne de déconnexion : %j', async (error) => {
+    const { gateway, raw } = client();
+    raw.auth.signOut.mockResolvedValueOnce({ error } as never);
+    expect(await gateway.signOut()).toBe(false);
+    expect(raw.auth.signOut).toHaveBeenCalledExactlyOnceWith({
+      scope: 'local',
+    });
   });
   it('renouvelle les cookies sur la requête et la réponse finale avec no-store', () => {
     const fake = client();

@@ -126,8 +126,12 @@ for (const [file, expected] of Object.entries(hashes))
     'Source changed during isolated check: ' + file,
   );
 const text = await readFile(artifact + '/check.log', 'utf8');
-const tests = Number(text.match(/Tests\s+(\d+) passed/)?.[1] ?? 0),
-  files = Number(text.match(/Test Files\s+(\d+) passed/)?.[1] ?? 0);
+const testSummary = text.match(/^\s*Tests\s+([^\r\n]+)/m)?.[1] ?? '',
+  fileSummary = text.match(/^\s*Test Files\s+([^\r\n]+)/m)?.[1] ?? '';
+const tests = Number(testSummary.match(/(\d+) passed/)?.[1] ?? 0),
+  files = Number(fileSummary.match(/(\d+) passed/)?.[1] ?? 0),
+  failedTests = Number(testSummary.match(/(\d+) failed/)?.[1] ?? 0),
+  failedFiles = Number(fileSummary.match(/(\d+) failed/)?.[1] ?? 0);
 const result = {
   result: exitCode === 0 ? 'PASS' : 'FAIL',
   date: new Date().toISOString(),
@@ -135,6 +139,8 @@ const result = {
   exitCode,
   tests,
   files,
+  failedTests,
+  failedFiles,
   sourceFiles: Object.keys(hashes).length,
   allCopiedSourcesStillMatch: true,
   fullCheckCommand: 'npm run check',

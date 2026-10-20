@@ -1,5 +1,10 @@
 # Authentification Admin — préparation locale du Lot 1B
 
+**20 octobre :** le [correctif d’expiration local](auth-expiry-local.md) passe
+les tests d’adaptateur et le recontrôle de la paire réellement expirée. Une
+nouvelle expiration complète reste en cours ; MFA et activation distante restent
+ouvertes.
+
 **Reprise du 19 octobre :** [connexion et services locaux rétablis](local-recovery-2026-10-19.md),
 SQL 68 et parcours de publication par lot qualifiés sur copies synthétiques.
 Aucune activation distante ; voir les preuves et limites datées.
@@ -112,3 +117,7 @@ PostCSS 8.5.30, sharp 0.35.5 et postcss-selector-parser 7.1.6 sont verrouillés
 via les overrides pour les dépendances transitives. Aucun changement dans
 NovLearn n'en découle. Le runtime Admin est aligné sur Node 24.19.x ; Vitest
 et les clients Supabase installés requièrent un Node récent.
+
+Le contrôle complet du correctif local passe ensuite 1 422 tests / 75 fichiers,
+types, lint, format, build et smoke. Voir les [preuves détaillées](auth-expiry-local-proof.json)
+pour l’échec initial et la nouvelle expiration réelle encore en cours.

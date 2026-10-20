@@ -1,5 +1,5 @@
 {
-  "recordedAt": "2026-10-20T13:46:20.773Z",
+  "recordedAt": "2026-10-20T17:17:20.203Z",
   "scope": "Documentary traceability for all 20 original goal sections; not a functional test, receipt, permission or completion certificate",
   "referenceInputs": {
     "requestSha256": "fb9ac40863c57594878833b8a9fc0bd130a0cba9d0249d29c609051a54bded93",
@@ -46,8 +46,8 @@
     {
       "id": 3,
       "title": "Auth et sécurité",
-      "evidenceSummary": "Vrais comptes, session fraîche, sauvegarde et reconnexion après panne : [reprise locale](local-recovery-2026-10-18-proof.json). Refus/révocation antérieurs dans [Auth locale](local-admin-proof.json).",
-      "remaining": "Expiration réelle, MFA, provision opérationnel et réception Staging non certifiés."
+      "evidenceSummary": "Vrais comptes, session fraîche, sauvegarde et reconnexion après panne : [reprise locale](local-recovery-2026-10-18-proof.json). Refus/révocation antérieurs dans [Auth locale](local-admin-proof.json). Correctif de session expirée : 25 tests et cinq observations sur la paire d’origine, [preuve](auth-expiry-local-proof.json).",
+      "remaining": "Nouvelle expiration complète en cours ; MFA, provision opérationnel et réception Staging non certifiés."
     },
     {
       "id": 4,
@@ -158,7 +158,7 @@
     "local-recovery-2026-10-18.md": "ab6e2a667d7b054b673a1b175044ed6504218a993fd9e8c6054b46fb970aac1f",
     "users-readonly.md": "af41c90a92f9f5f8baa0f9ad6094b0c87d6d54f07a1bff828e4494efe829ae20",
     "lot-1a-remote-reconciliation-current.md": "4a2a06adff60f7a6541f261af3bd00a63debc01197030717c389c7c22b813dfe",
-    "progress.md": "725c71aaa8ae31b709a30730aade20d38ab1f51e6fba2be0c727ddbea66b5779",
+    "progress.md": "812f4461c37117819b939571cd8cabc5e0020bf9368c348dc3126d91f9edd0f3",
     "lot-1a-preparation.md": "3561164a62bc6690a46d2f472c42037c11bd9aacc40add77d44814abdc5dd271",
     "recovery-cleanup-proof.json": "cb414a4c150ceb55204fcc9fca07696d05463e71642b4b4db35fd62819fa2524",
     "local-recovery-2026-10-18-proof.json": "5c9f10801159d1b94c66aebf2f4f45cb91e6a3447f6098968d85e03c83e0e26d",
@@ -179,7 +179,7 @@
     "activity-readonly-proof.json": "c362635524c4dc6cfe81cdbc489e2130a3e3285f8346462e5075915fddb51401",
     "activity-http-proof.json": "c4ae58e794d8944ecf0947935e799b834bb1742336984c5cd8c51201af35b806",
     "users-readonly-proof.json": "2a2ba32df2dca5050be282939596ed3a0a9e22695a56d4d6c6560f64ab5a8da2",
-    "roadmap.md": "a4f17e4509b341ab273c36c1dce13d586136f8810aa78da3531bc5d822d2f35b",
+    "roadmap.md": "5bb3cab997616f4d4ba4cbafd8738201ee63997341ff83d4149d413288bf41f1",
     "activity-readonly.md": "0bc4135dfe48409cb19a8f2ad0b98e9593c65f83f46bc12b53a4a8e6fd1fbdff",
     "activity-pg.md": "ce3ae62c070f728174bc2cae7817d1ed727d42fd1e2e09d162cadd188b028aec",
     "lot-1a-local-statistics-guard.md": "0bd4f19d706296ccb96f8ea246f186c4e52ddc7a23da69519f64c2a1978a7a92",
@@ -265,12 +265,14 @@
     "pedagogyConnectedUiDelivered": true,
     "latestFullCheck": {
       "result": "PASS",
-      "date": "2026-10-20T11:41:07.381Z",
-      "artifact": "C:\\Users\\balth\\AppData\\Local\\Temp\\novlearn-admin-check-1792496246511",
+      "date": "2026-10-20T17:16:09.175Z",
+      "artifact": "C:\\Users\\balth\\AppData\\Local\\Temp\\novlearn-admin-check-1792516070840",
       "exitCode": 0,
-      "tests": 1387,
-      "files": 72,
-      "sourceFiles": 536,
+      "tests": 1422,
+      "files": 75,
+      "failedTests": 0,
+      "failedFiles": 0,
+      "sourceFiles": 567,
       "allCopiedSourcesStillMatch": true,
       "fullCheckCommand": "npm run check",
       "separateBuildDirectory": true,
@@ -278,14 +280,27 @@
       "dependenciesCopied": true,
       "applicationServersInterrupted": false,
       "privateEnvironmentFilesCopied": false,
-      "scope": "Active target version reader preparation, kept disabled; five documentation/evidence files updated after exact-source complete check. No real TLS/HTTP runtime qualification."
+      "rawProof": "C:\\Users\\balth\\AppData\\Local\\Temp\\novlearn-admin-check-1792516070840/proof.json",
+      "rawProofSha256": "9d3097fa6e23c97db8cac8ef8191a4eb5d74da502a236d6a3e3f93a2e445eb42",
+      "postCheckUpdatedDocumentation": [
+        "docs/auth.md",
+        "docs/auth-expiry-local.md",
+        "docs/auth-expiry-local-proof.json",
+        "docs/legacy-search-path.md",
+        "docs/legacy-search-path-proof.json",
+        "docs/progress.md",
+        "docs/readiness-current.md",
+        "docs/readiness-current.json",
+        "docs/roadmap.md"
+      ],
+      "scope": "Full unchanged check on the exact Auth correction, SQL71 verification scripts and bounded scheduling; only these nine documents are completed afterward"
     },
     "pedagogyConnectedProof": "pedagogy-connected-proof.json",
     "pedagogyPerformanceProof": "pedagogy-performance-proof.json",
     "pedagogySyntheticPerformanceQualified": true,
     "currentSqlQuerySha256": "c12775bfc93a843a04146a8685d452f70d9ad4196afeadf41e427d00df32132f",
     "activeVersionPreparationProof": "active-version-readonly-proof.json",
-    "activeVersionConnectedQualified": false,
+    "activeVersionConnectedQualified": true,
     "previousFullCheck": {
       "result": "PASS",
       "date": "2026-10-19T18:32:02.917Z",
@@ -309,12 +324,15 @@
     "currentRuntimeSourcesMatchLatestFullCheck": true,
     "sql70PhysicalReaderQualified": true,
     "newVerificationScriptsRequireCurrentFullCheck": false,
-    "currentFullCheckProof": "active-version-connected-proof.json",
-    "currentFullCheckTests": 1404,
+    "currentFullCheckProof": "auth-expiry-local-proof.json",
+    "currentFullCheckTests": 1422,
     "currentFullCheckFiles": 75,
     "activeVersionTargetUpgradeProof": "active-version-target-local-proof.json",
     "activeVersionConnectedProof": "active-version-connected-proof.json",
-    "activeVersionMainEnabled": true
+    "activeVersionMainEnabled": true,
+    "authExpiryProof": "auth-expiry-local-proof.json",
+    "sql71Proof": "legacy-search-path-proof.json",
+    "previousCurrentCompleteAdminProof": "active-version-connected-proof.json"
   },
   "previousLocalServiceObservation": {
     "result": "PASS for actual local login availability",
