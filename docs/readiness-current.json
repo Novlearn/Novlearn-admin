@@ -218,7 +218,7 @@
     "local-recovery-2026-10-18.md": "ab6e2a667d7b054b673a1b175044ed6504218a993fd9e8c6054b46fb970aac1f",
     "users-readonly.md": "af41c90a92f9f5f8baa0f9ad6094b0c87d6d54f07a1bff828e4494efe829ae20",
     "lot-1a-remote-reconciliation-current.md": "4a2a06adff60f7a6541f261af3bd00a63debc01197030717c389c7c22b813dfe",
-    "progress.md": "5232714858bda8c0d12e9fa5780441f0b56bd840129abc7a9becf5710240242e",
+    "progress.md": "e28ae29a76a76a258d58d0e46d30da8bfbeffd191024749dfe01489556fa63ee",
     "lot-1a-preparation.md": "3561164a62bc6690a46d2f472c42037c11bd9aacc40add77d44814abdc5dd271",
     "recovery-cleanup-proof.json": "cb414a4c150ceb55204fcc9fca07696d05463e71642b4b4db35fd62819fa2524",
     "local-recovery-2026-10-18-proof.json": "5c9f10801159d1b94c66aebf2f4f45cb91e6a3447f6098968d85e03c83e0e26d",
@@ -239,7 +239,7 @@
     "activity-readonly-proof.json": "c362635524c4dc6cfe81cdbc489e2130a3e3285f8346462e5075915fddb51401",
     "activity-http-proof.json": "c4ae58e794d8944ecf0947935e799b834bb1742336984c5cd8c51201af35b806",
     "users-readonly-proof.json": "2a2ba32df2dca5050be282939596ed3a0a9e22695a56d4d6c6560f64ab5a8da2",
-    "roadmap.md": "d516be6e84bf09f43fdcfc4fda76f5c92ec2ab7662d72c60a6b338277b3f8f29",
+    "roadmap.md": "612a9e22b12eba61328186359fc99f943dd9a5c91bbfa7abd90f2d76ced58a06",
     "activity-readonly.md": "0bc4135dfe48409cb19a8f2ad0b98e9593c65f83f46bc12b53a4a8e6fd1fbdff",
     "activity-pg.md": "ce3ae62c070f728174bc2cae7817d1ed727d42fd1e2e09d162cadd188b028aec",
     "lot-1a-local-statistics-guard.md": "0bd4f19d706296ccb96f8ea246f186c4e52ddc7a23da69519f64c2a1978a7a92",
@@ -277,7 +277,11 @@
     "staging-schema-export.md": "0f05395040a35edc3d91b39e92f3bd5a9502841e668659419eeb0ab1379e7cea",
     "staging-schema-export-proof.json": "5908893960ac87a23063c078acc64ccbfa551bdb1a7defd8997c8d4fe4267114",
     "mcp-resume-2026-10-20.md": "48da91944f1390e0d4435914bcadd5f64c505ba77bdf193708b3843cb1ad337c",
-    "mcp-resume-2026-10-20.json": "187ab63add95804bb4907c60a0298259e9b0977e1a75d820af3d2e31978abe02"
+    "mcp-resume-2026-10-20.json": "187ab63add95804bb4907c60a0298259e9b0977e1a75d820af3d2e31978abe02",
+    "observed-schema-local-2026-10-21.md": "7b3f8693ec458727865535d4e9255bb92f4bac3121e6d0270a3250779dc28ec2",
+    "observed-schema-local-2026-10-21.json": "3b5b7223916941762bf18e2e214321bee8ced1e5a3e22d2debd4865eba4bdaae",
+    "observed-staging-shape-2026-10-20.json": "978a7c9616b6edbb5cc7d9ff72ee3ae4b20d2509db2c87955cbcdcd08940e8e3",
+    "observed-staging-shape-2026-10-20.sql": "77a623dd3a287065803c968d5654922cd490023623ec6b98ed2f5a3a9246b272"
   },
   "unimplemented": [
     "Production analytics identity/source activation and remaining metrics (local general and pedagogical filters, grouping/ranking, PG/TLS and Auth/HTTP page/API qualified)",
@@ -687,5 +691,16 @@
       "applicationOrigins": ["http://127.0.0.1:3150", "http://127.0.0.1:3152"],
       "remoteOperations": false
     }
+  },
+  "observedSchemaCompatibility": {
+    "recordedAt": "2026-10-20T22:16:57.893Z",
+    "evidence": "observed-schema-local-2026-10-21.json",
+    "assertions": 286,
+    "oldTables": 49,
+    "oldSequencesDuringDelta": 13,
+    "faithfulStagingRestoration": false,
+    "remoteApplicationAuthorized": false,
+    "lot1AComplete": false,
+    "goalComplete": false
   }
 }

@@ -1,5 +1,7 @@
 # État de livraison — 21 octobre 2026
 
+**Compatibilité SQL locale du 21 octobre :** [286 assertions passent](observed-schema-local-2026-10-21.md) sur les écarts Staging sélectionnés, avec conservation des anciennes valeurs de 49 tables et des états de 13 séquences pendant le delta. Cette base synthétique ne remplace pas la restauration fidèle du schéma vivant ; le Lot 1A reste ouvert.
+
 **Accès local rétabli le 21 octobre :** [connexion réelle, Engine et garde de publication](mcp-resume-2026-10-20.md) qualifiés après relance des processus, sans recréation de base. [Tester sur3150](http://127.0.0.1:3150/login). Le goal et les portes distantes restent ouverts.
 
 **Reprise MCP du 20 octobre :** [contrôle du reçu et audit SQL courant](mcp-resume-2026-10-20.md). Contrôle complet PASS, 1505 tests réussis ; aucun changement distant ni clôture du goal.

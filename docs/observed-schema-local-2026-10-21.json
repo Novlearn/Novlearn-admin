@@ -1,0 +1,96 @@
+{
+  "result": "PASS within the selected synthetic compatibility scope",
+  "recordedAt": "2026-10-20T22:16:57.893Z",
+  "nativeProof": ".local/lot1a/observed-schema-1792534350412/proof.json",
+  "nativeProofSha256": "a9572854fc346695b83aa36201a2b232e86b8cba5d1bd1de6e686c8b3005d855",
+  "remoteObservation": {
+    "projectRef": "tksvbkvfusrnxulpahky",
+    "capturedAt": "2026-10-20T22:04:47.015076+00:00",
+    "metadata": "observed-staging-shape-2026-10-20.json",
+    "metadataSha256": "978a7c9616b6edbb5cc7d9ff72ee3ae4b20d2509db2c87955cbcdcd08940e8e3",
+    "query": "observed-staging-shape-2026-10-20.sql",
+    "querySha256": "77a623dd3a287065803c968d5654922cd490023623ec6b98ed2f5a3a9246b272",
+    "raw": ".local/lot1a/observed-staging-shape-1792533887015/raw.json",
+    "rawSha256": "0ca3f044ea108ad7bbe3c6ae4f7b8c5454e03a22981f88f742596cac826436ed",
+    "businessOrAuthRowsExported": false
+  },
+  "fixture": {
+    "container": "novlearn-admin-lot1a-replay-20261020221230412",
+    "containerId": "d1af976fd677104c139e4b486d6a4b57314847dfa332818427a379bd2b168956",
+    "postgresImage": "public.ecr.aws/supabase/postgres@sha256:7374d196da7e301512cc5329e18040e0f7bb856287b323777cdadecccbc6c7e4",
+    "authImage": "public.ecr.aws/supabase/gotrue@sha256:1736a63078f5922b198c4cbe50f80ab9a2d3b54fe8b7b6cfb2e9dc5dbbc12c6b",
+    "nodeImage": "node:24.19.0-bookworm@sha256:4196d66a565c6f195728d9952f161f4adfe2ad753052a08b7ec7f1c5a6bda42b",
+    "network": "none",
+    "publishedPorts": false,
+    "cpus": 2,
+    "memoryBytes": 1073741824,
+    "swapBytes": 0,
+    "pids": 256,
+    "stoppedNormally": true,
+    "legacyMigrations": 45,
+    "adminMigrations": 26,
+    "selectedColumns": 11,
+    "selectedIndexes": 8,
+    "oldTables": 49,
+    "oldSequencesDuringDelta": 13,
+    "allOldValuesPreserved": true,
+    "selectedColumnOrderMatchesObservation": false,
+    "extraRetainedSerialSequences": 2,
+    "faithfulStagingRestoration": false
+  },
+  "assertions": {
+    "integration": 30,
+    "security": 26,
+    "catalogue": 48,
+    "receipts": 21,
+    "editorialReview": 43,
+    "taxonomy": 39,
+    "flashcards": 38,
+    "dashboard": 35,
+    "friendship": 6
+  },
+  "totalAssertions": 286,
+  "firstAttempt": {
+    "state": ".local/lot1a/observed-schema-1792534256501/state.json",
+    "stateSha256": "ba91b28a1791b23c96a9a381b6a2ab078b3fda37442544427604fa661383718e",
+    "result": "FAIL before Admin delta; physical ordering compared as array order; retained",
+    "correction": "Compare complete column contracts by table/name, reject duplicate keys; report physical ordering mismatch explicitly"
+  },
+  "lastCompleteApplicationCheck": {
+    "artifact": "C:/Users/balth/AppData/Local/Temp/novlearn-admin-check-1792532557934",
+    "proofSha256": "ad203e6f4fb06827ce276894be16b03051822297c21ad512795f102f3a3087a7",
+    "result": "Previously executed PASS, not rerun this turn",
+    "tests": 1505,
+    "files": 76,
+    "nonDocumentaryInputsStillExact": 429,
+    "newDiagnosticHarnessQualifiedSeparately": true
+  },
+  "preservation": {
+    "privateConfigurationsExact": 8,
+    "preexistingNeighborTrackedChangesExact": 8,
+    "originalDirtyFilesExact": 2,
+    "cdcAndDesignExact": true
+  },
+  "currentAnonymousHttp": [
+    {
+      "route": "/login",
+      "status": 200
+    },
+    {
+      "route": "/api/admin/session",
+      "status": 401
+    },
+    {
+      "route": "/admin",
+      "status": 307
+    }
+  ],
+  "remoteWrites": false,
+  "existingApplicationDatabasesModified": false,
+  "newEngineCertification": false,
+  "faithfulRestorationAndDeltaReviewStillRequired": true,
+  "actualSchemaExportExecuted": false,
+  "remoteApplicationAuthorized": false,
+  "lot1AComplete": false,
+  "goalComplete": false
+}

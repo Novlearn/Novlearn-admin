@@ -1,0 +1,140 @@
+{
+  "projectRef": "tksvbkvfusrnxulpahky",
+  "scope": "Selected catalog attributes only; not a complete schema export",
+  "columns": [
+    {
+      "name": "chapter_id",
+      "type": "uuid",
+      "table": "competences",
+      "default": null,
+      "identity": "",
+      "not_null": false,
+      "sequence": null
+    },
+    {
+      "name": "max_points",
+      "type": "integer",
+      "table": "competences",
+      "default": "10",
+      "identity": "",
+      "not_null": false,
+      "sequence": null
+    },
+    {
+      "name": "id",
+      "type": "bigint",
+      "table": "exercise_attempts",
+      "default": null,
+      "identity": "d",
+      "not_null": true,
+      "sequence": "public.exercise_attempts_id_seq"
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "table": "exercise_attempts",
+      "default": "timezone('utc'::text, now())",
+      "identity": "",
+      "not_null": true,
+      "sequence": null
+    },
+    {
+      "name": "id",
+      "type": "bigint",
+      "table": "exercises",
+      "default": null,
+      "identity": "d",
+      "not_null": true,
+      "sequence": "public.exercises_id_seq"
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "table": "exercises",
+      "default": "timezone('utc'::text, now())",
+      "identity": "",
+      "not_null": true,
+      "sequence": null
+    },
+    {
+      "name": "title",
+      "type": "text",
+      "table": "exercises",
+      "default": null,
+      "identity": "",
+      "not_null": true,
+      "sequence": null
+    },
+    {
+      "name": "current_streak",
+      "type": "integer",
+      "table": "profiles",
+      "default": "0",
+      "identity": "",
+      "not_null": false,
+      "sequence": null
+    },
+    {
+      "name": "max_streak",
+      "type": "integer",
+      "table": "profiles",
+      "default": "0",
+      "identity": "",
+      "not_null": false,
+      "sequence": null
+    },
+    {
+      "name": "role",
+      "type": "text",
+      "table": "profiles",
+      "default": "'user'::text",
+      "identity": "",
+      "not_null": false,
+      "sequence": null
+    },
+    {
+      "name": "has_seen_tutorial",
+      "type": "boolean",
+      "table": "profiles",
+      "default": "false",
+      "identity": "",
+      "not_null": false,
+      "sequence": null
+    }
+  ],
+  "indexes": [
+    {
+      "name": "idx_exercise_attempts_date",
+      "definition": "CREATE INDEX idx_exercise_attempts_date ON public.exercise_attempts USING btree (attempted_at DESC)"
+    },
+    {
+      "name": "idx_exercise_attempts_exercise",
+      "definition": "CREATE INDEX idx_exercise_attempts_exercise ON public.exercise_attempts USING btree (exercise_id)"
+    },
+    {
+      "name": "idx_exercise_attempts_user_correct",
+      "definition": "CREATE INDEX idx_exercise_attempts_user_correct ON public.exercise_attempts USING btree (user_id, is_correct)"
+    },
+    {
+      "name": "idx_exercises_chapter",
+      "definition": "CREATE INDEX idx_exercises_chapter ON public.exercises USING btree (chapter)"
+    },
+    {
+      "name": "idx_exercises_difficulty",
+      "definition": "CREATE INDEX idx_exercises_difficulty ON public.exercises USING btree (difficulty)"
+    },
+    {
+      "name": "idx_friend_requests_users",
+      "definition": "CREATE INDEX idx_friend_requests_users ON public.friend_requests USING btree (from_user_id, to_user_id, status)"
+    },
+    {
+      "name": "idx_friends_participants",
+      "definition": "CREATE INDEX idx_friends_participants ON public.friends USING btree (user1_id, user2_id, status)"
+    },
+    {
+      "name": "idx_user_progress_user_chapter",
+      "definition": "CREATE INDEX idx_user_progress_user_chapter ON public.user_progress USING btree (user_id, chapter)"
+    }
+  ],
+  "captured_at": "2026-10-20T22:04:47.015076+00:00"
+}
