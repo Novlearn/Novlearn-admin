@@ -1,5 +1,22 @@
 # Décisions et arbitrages
 
+## D09 — Deux compteurs d’exercices réalisés
+
+**Source : réponse explicite de l’utilisateur du 20 octobre 2026.**
+« Les deux compteurs » en réponse au choix entre exercices différents traités
+hors abandons et réponses terminées avec répétitions.
+
+Présenter séparément les exercices différents ayant une réponse enregistrée
+juste ou fausse, et le nombre de ces réponses terminées, répétitions comprises.
+La période et les filtres/modes choisis s’appliquent aux deux compteurs ; un
+exercice répété par plusieurs comptes ne compte qu’une fois dans le premier.
+Une réponse sans ID d’exercice reste dans le second uniquement. Aucun verdict
+historique ne devient certifié et aucune donnée Production n’est activée.
+Les [deux compteurs locaux](completed-work-local.md) passent les tests ciblés,
+les lectures SQL/TLS et huit rapports HTTP réels ; la vérification générale
+de cette révision passe 1 432 tests / 75 fichiers, types, lint, format, build,
+intégrité Engine et smoke.
+
 ## D08 — Champs de consultation des utilisateurs V1
 
 **Source : réponse explicite de l’utilisateur du 18 octobre 2026.**

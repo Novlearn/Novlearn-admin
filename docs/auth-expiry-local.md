@@ -1,5 +1,16 @@
 # Expiration des sessions — qualification locale
 
+**20 octobre — palier local vérifié :** les [deux compteurs D09](completed-work-local.md)
+et la [nouvelle expiration naturelle de 3 600 secondes](auth-expiry-local.md)
+passent réellement. Le contrôle complet passe **1 432 tests / 75 fichiers**,
+types, lint, format, build, intégrité Engine, onze SQL standalone et smoke.
+Huit rapports SQL/TLS/HTTP et 28 mesures sur 100 000 réponses passent ;
+données et configurations conservées. Réception visuelle, hôte cible,
+politique opérationnelle et portes distantes restent ouverts. Aucun distant,
+aucun contournement ni clôture du goal/Lot 1A.
+
+Les relevés suivants sont historiques.
+
 Un premier test réel a attendu l’expiration normale de jetons Auth de **3 600
 secondes**, sans modifier l’horloge, les paramètres Auth, les JWT ou les cookies
 émis. Il a révélé un défaut : une session expirée dont le renouvellement est

@@ -1,9 +1,9 @@
 # Authentification Admin — préparation locale du Lot 1B
 
 **20 octobre :** le [correctif d’expiration local](auth-expiry-local.md) passe
-les tests d’adaptateur et le recontrôle de la paire réellement expirée. Une
-nouvelle expiration complète reste en cours ; MFA et activation distante restent
-ouvertes.
+les tests d’adaptateur et le recontrôle de la paire réellement expirée. La nouvelle
+expiration complète naturelle de 3 600 secondes passe, ainsi que le contrôle
+général de 1 432 tests. Politique MFA et activation distante restent ouvertes.
 
 **Reprise du 19 octobre :** [connexion et services locaux rétablis](local-recovery-2026-10-19.md),
 SQL 68 et parcours de publication par lot qualifiés sur copies synthétiques.

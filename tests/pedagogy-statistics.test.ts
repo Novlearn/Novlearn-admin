@@ -25,7 +25,7 @@ const counts = {
   unclassified: '0',
 };
 const fixture = (): PedagogyStatistics => ({
-  schemaVersion: 1,
+  schemaVersion: 2,
   environment: 'local-copy',
   asOf: '2026-10-19T10:00:00.123456Z',
   period: { from: '2026-10-15', until: '2026-10-18' },
@@ -39,6 +39,7 @@ const fixture = (): PedagogyStatistics => ({
     sort: 'attempts',
   },
   totals: { ...counts },
+  completedWork: { distinctExercises: '2', completedResponses: '2' },
   quality: {
     missingExerciseAttempts: '0',
     unresolvedChapterAttempts: '0',
@@ -126,7 +127,7 @@ it.each([
     v.environment = 'production';
   },
   (v: Record<string, unknown>) => {
-    v.schemaVersion = 2;
+    v.schemaVersion = 1;
   },
   (v: Record<string, unknown>) => {
     v.asOf = '2026-02-30T12:00:00Z';
@@ -187,6 +188,10 @@ it('préserve des compteurs et une page au-delà de la précision JavaScript', (
     abandoned: '0',
   };
   v.groups.rows[0].counts = { ...v.totals };
+  v.completedWork = {
+    distinctExercises: '2',
+    completedResponses: '9007199254740993',
+  };
   expect(decodePedagogyStatistics(v, expected)?.totals.correct).toBe(
     '9007199254740993',
   );
@@ -263,4 +268,29 @@ it('refuse des compteurs de duel sous un filtre exercices', () => {
       query: { ...query, mode: 'exercise' },
     }),
   ).toBeNull();
+});
+it.each([
+  { distinctExercises: '3', completedResponses: '2' },
+  { distinctExercises: '1', completedResponses: '1' },
+  { distinctExercises: '-1', completedResponses: '2' },
+  { distinctExercises: '01', completedResponses: '2' },
+  { distinctExercises: 1, completedResponses: '2' },
+  { distinctExercises: '1', completedResponses: '9223372036854775808' },
+  { distinctExercises: '1', completedResponses: '2', userIds: [] },
+  { completedResponses: '2' },
+  null,
+])(
+  'refuse des compteurs de réalisation incohérents ou excessifs %j',
+  (completedWork) => {
+    const v = { ...fixture(), completedWork };
+    expect(decodePedagogyStatistics(v, expected)).toBeNull();
+  },
+);
+it('conserve la différence entre répétitions et exercices différents', () => {
+  const v = fixture();
+  v.completedWork.distinctExercises = '1';
+  expect(decodePedagogyStatistics(v, expected)?.completedWork).toEqual({
+    distinctExercises: '1',
+    completedResponses: '2',
+  });
 });

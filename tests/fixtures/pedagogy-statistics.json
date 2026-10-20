@@ -215,6 +215,10 @@
     "moreChapters": false,
     "moreCompetences": false
   },
-  "schemaVersion": 1,
-  "environment": "local-copy"
+  "schemaVersion": 2,
+  "environment": "local-copy",
+  "completedWork": {
+    "distinctExercises": "4",
+    "completedResponses": "8"
+  }
 }

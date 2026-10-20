@@ -62,7 +62,7 @@ d’identifiants, les cookies ou la configuration privée.
 Le [bilan de livraison](readiness-current.md) distingue ce qui est implémenté,
 testé localement et encore à réceptionner. Le [correctif des sessions expirées](auth-expiry-local.md)
 et le [bilan SQL 71](legacy-search-path.md) conservent les essais et échecs réels.
-Le contrôle complet de référence du 20 octobre passe 1 422 tests, les types,
-lint, format, build, intégrité Engine et smoke HTTP. Une nouvelle expiration
-naturelle complète est encore en cours au moment de ce guide ; elle n’est pas
-annoncée réussie par ce relevé documentaire.
+Le contrôle complet de référence du 20 octobre passe 1 432 tests, les types,
+lint, format, build, intégrité Engine et smoke HTTP. La nouvelle expiration
+naturelle complète de 3 600 secondes passe réellement ; les preuves conservent
+l’échec initial et le correctif, sans modifier les délais ni les protections.

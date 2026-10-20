@@ -1,5 +1,24 @@
 # Roadmap
 
+**20 octobre — palier local vérifié :** les [deux compteurs D09](completed-work-local.md)
+et la [nouvelle expiration naturelle de 3 600 secondes](auth-expiry-local.md)
+passent réellement. Le contrôle complet passe **1 432 tests / 75 fichiers**,
+types, lint, format, build, intégrité Engine, onze SQL standalone et smoke.
+Huit rapports SQL/TLS/HTTP et 28 mesures sur 100 000 réponses passent ;
+données et configurations conservées. Réception visuelle, hôte cible,
+politique opérationnelle et portes distantes restent ouverts. Aucun distant,
+aucun contournement ni clôture du goal/Lot 1A.
+
+Les relevés suivants sont historiques.
+
+**20 octobre — deux compteurs (D09) :** [intégration locale](completed-work-local.md)
+qualifiée par 151 tests ciblés, huit rapports SQL/TLS et HTTP, et conservation
+exacte des données. Les 28 mesures sur 100 000 réponses passent sous dix secondes
+(maximum 8,278 s). Vérification générale et expiration naturelle en cours ;
+aucune activation distante ni clôture du goal.
+
+Les relevés suivants décrivent les étapes antérieures.
+
 **20 octobre — expiration et SQL 71 :** le [correctif Auth](auth-expiry-local.md)
 refuse correctement une session réellement expirée et permet la déconnexion.
 Les 25 tests de l’adaptateur et cinq observations HTTP passent ; une nouvelle

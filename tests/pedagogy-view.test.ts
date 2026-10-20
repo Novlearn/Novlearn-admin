@@ -42,6 +42,9 @@ it('renders accessible forms and tables with recorded-result limitations', () =>
   expect(html).toContain('method="get"');
   expect(html).toContain('Les abandons sont exclus');
   expect(html).toContain('Référence non résolue');
+  expect(html).toContain('Exercices différents traités');
+  expect(html).toContain('Réponses terminées');
+  expect(html).toContain('plusieurs personnes');
 });
 it('escapes current reference labels without embedding HTML', () => {
   const p = data();
@@ -72,6 +75,7 @@ it('shows a successful empty selection distinctly from unavailability', () => {
   const p = data();
   for (const k of Object.keys(p.totals) as (keyof typeof p.totals)[])
     p.totals[k] = '0';
+  p.completedWork = { distinctExercises: '0', completedResponses: '0' };
   for (const k of Object.keys(p.quality) as (keyof typeof p.quality)[])
     p.quality[k] = '0';
   p.groups.rows = [];

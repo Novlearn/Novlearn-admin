@@ -33,12 +33,13 @@ export type PedagogyLabel = {
   truncated: boolean;
 };
 export type PedagogyStatistics = {
-  schemaVersion: 1;
+  schemaVersion: 2;
   environment: StatisticsEnvironment;
   asOf: string;
   period: { from: string; until: string };
   filters: Omit<PedagogyQuery, 'period' | 'page'>;
   totals: PedagogyCounts;
+  completedWork: { distinctExercises: string; completedResponses: string };
   quality: {
     missingExerciseAttempts: string;
     unresolvedChapterAttempts: string;
@@ -254,6 +255,8 @@ export function decodePedagogyStatistics(
     object(value) && object(value.filters) ? value.filters : null;
   const quality = object(value) && object(value.quality) ? value.quality : null;
   const total = object(value) && metrics(value.totals) ? value.totals : null;
+  const completedWork =
+    object(value) && object(value.completedWork) ? value.completedWork : null;
   if (
     !parsed.ok ||
     !period ||
@@ -270,11 +273,12 @@ export function decodePedagogyStatistics(
       'period',
       'filters',
       'totals',
+      'completedWork',
       'quality',
       'references',
       'groups',
     ]) ||
-    value.schemaVersion !== 1 ||
+    value.schemaVersion !== 2 ||
     value.environment !== expected.environment ||
     typeof value.asOf !== 'string' ||
     !/^\d{4}-\d{2}-\d{2}T(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.\d{1,6})?Z$/.test(
@@ -291,6 +295,14 @@ export function decodePedagogyStatistics(
     !exact(actualFilters, Object.keys(filters)) ||
     Object.entries(filters).some(([key, v]) => actualFilters[key] !== v) ||
     !total ||
+    !completedWork ||
+    !exact(completedWork, ['distinctExercises', 'completedResponses']) ||
+    !count(completedWork.distinctExercises) ||
+    !count(completedWork.completedResponses) ||
+    BigInt(completedWork.completedResponses) !==
+      BigInt(total.correct) + BigInt(total.incorrect) ||
+    BigInt(completedWork.distinctExercises) >
+      BigInt(completedWork.completedResponses) ||
     !quality ||
     !exact(quality, qualityKeys) ||
     qualityKeys.some((key) => !count(quality[key])) ||

@@ -296,6 +296,11 @@ export function PedagogyStatisticsView({
               ['Tentatives en pratique', current.totals.exerciseAttempts],
               ['Réponses aux questions en duel', current.totals.duelAttempts],
               ['Duels terminés', current.totals.completedDuels],
+              [
+                'Exercices différents traités',
+                current.completedWork.distinctExercises,
+              ],
+              ['Réponses terminées', current.completedWork.completedResponses],
               ['Comptes actifs', current.totals.activeAccounts],
             ].map(([label, value]) => (
               <section key={label} className="card">
@@ -306,6 +311,14 @@ export function PedagogyStatisticsView({
               </section>
             ))}
           </div>
+          <p className="text-sm leading-7 text-slate-600">
+            Les réponses terminées sont les réponses enregistrées justes ou
+            fausses, hors abandons. Un même exercice compte une seule fois parmi
+            les exercices différents, même s’il est répété ou traité par
+            plusieurs personnes. Ces compteurs suivent la période et les modes
+            sélectionnés. Une réponse sans exercice identifiable reste comptée
+            parmi les réponses terminées.
+          </p>
           <p className="text-sm leading-7 text-slate-600">
             Une réponse en duel n’est pas un match complet. En mode combiné, le
             taux porte sur les événements des deux modes ; choisissez un mode

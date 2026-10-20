@@ -128,11 +128,15 @@ WITH bounds AS NOT MATERIALIZED (
  SELECT * FROM ordered ORDER BY position LIMIT 25 OFFSET (SELECT (page-1)*25 FROM pagination)
 )
 SELECT jsonb_build_object(
- 'schemaVersion',1,'asOf',to_char(b.as_of AT TIME ZONE 'UTC','YYYY-MM-DD"T"HH24:MI:SS.US"Z"'),
+ 'schemaVersion',2,'asOf',to_char(b.as_of AT TIME ZONE 'UTC','YYYY-MM-DD"T"HH24:MI:SS.US"Z"'),
  'period',jsonb_build_object('from',b.first_day::text,'until',b.until_day::text),
  'filters',jsonb_build_object('chapter',b.chapter::text,'competence',b.competence,'difficulty',b.difficulty,
    'exerciseType',b.exercise_type,'mode',b.mode,'groupBy',b.grouping,'sort',b.ordering),
  'totals',(SELECT value FROM totals),'quality',(SELECT value FROM quality),
+ 'completedWork',(SELECT jsonb_build_object(
+   'distinctExercises',count(DISTINCT exercise_id) FILTER(WHERE verdict IN ('correct','incorrect'))::text,
+   'completedResponses',count(*) FILTER(WHERE verdict IN ('correct','incorrect'))::text)
+   FROM selected),
  'references',jsonb_build_object(
    'chapters',coalesce((SELECT jsonb_agg(jsonb_build_object('id',id::text,'label',left(label,200),'truncated',char_length(label)>200) ORDER BY label COLLATE "C",id)
      FROM (SELECT id,label FROM chapter_refs ORDER BY label COLLATE "C",id LIMIT 200) r),'[]'::jsonb),
