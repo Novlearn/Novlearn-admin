@@ -5,6 +5,10 @@ import path from 'node:path';
 import { readFile, writeFile, watch } from 'node:fs/promises';
 import { createServer } from 'node:http';
 import { localAdminOptions } from './local-admin-options.mjs';
+import {
+  disabledActiveVersionEnvironment,
+  localActiveVersionEnvironment,
+} from './local-active-version.mjs';
 const options = localAdminOptions(process.argv.slice(2));
 const artifact = path.resolve(options.workspace);
 const localRoot = path.resolve('.local') + path.sep;
@@ -36,6 +40,7 @@ if (options.stop) {
     )
       process.env[key] = '';
   Object.assign(process.env, state.authConfig, {
+    ...disabledActiveVersionEnvironment,
     NEXT_PUBLIC_SUPABASE_URL: '',
     NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: '',
     ADMIN_STAGING_AUTH_ENABLED: 'false',
@@ -60,6 +65,11 @@ if (options.stop) {
     ADMIN_LOCAL_PEDAGOGY_PG_CA: '',
     ADMIN_PEDAGOGY_ENABLED: 'false',
   });
+  if (options.activeVersion)
+    Object.assign(
+      process.env,
+      await localActiveVersionEnvironment({ requireHttp: true }),
+    );
   if (options.statistics) {
     const marker = JSON.parse(
       await readFile('.local/lot1a/activity-http-current.json', 'utf8'),
@@ -281,6 +291,7 @@ if (options.stop) {
         users: options.users,
         userDetail: options.userDetail,
         pedagogy: options.pedagogy,
+        activeVersion: options.activeVersion,
         ...(engine
           ? {
               engineContainer: engine.container,

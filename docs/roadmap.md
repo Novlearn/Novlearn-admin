@@ -1,5 +1,19 @@
 # Roadmap
 
+**20 octobre — indicateur de version active connecté :** [lecteur et permissions](active-version-connected.md)
+sont qualifiés sur la cible locale conservée : huit groupes PG/TLS, 17 refus,
+douze groupes Auth/HTTP, sept groupes sur 3150 et huit contrôles Engine après
+redémarrage. Les fiches affichent une observation fraîche, y compris le retour
+arrière vers 1 alors que MAX vaut 2 ; l’absence réelle reste distincte d’une
+panne. Activation explicite, données et huit configurations préservées ;
+publication ordinaire et Production fermées. Les 120 tests ciblés passent ;
+le contrôle complet réussit : **1 404 tests / 75 fichiers**, intégrité Engine,
+types, lint sans erreur, format, build, onze SQL standalone exacts et smoke. Les
+557 sources sont exactes à sa fin ; seules huit preuves documentaires sont
+complétées après le contrôle. Le goal reste ouvert.
+
+Les relevés suivants retracent les étapes antérieures à ce raccordement.
+
 **20 octobre — cible locale SQL 70 qualifiée :** [upgrade et régression](active-version-target-local.md)
 passent après sauvegarde : 62 tables, 11 séquences et identités préexistantes
 conservées, source Auth inchangée. Advisors : zéro erreur, 33 avertissements

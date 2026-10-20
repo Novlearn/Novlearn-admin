@@ -1,5 +1,8 @@
 # Cible locale SQL 70 — upgrade et régression de publication
 
+**Suite qualifiée :** le [lecteur de version active est maintenant connecté](active-version-connected.md).
+Le présent bilan décrit l’upgrade antérieur à son provisionnement et son activation.
+
 **La cible synthétique utilisée par l’instance 3152 est maintenant SQL 70.**
 L’application principale [3150](http://127.0.0.1:3150/login) reste disponible.
 Le nouvel indicateur de version active demeure désactivé : son LOGIN dédié,

@@ -16,8 +16,13 @@ import { createServer } from 'node:http';
 import { randomBytes, createHash, X509Certificate } from 'node:crypto';
 import { startLocalEngine } from './local-engine.mjs';
 import { readAuthConfiguration } from '../src/lib/auth/config.ts';
-const [workspace, ...flags] = process.argv.slice(2);
-assert(flags.length === 0 || (flags.length === 1 && flags[0] === '--stop'));
+import { localPublicationOptions } from './local-admin-options.mjs';
+import {
+  disabledActiveVersionEnvironment,
+  localActiveVersionEnvironment,
+} from './local-active-version.mjs';
+const options = localPublicationOptions(process.argv.slice(2));
+const workspace = options.workspace;
 const artifact = path.resolve(workspace ?? '');
 assert(
   artifact
@@ -29,7 +34,7 @@ const state = JSON.parse(await readFile(artifact + '/app-config.json', 'utf8'));
 assert.equal(state.artifact, artifact);
 assert.equal(state.publicationFixture, true);
 assert.equal(state.schemaVersion, 64);
-if (flags[0] === '--stop') {
+if (options.stop) {
   const runtime = JSON.parse(
     await readFile(artifact + '/app-runtime.json', 'utf8'),
   );
@@ -46,11 +51,14 @@ if (flags[0] === '--stop') {
   for (const key of Object.keys(process.env))
     if (key.startsWith('ADMIN_')) process.env[key] = '';
   Object.assign(process.env, state.authConfig, {
+    ...disabledActiveVersionEnvironment,
     NEXT_PUBLIC_SUPABASE_URL: '',
     NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: '',
     ADMIN_STAGING_AUTH_ENABLED: 'false',
     ADMIN_PUBLICATION_ENABLED: 'false',
   });
+  if (options.activeVersion)
+    Object.assign(process.env, await localActiveVersionEnvironment());
   assert.equal(
     readAuthConfiguration(process.env)?.localPublicationFixture,
     true,
@@ -188,6 +196,7 @@ if (flags[0] === '--stop') {
         controlNonce,
         local: true,
         publicationFixture: true,
+        activeVersion: options.activeVersion,
         engine: true,
         engineContainer: engine.container,
         engineArtifact: engine.artifact,

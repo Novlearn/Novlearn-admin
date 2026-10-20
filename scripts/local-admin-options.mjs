@@ -15,6 +15,7 @@ export function localAdminOptions(args) {
           '--users',
           '--user-detail',
           '--pedagogy',
+          '--active-version',
         ].includes(flag),
     )
   )
@@ -25,10 +26,17 @@ export function localAdminOptions(args) {
     statistics = flags.includes('--statistics'),
     users = flags.includes('--users'),
     userDetail = flags.includes('--user-detail'),
-    pedagogy = flags.includes('--pedagogy');
+    pedagogy = flags.includes('--pedagogy'),
+    activeVersion = flags.includes('--active-version');
   if (
     stop &&
-    (engine || review || statistics || users || userDetail || pedagogy)
+    (engine ||
+      review ||
+      statistics ||
+      users ||
+      userDetail ||
+      pedagogy ||
+      activeVersion)
   )
     throw Error('Stop does not enable local features');
   if (review && !engine)
@@ -48,5 +56,21 @@ export function localAdminOptions(args) {
     users,
     userDetail,
     pedagogy,
+    activeVersion,
   };
+}
+
+export function localPublicationOptions(args) {
+  const [workspace, ...flags] = args;
+  if (!workspace || workspace.startsWith('--'))
+    throw Error('Local publication workspace required');
+  if (
+    new Set(flags).size !== flags.length ||
+    flags.some((flag) => !['--stop', '--active-version'].includes(flag))
+  )
+    throw Error('Unknown or duplicate publication option');
+  const stop = flags.includes('--stop'),
+    activeVersion = flags.includes('--active-version');
+  if (stop && activeVersion) throw Error('Stop does not enable local features');
+  return { workspace, stop, activeVersion };
 }

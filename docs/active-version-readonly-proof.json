@@ -1,6 +1,6 @@
 {
-  "recordedAt": "2026-10-20T13:02:52.227Z",
-  "result": "SQL70 target upgrade and existing publication HTTP PASS; metadata-reader provision/HTTP/activation pending",
+  "recordedAt": "2026-10-20T13:46:20.773Z",
+  "result": "Local metadata reader provision, actual Auth/HTTP/SSR and main activation PASS; browser and remote gates open",
   "scope": "Current target-version metadata reader and protected UI/API preparation; not runtime activation, browser acceptance, Production or Lot 1A completion",
   "migration": {
     "file": "20261019184535_novlearn_admin_active_version_readonly.sql",
@@ -79,12 +79,12 @@
     },
     "fullCheck": {
       "result": "PASS",
-      "date": "2026-10-20T13:01:52.322Z",
-      "artifact": "C:\\Users\\balth\\AppData\\Local\\Temp\\novlearn-admin-check-1792501042275",
+      "date": "2026-10-20T13:44:14.132Z",
+      "artifact": "C:\\Users\\balth\\AppData\\Local\\Temp\\novlearn-admin-check-1792503593622",
       "exitCode": 0,
-      "tests": 1387,
-      "files": 72,
-      "sourceFiles": 544,
+      "tests": 1404,
+      "files": 75,
+      "sourceFiles": 557,
       "allCopiedSourcesStillMatch": true,
       "fullCheckCommand": "npm run check",
       "separateBuildDirectory": true,
@@ -92,25 +92,22 @@
       "dependenciesCopied": true,
       "applicationServersInterrupted": false,
       "privateEnvironmentFilesCopied": false,
-      "rawProof": "C:\\Users\\balth\\AppData\\Local\\Temp\\novlearn-admin-check-1792501042275/proof.json",
-      "rawProofSha256": "a9848dc9443a4dda551b0790cc27ad447336a909fa95a060483e66408b2772ac",
-      "sourceSnapshotManifest": "C:\\Users\\balth\\AppData\\Local\\Temp\\novlearn-admin-check-1792501042275/source-hashes.json",
-      "sourceSnapshotManifestSha256": "db658ddd754c3825cc25ba898afa257ab45f0cf73fcbf9e5aacca530eeccc221",
+      "rawProof": "C:\\Users\\balth\\AppData\\Local\\Temp\\novlearn-admin-check-1792503593622/proof.json",
+      "rawProofSha256": "492a10ec86c0227c15b92aeb102bdf0fe99fc7701ed6c25db11cbbd94a46ff44",
+      "sourceSnapshotManifest": "C:\\Users\\balth\\AppData\\Local\\Temp\\novlearn-admin-check-1792503593622/source-hashes.json",
+      "sourceSnapshotManifestSha256": "028b75c7e761f27b1a14c59e46ab10f92db5324867de65750ecf77b12eda3bb4",
       "standaloneExactSqlFiles": 11,
-      "allFiveNewVerificationAndUpgradeScriptsIncluded": true,
       "evidenceOnlyChangesAfterCompletion": [
-        "docs/active-version-target-local.md",
-        "docs/active-version-target-local-proof.json",
+        "docs/active-version-connected.md",
+        "docs/active-version-connected-proof.json",
         "docs/active-version-readonly.md",
         "docs/active-version-readonly-proof.json",
-        "docs/local-recovery-2026-10-20.md",
         "docs/progress.md",
-        "docs/roadmap.md",
         "docs/readiness-current.md",
-        "docs/readiness-current.json"
+        "docs/readiness-current.json",
+        "docs/roadmap.md"
       ],
-      "twoNewDocumentationFilesCreatedAfterCompletion": true,
-      "scope": "544 exact copied sources at check completion, including all five new/changed verification and upgrade scripts; nine listed documentation/evidence files are then updated or created and checked separately. Runtime, tests and tooling remain exact. Not browser or full Engine source-suite acceptance."
+      "scope": "557 exact source files at completion, including both launchers, eight changed/new scripts and seventeen new policy tests. Only the eight listed documentation/evidence files are updated after completion; runtime, tests and tooling remain exact. This is not browser or full Engine source-suite acceptance."
     },
     "previousFullCheck": {
       "result": "PASS",
@@ -169,6 +166,41 @@
         "docs/local-recovery-2026-10-20-proof.json"
       ],
       "scope": "Exact snapshot of 539 sources qualified at completion, including both new/corrected test harnesses. Only the eight listed documentation/evidence files are updated after completion; runtime, tests and tooling remain exact. Not browser, remote or full Engine source-suite acceptance."
+    },
+    "previousTargetFullCheck": {
+      "result": "PASS",
+      "date": "2026-10-20T13:01:52.322Z",
+      "artifact": "C:\\Users\\balth\\AppData\\Local\\Temp\\novlearn-admin-check-1792501042275",
+      "exitCode": 0,
+      "tests": 1387,
+      "files": 72,
+      "sourceFiles": 544,
+      "allCopiedSourcesStillMatch": true,
+      "fullCheckCommand": "npm run check",
+      "separateBuildDirectory": true,
+      "independentTemporaryProject": true,
+      "dependenciesCopied": true,
+      "applicationServersInterrupted": false,
+      "privateEnvironmentFilesCopied": false,
+      "rawProof": "C:\\Users\\balth\\AppData\\Local\\Temp\\novlearn-admin-check-1792501042275/proof.json",
+      "rawProofSha256": "a9848dc9443a4dda551b0790cc27ad447336a909fa95a060483e66408b2772ac",
+      "sourceSnapshotManifest": "C:\\Users\\balth\\AppData\\Local\\Temp\\novlearn-admin-check-1792501042275/source-hashes.json",
+      "sourceSnapshotManifestSha256": "db658ddd754c3825cc25ba898afa257ab45f0cf73fcbf9e5aacca530eeccc221",
+      "standaloneExactSqlFiles": 11,
+      "allFiveNewVerificationAndUpgradeScriptsIncluded": true,
+      "evidenceOnlyChangesAfterCompletion": [
+        "docs/active-version-target-local.md",
+        "docs/active-version-target-local-proof.json",
+        "docs/active-version-readonly.md",
+        "docs/active-version-readonly-proof.json",
+        "docs/local-recovery-2026-10-20.md",
+        "docs/progress.md",
+        "docs/roadmap.md",
+        "docs/readiness-current.md",
+        "docs/readiness-current.json"
+      ],
+      "twoNewDocumentationFilesCreatedAfterCompletion": true,
+      "scope": "544 exact copied sources at check completion, including all five new/changed verification and upgrade scripts; nine listed documentation/evidence files are then updated or created and checked separately. Runtime, tests and tooling remain exact. Not browser or full Engine source-suite acceptance."
     }
   },
   "connected": {
@@ -365,5 +397,7 @@
     "activeVersionReaderActivated": false,
     "completeCheckProof": "local-recovery-2026-10-20-proof.json"
   },
-  "localTargetUpgradeProof": "active-version-target-local-proof.json"
+  "localTargetUpgradeProof": "active-version-target-local-proof.json",
+  "connectedProof": "active-version-connected-proof.json",
+  "localReaderActivated": true
 }
