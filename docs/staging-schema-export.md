@@ -1,5 +1,20 @@
 # Export de structure Staging — outil opérateur préparé
 
+**Reprise actuelle :** les tentatives d’export sont arrêtées à la demande de
+l’utilisateur. Le [MCP dédié et l’audit courant](mcp-resume-2026-10-20.md)
+permettent de poursuivre l’examen SQL en lecture seule. Le pooler confirmé
+sur `aws-1-eu-west-3.pooler.supabase.com:5432` et le certificat téléchargé
+permettent l’authentification et vérifient le segment client→pooler (TLS1.3).
+Le contrôle `pg_stat_ssl` du segment pooler→Postgres observe toutefois `false` :
+l’export s’arrête avant `pg_dump`, sans assouplir cette garde. Le fichier
+privé conserve ses valeurs avec le seul ajout `caFile`. Le certificat n’est
+pas installé dans le magasin système. Les relevés suivants sont historiques.
+
+Le sélecteur explicite `--session-pooler` est préparé et testé ; il réutilise
+le mot de passe privé et fixe l’hôte confirmé ainsi que le suffixe utilisateur
+Staging, sans permettre de redirection Production ou de port transactionnel.
+Il ne constitue pas une autorisation de reprendre cet export.
+
 Le connecteur actuel permet les SELECT, pas un export standard `pg_dump`.
 L’utilisateur ne dispose pas d’export de structure existant. L’outil local
 `scripts/export-staging-schema.ts` prépare cette prochaine étape ; **l’export

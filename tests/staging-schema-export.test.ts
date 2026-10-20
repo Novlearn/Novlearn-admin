@@ -5,6 +5,8 @@ import {
   redactExportError,
   STAGING_EXPORT_HOST,
   managedAuthTriggerSql,
+  stagingExportConnection,
+  STAGING_SESSION_POOLER_HOST,
 } from '../scripts/export-staging-schema';
 
 const valid = () => ({
@@ -13,6 +15,41 @@ const valid = () => ({
   database: 'postgres',
   user: 'schema_reader',
   password: 'Only-a-test:#$\\"password',
+});
+
+describe('transport Staging explicitement sélectionné', () => {
+  it('conserve la connexion directe et la configuration privée intactes', () => {
+    const input = valid();
+    expect(stagingExportConnection(input, 'direct')).toEqual(input);
+    expect(stagingExportConnection(input, 'direct')).not.toBe(input);
+  });
+  it('utilise uniquement le pooler confirmé et le tenant Staging sur 5432', () => {
+    const input = { ...valid(), user: 'postgres' };
+    const before = structuredClone(input);
+    expect(stagingExportConnection(input, 'session-pooler')).toEqual({
+      ...input,
+      host: STAGING_SESSION_POOLER_HOST,
+      user: 'postgres.tksvbkvfusrnxulpahky',
+      port: 5432,
+    });
+    expect(input).toEqual(before);
+  });
+  it.each([
+    { ...valid(), host: 'db.abwipnppcrghdhwriyjp.supabase.co' },
+    { ...valid(), host: 'aws-1-eu-west-3.pooler.supabase.com' },
+    { ...valid(), user: 'postgres.abwipnppcrghdhwriyjp' },
+    { ...valid(), port: 6543 },
+    { ...valid(), ssl: false },
+  ])('refuse une redirection ou désactivation injectée %j', (input) => {
+    expect(() => stagingExportConnection(input, 'session-pooler')).toThrow(
+      'Configuration privée Staging invalide.',
+    );
+  });
+  it('refuse les modes non prévus, dont le pooler transactionnel', () => {
+    expect(() =>
+      stagingExportConnection(valid(), 'transaction' as never),
+    ).toThrow('Mode de connexion Staging invalide.');
+  });
 });
 describe('triggers applicatifs sur auth.users', () => {
   const row = {

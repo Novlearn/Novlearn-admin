@@ -1,12 +1,12 @@
 {
-  "result": "PASS for62 targeted contract tests and native synthetic dump workflow only; actual Staging export pending",
+  "result": "PASS for70 current export contract tests only; prior native dump retained as historical; actual export stopped",
   "recordedAt": "2026-10-20T21:05:56.497Z",
   "targetedTests": {
-    "tests": 62,
+    "tests": 70,
     "files": 1,
     "result": "PASS",
     "file": "tests/staging-schema-export.test.ts",
-    "sourceSha256": "a78ae93a14878daa6407d92408dce1148b1f9dcc0d607e69efe69df29cd32344"
+    "sourceSha256": "7eaa521823dd7a2a93f7a39e5f864e3b4f1f770bc18676f1bfe80773956000b0"
   },
   "native": {
     "rawProof": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\staging-dump-native-1792525888091/proof.json",
@@ -42,11 +42,13 @@
       "stagingTlsOrCredentialsQualified": false,
       "remoteWrites": false,
       "applicationDatabasesModified": false
-    }
+    },
+    "historicalRevisionOnly": true,
+    "currentTransportQualified": false
   },
   "operatorTool": {
     "file": "scripts/export-staging-schema.ts",
-    "sha256": "8e857035287a12af06cc9f49e5a3887e424fb755c5ebbeb08b8697c61183d951"
+    "sha256": "b7735643615a3b566bf4beffb7d8ab3bd4e37436f70908059070b791e221762b"
   },
   "negativeCliObservations": [
     "Missing private configuration refused before connection",
@@ -85,7 +87,7 @@
       "docs/readiness-current.json"
     ]
   },
-  "actualStagingConnectionExecuted": false,
+  "actualStagingConnectionExecuted": true,
   "actualStagingExportExecuted": false,
   "restorationExecuted": false,
   "remoteWrites": false,
@@ -193,5 +195,53 @@
     "nextStep": "Obtain exact Staging Session pooler host/port/user from Dashboard Connect; retain TLS verification and read-only requirements; no host guessed or project setting changed"
   },
   "actualStagingConnectionAttempted": true,
-  "actualStagingConnectionEstablished": false
+  "actualStagingConnectionEstablished": true,
+  "beforeSessionSelector": {
+    "operatorTool": {
+      "file": "scripts/export-staging-schema.ts",
+      "sha256": "b7735643615a3b566bf4beffb7d8ab3bd4e37436f70908059070b791e221762b"
+    },
+    "targetedTests": {
+      "tests": 62,
+      "files": 1,
+      "result": "PASS",
+      "file": "tests/staging-schema-export.test.ts",
+      "sourceSha256": "a78ae93a14878daa6407d92408dce1148b1f9dcc0d607e69efe69df29cd32344"
+    }
+  },
+  "sessionPoolerObservation": {
+    "result": "OBSERVED; export security gate not satisfied",
+    "at": "2026-10-20T21:12:54.241Z",
+    "host": "aws-1-eu-west-3.pooler.supabase.com",
+    "clientToPooler": {
+      "authorized": true,
+      "protocol": "TLSv1.3",
+      "hostname": "aws-1-eu-west-3.pooler.supabase.com",
+      "verificationDisabled": false
+    },
+    "database": "postgres",
+    "readonly": "on",
+    "serverVersion": "170011",
+    "poolerToPostgresSsl": false,
+    "authenticationSucceeded": true,
+    "sourceBusinessRowsRead": false,
+    "pgDumpStarted": false,
+    "remoteWrites": false,
+    "operatorStoppedByUser": true,
+    "caPublicCertificate": {
+      "at": "2026-10-20T21:12:09.484Z",
+      "source": "Operator downloaded certificate from Supabase Staging Database Settings",
+      "downloaded": "C:/Users/balth/Downloads/prod-ca-2021.crt",
+      "subject": "C=US\nST=Delware\nL=New Castle\nO=Supabase Inc\nCN=Supabase Root 2021 CA",
+      "issuer": "C=US\nST=Delware\nL=New Castle\nO=Supabase Inc\nCN=Supabase Root 2021 CA",
+      "validFrom": "Apr 28 10:56:53 2021 GMT",
+      "validTo": "Apr 26 10:56:53 2031 GMT",
+      "fingerprint256": "80:70:25:AD:50:D4:ED:21:9D:2C:9C:7D:29:9C:00:4F:82:4E:B0:0C:F7:F6:5A:FE:F6:07:D0:7B:72:E6:CA:FA",
+      "sha256": "700723581420dd1ac98fd7e9ac529f0ef210eadcaf87fc868a3ad7d114c2f3b7",
+      "privateConfigurationChange": "Add caFile only; all previous field values preserved",
+      "systemTrustStoreChanged": false,
+      "tlsVerificationDisabled": false
+    }
+  },
+  "currentRevisionFullCheck": "See mcp-resume-2026-10-20.json; previous completeAdminCheck retained as historical"
 }

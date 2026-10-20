@@ -8,6 +8,9 @@ import { spawn } from 'node:child_process';
 import pg from 'pg';
 
 export const STAGING_EXPORT_HOST = 'db.tksvbkvfusrnxulpahky.supabase.co';
+// Exact Session pooler coordinates supplied by the operator from Staging Connect.
+export const STAGING_SESSION_POOLER_HOST =
+  'aws-1-eu-west-3.pooler.supabase.com';
 const image =
   'public.ecr.aws/supabase/postgres@sha256:7374d196da7e301512cc5329e18040e0f7bb856287b323777cdadecccbc6c7e4';
 const options =
@@ -42,6 +45,20 @@ export function readStagingExportSource(input: unknown): StagingExportSource {
   )
     throw fail();
   return { ...v } as StagingExportSource;
+}
+export function stagingExportConnection(
+  input: unknown,
+  mode: 'direct' | 'session-pooler',
+) {
+  const source = readStagingExportSource(input);
+  if (mode !== 'direct' && mode !== 'session-pooler')
+    throw new Error('Mode de connexion Staging invalide.');
+  return {
+    ...source,
+    host: mode === 'direct' ? source.host : STAGING_SESSION_POOLER_HOST,
+    user:
+      mode === 'direct' ? source.user : source.user + '.tksvbkvfusrnxulpahky',
+  };
 }
 export function stagingDumpArguments(snapshot: string, schemas: string[]) {
   if (
@@ -109,10 +126,11 @@ const fingerprint = (value: string | Buffer) =>
   createHash('sha256').update(value).digest('hex');
 
 async function main() {
+  const args = process.argv.slice(2);
   assert(
-    process.argv.length === 2 ||
-      (process.argv.length === 3 && process.argv[2] === '--check'),
-    'Seule l’option --check est acceptée.',
+    new Set(args).size === args.length &&
+      args.every((arg) => ['--check', '--session-pooler'].includes(arg)),
+    'Seules les options --check et --session-pooler sont acceptées.',
   );
   const workspace = process.cwd(),
     sourceRoot = path.resolve('.local/staging-schema-export'),
@@ -129,6 +147,10 @@ async function main() {
       'Configurer uniquement Staging dans .local/staging-schema-export/source.json ; ne transmettre aucun secret dans la conversation.',
     );
   }
+  const connectionMode = args.includes('--session-pooler')
+    ? 'session-pooler'
+    : 'direct';
+  const connection = stagingExportConnection(source, connectionMode);
   let ca: string | undefined;
   if (source.caFile) {
     const caPath = path.join(sourceRoot, source.caFile);
@@ -141,11 +163,12 @@ async function main() {
       'Certificat public attendu.',
     );
   }
-  if (process.argv[2] === '--check') {
+  if (args.includes('--check')) {
     console.log(
       JSON.stringify({
         result: 'Configuration shape accepted only; no connection or export',
-        host: STAGING_EXPORT_HOST,
+        host: connection.host,
+        connectionMode,
         tls: 'verify-full',
         sourceConnected: false,
       }),
@@ -155,10 +178,10 @@ async function main() {
   const artifact = path.join(sourceRoot, 'export-' + Date.now());
   await mkdir(artifact);
   const client = new pg.Client({
-    host: source.host,
-    port: source.port,
-    database: source.database,
-    user: source.user,
+    host: connection.host,
+    port: connection.port,
+    database: connection.database,
+    user: connection.user,
     password: source.password,
     ssl: {
       rejectUnauthorized: true,
@@ -203,10 +226,10 @@ async function main() {
     const caFile = path.join(artifact, 'ca.crt');
     if (ca) await writeFile(caFile, ca, { flag: 'wx' });
     const environment = {
-      PGHOST: source.host,
-      PGPORT: String(source.port),
-      PGDATABASE: source.database,
-      PGUSER: source.user,
+      PGHOST: connection.host,
+      PGPORT: String(connection.port),
+      PGDATABASE: connection.database,
+      PGUSER: connection.user,
       PGPASSWORD: source.password,
       PGSSLMODE: 'verify-full',
       PGSSLROOTCERT: ca ? '/export-ca.crt' : 'system',
@@ -297,7 +320,9 @@ async function main() {
         {
           result: 'PASS for schema export only; restoration not executed',
           at: new Date().toISOString(),
-          host: STAGING_EXPORT_HOST,
+          host: connection.host,
+          connectionMode,
+          stagingProjectRef: 'tksvbkvfusrnxulpahky',
           schemas,
           image,
           sourceTlsVerified: true,
