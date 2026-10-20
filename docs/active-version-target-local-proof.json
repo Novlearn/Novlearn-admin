@@ -1,0 +1,272 @@
+{
+  "recordedAt": "2026-10-20T13:02:52.227Z",
+  "result": "PASS for SQL70 advisors, target regression, actual local target upgrade and existing publication HTTP workflow; metadata reader activation pending",
+  "scope": "Retained local synthetic target only; no Production, browser acceptance or new metadata-reader HTTP activation",
+  "baselineAdminCommit": "c762c775abcdf5aa91d001a819985adbbbf68905",
+  "advisors": {
+    "rawProof": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\active-version-advisors-1792499884590/proof.json",
+    "rawProofSha256": "919daebe7280774d36b3f74c8878db5b39c940532227669ef59057e5b28f17eb",
+    "at": "2026-10-20T12:38:09.002Z",
+    "cliVersion": "2.98.2",
+    "levels": { "INFO": 67, "WARN": 33 },
+    "rules": {
+      "unindexed_foreign_keys": 24,
+      "auth_rls_initplan": 14,
+      "unused_index": 37,
+      "multiple_permissive_policies": 17,
+      "rls_enabled_no_policy": 6,
+      "function_search_path_mutable": 2
+    },
+    "errors": 0,
+    "globalSqlCertification": false,
+    "network": "preserved network-none database namespace",
+    "officialArchiveSha256": "0f59df9e6837e876f309e0b4f47005133c51296e85a02727b2927f33ed9adb2d",
+    "officialBinarySha256": "94e6d7a9b6d674126144cecbfc64ce871189c0cfd88f19acb2a1675200f674d2",
+    "verifiedTls": true,
+    "transactionDefaultReadOnly": true,
+    "originalCopyAndApplicationTargetUnchanged": true
+  },
+  "targetRegression": {
+    "rawProof": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\active-version-publication-1792500536373/proof.json",
+    "rawProofSha256": "da9b2004abc59a4ca3cc85e4604b0b4e65a019ab6430e6a654d5279c176c2d3d",
+    "at": "2026-10-20T12:49:07.924Z",
+    "database": "active_version_regression_1792500536373",
+    "checks": [
+      "new database writer requires the preserved SCRAM password",
+      "actual TLS publication pool audits exact writer identity and denies direct table reads",
+      "reader observes actual absence before the new publication",
+      "target driver commits revision 1 and the minimal reader observes it",
+      "identical publication is idempotent and does not advance epoch",
+      "revision 2 publication updates the current pointer",
+      "explicit rollback selects revision 1 while MAX revision remains 2",
+      "repeated rollback is idempotent",
+      "failing pre-commit recheck rolls back all target rows",
+      "stale inspection and conflicting immutable revision abort without a commit callback",
+      "wrong business digest is rejected by the unchanged target",
+      "lost commit acknowledgement remains uncertain until actual target observation resolves it",
+      "new metadata reader still cannot read definitions, write, publish or consume sequences"
+    ],
+    "observations": [
+      {
+        "catalogId": "7bf6b540-54ed-4fb4-a661-54ce65e55aea",
+        "active": null,
+        "epoch": null,
+        "state": "absent"
+      },
+      {
+        "catalogId": "7bf6b540-54ed-4fb4-a661-54ce65e55aea",
+        "active": 1,
+        "epoch": "1",
+        "state": "active"
+      },
+      {
+        "catalogId": "7bf6b540-54ed-4fb4-a661-54ce65e55aea",
+        "active": 1,
+        "epoch": "1",
+        "state": "active"
+      },
+      {
+        "catalogId": "7bf6b540-54ed-4fb4-a661-54ce65e55aea",
+        "active": 2,
+        "epoch": "2",
+        "state": "active"
+      },
+      {
+        "catalogId": "7bf6b540-54ed-4fb4-a661-54ce65e55aea",
+        "active": 1,
+        "epoch": "3",
+        "state": "active"
+      },
+      {
+        "catalogId": "7bf6b540-54ed-4fb4-a661-54ce65e55aea",
+        "active": 1,
+        "epoch": "3",
+        "state": "active"
+      },
+      {
+        "catalogId": "fbd596f9-e189-4a07-8389-ad76daa8560b",
+        "active": null,
+        "epoch": null,
+        "state": "absent"
+      },
+      {
+        "catalogId": "7bf6b540-54ed-4fb4-a661-54ce65e55aea",
+        "active": 3,
+        "epoch": "4",
+        "state": "active"
+      },
+      {
+        "catalogId": "0ea545ae-3e41-49fb-9ac5-a3f41c256e6b",
+        "active": 1,
+        "epoch": "1",
+        "state": "active"
+      }
+    ],
+    "realTargetDriver": true,
+    "writerScramVerified": true,
+    "realTls": true,
+    "minimalReaderUsesNativeSessionAuthorization": true,
+    "sourceAuthAndJournalNotCertifiedByThisTest": true,
+    "originalHbaContentsAndModeRestoredExactly": true,
+    "originalDatabaseAndApplicationTargetExact": true,
+    "onlyExerciseSequenceMayAdvanceInNewDatabase": true,
+    "noSequenceReset": true
+  },
+  "applicationTargetUpgrade": {
+    "rawProof": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\active-version-target-upgrade-1792500691399/proof.json",
+    "rawProofSha256": "3f32e48af47270b80edcd6b8249ed105e6ef343afdcf9a2e0ed3a3e3432284d1",
+    "at": "2026-10-20T12:51:38.193Z",
+    "target": "novlearn-admin-publication-local-1792259029889-target-db",
+    "containerId": "7c259024c91f4b738bc63755d10fcdbf7be00a8d62c296a55febac218529c9e1",
+    "sourceSchemaVersion": 64,
+    "targetSchemaVersion": 70,
+    "migrations": [
+      {
+        "file": "20261018162349_novlearn_admin_activity_readonly.sql",
+        "sha256": "2c15766585250ad1478725ffd2dc0715a839080cbeb647fe273b320bde64ed82"
+      },
+      {
+        "file": "20261018181426_novlearn_admin_user_readonly.sql",
+        "sha256": "e72c7df6bcf4761c37d127ff967d247664e18ce0aa162d4e009c695bea4fedc9"
+      },
+      {
+        "file": "20261018213847_novlearn_admin_user_detail_readonly.sql",
+        "sha256": "215d3a9ce19a9b3216c4aa20667732105933ab546a526fdf8c008fd2a64ee3ac"
+      },
+      {
+        "file": "20261019093842_consolidate_novlearn_admin_reader_policies.sql",
+        "sha256": "0e93f2931501ecb3f7575be0467d4f454fd43a061420a566d8abc4268479863f"
+      },
+      {
+        "file": "20261019111336_novlearn_admin_pedagogy_readonly.sql",
+        "sha256": "1e222b92124becfc9b340afb3300d1ca1c95c40646ccd26aede11f5e36145ede"
+      },
+      {
+        "file": "20261019184535_novlearn_admin_active_version_readonly.sql",
+        "sha256": "0d9e07df82ebd0822b0178e6bb4df066f1ee5a7728c05c522858b4abf63a3e6b"
+      }
+    ],
+    "beforeDump": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\active-version-target-upgrade-1792500691399/before-64.dump",
+    "beforeDumpSha256": "2c2714de20dfad9de95ad8b7f0e4906b07345deaf2732eedd4702257fef06243",
+    "privateRoleBackupSha256": "e1f26cfcea57cf56dcaa7961b2cd1fbf74dedbff0dee55246289a0642975ae90",
+    "backupPreserved": true,
+    "noRestoreOrDeletionPerformed": true,
+    "preservedTables": 62,
+    "preservedSequences": 11,
+    "allOriginalRowsAndSequencesExactAtUpgrade": true,
+    "preexistingRolesAndPasswordsExact": true,
+    "metadataComparedWithQualifiedCopyExceptBuiltinPasswordsAndAclOrder": true,
+    "readerLoginCreated": false,
+    "readerActivated": false,
+    "mainApplicationNotStopped": true
+  },
+  "publicationHttp": {
+    "rawProof": ".local/local-admin-publication-1792259029889/http-integration-1792500753433/proof.json",
+    "rawProofSha256": "48771860352d7971bd333137c594ca7d7ed626c2e508fff8c91a9824d0a8f31f",
+    "at": "2026-10-20T12:55:01.353Z",
+    "checks": [
+      "Actual Next login form, dedicated HttpOnly session cookie and verified Admin session",
+      "Real unauthenticated, metadata-spoofing non-Admin, foreign origin and injected target inputs refused",
+      "Actual main application session cannot authorize the fixture, even after cookie renaming; the independent main session still works",
+      "New canonical revision, complete native two-seed report, signed SQL receipt and explicitly labelled synthetic review through real HTTP/Auth/REST",
+      "Actual preparation reruns native Engine and returns a signed local diff without changing any target table",
+      "Altered confirmation is refused with no target row change",
+      "Real target commit survives a client socket close after response headers; HTTP recovery reads the durable committed result",
+      "Repeated confirmation is idempotent and does not write target data again",
+      "Revocation of only the new fixture Admin refuses confirmation; target remains unchanged and the old plan is explicitly cancelled",
+      "Second revision transfers through actual HTTP and finalizes its source status and active pointer",
+      "HTTP rollback reactivates revision 1 in both copies, preserves revision 2 and resolves taxonomy to target identifiers without copying source actors",
+      "All 60 non-publication target tables and every preexisting target/source business row remain exact, including non-empty attempts, replay artifacts, duels and Auth histories",
+      "Real authenticated history/detail pages show local results and retain original signed receipts; no browser execution claimed"
+    ],
+    "realNext": true,
+    "realAuth": true,
+    "realPostgrest": true,
+    "verifiedTls": true,
+    "nativeLinuxEngine": true,
+    "versions": 2,
+    "rollback": true,
+    "targetPreexistingRowsPreserved": true,
+    "sourcePreexistingRowsPreserved": true,
+    "targetNonPublicationTablesPreserved": 60,
+    "onlyNewLabelledSyntheticAccountsAndExercises": true,
+    "ordinaryMainPublicationEnabled": false,
+    "browserExecuted": false
+  },
+  "preservation": {
+    "privateConfigurationsExact": 8,
+    "protectedAdminFilesExact": 4,
+    "preexistingNovlearnFilesExact": 8,
+    "engineRepositoryUnchanged": true,
+    "canonicalMigrationsUnchanged": true,
+    "oldTargetRowsMayBeAugmentedOnlyByTheNewHttpFixturesAfterUpgrade": true
+  },
+  "failedPreparations": [
+    {
+      "artifact": ".local/lot1a/active-version-publication-1792500269936/execution.log",
+      "result": "FAIL",
+      "sqlstate": "42702",
+      "reason": "Ambiguous definition alias in test payload construction; no application database mutation",
+      "corrected": true,
+      "originalLogPreserved": true
+    },
+    {
+      "result": "FAIL before any artifact, shutdown or SQL",
+      "reason": "Upgrade preflight read schemaVersion from private.json instead of app-config.json",
+      "corrected": true
+    },
+    {
+      "result": "Local documentary consolidation initially stopped before writes",
+      "reason": "Sandbox denied read access to sibling Engine Git repository; same read succeeded in authorized owner context",
+      "permissionsOrProtectionsChanged": false,
+      "automaticApprovalRejection": false
+    }
+  ],
+  "fullCheck": {
+    "result": "PASS",
+    "date": "2026-10-20T13:01:52.322Z",
+    "artifact": "C:\\Users\\balth\\AppData\\Local\\Temp\\novlearn-admin-check-1792501042275",
+    "exitCode": 0,
+    "tests": 1387,
+    "files": 72,
+    "sourceFiles": 544,
+    "allCopiedSourcesStillMatch": true,
+    "fullCheckCommand": "npm run check",
+    "separateBuildDirectory": true,
+    "independentTemporaryProject": true,
+    "dependenciesCopied": true,
+    "applicationServersInterrupted": false,
+    "privateEnvironmentFilesCopied": false,
+    "rawProof": "C:\\Users\\balth\\AppData\\Local\\Temp\\novlearn-admin-check-1792501042275/proof.json",
+    "rawProofSha256": "a9848dc9443a4dda551b0790cc27ad447336a909fa95a060483e66408b2772ac",
+    "sourceSnapshotManifest": "C:\\Users\\balth\\AppData\\Local\\Temp\\novlearn-admin-check-1792501042275/source-hashes.json",
+    "sourceSnapshotManifestSha256": "db658ddd754c3825cc25ba898afa257ab45f0cf73fcbf9e5aacca530eeccc221",
+    "standaloneExactSqlFiles": 11,
+    "allFiveNewVerificationAndUpgradeScriptsIncluded": true,
+    "evidenceOnlyChangesAfterCompletion": [
+      "docs/active-version-target-local.md",
+      "docs/active-version-target-local-proof.json",
+      "docs/active-version-readonly.md",
+      "docs/active-version-readonly-proof.json",
+      "docs/local-recovery-2026-10-20.md",
+      "docs/progress.md",
+      "docs/roadmap.md",
+      "docs/readiness-current.md",
+      "docs/readiness-current.json"
+    ],
+    "twoNewDocumentationFilesCreatedAfterCompletion": true,
+    "scope": "544 exact copied sources at check completion, including all five new/changed verification and upgrade scripts; nine listed documentation/evidence files are then updated or created and checked separately. Runtime, tests and tooling remain exact. Not browser or full Engine source-suite acceptance."
+  },
+  "notExecuted": [
+    "Provision dedicated metadata-reader LOGIN on actual local target",
+    "Actual metadata-reader Auth/HTTP, permissions and confidentiality on upgraded target",
+    "Explicit launcher flags and activation of target-version indicator",
+    "Authorized manual browser acceptance including MathLive and recovery",
+    "SQL70 batch HTTP workflow not rerun by this single-publication regression",
+    "Full Engine source suite 1540 not rerun; same pinned archive and real native HTTP tests used",
+    "Full SQL advisor remediation, session expiry/MFA and deployment-host qualification",
+    "Remote rehearsal/application, first real publication and deployment require separate authorization"
+  ],
+  "remoteOperations": false,
+  "goalComplete": false
+}

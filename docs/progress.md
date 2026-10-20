@@ -1,5 +1,18 @@
 # Progression du goal NovLearn Admin
 
+**20 octobre — cible locale SQL 70 qualifiée :** [upgrade et régression](active-version-target-local.md)
+passent après sauvegarde : 62 tables, 11 séquences et identités préexistantes
+conservées, source Auth inchangée. Advisors : zéro erreur, 33 avertissements
+ouverts. Treize groupes du pilote cible puis treize groupes Auth/HTTP réels
+exercent publication et retour arrière. L’indicateur reste fermé en attendant
+provision, Auth/HTTP spécifiques et activation explicite. Aucun distant ;
+le contrôle complet réussit : **1 387 tests / 72 fichiers**, types, lint, format,
+build, onze SQL standalone exacts et smoke. Les cinq nouveaux scripts sont
+inclus ; les neuf documents de bilan sont complétés et vérifiés après le contrôle.
+Le goal reste ouvert.
+
+Les relevés suivants sont antérieurs à cet upgrade de la cible synthétique.
+
 **20 octobre — reprise confirmée après réparation utilisateur :** les 14 services
 conservés sont redémarrés sans recréation. La [connexion réelle et huit contrôles
 Engine](local-recovery-2026-10-20.md) passent sur [3150](http://127.0.0.1:3150/login),

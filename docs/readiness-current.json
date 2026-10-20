@@ -1,12 +1,12 @@
 {
-  "recordedAt": "2026-10-20T12:34:03.649Z",
+  "recordedAt": "2026-10-20T13:02:52.227Z",
   "scope": "Documentary traceability for all 20 original goal sections; not a functional test, receipt, permission or completion certificate",
   "referenceInputs": {
     "requestSha256": "fb9ac40863c57594878833b8a9fc0bd130a0cba9d0249d29c609051a54bded93",
     "cdcSha256": "b6bfea6d74b008e54ed61aa7598ccd01bd438d496cc22add15da2ff8abb04401",
     "decisionsSha256": "dac872dd9755c30734c067b8df52be8b5d595dbd9e01f5e5e1dcd27fca9ff028"
   },
-  "baselineAdminCommitAtAssessment": "0a7dfc6e490e2ed099cc7ee05ff139babb5ee50c",
+  "baselineAdminCommitAtAssessment": "c762c775abcdf5aa91d001a819985adbbbf68905",
   "implementationHasUncommittedChangesAtObservation": true,
   "requestedSections": [
     { "id": 1, "title": "Audit de démarrage" },
@@ -58,8 +58,8 @@
     {
       "id": 5,
       "title": "Gestion des exercices",
-      "evidenceSummary": "CRUD, conflits, versions, duplication et archivage dans [catalogue](catalogue-local-proof.json) et parcours Auth/REST réels. [Version cible préparée](active-version-readonly-proof.json) : 70 migrations, copie peuplée, six observations/16 refus natifs et 103 tests ciblés. Lecteur physique : huit groupes TLS, 17 refus et trois dérives ; quinze prérequis et restauration peuplée réussis le 20 octobre.",
-      "remaining": "Indicateur de cible fermé par défaut ; advisors, régression publication, upgrade de la cible et Auth/HTTP réels restent à qualifier avant activation locale. Accès Production soumis aux portes distinctes."
+      "evidenceSummary": "CRUD, conflits, versions, duplication et archivage dans [catalogue](catalogue-local-proof.json) et parcours Auth/REST réels. [Version cible préparée](active-version-readonly-proof.json) : 70 migrations, copie peuplée, six observations/16 refus natifs et 103 tests ciblés. Lecteur physique : huit groupes TLS, 17 refus et trois dérives ; quinze prérequis et restauration peuplée réussis le 20 octobre. Cible locale passée à SQL 70, advisors sans erreur et régression réelle de publication/retour arrière réussis : [upgrade](active-version-target-local-proof.json).",
+      "remaining": "Provision et parcours Auth/HTTP du lecteur de version active avant activation locale ; réception navigateur et accès Production restent ouverts."
     },
     {
       "id": 6,
@@ -158,7 +158,7 @@
     "local-recovery-2026-10-18.md": "ab6e2a667d7b054b673a1b175044ed6504218a993fd9e8c6054b46fb970aac1f",
     "users-readonly.md": "af41c90a92f9f5f8baa0f9ad6094b0c87d6d54f07a1bff828e4494efe829ae20",
     "lot-1a-remote-reconciliation-current.md": "4a2a06adff60f7a6541f261af3bd00a63debc01197030717c389c7c22b813dfe",
-    "progress.md": "c85161bb2c521e926af7fde1f7191044479d39dfd2237978a118ed684b449fe0",
+    "progress.md": "9f301e6c2b3e7eee3d7ad8e2c1acdab1f6ebfe8d69369a0167b0e4f5c99d0b45",
     "lot-1a-preparation.md": "3561164a62bc6690a46d2f472c42037c11bd9aacc40add77d44814abdc5dd271",
     "recovery-cleanup-proof.json": "cb414a4c150ceb55204fcc9fca07696d05463e71642b4b4db35fd62819fa2524",
     "local-recovery-2026-10-18-proof.json": "5c9f10801159d1b94c66aebf2f4f45cb91e6a3447f6098968d85e03c83e0e26d",
@@ -179,7 +179,7 @@
     "activity-readonly-proof.json": "c362635524c4dc6cfe81cdbc489e2130a3e3285f8346462e5075915fddb51401",
     "activity-http-proof.json": "c4ae58e794d8944ecf0947935e799b834bb1742336984c5cd8c51201af35b806",
     "users-readonly-proof.json": "2a2ba32df2dca5050be282939596ed3a0a9e22695a56d4d6c6560f64ab5a8da2",
-    "roadmap.md": "e917fb3c6ac23844804890bd548ab01364bdf49cb6281f797a79d306df7cdf66",
+    "roadmap.md": "a51059ff9c41a0071421eb0a94f9c786b258e81dfe04458a85175c94cc447429",
     "activity-readonly.md": "0bc4135dfe48409cb19a8f2ad0b98e9593c65f83f46bc12b53a4a8e6fd1fbdff",
     "activity-pg.md": "ce3ae62c070f728174bc2cae7817d1ed727d42fd1e2e09d162cadd188b028aec",
     "lot-1a-local-statistics-guard.md": "0bd4f19d706296ccb96f8ea246f186c4e52ddc7a23da69519f64c2a1978a7a92",
@@ -198,10 +198,12 @@
     "local-admin.md": "ff799a6d56bcc2ac59885eb56d1d1084ee847c5372bb8f31ecfab171751ac2d3",
     "pedagogy-performance.md": "9108e009389a0e65d880478874bb19604ace9943364cb9cd301615097fdafd10",
     "pedagogy-performance-proof.json": "3a4ed57d4fef63ee64d9010230023a7f08ce9da995484c28477ee379a029b619",
-    "active-version-readonly.md": "7375193be844095cb4c11600c5d4853a89eebb8b10e26980f1a2c9864173fff3",
-    "active-version-readonly-proof.json": "e24b480998943ace233737100d7fdce98b72898fb9032f498b3d407bd7858d80",
-    "local-recovery-2026-10-20.md": "31fd8fecb947a1e58766b8247f198a7b153c4815ebcbd2b1be5078f4cce3265f",
-    "local-recovery-2026-10-20-proof.json": "7874dc97b73d76232570bf7828d2c450dfb1f93a765fc4a6885bc2fe1b85ccda"
+    "active-version-readonly.md": "e01b1b56fd5183822e60ecd6eed933dd97b6d5179208e7ae53039e0e07f1be40",
+    "active-version-readonly-proof.json": "2fe2e722cfde03e7e7e0cdf2e4ecc910949701471fe0220b7aee05304d95a9b5",
+    "local-recovery-2026-10-20.md": "d4fbdf06565eda9ef87c841f675039936ebcc479d53fc293c83abd5e6410ebea",
+    "local-recovery-2026-10-20-proof.json": "7874dc97b73d76232570bf7828d2c450dfb1f93a765fc4a6885bc2fe1b85ccda",
+    "active-version-target-local.md": "52c2773595cd8359b77a6841f2f64629ba6fc2072180976441fb531847b0b838",
+    "active-version-target-local-proof.json": "3936f6472a8a2feaf845585aa8871a3f9e70fdcb637d5a85da828d663c2bf593"
   },
   "unimplemented": [
     "Production analytics identity/source activation and remaining metrics (local general and pedagogical filters, grouping/ranking, PG/TLS and Auth/HTTP page/API qualified)",
@@ -217,7 +219,7 @@
     "Target deployment-host qualification",
     "Remote migration rehearsal/approval and controlled first publication",
     "Full SQL advisor remediation and global security qualification (SQL69: 33 warnings and 67 infos)",
-    "SQL70 advisors/publication regression, actual application-target upgrade/provision, active-version HTTP and activation"
+    "Dedicated active-version reader provision, physical connection, Auth/HTTP and explicit activation on the upgraded local target"
   ],
   "remoteWritesPerformed": false,
   "privilegedProductionKeysRetrieved": false,
@@ -245,7 +247,10 @@
     "mainOrigin": "http://127.0.0.1:3150",
     "publicationSyntheticOrigin": "http://127.0.0.1:3152",
     "browserExecuted": false,
-    "remoteOperations": false
+    "remoteOperations": false,
+    "dedicatedPublicationInstanceRestartedAfterTargetUpgrade": true,
+    "publicationHttpQualifiedOnSql70Target": true,
+    "publicationHttpQualificationAt": "2026-10-20T12:55:01.353Z"
   },
   "latestLocalQualification": {
     "sql68Proof": "reader-policies-proof.json",
@@ -300,9 +305,10 @@
     "currentRuntimeSourcesMatchLatestFullCheck": true,
     "sql70PhysicalReaderQualified": true,
     "newVerificationScriptsRequireCurrentFullCheck": false,
-    "currentFullCheckProof": "local-recovery-2026-10-20-proof.json",
+    "currentFullCheckProof": "active-version-target-local-proof.json",
     "currentFullCheckTests": 1387,
-    "currentFullCheckFiles": 72
+    "currentFullCheckFiles": 72,
+    "activeVersionTargetUpgradeProof": "active-version-target-local-proof.json"
   },
   "previousLocalServiceObservation": {
     "result": "PASS for actual local login availability",

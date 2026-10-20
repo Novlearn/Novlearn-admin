@@ -1,5 +1,8 @@
 # Reprise locale du 20 octobre — services et connexion rétablis
 
+**Suite de cette reprise :** la [cible locale passe ensuite à SQL 70](active-version-target-local.md).
+Les états de schéma et étapes restantes décrits ci-dessous sont ceux de la reprise antérieure.
+
 **L’application est de nouveau utilisable sur [3150](http://127.0.0.1:3150/login).**
 Les identifiants existants restent dans `.local/local-admin-1792143739689/login.txt`.
 La connexion Admin réelle, le dashboard, le catalogue et les pages de statistiques
