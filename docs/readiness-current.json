@@ -1,5 +1,5 @@
 {
-  "recordedAt": "2026-10-20T17:46:58.352Z",
+  "recordedAt": "2026-10-20T19:17:37.845Z",
   "scope": "Documentary traceability for all 20 original goal sections; not a functional test, receipt, permission or completion certificate",
   "referenceInputs": {
     "requestSha256": "fb9ac40863c57594878833b8a9fc0bd130a0cba9d0249d29c609051a54bded93",
@@ -34,8 +34,8 @@
     {
       "id": 1,
       "title": "Audit initial",
-      "evidenceSummary": "CDC, schéma local et API Engine examinés ; décisions et historique dans [progression](progress.md) et [Lot 1A](lot-1a-preparation.md).",
-      "remaining": "Réconcilier le schéma/historique distant avant application ; les relevés du 13 octobre ne prouvent pas l’état distant actuel."
+      "evidenceSummary": "CDC, schéma local et API Engine examinés ; décisions et historique dans [progression](progress.md) et [Lot 1A](lot-1a-preparation.md). [Relevé distant élargi du 20 octobre](remote-readiness-2026-10-20.json) et archives Git001–025 identifiées.",
+      "remaining": "Rapprocher les écarts du schéma vivant et les archives ; qualifier un delta sur copie avant toute proposition d’application distante."
     },
     {
       "id": 2,
@@ -52,8 +52,8 @@
     {
       "id": 4,
       "title": "Interface générale",
-      "evidenceSummary": "Identité [visuelle](visual-implementation.md), navigation, formulaires, retours d’erreur et essais sur 3140. Un [parcours manuel](local-user-testing.md) permet les essais progressifs sur l’application connectée 3150.",
-      "remaining": "Réception visuelle/accessibilité actuelle ; aucun succès navigateur déduit de la compilation ou du SSR."
+      "evidenceSummary": "Identité [visuelle](visual-implementation.md), navigation, formulaires, retours d’erreur et essais sur 3140. Un [parcours manuel](local-user-testing.md) permet les essais progressifs sur l’application connectée 3150. [Parcours court accepté par l’utilisateur](local-reception-2026-10-20.md) : connexion, brouillon, fraction MathLive, sauvegarde et réouverture.",
+      "remaining": "Réception complète visuelle/accessibilité, focus et mobile ; soucis d’interface non précisés reportés par l’utilisateur."
     },
     {
       "id": 5,
@@ -64,14 +64,14 @@
     {
       "id": 6,
       "title": "Creator visuel",
-      "evidenceSummary": "Édition canonique des vingt types, variables, contraintes, questions, politiques ; [Creator](creator-local-proof.json), [récupération](creator-recovery-proof.json).",
+      "evidenceSummary": "Édition canonique des vingt types, variables, contraintes, questions, politiques ; [Creator](creator-local-proof.json), [récupération](creator-recovery-proof.json). [Parcours court accepté par l’utilisateur](local-reception-2026-10-20.md) : connexion, brouillon, fraction MathLive, sauvegarde et réouverture.",
       "remaining": "Réception de la récupération en navigateur et avec la sauvegarde connectée ; courbes de formules non prises en charge faute de points calculés officiels."
     },
     {
       "id": 7,
       "title": "MathLive",
-      "evidenceSummary": "Saisie et clavier existants ; [preuves Creator](creator-local-proof.json) et [aperçu](preview-local-proof.json) distinctes des captures serveur.",
-      "remaining": "Réception des interactions actuelles dans une session navigateur autorisée ; ne pas présenter les tests de chaînes LaTeX comme des clics de clavier exécutés."
+      "evidenceSummary": "Saisie et clavier existants ; [preuves Creator](creator-local-proof.json) et [aperçu](preview-local-proof.json) distinctes des captures serveur. [Parcours court accepté par l’utilisateur](local-reception-2026-10-20.md) : connexion, brouillon, fraction MathLive, sauvegarde et réouverture.",
+      "remaining": "Clavier complet, focus et accessibilité restent à réceptionner ; le retour humain sur une fraction ne couvre pas toutes les interactions."
     },
     {
       "id": 8,
@@ -158,7 +158,7 @@
     "local-recovery-2026-10-18.md": "ab6e2a667d7b054b673a1b175044ed6504218a993fd9e8c6054b46fb970aac1f",
     "users-readonly.md": "af41c90a92f9f5f8baa0f9ad6094b0c87d6d54f07a1bff828e4494efe829ae20",
     "lot-1a-remote-reconciliation-current.md": "4a2a06adff60f7a6541f261af3bd00a63debc01197030717c389c7c22b813dfe",
-    "progress.md": "134af0e7253b3c553de719a192daf76883d390073a2a984e5bc0d8e2845df1c0",
+    "progress.md": "a662595adba29bc7328509e533a02bea5811f23cea1a897ea70170a95b4b4d9f",
     "lot-1a-preparation.md": "3561164a62bc6690a46d2f472c42037c11bd9aacc40add77d44814abdc5dd271",
     "recovery-cleanup-proof.json": "cb414a4c150ceb55204fcc9fca07696d05463e71642b4b4db35fd62819fa2524",
     "local-recovery-2026-10-18-proof.json": "5c9f10801159d1b94c66aebf2f4f45cb91e6a3447f6098968d85e03c83e0e26d",
@@ -179,7 +179,7 @@
     "activity-readonly-proof.json": "c362635524c4dc6cfe81cdbc489e2130a3e3285f8346462e5075915fddb51401",
     "activity-http-proof.json": "c4ae58e794d8944ecf0947935e799b834bb1742336984c5cd8c51201af35b806",
     "users-readonly-proof.json": "2a2ba32df2dca5050be282939596ed3a0a9e22695a56d4d6c6560f64ab5a8da2",
-    "roadmap.md": "4b30aa37183e26f007c120d473747082c9b6a784037c1966baaa1aa383761eed",
+    "roadmap.md": "483de7419e769cd670f62009c86c7022fc3caaf95a162a4ab443ec0fdf80e569",
     "activity-readonly.md": "0bc4135dfe48409cb19a8f2ad0b98e9593c65f83f46bc12b53a4a8e6fd1fbdff",
     "activity-pg.md": "ce3ae62c070f728174bc2cae7817d1ed727d42fd1e2e09d162cadd188b028aec",
     "lot-1a-local-statistics-guard.md": "0bd4f19d706296ccb96f8ea246f186c4e52ddc7a23da69519f64c2a1978a7a92",
@@ -207,8 +207,13 @@
     "active-version-connected.md": "5b105582074182c67738694ede5f9b417fb4d88abd225bcfcb31d29d3bff9f36",
     "active-version-connected-proof.json": "d6d3809c0abc4a5229f5b4fa3e1f1d656792fcbb1a431ac42114a5007970654b",
     "completed-work-local-proof.json": "fa299648e3c6e8bbe6ded6f263d76ccf0eb70b8f8e5d11669884909147773728",
-    "local-handover.md": "0b80820c9bad1994bfc849fa0a9cbfb357e6f4e5cf3d4a58b2664de1373ad8bb",
-    "sql-findings-triage.json": "246e4045b6499812b0aed284513af1fa734ab50b9a37952dddd109cb47e155df"
+    "local-handover.md": "8e19a67c56a3e076bf0f67ff46458dadeded627f50963ae43c4b1637ca276a8d",
+    "sql-findings-triage.json": "246e4045b6499812b0aed284513af1fa734ab50b9a37952dddd109cb47e155df",
+    "local-reception-2026-10-20.json": "082d92242f3e96ef2ed9517be6cb5e3396215b7eda56034c7d14d50f385b3e27",
+    "local-reception-2026-10-20.md": "b55e2180f01abc7600597d98bb00bb53674524cecf4fd23b3d9314fd9831ba11",
+    "remote-readiness-2026-10-20.json": "bd52183c053a2331027fbe30ec41d3587fd09b20a9c558d0b68f168415c4cdee",
+    "remote-readiness-2026-10-20.md": "3967ffc81b6f578ac110c6306c66d0e8803488dbcd1096b652e6c76d94523d5a",
+    "migration-archives-2026-10-20.json": "1d516967f7acb50702be1e0d605584727b2436fe49c3feffc3168611315221a1"
   },
   "unimplemented": [
     "Production analytics identity/source activation and remaining metrics (local general and pedagogical filters, grouping/ranking, PG/TLS and Auth/HTTP page/API qualified)",
@@ -460,9 +465,43 @@
     "document": "local-handover.md",
     "sqlFindingClassification": "sql-findings-triage.json",
     "basedOnAdminCommit": "4ab94d1610d10374c5cfb492a3f8d855a6965899",
-    "humanReception": "PENDING: manual local test requested; no response claimed",
+    "humanReception": "ACCEPTED for the short user-reported flow; broader reception and deferred UI issues remain",
     "functionalChanges": false,
     "remoteOperations": false,
-    "browserExecuted": false
+    "browserExecuted": false,
+    "manualReceptionProof": "local-reception-2026-10-20.json"
+  },
+  "manualReception": {
+    "recordedAt": "2026-10-20T19:17:37.829Z",
+    "evidenceType": "Direct human test report",
+    "userQuote": "le parcours fonctionne, on réglera certains soucis plus tard. Continue",
+    "testedOrigin": "http://127.0.0.1:3150",
+    "requestedSteps": [
+      "connexion",
+      "ouverture d’un brouillon",
+      "saisie d’une fraction avec MathLive",
+      "sauvegarde",
+      "réouverture"
+    ],
+    "result": "ACCEPTED for this reported short flow",
+    "unspecifiedUiIssues": "Deferred by user; no details or fixes inferred",
+    "automationExecuted": false,
+    "fullBrowserAcceptance": false,
+    "remoteChangeAuthorization": false,
+    "remaining": [
+      "Complete keyboard, focus and accessibility reception",
+      "Mobile reception",
+      "Recovery of unsaved browser state",
+      "Other element types and publication reception"
+    ]
+  },
+  "currentRemoteSchemaObservation": {
+    "document": "remote-readiness-2026-10-20.md",
+    "proof": "remote-readiness-2026-10-20.json",
+    "scope": "15 catalog categories on two remote SELECT snapshots and retained localSQL71, plus a separate six-count Staging NULL preflight; no exported business/Auth row values or remote writes",
+    "ownerArchives": "25 legacy migrations located in Novlearn per user; immutable Git provenance inventory retained separately",
+    "goalComplete": false,
+    "stagingNullability": "PASS for six NULL counts at one snapshot only; other constraints and Production not tested",
+    "repositoryArchives": "migration-archives-2026-10-20.json"
   }
 }

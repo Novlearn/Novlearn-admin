@@ -1,0 +1,24 @@
+{
+  "recordedAt": "2026-10-20T19:17:37.829Z",
+  "evidenceType": "Direct human test report",
+  "userQuote": "le parcours fonctionne, on réglera certains soucis plus tard. Continue",
+  "testedOrigin": "http://127.0.0.1:3150",
+  "requestedSteps": [
+    "connexion",
+    "ouverture d’un brouillon",
+    "saisie d’une fraction avec MathLive",
+    "sauvegarde",
+    "réouverture"
+  ],
+  "result": "ACCEPTED for this reported short flow",
+  "unspecifiedUiIssues": "Deferred by user; no details or fixes inferred",
+  "automationExecuted": false,
+  "fullBrowserAcceptance": false,
+  "remoteChangeAuthorization": false,
+  "remaining": [
+    "Complete keyboard, focus and accessibility reception",
+    "Mobile reception",
+    "Recovery of unsaved browser state",
+    "Other element types and publication reception"
+  ]
+}

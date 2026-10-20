@@ -1,5 +1,13 @@
 # Roadmap
 
+**20 octobre — retour humain et schéma vivant :** le [parcours court](local-reception-2026-10-20.md)
+est accepté ; les soucis d’interface non précisés sont reportés par l’utilisateur.
+Le [relevé distant élargi](remote-readiness-2026-10-20.md) identifie les écarts
+avec SQL71, notamment colonne distante supplémentaire, index et identités à
+préserver. Archives001–025 retrouvées dans Novlearn ; aucun changement distant.
+
+Les relevés ci-dessous gardent leur date et leur portée.
+
 **20 octobre — palier local vérifié :** les [deux compteurs D09](completed-work-local.md)
 et la [nouvelle expiration naturelle de 3 600 secondes](auth-expiry-local.md)
 passent réellement. Le contrôle complet passe **1 432 tests / 75 fichiers**,

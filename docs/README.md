@@ -1,5 +1,9 @@
 # Documentation NovLearn Admin
 
+[Parcours court reçu](local-reception-2026-10-20.md) : confirmation humaine ;
+soucis d’interface reportés et réception élargie restante. [Écarts du schéma vivant](remote-readiness-2026-10-20.md) :
+relevé en lecture seule, archives et préparation du delta Staging.
+
 [Tester progressivement l’application locale](local-user-testing.md) : connexion,
 brouillon, Creator, MathLive, vrai Engine, sauvegarde et retours à relever.
 

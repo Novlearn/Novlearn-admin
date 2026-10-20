@@ -1,5 +1,13 @@
 # Progression du goal NovLearn Admin
 
+**20 octobre — retour humain et schéma vivant :** le [parcours court](local-reception-2026-10-20.md)
+est accepté ; les soucis d’interface non précisés sont reportés par l’utilisateur.
+Le [relevé distant élargi](remote-readiness-2026-10-20.md) identifie les écarts
+avec SQL71, notamment colonne distante supplémentaire, index et identités à
+préserver. Archives001–025 retrouvées dans Novlearn ; aucun changement distant.
+
+Les relevés ci-dessous gardent leur date et leur portée.
+
 **20 octobre — réception et classement SQL :** le [dossier de passage](local-handover.md)
 précise les étapes qui dépendent d’observations ou décisions humaines. Les
 97 constats conservés sur la copie SQL 71 sont classés : 30 avertissements de

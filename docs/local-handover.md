@@ -12,14 +12,15 @@ Le commit `4ab94d1` conserve la dernière réalisation fonctionnelle : deux
 compteurs, huit rapports SQL/TLS/HTTP, 28 mesures de charge et contrôle général
 de 1 432 tests / 75 fichiers, build et smoke réussis. La nouvelle expiration
 naturelle de 3 600 secondes passe. Voir les [preuves](completed-work-local-proof.json).
-Ces résultats ne constituent pas une réception des interactions dans le navigateur.
+Le [parcours court](local-reception-2026-10-20.md) est ensuite accepté par
+l’utilisateur ; la réception plus large garde ses contrôles distincts.
 
 ## Actions qui restent nécessaires
 
 | Étape                   | Travail concret                                                                                                                                                                    | Condition pour avancer                                                                                                                 |
 | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| Réception locale        | Sur 3150 : connexion, brouillon, fraction MathLive, sauvegarde/réouverture ; puis aperçu Engine, clavier, focus, mobile et récupération d’une saisie selon le guide                | Observations humaines réelles ; le pilotage automatisé précédemment refusé ne sera pas réessayé par un autre moyen                     |
-| Historique SQL          | Obtenir auprès du propriétaire les 25 entrées historiques sans SQL et rapprocher le schéma complet courant                                                                         | Le relevé distant du 18 octobre et les 71 migrations locales ne suffisent pas à établir un plan d’application distant sûr              |
+| Réception locale        | Sur 3150 : connexion, brouillon, fraction MathLive, sauvegarde/réouverture ; puis aperçu Engine, clavier, focus, mobile et récupération d’une saisie selon le guide                | Parcours court accepté ; réception élargie restante. Le pilotage automatisé précédemment refusé reste respecté                         |
+| Historique SQL          | Archives001–025 identifiées dans Novlearn ; rapprocher leur provenance et les écarts du schéma vivant                                                                              | Le relevé élargi du 20 octobre et les archives ne suffisent pas, seuls, à qualifier un delta distant sûr                               |
 | Exploitation Staging    | Choisir l’hôte, le premier Admin, la politique MFA/récupération, les identités PG distinctes et le stockage des secrets ; qualifier sauvegarde/restauration et compatibilité élève | Dossier et autorisation propres à Staging ; aucune clé privilégiée générale utilisée comme lecteur limité                              |
 | Staging puis Production | Revoir les changements réellement nécessaires après réconciliation, faire valider le plan et ses vérifications ; qualifier Staging avant de proposer Production                    | Accords explicites et séparés ; pas d’application automatique des fichiers locaux, de réparation d’historique ou de publication réelle |
 

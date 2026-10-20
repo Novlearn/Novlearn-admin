@@ -1,5 +1,9 @@
 # Tester NovLearn Admin au fil du développement
 
+Le [parcours court a été confirmé par l’utilisateur](local-reception-2026-10-20.md).
+Les soucis d’interface sont reportés à sa demande ; les autres contrôles de ce
+guide restent à réceptionner selon leur portée.
+
 L’application connectée est disponible sur
 [http://127.0.0.1:3150/login](http://127.0.0.1:3150/login).
 Elle utilise des comptes et données d’essai sur cet ordinateur. Les brouillons
