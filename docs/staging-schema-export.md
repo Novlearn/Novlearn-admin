@@ -5,6 +5,20 @@ L’utilisateur ne dispose pas d’export de structure existant. L’outil local
 `scripts/export-staging-schema.ts` prépare cette prochaine étape ; **l’export
 réel et sa restauration ne sont pas encore exécutés**.
 
+## Tentative réelle du 20 octobre — accès IPv6 indisponible
+
+La forme de la configuration privée renseignée par l’utilisateur passe. La
+tentative réelle s’arrête sur `getaddrinfo ENOTFOUND` avant authentification.
+Le DNS possède une adresse AAAA mais aucune adresse A ; la connexion TCP IPv6
+échoue avec `ENETUNREACH`. Le mot de passe n’est donc pas encore authentifié.
+Aucun `pg_dump`, export réussi ou restauration n’est annoncé.
+
+La prochaine voie est le **Session pooler IPv4** proposé par Supabase.
+L’hôte exact, le port et le nom d’utilisateur Staging ont été demandés depuis
+Connect ; aucun endpoint n’est déduit de la région. TLS et lecture seule
+restent requis, sans changement réseau, ajout payant ou modification distante.
+[Connexion IPv4 prévue par Supabase](https://supabase.com/docs/guides/database/connecting-to-postgres#shared-pooler-session-mode).
+
 ## Configuration privée nécessaire
 
 Le fichier ignoré `.local/staging-schema-export/source.json` est réservé à la
@@ -102,5 +116,5 @@ distinction et les échecs initiaux du test et du contrôle de types.
 Le contrôle général final reste en échec : 1 493 tests passent et un test dépasse sa limite de cinq secondes. Aucun succès global n’est annoncé.
 Les étapes suivantes sont exécutées séparément après cet arrêt : typecheck PASS, lint PASS, format:check PASS, build PASS, test:smoke PASS. Ces résultats ne transforment pas le contrôle complet en réussite. Le timeout touche un test qui appelle directement le SDK officiel sous Windows ; la cause précise reste non établie. L’archive et la certification Linux antérieure sont inchangées. Aucun délai, nombre de cas ou assertion n’est modifié.
 
-L’export Staging et sa restauration restent non exécutés, faute de connexion
-opérateur configurée.
+L’export Staging et sa restauration restent non exécutés. La configuration
+privée est désormais renseignée ; voir le diagnostic réseau ci-dessus.

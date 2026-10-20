@@ -1,6 +1,6 @@
 {
   "result": "PASS for62 targeted contract tests and native synthetic dump workflow only; actual Staging export pending",
-  "recordedAt": "2026-10-20T20:03:46.908Z",
+  "recordedAt": "2026-10-20T21:05:56.497Z",
   "targetedTests": {
     "tests": 62,
     "files": 1,
@@ -169,5 +169,29 @@
     "testCriteriaChanged": false,
     "remoteOperations": false,
     "proofSha256": "2b7c5dd73e695f37ad4021d0d99fd70472004d458c4bfa19ee3ab2457da87c79"
-  }
+  },
+  "connectionAttempt": {
+    "at": "2026-10-20T21:05:56.497Z",
+    "configurationShapeCheck": "PASS",
+    "privateCredentialConfigured": true,
+    "credentialAuthenticationTested": false,
+    "sourceConnectionAttempted": true,
+    "sourceConnectionEstablished": false,
+    "operatorResult": "FAIL before authentication",
+    "operatorFailure": "getaddrinfo ENOTFOUND db.tksvbkvfusrnxulpahky.supabase.co",
+    "directHostARecord": "ENODATA",
+    "directHostAAAARecordPresent": true,
+    "ipv6TcpResult": "ENETUNREACH",
+    "pgDumpStarted": false,
+    "actualStagingExportExecuted": false,
+    "restorationExecuted": false,
+    "remoteWrites": false,
+    "securityProtectionChanged": false,
+    "privateConfigurationModified": false,
+    "partialArtifact": ".local/staging-schema-export/export-1792530252706",
+    "failureSha256": "f9cb62ad1b6550a9cac71d0267c5177dcc8db4343981f649c0e2c29fecd816a4",
+    "nextStep": "Obtain exact Staging Session pooler host/port/user from Dashboard Connect; retain TLS verification and read-only requirements; no host guessed or project setting changed"
+  },
+  "actualStagingConnectionAttempted": true,
+  "actualStagingConnectionEstablished": false
 }

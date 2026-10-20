@@ -1,5 +1,7 @@
 # Roadmap
 
+**20 octobre — tentative d’export Staging :** le fichier privé renseigné passe la vérification de forme. La connexion directe échoue avant authentification : DNS AAAA uniquement, puis `ENETUNREACH` en TCP IPv6. Aucun dump lancé ni mot de passe validé. L’endpoint officiel Session pooler Staging est attendu depuis Connect pour poursuivre en IPv4, avec TLS et lecture seule inchangés. [Diagnostic](staging-schema-export.md). Aucun distant modifié.
+
 **20 octobre — export standard préparé :** l’[outil opérateur](staging-schema-export.md) passe 62 tests et un dump natif sans données sur la copie synthétique, avec conservation des états des triggers, tables et séquences. Le contrôle général final reste en échec : 1 493 tests passent et un test dépasse sa limite de cinq secondes. Aucun succès global n’est annoncé. Connexion et export Staging réels, puis restauration isolée restent en attente du mot de passe PostgreSQL existant dans le fichier privé local. Aucun distant modifié ; goal et Lot 1A ouverts.
 
 **20 octobre — retour humain et schéma vivant :** le [parcours court](local-reception-2026-10-20.md)

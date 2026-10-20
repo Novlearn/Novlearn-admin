@@ -218,7 +218,7 @@
     "local-recovery-2026-10-18.md": "ab6e2a667d7b054b673a1b175044ed6504218a993fd9e8c6054b46fb970aac1f",
     "users-readonly.md": "af41c90a92f9f5f8baa0f9ad6094b0c87d6d54f07a1bff828e4494efe829ae20",
     "lot-1a-remote-reconciliation-current.md": "4a2a06adff60f7a6541f261af3bd00a63debc01197030717c389c7c22b813dfe",
-    "progress.md": "f4c8093fbece2a7e60298ccad7abf25d5fc62155fa787b1354bf04c29affacd4",
+    "progress.md": "65bd555056b286249d682011c889b830d43c59c24fd58055712c26e0132f3060",
     "lot-1a-preparation.md": "3561164a62bc6690a46d2f472c42037c11bd9aacc40add77d44814abdc5dd271",
     "recovery-cleanup-proof.json": "cb414a4c150ceb55204fcc9fca07696d05463e71642b4b4db35fd62819fa2524",
     "local-recovery-2026-10-18-proof.json": "5c9f10801159d1b94c66aebf2f4f45cb91e6a3447f6098968d85e03c83e0e26d",
@@ -239,7 +239,7 @@
     "activity-readonly-proof.json": "c362635524c4dc6cfe81cdbc489e2130a3e3285f8346462e5075915fddb51401",
     "activity-http-proof.json": "c4ae58e794d8944ecf0947935e799b834bb1742336984c5cd8c51201af35b806",
     "users-readonly-proof.json": "2a2ba32df2dca5050be282939596ed3a0a9e22695a56d4d6c6560f64ab5a8da2",
-    "roadmap.md": "ac8bcaaa2122b7353d54226a2a3a60ef5d5f3ebabd197fe8cdcd7c7fcb7700e5",
+    "roadmap.md": "c44784b815d9c8a5b05c4b4416b5943a9c884a00ab7744f24675720af78fda3e",
     "activity-readonly.md": "0bc4135dfe48409cb19a8f2ad0b98e9593c65f83f46bc12b53a4a8e6fd1fbdff",
     "activity-pg.md": "ce3ae62c070f728174bc2cae7817d1ed727d42fd1e2e09d162cadd188b028aec",
     "lot-1a-local-statistics-guard.md": "0bd4f19d706296ccb96f8ea246f186c4e52ddc7a23da69519f64c2a1978a7a92",
@@ -274,8 +274,8 @@
     "remote-readiness-2026-10-20.json": "bd52183c053a2331027fbe30ec41d3587fd09b20a9c558d0b68f168415c4cdee",
     "remote-readiness-2026-10-20.md": "3967ffc81b6f578ac110c6306c66d0e8803488dbcd1096b652e6c76d94523d5a",
     "migration-archives-2026-10-20.json": "1d516967f7acb50702be1e0d605584727b2436fe49c3feffc3168611315221a1",
-    "staging-schema-export.md": "bd88990c6fe7accc3a52e141d60a0c77ca77db2e80e4994acc2ce1ce94729362",
-    "staging-schema-export-proof.json": "dc519b50e5b78413dd88b1123064f9667b1e511b5602011884370846dd494cd7"
+    "staging-schema-export.md": "14ebbe708c6f575a33f6384b865cce7deb472d2e83de6df321b6117870d05179",
+    "staging-schema-export-proof.json": "24d63cee7717a51071dbb499016dec1ebd9763f5e200a4cf13d655b04972815c"
   },
   "unimplemented": [
     "Production analytics identity/source activation and remaining metrics (local general and pedagogical filters, grouping/ranking, PG/TLS and Auth/HTTP page/API qualified)",
@@ -588,7 +588,7 @@
     "document": "staging-schema-export.md",
     "proof": "staging-schema-export-proof.json",
     "operatorConfiguration": ".local/staging-schema-export/source.json",
-    "state": "Prepared;62 contract tests and native synthetic snapshot/dump pass; real credentials/export pending",
+    "state": "Private configuration shape accepted; direct connection fails before authentication (IPv6 unavailable); exact Staging Session pooler endpoint pending",
     "actualStagingExportExecuted": false,
     "restorationExecuted": false,
     "remoteWrites": false,
@@ -619,6 +619,28 @@
         "docs/readiness-current.md",
         "docs/readiness-current.json"
       ]
+    },
+    "connectionAttempt": {
+      "at": "2026-10-20T21:05:56.497Z",
+      "configurationShapeCheck": "PASS",
+      "privateCredentialConfigured": true,
+      "credentialAuthenticationTested": false,
+      "sourceConnectionAttempted": true,
+      "sourceConnectionEstablished": false,
+      "operatorResult": "FAIL before authentication",
+      "operatorFailure": "getaddrinfo ENOTFOUND db.tksvbkvfusrnxulpahky.supabase.co",
+      "directHostARecord": "ENODATA",
+      "directHostAAAARecordPresent": true,
+      "ipv6TcpResult": "ENETUNREACH",
+      "pgDumpStarted": false,
+      "actualStagingExportExecuted": false,
+      "restorationExecuted": false,
+      "remoteWrites": false,
+      "securityProtectionChanged": false,
+      "privateConfigurationModified": false,
+      "partialArtifact": ".local/staging-schema-export/export-1792530252706",
+      "failureSha256": "f9cb62ad1b6550a9cac71d0267c5177dcc8db4343981f649c0e2c29fecd816a4",
+      "nextStep": "Obtain exact Staging Session pooler host/port/user from Dashboard Connect; retain TLS verification and read-only requirements; no host guessed or project setting changed"
     }
   }
 }
