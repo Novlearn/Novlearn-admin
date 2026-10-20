@@ -1,5 +1,7 @@
 # Aperçu et tests Engine — implémentation locale
 
+**Proposition du 21 octobre :** le [calcul officiel des courbes](engine-graph-proposal.md) est décrit avec son périmètre, ses limites et ses critères de certification. L’extension attend une autorisation explicite pour modifier l’Engine ; aucun échantillonnage ni nouveau rendu n’est implémenté par cette proposition.
+
 **Rendu du 16 octobre :** les [figures et vecteurs](coordinate-rendering.md)
 ajoutent les flèches 2D/3D, le découpage des droites à la fenêtre prescrite,
 les bornes MathLive et une description géométrique. Les projections réellement

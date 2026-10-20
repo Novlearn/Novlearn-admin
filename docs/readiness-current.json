@@ -136,8 +136,8 @@
     {
       "id": 8,
       "title": "Engine officiel",
-      "evidenceSummary": "[1 540 tests et qualification Linux](engine-numeric-cache-proof.json), [adoption](engine-admin-adoption-proof.json), puis huit contrôles natifs après [reprise](local-recovery-2026-10-18-proof.json).",
-      "remaining": "Hôte de déploiement, compatibilité élève et nouvelle capacité de tracé de formules restent des portes séparées. La suite source Engine n’est pas relancée pendant la reprise."
+      "evidenceSummary": "[1 540 tests et qualification Linux](engine-numeric-cache-proof.json), [adoption](engine-admin-adoption-proof.json), puis huit contrôles natifs après [reprise](local-recovery-2026-10-18-proof.json). [Proposition de calcul des courbes à autoriser](engine-graph-proposal.md), non implémentée.",
+      "remaining": "Hôte de déploiement et compatibilité élève restent séparés. L’extension locale des courbes est proposée mais attend une autorisation explicite ; aucune nouvelle certification Engine."
     },
     {
       "id": 9,
@@ -218,7 +218,7 @@
     "local-recovery-2026-10-18.md": "ab6e2a667d7b054b673a1b175044ed6504218a993fd9e8c6054b46fb970aac1f",
     "users-readonly.md": "af41c90a92f9f5f8baa0f9ad6094b0c87d6d54f07a1bff828e4494efe829ae20",
     "lot-1a-remote-reconciliation-current.md": "4a2a06adff60f7a6541f261af3bd00a63debc01197030717c389c7c22b813dfe",
-    "progress.md": "61036ab95cbf94e9e9f836c7071feaad4b206f844c03782975dfb7f04973aa01",
+    "progress.md": "fdd2d677cced98f7f5bc61125ecaaf138aaf12391c69b43ade12b05042f104d2",
     "lot-1a-preparation.md": "3561164a62bc6690a46d2f472c42037c11bd9aacc40add77d44814abdc5dd271",
     "recovery-cleanup-proof.json": "cb414a4c150ceb55204fcc9fca07696d05463e71642b4b4db35fd62819fa2524",
     "local-recovery-2026-10-18-proof.json": "5c9f10801159d1b94c66aebf2f4f45cb91e6a3447f6098968d85e03c83e0e26d",
@@ -239,7 +239,7 @@
     "activity-readonly-proof.json": "c362635524c4dc6cfe81cdbc489e2130a3e3285f8346462e5075915fddb51401",
     "activity-http-proof.json": "c4ae58e794d8944ecf0947935e799b834bb1742336984c5cd8c51201af35b806",
     "users-readonly-proof.json": "2a2ba32df2dca5050be282939596ed3a0a9e22695a56d4d6c6560f64ab5a8da2",
-    "roadmap.md": "4fc0df253ee2916af4f8a0796bbbe8ecd02731dda88ecca9df43e18f8932eebd",
+    "roadmap.md": "d7c19a6e185d796aa8f1cb58d46ed0082d2558b76a8f28560f3d3a3be45e598b",
     "activity-readonly.md": "0bc4135dfe48409cb19a8f2ad0b98e9593c65f83f46bc12b53a4a8e6fd1fbdff",
     "activity-pg.md": "ce3ae62c070f728174bc2cae7817d1ed727d42fd1e2e09d162cadd188b028aec",
     "lot-1a-local-statistics-guard.md": "0bd4f19d706296ccb96f8ea246f186c4e52ddc7a23da69519f64c2a1978a7a92",
@@ -285,13 +285,16 @@
     "creator-recovery.md": "ee99fddcd3c8a8bd8c3350b24ebac9da3c1200803e10823dc34e848de37dafde",
     "local-user-testing.md": "804715828c0d8e96d0f5983afe4b1283d83000435b0d988f1dceead4a9dc6c58",
     "recovery-reception-2026-10-21.md": "f9bf72a8378861bd785935639c941055c0f06d74c688f1ae11ce976a23856918",
-    "recovery-reception-2026-10-21.json": "ac1c9dfd1d357cbc331d4f0e71dadde1c63e1c1cc568e99af64c85db68eb36fd"
+    "recovery-reception-2026-10-21.json": "ac1c9dfd1d357cbc331d4f0e71dadde1c63e1c1cc568e99af64c85db68eb36fd",
+    "engine-graph-proposal.md": "c4b5ad3c7afe635513b631dd2595fb532ba2af1cfa85de20d387dd199031ffc1",
+    "engine-graph-proposal.json": "3952928915869a5b31160e5e270fe505d23302d6ea74713b173daa4212cdf024",
+    "preview.md": "f77378925dfd3ab8e653a989b64de813580c9aaba88df9986866b29ba49989c3"
   },
   "unimplemented": [
     "Production analytics identity/source activation and remaining metrics (local general and pedagogical filters, grouping/ranking, PG/TLS and Auth/HTTP page/API qualified)",
     "Production user identity/source activation (local list and detailed recorded progression/history qualified)",
     "Current Production active-version indicator",
-    "Official Engine formula sampling and dependent curve rendering",
+    "Official Engine formula sampling and dependent curve rendering: concrete proposal prepared, explicit Engine extension authorization pending",
     "Operational identity policy for MFA/recovery remains undecided; no implicit local MFA activation"
   ],
   "notExecuted": [
@@ -713,5 +716,15 @@
     "remoteApplicationAuthorized": false,
     "lot1AComplete": false,
     "goalComplete": false
+  },
+  "engineGraphProposal": {
+    "recordedAt": "2026-10-20T22:31:00.809Z",
+    "document": "engine-graph-proposal.md",
+    "sourceEvidence": "engine-graph-proposal.json",
+    "status": "PENDING_USER_AUTHORIZATION",
+    "implemented": false,
+    "engineFilesModified": false,
+    "newTestsExecuted": false,
+    "remoteWrites": false
   }
 }
