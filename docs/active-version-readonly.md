@@ -1,10 +1,28 @@
-# Version active de la cible — préparation locale
+# Version active de la cible — qualification locale en cours
+
+**20 octobre — reprise confirmée après réparation utilisateur :** les 14 services
+conservés sont redémarrés sans recréation. La [connexion réelle et huit contrôles
+Engine](local-recovery-2026-10-20.md) passent sur [3150](http://127.0.0.1:3150/login),
+avec les mêmes identifiants ; les vingt anciens rapports restent exacts.
+SQL 70 passe quinze prérequis négatifs, l’annulation DDL et une restauration
+peuplée (62 tables, 11 séquences). Le vrai lecteur TLS passe huit groupes,
+17 refus et trois dérives de droits. La cible applicative demeure SQL 64,
+intégralement inchangée : advisors, régression de publication, upgrade et
+qualification HTTP du nouvel indicateur restent à effectuer avant activation.
+Le contrôle complet courant réussit : **1 387 tests / 72 fichiers**, types, lint
+sans erreur, format, build, onze SQL standalone exacts et smoke. Les 539 sources
+incluent les deux bancs de test ; seules les preuves documentaires listées sont
+complétées après le contrôle. Aucun distant ni navigateur automatisé ; le goal
+et le Lot 1A restent ouverts.
+
+Les relevés suivants décrivent les observations antérieures à cette reprise.
 
 Le CDC §7.3 demande de vérifier la version actuellement publiée. La fiche
 prépare désormais cette observation avec une capacité distincte de publication.
 **La lecture connectée n’est pas encore activée dans les applications locales.**
-Les preuves SQL natives sont réussies ; la qualification du login/TLS, du
-parcours HTTP réel et la réception navigateur restent ouvertes.
+Les preuves SQL natives, les prérequis/restauration et le vrai lecteur TLS
+réussissent. L’upgrade de la cible, le parcours HTTP réel de cet indicateur et
+la réception navigateur restent ouverts.
 
 ## Comportement et autorité
 
@@ -77,50 +95,37 @@ Les [preuves datées](active-version-readonly-proof.json) séparent les périmè
   page et rendu HTML serveur. Types et lint sans erreur passent ; le seul
   avertissement `<img>` est antérieur. Ces tests ne remplacent pas TLS ou HTTP réels.
 
-Une nouvelle identité et des certificats ont été préparés **sur cette copie
-uniquement**. L’état conservé est `provisioned`, sans preuve de réussite du test
-physique. Le handle initial n’est plus disponible ; le 20 octobre, l’inspection
-utilisateur ne trouve ni processus de ce test ni canal Docker Linux. Aucun
-redémarrage du test, réensemencement, remplacement de mot de passe ou succès
-présumé n’en est déduit. La reprise explicite `--resume` vérifie le snapshot,
-les fichiers TLS et HBA et réutilise cette identité, sans reprovisionnement.
-Chaque nouvelle exécution conserve ses propres journaux.
+La reprise du 20 octobre réutilise l’identité et les certificats déjà préparés,
+sans reprovisionnement. Huit groupes physiques SCRAM/TLS, 17 refus et trois
+dérives passent ; les six observations exactes et deux connexions simultanées
+sont exercées. Le snapshot des lignes, séquences, rôles et droits reste exact.
+Une destination de montage manquante a été corrigée dans le banc de test, sans
+modifier la lecture seule, les quotas ou les attentes. Les journaux de cet échec
+et de la reprise réussie restent distincts.
+
+Le nouveau banc des prérequis passe réellement quinze refus P0001 attendus,
+l’annulation DDL, le COMMIT puis le refus de réapplication, et la restauration
+peuplée de SQL 70 : 62 tables, 11 séquences, six observations, 14 colonnes.
+Il conserve les rôles et empreintes personnalisés. Seul l’ordre des ACL est
+normalisé entre clusters ; les mots de passe intégrés propres aux nouveaux
+clusters sont exclus de cette comparaison, leurs attributs restant comparés.
+Les deux nouvelles copies sont sans réseau ni port et bornées.
 
 ## État actuel et suite
 
-Le 20 octobre à 11:33 UTC, les ports applicatifs 3150 et 3152 refusent les
-connexions dans le contexte utilisateur. Le résultat du 19 octobre reste
-historique ; la connexion actuelle n’est pas déclarée opérationnelle. L’utilisateur
-est invité à ouvrir Docker normalement. Aucun reset, arrêt forcé, changement de
-protection, contournement navigateur ou modification distante n’est effectué.
+La [connexion et le moteur de l’application sont rétablis](local-recovery-2026-10-20.md).
+Les huit contrôles Engine après reprise passent, sans relancer les 1 540 tests
+source antérieurs. La cible applicative reste intégralement SQL 64 et l’indicateur
+reste fermé par défaut. La qualification physique de sa copie ne vaut pas une
+activation sur la vraie cible.
 
-Après retour du moteur : reprendre le test PG/TLS conservé, terminer les essais
-de prérequis/restauration SQL et advisors, puis qualifier l’upgrade de la vraie
-cible **locale** et sa régression de publication avant d’y activer le lecteur.
-La copie de qualification ne doit pas être présentée comme une cible courante.
-Raccorder ensuite les lanceurs sans changer les configurations préexistantes,
-relancer les services conservés, vérifier connexion/Engine et exercer Auth/HTTP
-réels et confidentialité. La réception navigateur reste soumise à une méthode
-autorisée. Production, déploiement, push et première publication réelle restent
-fermés ; le Lot 1A et le goal ne sont pas terminés.
+Avant activation : advisors SQL 70, régression de publication sur copie, upgrade
+et provision de la cible locale réelle, puis Auth/HTTP et confidentialité.
+Les lanceurs devront lire la nouvelle capacité explicitement, sans remplacer
+les huit configurations existantes. Réception navigateur, autorisations et
+portes distantes restent ouvertes ; le Lot 1A et le goal ne sont pas terminés.
 
-**Contrôle complet du 20 octobre :** 1 387 tests / 72 fichiers, intégrité du
-package Engine, types, lint, format, build standalone, onze fichiers SQL exacts
-et smoke passent sur une copie des 536 sources restées identiques. Seules les
-mises à jour documentaires et de preuves explicitement listées suivent ce
-contrôle. Les 1 540 tests du dépôt Engine ne sont pas relancés ; aucun résultat
-TLS/HTTP connecté n’est ajouté. Le commit SQL local `0808eb7`
-porte uniquement la nouvelle migration.
-
-Un [aperçu synthétique](http://127.0.0.1:3140/) est rouvert sans Auth, base ou
-Engine : huit contrôles HTTP passent à 11:39 UTC, avec logos disponibles et
-fichier privé existant refusé. Ce service permet les essais manuels d’interface,
-sans connexion ni sauvegarde réelle ; aucun navigateur n’est piloté. Une
-première attente de statut du banc sur un fichier `.env` absent était erronée
-(403 attendu au lieu de 404). Son absence est maintenant vérifiée avant
-l’assertion 404 ; le fichier privé existant doit toujours répondre 403.
-
-Le dernier relevé utilisateur à 11:43 UTC retrouve le canal Docker absent et
-3150/3152 toujours en refus de connexion. Les huit configurations existantes
-restent exactes. La préparation et les identifiants sont conservés pour la
-reprise normale, sans reset ni contournement.
+Le contrôle complet précédent de 1 387 tests / 72 fichiers, build et smoke reste
+celui de la préparation committée `0a7dfc6`. Les nouvelles vérifications et leur
+contrôle complet courant sont consignés séparément dans la preuve de reprise.
+Le commit SQL `0808eb7` reste inchangé. Aucun accès distant n’est activé.

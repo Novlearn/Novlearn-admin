@@ -1,6 +1,6 @@
 {
-  "recordedAt": "2026-10-20T11:44:35.390Z",
-  "result": "Native SQL PASS; connected qualification and activation pending",
+  "recordedAt": "2026-10-20T12:34:03.649Z",
+  "result": "Native SQL, prerequisites/restoration and physical reader PASS; actual target upgrade/HTTP/activation pending",
   "scope": "Current target-version metadata reader and protected UI/API preparation; not runtime activation, browser acceptance, Production or Lot 1A completion",
   "migration": {
     "file": "20261019184535_novlearn_admin_active_version_readonly.sql",
@@ -78,6 +78,38 @@
       "scope": "domain/configuration/mocked PG/protected route/page/SSR card; not real TLS or browser"
     },
     "fullCheck": {
+      "result": "PASS",
+      "date": "2026-10-20T12:33:23.646Z",
+      "artifact": "C:\\Users\\balth\\AppData\\Local\\Temp\\novlearn-admin-check-1792499321074",
+      "exitCode": 0,
+      "tests": 1387,
+      "files": 72,
+      "sourceFiles": 539,
+      "allCopiedSourcesStillMatch": true,
+      "fullCheckCommand": "npm run check",
+      "separateBuildDirectory": true,
+      "independentTemporaryProject": true,
+      "dependenciesCopied": true,
+      "applicationServersInterrupted": false,
+      "privateEnvironmentFilesCopied": false,
+      "rawProof": "C:\\Users\\balth\\AppData\\Local\\Temp\\novlearn-admin-check-1792499321074/proof.json",
+      "rawProofSha256": "58048b9145663c8c082fdcdd49447cea301ddf5cf8168d2992589bc33ff640ca",
+      "sourceSnapshotManifest": "C:\\Users\\balth\\AppData\\Local\\Temp\\novlearn-admin-check-1792499321074/source-hashes.json",
+      "sourceSnapshotManifestSha256": "dc1ff87fccd08958df1b3b0e3717e3db3cfe91931778f0a3ba6eb790122c4f9b",
+      "standaloneExactSqlFiles": 11,
+      "evidenceOnlyChangesAfterCompletion": [
+        "docs/active-version-readonly-proof.json",
+        "docs/active-version-readonly.md",
+        "docs/progress.md",
+        "docs/readiness-current.json",
+        "docs/readiness-current.md",
+        "docs/roadmap.md",
+        "docs/local-recovery-2026-10-20.md",
+        "docs/local-recovery-2026-10-20-proof.json"
+      ],
+      "scope": "Exact snapshot of 539 sources qualified at completion, including both new/corrected test harnesses. Only the eight listed documentation/evidence files are updated after completion; runtime, tests and tooling remain exact. Not browser, remote or full Engine source-suite acceptance."
+    },
+    "previousFullCheck": {
       "result": "PASS",
       "date": "2026-10-20T11:41:07.381Z",
       "artifact": "C:\\Users\\balth\\AppData\\Local\\Temp\\novlearn-admin-check-1792496246511",
@@ -226,5 +258,76 @@
     "browserExecuted": false,
     "remoteOperations": false,
     "initialDiagnosticExpectationCorrection": "The first diagnostic expected 403 for /.env and got 404. Local absence was then verified (ENOENT) and exact 404 asserted; the existing private configuration still requires and returns 403. No data-exposure criterion changed."
+  },
+  "qualification20October": {
+    "proof": "local-recovery-2026-10-20-proof.json",
+    "physicalReader": {
+      "rawProof": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\active-version-pg-1792436591935/run-1792498895295/proof.json",
+      "rawProofSha256": "1d0c2e6b126ba96e394956f8e8360b3255a4586795bf76e79dce8b9a8f600869",
+      "at": "2026-10-20T12:21:59.053Z",
+      "realTls": true,
+      "realServerReader": true,
+      "checks": 8,
+      "sqlDenials": 17,
+      "drifts": 3,
+      "observations": 6,
+      "allRowsSequencesMetadataPreserved": true,
+      "initialAttempt": {
+        "result": "FAIL",
+        "dockerExitCode": 125,
+        "log": ".local/lot1a/active-version-pg-1792436591935/run-1792498849405/connection.log",
+        "reason": "Nested mount destination absent under read-only parent bind",
+        "fix": "Create empty runner/node_modules before mounting, preserving all read-only and sandbox flags"
+      },
+      "sourceHashes": {
+        "src/lib/active-version-pg.ts": "a4e6e44b9032b7b5259e0a294bb0ff1bbb6dbe3da0419e30a85d2d1abe9905a0",
+        "src/lib/active-version-config.ts": "3bfbe6545eaf03f2ecba1ac5d0897bbc70727379f2f4e1c2584c2c939c8fb363",
+        "src/lib/active-version.ts": "7e4e61f0e7926e4da3bf523057c2664060cfb2ef52911e51167048d69aba6b85",
+        "scripts/active-version-query.sql": "b11727e750ea4cd619816240519dadeae9200716a29f780be3cb9f6cc8d7be1c",
+        "scripts/active-version-reader-audit.sql": "6e3a5b55feee6346f3249f91a6c44015ca9509446bd0fe09d22f4877a0c59fa8",
+        "scripts/test-active-version-pg-local.mjs": "1855970a760c442aaafd2eec1f34da1e04357c18e7a1a573d7131e02a0cf765b",
+        "scripts/test-active-version-pg-worker.mjs": "171af5802387830fd7a16a5b954c9effd7a37da0fb40417351b323f1c96ca570"
+      }
+    },
+    "prerequisites": {
+      "rawProof": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\active-version-prerequisites-1792498891090/proof.json",
+      "rawProofSha256": "32059d21e2ba46e2f867c762912a356e50f12e0e7fcd54e9d1b52609b7946a67",
+      "at": "2026-10-20T12:22:38.214Z",
+      "failedPreconditions": 15,
+      "successfulDdlRolledBackExactly": true,
+      "realCanonicalCommitExecuted": true,
+      "reapplicationRefusedWithoutMutation": true,
+      "restoredObservations": 6,
+      "preservedTables": 62,
+      "preservedSequences": 11,
+      "readerColumns": 14,
+      "customScramDigestsPreserved": true,
+      "builtinRoleAttributesComparedExceptPasswords": true,
+      "containers": [
+        {
+          "name": "novlearn-admin-active-version-preflight-1792498891090",
+          "id": "c9d1c50bc5afde234efa774b85580d05177d94bbb0e7b67c864b1dfaa98e846b",
+          "network": "none",
+          "cpuLimit": 2,
+          "memoryBytes": 1073741824,
+          "swapBytes": 0,
+          "pidsLimit": 256
+        },
+        {
+          "name": "novlearn-admin-active-version-restored-1792498891090",
+          "id": "e1b289c2c36eb80267f407c99bbacd117014d74a5e12760d06915ae9221c8cb3",
+          "network": "none",
+          "cpuLimit": 2,
+          "memoryBytes": 1073741824,
+          "swapBytes": 0,
+          "pidsLimit": 256
+        }
+      ],
+      "source": "scripts/test-active-version-prerequisites-local.mjs",
+      "sha256": "e0af9f94cde5e0f1130794bacda20b862f684e9400a5a3bf69ac3834c90cf16c"
+    },
+    "applicationTargetUpgraded": false,
+    "activeVersionReaderActivated": false,
+    "completeCheckProof": "local-recovery-2026-10-20-proof.json"
   }
 }

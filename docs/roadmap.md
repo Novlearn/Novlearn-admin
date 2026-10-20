@@ -1,5 +1,27 @@
 # Roadmap
 
+**20 octobre — reprise confirmée après réparation utilisateur :** les 14 services
+conservés sont redémarrés sans recréation. La [connexion réelle et huit contrôles
+Engine](local-recovery-2026-10-20.md) passent sur [3150](http://127.0.0.1:3150/login),
+avec les mêmes identifiants ; les vingt anciens rapports restent exacts.
+SQL 70 passe quinze prérequis négatifs, l’annulation DDL et une restauration
+peuplée (62 tables, 11 séquences). Le vrai lecteur TLS passe huit groupes,
+17 refus et trois dérives de droits. La cible applicative demeure SQL 64,
+intégralement inchangée : advisors, régression de publication, upgrade et
+qualification HTTP du nouvel indicateur restent à effectuer avant activation.
+Le contrôle complet courant réussit : **1 387 tests / 72 fichiers**, types, lint
+sans erreur, format, build, onze SQL standalone exacts et smoke. Les 539 sources
+incluent les deux bancs de test ; seules les preuves documentaires listées sont
+complétées après le contrôle. Aucun distant ni navigateur automatisé ; le goal
+et le Lot 1A restent ouverts.
+
+Les relevés suivants décrivent les observations antérieures à cette reprise.
+
+**20 octobre — panne Docker précisée :** le [crash Ingest au renommage du socket](local-recovery-2026-10-20.md)
+est reproduit par un unique lancement normal. Les vérifications connectées
+restent arrêtées, sans reset ni contournement. Quinze scénarios de prérequis
+et une restauration SQL 70 sont préparés, contrôlés statiquement, non exécutés.
+
 **20 octobre — préparation de la version cible :** [SQL 70 et l’indicateur](active-version-readonly.md)
 passent le rejeu neuf, l’upgrade d’une copie et les tests ciblés. Login/TLS et
 Auth/HTTP réels restent à qualifier avant activation locale. Docker est

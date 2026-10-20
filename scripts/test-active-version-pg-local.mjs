@@ -294,6 +294,8 @@ await copyFile(
   'scripts/test-active-version-pg-worker.mjs',
   runner + '/worker.mjs',
 );
+// The parent bind is read-only: nested bind destinations must already exist.
+await mkdir(runner + '/node_modules');
 const workerArgs = [
   'run',
   '--rm',
