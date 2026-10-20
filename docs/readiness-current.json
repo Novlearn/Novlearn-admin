@@ -684,10 +684,7 @@
       "login": "PASS: existing local credentials and logout",
       "engine": "PASS:8 native HTTP checks;22 previous receipts preserved",
       "publication": "PASS: fresh native prepare then cancel; no target transfer",
-      "applicationOrigins": [
-        "http://127.0.0.1:3150",
-        "http://127.0.0.1:3152"
-      ],
+      "applicationOrigins": ["http://127.0.0.1:3150", "http://127.0.0.1:3152"],
       "remoteOperations": false
     }
   }
