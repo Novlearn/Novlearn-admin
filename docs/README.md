@@ -1,7 +1,17 @@
 # Documentation NovLearn Admin
 
-[Statistiques pédagogiques — socle SQL](pedagogy-readonly.md) : filtres,
-répartition et classement qualifiés sur copies ; raccordement serveur/UI restant.
+[Tester progressivement l’application locale](local-user-testing.md) : connexion,
+brouillon, Creator, MathLive, vrai Engine, sauvegarde et retours à relever.
+
+[Expiration et correctif Auth](auth-expiry-local.md) : vrais essais conservés,
+25 tests de l’adaptateur et recontrôle de la paire expirée ; nouvelle expiration
+complète en cours. [SQL 71](legacy-search-path.md) : prérequis, restauration,
+rejeu neuf et advisors comparables. Le [bilan actuel](readiness-current.md)
+distingue ces résultats des jalons historiques ci-dessous.
+
+[Statistiques pédagogiques](pedagogy-connected.md) : filtres, répartition et
+classement raccordés localement, avec lecteur TLS et page/API Auth qualifiés. Le
+[socle SQL](pedagogy-readonly.md) conserve le relevé précédant ce raccordement.
 
 [Reprise locale du 19 octobre](local-recovery-2026-10-19.md) : connexion et Engine
 disponibles, données conservées, parcours HTTP par lot réel et limites restantes.
@@ -16,7 +26,7 @@ enregistrée et historique synthétique ; SQL 67, vraie connexion et source sép
 source synthétique séparée, permissions et conservation des données vérifiées.
 
 [Lecteur analytique PostgreSQL/TLS](activity-pg.md) : compte dédié, audit des deux
-identités, agrégats serveur et dérives refusées sur copie ; page encore non raccordée.
+identités, agrégats serveur et dérives refusées sur copie ; [page locale raccordée](activity-http.md).
 
 [Lecture analytique SQL](activity-readonly.md) : migration locale 65, rôle limité,
 agrégats natifs, refus et restauration ; lecteur Production encore non raccordé.

@@ -1,5 +1,10 @@
 # NovLearn Admin
 
+**Tester maintenant :** ouvrir [l’application locale sur 3150](http://127.0.0.1:3150/login)
+et suivre le [parcours progressif](docs/local-user-testing.md). Les identifiants
+conservés, les fonctions disponibles et les limites de réception y sont précisés.
+Le [bilan actuel](docs/readiness-current.md) est rapproché des preuves du 20 octobre.
+
 **Reprise du 19 octobre :** [connexion et services locaux rétablis](docs/local-recovery-2026-10-19.md),
 SQL 68 et parcours de publication par lot qualifiés sur copies synthétiques.
 Aucune activation distante ; voir les preuves et limites datées.

@@ -1,5 +1,5 @@
 {
-  "recordedAt": "2026-10-20T17:17:20.203Z",
+  "recordedAt": "2026-10-20T17:24:32.758Z",
   "scope": "Documentary traceability for all 20 original goal sections; not a functional test, receipt, permission or completion certificate",
   "referenceInputs": {
     "requestSha256": "fb9ac40863c57594878833b8a9fc0bd130a0cba9d0249d29c609051a54bded93",
@@ -9,26 +9,86 @@
   "baselineAdminCommitAtAssessment": "2145784757fa4d2281f81ad45016853c446c7fc8",
   "implementationHasUncommittedChangesAtObservation": true,
   "requestedSections": [
-    { "id": 1, "title": "Audit de démarrage" },
-    { "id": 2, "title": "Architecture technique" },
-    { "id": 3, "title": "Authentification et sécurité" },
-    { "id": 4, "title": "Interface générale" },
-    { "id": 5, "title": "Gestion des exercices" },
-    { "id": 6, "title": "Creator visuel" },
-    { "id": 7, "title": "MathLive" },
-    { "id": 8, "title": "Intégration de l'Exercise Engine" },
-    { "id": 9, "title": "Prévisualisation et tests" },
-    { "id": 10, "title": "Validation éditoriale et publication" },
-    { "id": 11, "title": "Chapitres" },
-    { "id": 12, "title": "Compétences" },
-    { "id": 13, "title": "Flashcards" },
-    { "id": 14, "title": "Dashboard et statistiques" },
-    { "id": 15, "title": "Utilisateurs" },
-    { "id": 16, "title": "Qualité et tests" },
-    { "id": 17, "title": "Organisation du travail autonome" },
-    { "id": 18, "title": "Points d'arrêt obligatoires" },
-    { "id": 19, "title": "Conditions de réussite" },
-    { "id": 20, "title": "Rapport et suivi" }
+    {
+      "id": 1,
+      "title": "Audit de démarrage"
+    },
+    {
+      "id": 2,
+      "title": "Architecture technique"
+    },
+    {
+      "id": 3,
+      "title": "Authentification et sécurité"
+    },
+    {
+      "id": 4,
+      "title": "Interface générale"
+    },
+    {
+      "id": 5,
+      "title": "Gestion des exercices"
+    },
+    {
+      "id": 6,
+      "title": "Creator visuel"
+    },
+    {
+      "id": 7,
+      "title": "MathLive"
+    },
+    {
+      "id": 8,
+      "title": "Intégration de l'Exercise Engine"
+    },
+    {
+      "id": 9,
+      "title": "Prévisualisation et tests"
+    },
+    {
+      "id": 10,
+      "title": "Validation éditoriale et publication"
+    },
+    {
+      "id": 11,
+      "title": "Chapitres"
+    },
+    {
+      "id": 12,
+      "title": "Compétences"
+    },
+    {
+      "id": 13,
+      "title": "Flashcards"
+    },
+    {
+      "id": 14,
+      "title": "Dashboard et statistiques"
+    },
+    {
+      "id": 15,
+      "title": "Utilisateurs"
+    },
+    {
+      "id": 16,
+      "title": "Qualité et tests"
+    },
+    {
+      "id": 17,
+      "title": "Organisation du travail autonome"
+    },
+    {
+      "id": 18,
+      "title": "Points d'arrêt obligatoires"
+    },
+    {
+      "id": 19,
+      "title": "Conditions de réussite"
+    },
+    {
+      "id": 20,
+      "title": "Rapport et suivi"
+    }
   ],
   "assessedSections": [
     {
@@ -40,19 +100,19 @@
     {
       "id": 2,
       "title": "Architecture",
-      "evidenceSummary": "Next, TypeScript strict, services serveur, contrats et package Engine verrouillés ; contrôle complet référencé dans [correctif de récupération](recovery-cleanup-proof.json).",
+      "evidenceSummary": "Next, TypeScript strict, services serveur et archive Engine verrouillés ; contrôle complet actuel : [1 422 tests et vérifications](auth-expiry-local-proof.json). Les lecteurs locaux minimisés sont qualifiés séparément.",
       "remaining": "Capacité de lecture Production et hébergement à concevoir/qualifier ; aucune clé générale ne vaut un droit limité."
     },
     {
       "id": 3,
       "title": "Auth et sécurité",
-      "evidenceSummary": "Vrais comptes, session fraîche, sauvegarde et reconnexion après panne : [reprise locale](local-recovery-2026-10-18-proof.json). Refus/révocation antérieurs dans [Auth locale](local-admin-proof.json). Correctif de session expirée : 25 tests et cinq observations sur la paire d’origine, [preuve](auth-expiry-local-proof.json).",
-      "remaining": "Nouvelle expiration complète en cours ; MFA, provision opérationnel et réception Staging non certifiés."
+      "evidenceSummary": "Auth réelle, refus et révocation serveur ; [correctif d’expiration](auth-expiry-local-proof.json) : 25 tests de l’adaptateur et cinq observations avec la paire réellement expirée. Nouvelle expiration complète en cours.",
+      "remaining": "Résultat de la nouvelle expiration complète, provision opérationnel et réception Staging ; politique MFA/récupération à décider selon l’identité du projet."
     },
     {
       "id": 4,
       "title": "Interface générale",
-      "evidenceSummary": "Identité [visuelle](visual-implementation.md), navigation, formulaires, retours d’erreur et essais sur 3140.",
+      "evidenceSummary": "Identité [visuelle](visual-implementation.md), navigation, formulaires, retours d’erreur et essais sur 3140. Un [parcours manuel](local-user-testing.md) permet les essais progressifs sur l’application connectée 3150.",
       "remaining": "Réception visuelle/accessibilité actuelle ; aucun succès navigateur déduit de la compilation ou du SSR."
     },
     {
@@ -113,7 +173,7 @@
       "id": 14,
       "title": "Dashboard et statistiques",
       "evidenceSummary": "Dashboard Staging et activité générale locale qualifiés. Filtres pédagogiques, regroupements/tri, lecture TLS minimisée et page/API Auth réels : [raccordement pédagogique](pedagogy-connected-proof.json). [Plans/charge synthétique et vrai pool simultané](pedagogy-performance-proof.json) qualifiés.",
-      "remaining": "Source/activation Production, métriques restantes, volumétrie réelle/caches froids/hôte cible et réception navigateur restent ouverts."
+      "remaining": "Source et activation Production ; définition explicite de l’indicateur « exercices réalisés » à préciser, sans le confondre avec les tentatives ; volumétrie réelle, caches froids, hôte cible et réception navigateur."
     },
     {
       "id": 15,
@@ -124,8 +184,8 @@
     {
       "id": 16,
       "title": "Qualité et tests",
-      "evidenceSummary": "Suites unitaires/SSR, SQL, concurrence, sauvegarde/restauration et HTTP datés ; erreurs intermédiaires conservées.",
-      "remaining": "E2E navigateur, récupération connectée, expiration réelle et qualification distante non exécutés. Aucun test simulé ne remplace ces portes."
+      "evidenceSummary": "Contrôle complet [1 422 tests / 75 fichiers](auth-expiry-local-proof.json), types, lint, format, build, intégrité Engine et smoke ; [71 migrations](legacy-search-path-proof.json), restauration et contrôles SQL réels. Les échecs initiaux restent conservés.",
+      "remaining": "Nouvelle expiration complète en cours ; réception navigateur/récupération connectée, hôte cible et qualifications distantes ouvertes."
     },
     {
       "id": 17,
@@ -212,15 +272,15 @@
     "Production user identity/source activation (local list and detailed recorded progression/history qualified)",
     "Current Production active-version indicator",
     "Official Engine formula sampling and dependent curve rendering",
-    "MFA policy and implementation"
+    "Operational identity policy for MFA/recovery remains undecided; no implicit local MFA activation"
   ],
   "notExecuted": [
     "Authorized browser acceptance of current recovery/cleanup",
     "Connected browser cleanup/recovery (services now restored)",
-    "Real session expiry qualification",
+    "New complete natural 3600-second session-expiry run pending; actual old-pair failure and five corrected HTTP observations retained",
     "Target deployment-host qualification",
     "Remote migration rehearsal/approval and controlled first publication",
-    "Full SQL advisor remediation and global security qualification (SQL69: 33 warnings and 67 infos)",
+    "Global SQL advisor remediation/security qualification remains open: SQL71 comparable copies 30 WARN/67 INFO; unchanged application target SQL70 previously 33 WARN/67 INFO",
     "Authorized browser reception of active-version indicator and refresh; stored inconsistency not planted in current published target"
   ],
   "remoteWritesPerformed": false,
@@ -230,8 +290,14 @@
     "result": "PASS for actual retained login and local Engine adoption",
     "date": "2026-10-20T12:24:50.302Z",
     "observations": [
-      { "route": "/api/admin/session", "status": 200 },
-      { "route": "/admin/statistics", "status": 200 },
+      {
+        "route": "/api/admin/session",
+        "status": 200
+      },
+      {
+        "route": "/admin/statistics",
+        "status": 200
+      },
       {
         "route": "/admin/statistics/pedagogy?from=2026-10-15&to=2026-10-17",
         "status": 200
@@ -241,8 +307,14 @@
         "actualPrivateValuesAbsent": true,
         "exhaustiveSecurityScan": false
       },
-      { "origin": "http://127.0.0.1:3150", "loginStatus": 200 },
-      { "origin": "http://127.0.0.1:3152", "loginStatus": 200 }
+      {
+        "origin": "http://127.0.0.1:3150",
+        "loginStatus": 200
+      },
+      {
+        "origin": "http://127.0.0.1:3152",
+        "loginStatus": 200
+      }
     ],
     "authenticatedLoginTested": true,
     "dockerLinuxNamedPipeAvailable": true,
@@ -359,8 +431,14 @@
     "browserExecuted": false,
     "observedAt": "2026-10-19T18:30:29.469Z",
     "latestLoginChecks": [
-      { "origin": "http://127.0.0.1:3150", "loginStatus": 200 },
-      { "origin": "http://127.0.0.1:3152", "loginStatus": 200 }
+      {
+        "origin": "http://127.0.0.1:3150",
+        "loginStatus": 200
+      },
+      {
+        "origin": "http://127.0.0.1:3152",
+        "loginStatus": 200
+      }
     ],
     "currentMainProcessId": 39928,
     "currentMainEngineContainer": "novlearn-admin-engine-1792431615700",
@@ -384,6 +462,26 @@
           "local": true
         }
       ]
+    }
+  },
+  "documentaryFollowup": {
+    "at": "2026-10-20T17:24:32.758Z",
+    "baselineAdminCommit": "04c042308fdf0dce92c705c115bddb2e91cca8be",
+    "scope": "Synchronize the 20-row Markdown matrix with current JSON evidence; provide manual progressive testing instructions. No functional/runtime change or newly executed browser test.",
+    "changedFiles": [
+      "README.md",
+      "docs/README.md",
+      "docs/local-user-testing.md",
+      "docs/readiness-current.md",
+      "docs/readiness-current.json"
+    ],
+    "fullCheckNotRepeatedForDocumentationOnly": true,
+    "browserExecuted": false,
+    "remoteOperations": false,
+    "verification": {
+      "proof": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\readiness-guide-1792517204663/proof.json",
+      "sha256": "e20d1b229dcbbc1f01f338986fdc9c3fe364b308bd9812bd29a2f6f3fbbe32b5",
+      "scope": "PASS for documentary reconciliation and actual anonymous HTTP availability only"
     }
   }
 }
