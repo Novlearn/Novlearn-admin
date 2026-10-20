@@ -9,26 +9,86 @@
   "baselineAdminCommitAtAssessment": "2145784757fa4d2281f81ad45016853c446c7fc8",
   "implementationHasUncommittedChangesAtObservation": true,
   "requestedSections": [
-    { "id": 1, "title": "Audit de démarrage" },
-    { "id": 2, "title": "Architecture technique" },
-    { "id": 3, "title": "Authentification et sécurité" },
-    { "id": 4, "title": "Interface générale" },
-    { "id": 5, "title": "Gestion des exercices" },
-    { "id": 6, "title": "Creator visuel" },
-    { "id": 7, "title": "MathLive" },
-    { "id": 8, "title": "Intégration de l'Exercise Engine" },
-    { "id": 9, "title": "Prévisualisation et tests" },
-    { "id": 10, "title": "Validation éditoriale et publication" },
-    { "id": 11, "title": "Chapitres" },
-    { "id": 12, "title": "Compétences" },
-    { "id": 13, "title": "Flashcards" },
-    { "id": 14, "title": "Dashboard et statistiques" },
-    { "id": 15, "title": "Utilisateurs" },
-    { "id": 16, "title": "Qualité et tests" },
-    { "id": 17, "title": "Organisation du travail autonome" },
-    { "id": 18, "title": "Points d'arrêt obligatoires" },
-    { "id": 19, "title": "Conditions de réussite" },
-    { "id": 20, "title": "Rapport et suivi" }
+    {
+      "id": 1,
+      "title": "Audit de démarrage"
+    },
+    {
+      "id": 2,
+      "title": "Architecture technique"
+    },
+    {
+      "id": 3,
+      "title": "Authentification et sécurité"
+    },
+    {
+      "id": 4,
+      "title": "Interface générale"
+    },
+    {
+      "id": 5,
+      "title": "Gestion des exercices"
+    },
+    {
+      "id": 6,
+      "title": "Creator visuel"
+    },
+    {
+      "id": 7,
+      "title": "MathLive"
+    },
+    {
+      "id": 8,
+      "title": "Intégration de l'Exercise Engine"
+    },
+    {
+      "id": 9,
+      "title": "Prévisualisation et tests"
+    },
+    {
+      "id": 10,
+      "title": "Validation éditoriale et publication"
+    },
+    {
+      "id": 11,
+      "title": "Chapitres"
+    },
+    {
+      "id": 12,
+      "title": "Compétences"
+    },
+    {
+      "id": 13,
+      "title": "Flashcards"
+    },
+    {
+      "id": 14,
+      "title": "Dashboard et statistiques"
+    },
+    {
+      "id": 15,
+      "title": "Utilisateurs"
+    },
+    {
+      "id": 16,
+      "title": "Qualité et tests"
+    },
+    {
+      "id": 17,
+      "title": "Organisation du travail autonome"
+    },
+    {
+      "id": 18,
+      "title": "Points d'arrêt obligatoires"
+    },
+    {
+      "id": 19,
+      "title": "Conditions de réussite"
+    },
+    {
+      "id": 20,
+      "title": "Rapport et suivi"
+    }
   ],
   "assessedSections": [
     {
@@ -40,7 +100,7 @@
     {
       "id": 2,
       "title": "Architecture",
-      "evidenceSummary": "Next, TypeScript strict, services serveur et archive Engine verrouillés ; contrôle complet actuel : [1 432 tests et vérifications](completed-work-local-proof.json). Les lecteurs locaux minimisés sont qualifiés séparément.",
+      "evidenceSummary": "Next, TypeScript strict, services serveur et archive Engine verrouillés ; dernier palier complet validé : [1 432 tests et vérifications](completed-work-local-proof.json). Les lecteurs locaux minimisés sont qualifiés séparément. Nouvelle révision : [1493 tests passent, 1 timeout de publication](staging-schema-export-proof.json) ; contrôle global en échec.",
       "remaining": "Capacité de lecture Production et hébergement à concevoir/qualifier ; aucune clé générale ne vaut un droit limité."
     },
     {
@@ -124,7 +184,7 @@
     {
       "id": 16,
       "title": "Qualité et tests",
-      "evidenceSummary": "Contrôle complet [1 432 tests / 75 fichiers](completed-work-local-proof.json), types, lint, format, build, intégrité Engine et smoke ; [71 migrations](legacy-search-path-proof.json), restauration et contrôles SQL réels. Les échecs initiaux restent conservés.",
+      "evidenceSummary": "Dernier palier complet validé [1 432 tests / 75 fichiers](completed-work-local-proof.json), types, lint, format, build, intégrité Engine et smoke ; [71 migrations](legacy-search-path-proof.json), restauration et contrôles SQL réels. Les échecs initiaux restent conservés. Nouvelle révision : [1493 tests passent, 1 timeout de publication](staging-schema-export-proof.json) ; contrôle global en échec.",
       "remaining": "Réception navigateur/récupération connectée, hôte cible et qualifications distantes ouvertes."
     },
     {
@@ -158,7 +218,7 @@
     "local-recovery-2026-10-18.md": "ab6e2a667d7b054b673a1b175044ed6504218a993fd9e8c6054b46fb970aac1f",
     "users-readonly.md": "af41c90a92f9f5f8baa0f9ad6094b0c87d6d54f07a1bff828e4494efe829ae20",
     "lot-1a-remote-reconciliation-current.md": "4a2a06adff60f7a6541f261af3bd00a63debc01197030717c389c7c22b813dfe",
-    "progress.md": "a662595adba29bc7328509e533a02bea5811f23cea1a897ea70170a95b4b4d9f",
+    "progress.md": "f4c8093fbece2a7e60298ccad7abf25d5fc62155fa787b1354bf04c29affacd4",
     "lot-1a-preparation.md": "3561164a62bc6690a46d2f472c42037c11bd9aacc40add77d44814abdc5dd271",
     "recovery-cleanup-proof.json": "cb414a4c150ceb55204fcc9fca07696d05463e71642b4b4db35fd62819fa2524",
     "local-recovery-2026-10-18-proof.json": "5c9f10801159d1b94c66aebf2f4f45cb91e6a3447f6098968d85e03c83e0e26d",
@@ -179,7 +239,7 @@
     "activity-readonly-proof.json": "c362635524c4dc6cfe81cdbc489e2130a3e3285f8346462e5075915fddb51401",
     "activity-http-proof.json": "c4ae58e794d8944ecf0947935e799b834bb1742336984c5cd8c51201af35b806",
     "users-readonly-proof.json": "2a2ba32df2dca5050be282939596ed3a0a9e22695a56d4d6c6560f64ab5a8da2",
-    "roadmap.md": "483de7419e769cd670f62009c86c7022fc3caaf95a162a4ab443ec0fdf80e569",
+    "roadmap.md": "ac8bcaaa2122b7353d54226a2a3a60ef5d5f3ebabd197fe8cdcd7c7fcb7700e5",
     "activity-readonly.md": "0bc4135dfe48409cb19a8f2ad0b98e9593c65f83f46bc12b53a4a8e6fd1fbdff",
     "activity-pg.md": "ce3ae62c070f728174bc2cae7817d1ed727d42fd1e2e09d162cadd188b028aec",
     "lot-1a-local-statistics-guard.md": "0bd4f19d706296ccb96f8ea246f186c4e52ddc7a23da69519f64c2a1978a7a92",
@@ -213,7 +273,9 @@
     "local-reception-2026-10-20.md": "b55e2180f01abc7600597d98bb00bb53674524cecf4fd23b3d9314fd9831ba11",
     "remote-readiness-2026-10-20.json": "bd52183c053a2331027fbe30ec41d3587fd09b20a9c558d0b68f168415c4cdee",
     "remote-readiness-2026-10-20.md": "3967ffc81b6f578ac110c6306c66d0e8803488dbcd1096b652e6c76d94523d5a",
-    "migration-archives-2026-10-20.json": "1d516967f7acb50702be1e0d605584727b2436fe49c3feffc3168611315221a1"
+    "migration-archives-2026-10-20.json": "1d516967f7acb50702be1e0d605584727b2436fe49c3feffc3168611315221a1",
+    "staging-schema-export.md": "bd88990c6fe7accc3a52e141d60a0c77ca77db2e80e4994acc2ce1ce94729362",
+    "staging-schema-export-proof.json": "dc519b50e5b78413dd88b1123064f9667b1e511b5602011884370846dd494cd7"
   },
   "unimplemented": [
     "Production analytics identity/source activation and remaining metrics (local general and pedagogical filters, grouping/ranking, PG/TLS and Auth/HTTP page/API qualified)",
@@ -237,8 +299,14 @@
     "result": "PASS for actual retained login and local Engine adoption",
     "date": "2026-10-20T12:24:50.302Z",
     "observations": [
-      { "route": "/api/admin/session", "status": 200 },
-      { "route": "/admin/statistics", "status": 200 },
+      {
+        "route": "/api/admin/session",
+        "status": 200
+      },
+      {
+        "route": "/admin/statistics",
+        "status": 200
+      },
       {
         "route": "/admin/statistics/pedagogy?from=2026-10-15&to=2026-10-17",
         "status": 200
@@ -248,8 +316,14 @@
         "actualPrivateValuesAbsent": true,
         "exhaustiveSecurityScan": false
       },
-      { "origin": "http://127.0.0.1:3150", "loginStatus": 200 },
-      { "origin": "http://127.0.0.1:3152", "loginStatus": 200 }
+      {
+        "origin": "http://127.0.0.1:3150",
+        "loginStatus": 200
+      },
+      {
+        "origin": "http://127.0.0.1:3152",
+        "loginStatus": 200
+      }
     ],
     "authenticatedLoginTested": true,
     "dockerLinuxNamedPipeAvailable": true,
@@ -366,8 +440,14 @@
     "browserExecuted": false,
     "observedAt": "2026-10-19T18:30:29.469Z",
     "latestLoginChecks": [
-      { "origin": "http://127.0.0.1:3150", "loginStatus": 200 },
-      { "origin": "http://127.0.0.1:3152", "loginStatus": 200 }
+      {
+        "origin": "http://127.0.0.1:3150",
+        "loginStatus": 200
+      },
+      {
+        "origin": "http://127.0.0.1:3152",
+        "loginStatus": 200
+      }
     ],
     "currentMainProcessId": 39928,
     "currentMainEngineContainer": "novlearn-admin-engine-1792431615700",
@@ -503,5 +583,42 @@
     "goalComplete": false,
     "stagingNullability": "PASS for six NULL counts at one snapshot only; other constraints and Production not tested",
     "repositoryArchives": "migration-archives-2026-10-20.json"
+  },
+  "stagingSchemaExport": {
+    "document": "staging-schema-export.md",
+    "proof": "staging-schema-export-proof.json",
+    "operatorConfiguration": ".local/staging-schema-export/source.json",
+    "state": "Prepared;62 contract tests and native synthetic snapshot/dump pass; real credentials/export pending",
+    "actualStagingExportExecuted": false,
+    "restorationExecuted": false,
+    "remoteWrites": false,
+    "completeAdminCheck": {
+      "result": "FAIL",
+      "date": "2026-10-20T19:57:40.320Z",
+      "artifact": "C:\\Users\\balth\\AppData\\Local\\Temp\\novlearn-admin-check-1792526012431",
+      "exitCode": 1,
+      "tests": 1493,
+      "files": 75,
+      "failedTests": 1,
+      "failedFiles": 1,
+      "sourceFiles": 583,
+      "allCopiedSourcesStillMatch": true,
+      "fullCheckCommand": "npm run check",
+      "separateBuildDirectory": true,
+      "independentTemporaryProject": true,
+      "dependenciesCopied": true,
+      "applicationServersInterrupted": false,
+      "privateEnvironmentFilesCopied": false,
+      "proofSha256": "df12eade7513194812045fc09663fe8c0786f47cf194c5dd90e5288e247f644f",
+      "documentaryOnlyAfterCheck": [
+        "docs/staging-schema-export-proof.json",
+        "docs/staging-schema-export.md",
+        "docs/README.md",
+        "docs/progress.md",
+        "docs/roadmap.md",
+        "docs/readiness-current.md",
+        "docs/readiness-current.json"
+      ]
+    }
   }
 }

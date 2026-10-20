@@ -1,5 +1,9 @@
 # Documentation NovLearn Admin
 
+[Export de structure Staging préparé](staging-schema-export.md) : outil opérateur
+borné, TLS et lecture seule, 62 tests et snapshot/dump natifs synthétiques.
+La connexion privée et l’export réel restent à qualifier ; aucune migration.
+
 [Parcours court reçu](local-reception-2026-10-20.md) : confirmation humaine ;
 soucis d’interface reportés et réception élargie restante. [Écarts du schéma vivant](remote-readiness-2026-10-20.md) :
 relevé en lecture seule, archives et préparation du delta Staging.

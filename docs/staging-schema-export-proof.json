@@ -1,0 +1,173 @@
+{
+  "result": "PASS for62 targeted contract tests and native synthetic dump workflow only; actual Staging export pending",
+  "recordedAt": "2026-10-20T20:03:46.908Z",
+  "targetedTests": {
+    "tests": 62,
+    "files": 1,
+    "result": "PASS",
+    "file": "tests/staging-schema-export.test.ts",
+    "sourceSha256": "a78ae93a14878daa6407d92408dce1148b1f9dcc0d607e69efe69df29cd32344"
+  },
+  "native": {
+    "rawProof": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\staging-dump-native-1792525888091/proof.json",
+    "rawProofSha256": "9f7bf6d204c4ab5231943a92702d906cf9f111b00bcdc62bd710974f806d4794",
+    "proof": {
+      "result": "PASS for native synthetic snapshot/schema-only flags, auth trigger capture and dummy environment roundtrip only",
+      "at": "2026-10-20T19:51:43.980Z",
+      "artifact": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\staging-dump-native-1792525888091",
+      "sourceContainer": "novlearn-admin-lot1a-replay-20261020165554035",
+      "sourceWasAlreadyRunning": false,
+      "sourceTablesExact": 62,
+      "sequencesExact": 11,
+      "metadataExact": true,
+      "sharedSnapshotActuallyUsed": true,
+      "authTriggerStatesCaptured": [
+        {
+          "name": "on_auth_user_created",
+          "enabled": "O"
+        },
+        {
+          "name": "on_user_created_generate_friend_code",
+          "enabled": "O"
+        }
+      ],
+      "authTriggerSqlSha256": "15517a596cb0240ea4ba7969a4dc2c23a7de86f133f27e16606d9c0ee9a494c1",
+      "triggerRestorationExecuted": false,
+      "invalidSnapshotActuallyRefused": true,
+      "schemaOnlyTocHasNoTableDataSequenceSetOrBlob": true,
+      "dummyPasswordRoundtripExact": true,
+      "dumpSha256": "d664900a0aba87f50724a94227a669cda9f2c15c2a07c50e98b380f5002a5e12",
+      "exportToolSha256": "8e857035287a12af06cc9f49e5a3887e424fb755c5ebbeb08b8697c61183d951",
+      "actualStagingExportExecuted": false,
+      "stagingTlsOrCredentialsQualified": false,
+      "remoteWrites": false,
+      "applicationDatabasesModified": false
+    }
+  },
+  "operatorTool": {
+    "file": "scripts/export-staging-schema.ts",
+    "sha256": "8e857035287a12af06cc9f49e5a3887e424fb755c5ebbeb08b8697c61183d951"
+  },
+  "negativeCliObservations": [
+    "Missing private configuration refused before connection",
+    "Blank password in newly created private template refused before connection"
+  ],
+  "initialFailures": [
+    "Initial contract test asserted that a message excluded an empty password;42 pass1 fail retained in tool output. Corrected to exact generic error-message assertion for every invalid source; no source validation relaxed",
+    "Initial typecheck found nullable child.stderr; an explicit assertion now requires the configured diagnostic pipe",
+    "Native capture harness initially parsed multiline json_agg as one line; failure retained in the private artifact, fixed with jsonb_agg and explicit pg_catalog search_path; no source data or acceptance criterion changed"
+  ],
+  "completeAdminCheck": {
+    "result": "FAIL",
+    "date": "2026-10-20T19:57:40.320Z",
+    "artifact": "C:\\Users\\balth\\AppData\\Local\\Temp\\novlearn-admin-check-1792526012431",
+    "exitCode": 1,
+    "tests": 1493,
+    "files": 75,
+    "failedTests": 1,
+    "failedFiles": 1,
+    "sourceFiles": 583,
+    "allCopiedSourcesStillMatch": true,
+    "fullCheckCommand": "npm run check",
+    "separateBuildDirectory": true,
+    "independentTemporaryProject": true,
+    "dependenciesCopied": true,
+    "applicationServersInterrupted": false,
+    "privateEnvironmentFilesCopied": false,
+    "proofSha256": "df12eade7513194812045fc09663fe8c0786f47cf194c5dd90e5288e247f644f",
+    "documentaryOnlyAfterCheck": [
+      "docs/staging-schema-export-proof.json",
+      "docs/staging-schema-export.md",
+      "docs/README.md",
+      "docs/progress.md",
+      "docs/roadmap.md",
+      "docs/readiness-current.md",
+      "docs/readiness-current.json"
+    ]
+  },
+  "actualStagingConnectionExecuted": false,
+  "actualStagingExportExecuted": false,
+  "restorationExecuted": false,
+  "remoteWrites": false,
+  "globalGoalComplete": false,
+  "priorCompleteAdminFailure": {
+    "result": "FAIL",
+    "date": "2026-10-20T19:45:26.816Z",
+    "artifact": "C:\\Users\\balth\\AppData\\Local\\Temp\\novlearn-admin-check-1792525309582",
+    "exitCode": 1,
+    "tests": 1474,
+    "files": 75,
+    "failedTests": 1,
+    "failedFiles": 1,
+    "sourceFiles": 583,
+    "allCopiedSourcesStillMatch": true,
+    "fullCheckCommand": "npm run check",
+    "separateBuildDirectory": true,
+    "independentTemporaryProject": true,
+    "dependenciesCopied": true,
+    "applicationServersInterrupted": false,
+    "privateEnvironmentFilesCopied": false,
+    "failedTest": "tests/publication-verification.test.ts:40",
+    "reason": "Default5000ms timeout;1474 pass1 fail, later stages not executed",
+    "proofSha256": "c973cd522682c80abc4f07cb98c033f7a7a1cccd49136d4f6b5b5072a0929074"
+  },
+  "focusedPublicationFailure": {
+    "command": "node node_modules/vitest/vitest.mjs run tests/staging-schema-export.test.ts tests/publication-verification.test.ts",
+    "result": "FAIL",
+    "passed": 72,
+    "failed": 1,
+    "failedTest": "tests/publication-verification.test.ts:122",
+    "reason": "Default5000ms timeout on a different case; no source copy used",
+    "timeoutChanged": false
+  },
+  "targetedStaticChecks": {
+    "typecheck": "PASS: tsc --noEmit --incremental false",
+    "lint": "PASS for script and targeted test",
+    "timeoutsOrAssertionsChanged": false
+  },
+  "finalCompleteAdminFailure": {
+    "test": "tests/publication-verification.test.ts",
+    "name": "fails when a formerly incorrect case now becomes correct",
+    "observedDurationMs": 6526,
+    "timeoutMs": 5000,
+    "rootCauseConfirmed": false,
+    "criteriaChanged": false
+  },
+  "separatePostTestStages": {
+    "result": "PASS for separate post-test stages only",
+    "at": "2026-10-20T20:03:30.204Z",
+    "artifact": "C:\\Users\\balth\\AppData\\Local\\Temp\\novlearn-admin-check-1792526012431",
+    "stages": [
+      {
+        "stage": "typecheck",
+        "exitCode": 0,
+        "result": "PASS"
+      },
+      {
+        "stage": "lint",
+        "exitCode": 0,
+        "result": "PASS"
+      },
+      {
+        "stage": "format:check",
+        "exitCode": 0,
+        "result": "PASS"
+      },
+      {
+        "stage": "build",
+        "exitCode": 0,
+        "result": "PASS"
+      },
+      {
+        "stage": "test:smoke",
+        "exitCode": 0,
+        "result": "PASS"
+      }
+    ],
+    "fullAdminCheckResult": "FAIL",
+    "allCopiedSourcesStillMatch": true,
+    "testCriteriaChanged": false,
+    "remoteOperations": false,
+    "proofSha256": "2b7c5dd73e695f37ad4021d0d99fd70472004d458c4bfa19ee3ab2457da87c79"
+  }
+}
