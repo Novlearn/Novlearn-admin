@@ -7,6 +7,9 @@ Ouvrir [NovLearn Admin](http://127.0.0.1:3150/login). Les identifiants locaux
 restent dans `.local/local-admin-1792143739689/login.txt` ; garder ce fichier
 privé. La connexion fonctionne avec le compte administrateur existant.
 
+Le périmètre réduit D11 est livré localement. La cible complète du CDC et
+le Lot 1A restent distincts et ne sont pas déclarés terminés.
+
 ## Ce que cette version permet
 
 - Consulter le catalogue, créer et modifier des brouillons.

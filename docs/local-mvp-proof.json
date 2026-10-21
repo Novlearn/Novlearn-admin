@@ -101,5 +101,7 @@
     "coldStartOfStoppedServicesExecuted": false,
     "cmdDoubleClickExecuted": false,
     "nodeLauncherEquivalentExecuted": true
-  }
+  },
+  "reducedLocalGoalComplete": true,
+  "goalCompletionScope": "D11: essential local version delivered after the user explicitly reduced scope. Original full CDC, Lot1A and remote readiness remain incomplete."
 }
