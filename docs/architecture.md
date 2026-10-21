@@ -1,65 +1,179 @@
-# Architecture cible et audit du Lot 0 bis
+# Architecture et contrats
 
-Ce rapport conserve les constats du Lot 0 bis. Depuis D02, le code Auth et le
-layout sont préparés localement, avec accès Staging désactivé. L'état courant
-et ses preuves sont dans [Auth](auth.md) et [progression](progress.md) ; les
-paragraphes décrivant le socle vide correspondent au relevé initial.
+Ce document décrit les responsabilités du code présent. Les capacités actives
+et les limites de réception sont dans [l’état actuel](roadmap.md), les règles
+fonctionnelles dans le [CDC](../CDC_reference.md).
 
-État au 13 octobre 2026. Ce document distingue les faits vérifiés dans les dépôts et métadonnées accessibles, les déclarations du CDC et les recommandations à valider. Aucun changement fonctionnel n'est implémenté ici.
+## Application et frontières
 
-## Architecture recommandée
+NovLearn Admin est une application Next.js App Router full-stack distincte de
+NovLearn élève, de son backend FastAPI/Colyseus et de l’ancien Creator.
+[package.json](../package.json) fixe Next 15.5.28, React 18.3.1, TypeScript strict,
+Tailwind 3, Supabase SSR et MathLive. Les polices Inter/Fredoka et les ressources
+MathLive sont locales ; la référence visuelle reste
+[system-design.md](system-design.md).
 
-`novlearn-admin` reste une application Next.js full-stack, distincte du frontend élève, du backend FastAPI et de Colyseus de `Novlearn`. Ses composants serveur et routes contrôlées portent les accès privilégiés. Le navigateur n'obtient que la session Auth Staging et des données explicitement projetées pour l'interface.
+| Emplacement                                                      | Responsabilité                                                                            |
+| ---------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| `src/app/admin/`                                                 | Pages protégées : catalogue, Creator, référentiel, dashboard, statistiques et publication |
+| `src/app/api/admin/`                                             | Routes contrôlées : entrées bornées, session/rôle serveur et projection des réponses      |
+| `src/components/`                                                | Formulaires, saisie MathLive, rendus et interactions navigateur                           |
+| `src/lib/auth/`                                                  | Configuration, client serveur Supabase et autorisations                                   |
+| `src/lib/creator*`, `catalogue*`, `taxonomy.ts`, `flashcards.ts` | Contrats d’édition et accès Staging                                                       |
+| `src/lib/engine-*`, `preview*`, `test-receipt*`, `review.ts`     | Identité du moteur, calcul officiel, aperçu, reçus et relecture                           |
+| `src/lib/publication*`                                           | Préparation, confirmation, transfert sélectif, journal et reprise                         |
+| `src/lib/*-pg.ts`, `*-config.ts`                                 | Capacités PostgreSQL et lecteurs spécialisés                                              |
+| `scripts/`, `tests/`                                             | Contrôles SQL/HTTP/Engine, bancs isolés et tests de contrats/permissions                  |
 
-Supabase Staging est le plan de travail éditorial et la source Auth de l'Admin. Production est une frontière distincte : requêtes statistiques minimisées en lecture, consultation des utilisateurs selon un besoin autorisé, et une capacité de publication dédiée et contrôlée. Une clé secrète Supabase n'étant pas limitée par son nom, ne pas utiliser une clé `service_role` partagée comme mécanisme de permissions. Les accès de Production ne sont pas encore implémentés et aucun secret/client Production ne doit être ajouté avant conception des permissions effectives.
+Le navigateur gère la saisie et l’affichage. Le serveur vérifie l’identité et les
+droits, lit Staging et appelle Engine. Les informations de correction privées
+ne doivent jamais passer dans une projection élève. Les secrets restent côté
+serveur ; voir [Auth et configuration](auth.md).
 
-L'Exercise Engine est appelé exclusivement côté serveur pour valider les définitions, instancier par seed, produire la projection publique et corriger depuis l'instance privée. MathLive est une interface de saisie ; il ne porte aucun calcul métier. NovLearn Admin ne copie aucune logique mathématique historique.
+Staging porte Auth Admin, brouillons et référentiel. Production est une frontière
+séparée pour les lectures minimisées et la publication approuvée. Les lecteurs
+statistiques/utilisateurs actuellement raccordés dans le code concernent des
+copies locales, pas une connexion Production établie.
 
-Le modèle est désormais validé : identité stable dans `public.exercises`, révisions dans `public.exercise_versions`. La publication transfère uniquement leur contenu métier approuvé, en préservant les versions publiées immuables et les instances des nouvelles tentatives. Cette sélection ne réplique ni les lignes complètes ni les autres tables. Les migrations de structure pour la compatibilité restent un processus distinct. Les détails SQL sont décrits dans [le modèle des exercices](exercise-data-model.md).
+## Exercices et cycle éditorial
 
-```mermaid
-flowchart LR
-  Browser[Administrateur navigateur] -->|Session Auth Staging, données minimisées| Admin[Next.js Admin]
-  Admin -->|Auth et édition Staging| Stage[(Supabase Staging)]
-  Admin -->|Agrégats et consultation autorisée| Read[Accès Production lecture restreinte]
-  Admin -->|Publication approuvée uniquement| Publish[Capacité serveur de publication]
-  Read --> Prod[(Supabase Production)]
-  Publish --> Prod
-  Admin -->|validation, instanciation, correction| Engine[Exercise Engine serveur]
-  Student[NovLearn élève: Next.js + FastAPI + Colyseus] --> Engine
-  Student --> Prod
-  Student --> Stage
-```
+Le modèle retenu sépare l’identité stable dans `public.exercises` et les
+révisions dans `public.exercise_versions`. Le `bigint` historique est propre à
+chaque base ; la correspondance de publication repose sur l’identité de catalogue
+`catalog_id`, jamais sur une égalité supposée des IDs.
 
-Le schéma représente une cible. Dans le dépôt Admin actuellement inspecté, seuls le socle Next.js App Router, la page statique, les styles, TypeScript strict et `output: standalone` sont présents. Aucun client Supabase, API métier, route protégée ou accès Engine n'est implémenté. La copie de travail préexistante de `.env.example` propose `APP_BASE_URL` et des noms fictifs pour l'URL et la clé publique Staging ; aucun code ne les lit actuellement. Ce diff local est conservé hors du commit documentaire ; les anciens placeholders versionnés ne confèrent pas de permissions réelles.
+Le contenu historique ne devient pas canonique par simple lecture ou sauvegarde.
+Le Creator produit des définitions du contrat Engine schéma 5 : paramètres,
+contraintes, éléments, questions et politiques de correction. MathLive saisit le
+LaTeX ; il ne génère ni ne corrige les exercices. L’éditeur propose les 20 types
+d’éléments du contrat, sans que cela prouve une réception visuelle complète de
+chacun. Sauvegarde de brouillon et validation mathématique sont distinctes.
 
-## Frontières et responsabilités
+Les changements sont protégés par empreinte et `test_epoch`, avec refus des
+conflits. Une version publiée est immuable ; la suite passe par une nouvelle
+révision. Un rapport ou une approbation ne reste pas courant après modification,
+changement d’époque ou d’archive Engine. Les anciens reçus restent lisibles et
+ne doivent pas être réétiquetés comme résultats du nouveau moteur.
 
-| Composant          | Responsabilité                                                                                                    | Interdit / limite                                                                 |
-| ------------------ | ----------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
-| Navigateur Admin   | UI, session Auth Staging, saisie et aperçu d'informations permises                                                | Aucun secret, client Production privilégié, correction faisant autorité           |
-| Serveur Admin      | Authentifier, vérifier rôle et intention à chaque action, valider l'entrée, appeler Engine, minimiser les données | Ne jamais faire confiance au seul masquage UI ou à un rôle transmis par le client |
-| Staging            | Comptes Admin, brouillons et contenu de travail                                                                   | Pas de dépendance aux données personnelles réelles de Production                  |
-| Production lecture | Requêtes nécessaires aux indicateurs et consultations explicitement autorisées                                    | Pas de clé générale donnant une écriture accidentelle                             |
-| Publication        | Opération séparée, journalisée, exercice approuvé uniquement                                                      | Pas de réplication ou synchronisation générale                                    |
-| NovLearn           | Exécution élève et API existantes, dont FastAPI et Colyseus                                                       | Pas de modification dans le cadre de ce lot                                       |
-| Exercise Engine    | Contrats canoniques, validation, génération, projection, correction et diagnostics                                | Ne fournit ni auth, ni stockage, ni rendu d'interface                             |
+Le parcours relie brouillon, tests, demande de relecture, approbation humaine et
+publication. Les statuts SQL effectifs sont portés par les contrats et RPC ; la
+formulation cible du CDC ne prouve pas l’activation de chaque étape.
 
-## Propriété des migrations
+La récupération Creator est facultative, désactivée par défaut, dans le
+`sessionStorage` de l’onglet : 30 minutes depuis la dernière écriture, 256 Kio,
+choix explicite de restaurer ou d’effacer. Elle contient les attendus privés et
+n’est pas chiffrée. Elle ne restaure ni diagnostic, ni rapport, ni approbation.
+Une référence modifiée prépare une nouvelle révision au lieu d’écraser la version
+courante. Un refus d’effacement est signalé ; fermer l’onglet si nécessaire.
+La restauration de session navigateur peut conserver physiquement la copie plus
+longtemps que sa durée de récupération autorisée.
 
-Les migrations existantes se trouvent dans `Novlearn/supabase/migrations/`. Recommandation : conserver un seul historique canonique des migrations partagé dans le dépôt NovLearn, qui possède déjà le code serveur et les migrations actuelles. Toute évolution de schéma requise par l'Admin serait examinée et ajoutée à cette source canonique, puis appliquée à Staging et Production par un mécanisme approuvé. Le dépôt Admin ne doit pas créer une deuxième suite de migrations concurrente. Ce choix de gouvernance doit être validé avec le propriétaire du dépôt NovLearn avant toute migration.
+## Engine officiel
 
-## Sources et limites de l'audit
+L’archive consommée est [le tarball versionné](../vendor/novlearn-exercise-engine-0.1.0.tgz),
+package 0.1.0, contrat `schema-5;engine-0.1.0`, Cortex 0.151.0. L’identité exacte,
+y compris le SHA256, est définie dans
+[engine-identity.ts](../src/lib/engine-identity.ts) et vérifiée par
+[verify-engine-package.mjs](../scripts/verify-engine-package.mjs), avec le lockfile
+et le fichier installé. Une même version npm ne suffit pas à identifier le build.
 
-- Les `AGENTS.md`, `CDC_reference.md`, `README.md`, documents `docs/`, `package.json`, `tsconfig.json` et `next.config.ts` du dépôt ont été consultés. Après le Lot 0 bis, l'utilisateur a expressément autorisé le 13 octobre 2026 une mise à jour ciblée du CDC sur le modèle, le versionnement, la publication et les arbitrages associés. Cette exception est tracée dans [les décisions](decisions.md).
-- Les répertoires frères `Novlearn` et `Novlearn-Engine` étaient lisibles ; leurs fichiers ont été consultés en lecture seule. La préparation du Lot 1A a également relevé le commit et le statut Git de NovLearn avec une exception de confiance limitée à la commande et sans verrou optionnel ; aucun paramètre global Git ou fichier voisin n'a été modifié.
-- La liste des tables et migrations, les colonnes/FK pertinentes, les politiques RLS et définitions des trois fonctions SQL ont été lues par outils Supabase en lecture seule pour les projets nommés `novlearn-prod` et `novlearn-staging`.
-- Aucun jeu de lignes métier, identité utilisateur, ni secret n'a été demandé. Aucun SQL d'écriture, migration, changement de permission, déploiement ou exécution de code externe n'a eu lieu.
-- Les projets exposent chacun 22 tables `public`. Les colonnes et relations des exercices, tentatives, duels et profils sont identiques dans les métadonnées lues. Les moteurs Postgres déclarés sont 17, avec des versions mineures différentes au moment de l'audit.
-- Les environnements déclarent la même liste de versions/noms de migrations. Cette égalité d'historique déclaré ne prouve pas que les fichiers Git reproduisent les changements effectifs, ni qu'aucune modification manuelle n'a eu lieu.
-- Dans l'état inspecté, les définitions présentes de `get_random_exercise`, `get_monthly_leaderboard` et `get_weekly_leaderboard` étaient équivalentes entre les deux projets. Elles sont toutes `SECURITY DEFINER`; les deux définitions de leaderboard exposent des noms et données de scores. Le signalement historique de divergences du CDC n'est donc pas confirmé par ce relevé actuel. Vérifier également ACL, dépendances, propriétaires et historiques SQL avant changement.
-- La certification la plus récente documentée de l'Engine (13 octobre 2026) signale un échec de transport isolé Windows (`worker unavailable`) et le juge non prêt au pilote. Le contrat est suffisamment documenté pour spécifier une future intégration, mais l'emploi en production reste bloqué à une qualification et compatibilité de runtime réussies.
+[engine-runtime.ts](../src/lib/engine-runtime.ts) appelle le host officiel côté
+serveur. Le profil qualifié est Linux cgroup v2 : 384 Mio, aucun swap
+supplémentaire, 64 processus, utilisateur non privilégié, réseau absent, racine en
+lecture seule, capacités retirées et aucun nouveau privilège. Le délai natif
+reste cinq secondes ; une opération active et quatre en attente. Le transport
+local permet de joindre ce worker depuis le frontend Windows sous gardes
+explicites. **Aucun évaluateur de secours dans Admin.**
 
-## Préparation du Lot 1A
+`isEngineEnabled` refuse Vercel, même si `ADMIN_ENGINE_ENABLED=true`. Installer
+l’archive ou réussir un build n’établit pas l’existence d’un hôte qualifié.
+La certification d’un package ne se transfère pas à un nouvel hébergement.
 
-Le choix des deux tables et leur périmètre de publication sont clos. Le [dossier Lot 1A](lot-1a-preparation.md) prépare la réconciliation des migrations et la sécurisation SQL avec des requêtes de métadonnées exclusivement en lecture. Il n'applique aucun correctif et ne crée pas `exercise_versions`. La propriété des migrations, le mapping des identifiants, les champs/versionnement précis et les permissions Production restent à finaliser. La roadmap impose la sécurisation avant le lot fonctionnel d'authentification.
+L’aperçu conserve les snapshots privés dans la mémoire du processus : dix minutes,
+deux par Admin, 32 au total, 512 Kio chacun. Le navigateur reçoit une projection
+publique et une référence opaque ; l’inspection des attendus exige un contrôle
+séparé. La correction utilise le snapshot serveur, jamais une instance fournie
+par le client. Une référence expirée ou perdue au redémarrage produit un refus 410. Plusieurs processus exigent une stratégie privée partagée ou une affinité
+qualifiée avant réception.
+
+Les tests multi-seeds vérifient génération, rejeu identique, projection, attendus,
+formats invalides et cas incorrects explicites. Leur réussite n’est pas une
+validation humaine. Les reçus persistés ajoutent une signature liée à la version,
+à l’empreinte, à l’époque et à l’archive exacte.
+
+Le rendu de coordonnées publiques couvre notamment figures et vecteurs ; il ne
+calcule pas les courbes mathématiques. L’extension de sampling 0.2.0 décrite par
+les preuves D10 n’est pas adoptée dans ce dépôt. Ses résultats partiels et ses
+échecs complets restent distingués dans [Vérifications](verification.md).
+
+## Publication et reprise
+
+Seul le contenu métier approuvé de `exercises` et `exercise_versions` peut passer
+vers Production. Il s’agit d’une projection autorisée, jamais d’un `SELECT *` ou
+d’une copie de base. Les références aux chapitres, compétences et ressources
+exigent un contrôle : ces tables ne sont pas publiées avec les exercices.
+Auth, profils, tentatives, duels, statistiques, flashcards, feedbacks et
+`exercises_claude` sont exclus. Une absence Staging ne supprime rien en Production.
+
+Le service relit la source approuvée, les permissions et les reçus courants,
+refait les contrôles Engine, calcule le diff, puis exige une confirmation signée.
+Les identités SQL du journal source et d’écriture cible sont distinctes ; les
+connexions sont privées et vérifiées avec TLS. La cible applique une transaction
+idempotente et produit un résultat observable. La finalisation source conserve
+statut, pointeur et journal ensemble. Un rollback réactive explicitement une
+ancienne version publiée sans réécrire les révisions ni les tentatives liées.
+
+Le journal distingue `planned`, `executing`, `uncertain`, `committed`, `failed`
+et `cancelled`. Une issue incertaine conserve la protection durable de la source.
+Un timeout ne prouve ni l’échec ni le succès : observer la cible avant toute
+répétition. L’annulation d’un plan préparé n’annule pas une transaction engagée.
+Les lots gardent un résultat par exercice ; une reprise ne réapplique pas les
+succès déjà établis. Les preuves locales de ce pipeline ne prouvent pas une
+publication distante.
+
+## Indicateurs et données historiques
+
+Le dashboard catalogue compte les identités, utilise la dernière révision pour
+le statut éditorial et donne priorité à l’archive. Le pointeur `active_version_id`
+est distinct de `MAX(revision)` : un nouveau brouillon ne remplace pas une version
+publiée active. « Tests en échec » désigne le dernier reçu courant échoué, pas
+l’absence de reçu. Les cinq versions actives récentes ne sont pas un journal de
+transferts.
+
+Les statistiques d’activité utilisent des périodes UTC de 1 à 90 jours,
+`[from, until)`. Les tentatives suivent `attempted_at` ou `submitted_at`, les duels
+terminés `finished_at`. Les comptes actifs sont les identités Auth encore présentes
+ayant une tentative datée sur la période, anonymes inclus et dédupliqués ; ils ne
+sont pas le nombre de comptes créés. Les dates manquantes ne sont pas inventées.
+
+La réussite enregistrée vaut `correct / (correct + incorrect)`, abandons exclus ;
+sans dénominateur, elle est non calculable. Elle ne certifie pas les verdicts
+historiques. Les deux compteurs décidés sont les exercices distincts traités
+hors abandons et les réponses terminées avec répétitions. Une réponse sans ID
+d’exercice compte seulement dans le second.
+
+Les regroupements pédagogiques utilisent les métadonnées actuelles, pas une
+reconstitution historique. Une tentative multi-compétences peut figurer dans
+plusieurs groupes mais une seule fois dans les totaux. Références inconnues,
+valeurs absentes et rapprochements ambigus restent explicites. Les compteurs SQL
+sont des chaînes décimales traitées avec `BigInt`. Une panne de lecture affiche
+« indisponible », jamais des zéros fabriqués. La consultation nominative retenue
+porte sur nom, e-mail et activité, avec progression/historique minimisés.
+
+## Schéma et migrations
+
+L’historique canonique appartient au dépôt NovLearn ; Admin conserve les contrats,
+audits et outils de contrôle, sans deuxième suite concurrente de migrations.
+Les preuves de rejeu **SQL71 local** et les **71 entrées distantes après bundle
+Staging** ne désignent pas nécessairement les mêmes fichiers SQL.
+
+Le bundle ciblé `supabase/rollouts/20261021115604_novlearn_admin_staging_core.sql`
+a été appliqué à Staging sous la version `20261021120707`, selon la
+[qualification conservée](archives/staging-sql-qualification-2026-10-21.json).
+Ce bundle est adapté à une baseline vivante ; ne pas l’ajouter au rejeu neuf ni
+le rejouer aveuglément. Son SHA256 est dans la preuve, pas recopié ici.
+
+Les tentatives historiques sans version restent sans version connue : ne pas
+leur attribuer arbitrairement le contenu courant. La compatibilité des lecteurs
+élèves et du stockage/rejeu d’instances reste une porte distincte. Une publication
+de contenu ne déclenche ni migration SQL ni déploiement de code.

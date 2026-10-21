@@ -25,7 +25,9 @@ const nativeMarker = await json(
   '.local/lot1a/active-version-copy-current.json',
 );
 assert.equal(nativeMarker.phase, 'qualified-native');
-const documented = await json('docs/active-version-readonly-proof.json');
+const documented = await json(
+  'docs/archives/active-version-readonly-proof.json',
+);
 assert.equal(nativeMarker.proof, documented.populatedCopy.rawProof);
 assert.equal(
   sha(await readFile(nativeMarker.proof)),

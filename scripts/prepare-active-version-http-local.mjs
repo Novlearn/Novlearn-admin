@@ -14,7 +14,9 @@ assert(flag === undefined || flag === '--resume');
 const resume = flag === '--resume';
 const json = async (f) => JSON.parse(await readFile(f, 'utf8'));
 const sha = (b) => createHash('sha256').update(b).digest('hex');
-const certified = await json('docs/active-version-target-local-proof.json');
+const certified = await json(
+  'docs/archives/active-version-target-local-proof.json',
+);
 assert.equal(certified.applicationTargetUpgrade.targetSchemaVersion, 70);
 assert.equal(certified.publicationHttp.checks.length, 13);
 const upgrade = await json(

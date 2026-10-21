@@ -90,7 +90,9 @@ const snapshotSql =
   'ROLLBACK;';
 const targetBefore = value(reader.target, snapshotSql),
   sourceBefore = value(state.names.db, snapshotSql);
-const previous = await json('docs/active-version-target-local-proof.json');
+const previous = await json(
+  'docs/archives/active-version-target-local-proof.json',
+);
 const transfer = await json(previous.publicationHttp.rawProof);
 const source = value(
   state.names.db,

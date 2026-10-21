@@ -97,8 +97,8 @@ await writeJson('manifest.json', manifest);
 const inputs = {};
 for (const relative of [
   'scripts/test-observed-schema-local.mjs',
-  'docs/observed-staging-shape-2026-10-20.sql',
-  'docs/observed-staging-shape-2026-10-20.json',
+  'docs/archives/observed-staging-shape-2026-10-20.sql',
+  'docs/archives/observed-staging-shape-2026-10-20.json',
 ]) {
   const file = path.join(root, relative);
   inputs[file] = sha(await readFile(file));
@@ -272,12 +272,12 @@ try {
   const overlayResult = sql(overlay);
   await writeFile(path.join(artifact, 'overlay.log'), overlayResult);
   const shapeQuery = await readFile(
-    path.join(root, 'docs/observed-staging-shape-2026-10-20.sql'),
+    path.join(root, 'docs/archives/observed-staging-shape-2026-10-20.sql'),
     'utf8',
   );
   const expected = JSON.parse(
     await readFile(
-      path.join(root, 'docs/observed-staging-shape-2026-10-20.json'),
+      path.join(root, 'docs/archives/observed-staging-shape-2026-10-20.json'),
       'utf8',
     ),
   );

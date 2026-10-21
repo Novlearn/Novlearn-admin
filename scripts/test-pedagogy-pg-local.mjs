@@ -13,7 +13,7 @@ assert.equal(extra.length, 0);
 assert.match(container ?? '', /^novlearn-admin-user-detail-restore-\d+$/);
 assert(flag === undefined || (flag === '--resume' && resume));
 const certified = JSON.parse(
-  await readFile('docs/pedagogy-readonly-proof.json', 'utf8'),
+  await readFile('docs/archives/pedagogy-readonly-proof.json', 'utf8'),
 );
 assert.equal(certified.restoration.proof.restored, container);
 assert.equal(

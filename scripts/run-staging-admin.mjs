@@ -52,7 +52,7 @@ async function runStagingAdmin() {
     );
     return;
   }
-  const reviewPath = 'docs/staging-sql-qualification-2026-10-21.json';
+  const reviewPath = 'docs/archives/staging-sql-qualification-2026-10-21.json';
   const reviewBytes = await readFile(reviewPath);
   const digest = createHash('sha256').update(reviewBytes).digest('hex');
   assert.equal(

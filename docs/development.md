@@ -1,56 +1,76 @@
-# Développement
+# Démarrer et travailler sur le dépôt
 
-## Prérequis et installation
+## Installation
 
-Node.js 24.19.x et npm 11.17.x pour l'Admin courant, alignés sur le runtime de l'Engine. Le frontend NovLearn observé déclare encore Node 20+ ; ce dépôt ne le modifie pas.
+Utiliser Node.js `>=24.19.0 <25` selon [package.json](../package.json).
+Les preuves de qualification utilisent Node 24.19.0 et npm 11.17.0.
+Le lockfile fixe les dépendances, dont l’archive Engine locale.
 
 ```powershell
 npm.cmd ci
 npm.cmd run dev
 ```
 
-Les commandes `npm.cmd` évitent le blocage fréquent de `npm.ps1` par la politique PowerShell. Le serveur local est à `http://localhost:3000`.
+Sous PowerShell, `npm.cmd` évite les restrictions éventuelles de `npm.ps1`.
+Next démarre sur `http://localhost:3000`, puis redirige vers la connexion.
+Sans configuration Auth valide, le formulaire est désactivé et les opérations
+protégées refusées. `npm ci` nécessite l’accès aux dépendances ; il ne provisionne
+aucune base ni aucun compte.
 
-## Scripts disponibles
+Les scripts `predev` et `prebuild` préparent les ressources MathLive locales.
+`npm.cmd run build` produit une sortie autonome et `postbuild` y copie les
+ressources nécessaires. `npm.cmd start` sert ce build.
 
-| Commande                   | Rôle                                            |
-| -------------------------- | ----------------------------------------------- |
-| `npm.cmd run dev`          | Serveur de développement Next.js                |
-| `npm.cmd run build`        | Build de production autonome                    |
-| `npm.cmd start`            | Sert le build déjà produit                      |
-| `npm.cmd run typecheck`    | Vérification TypeScript sans émission           |
-| `npm.cmd run lint`         | ESLint                                          |
-| `npm.cmd run format`       | Formate les fichiers suivis par Prettier        |
-| `npm.cmd run format:check` | Vérifie le format sans modifier les fichiers    |
-| `npm.cmd run check`        | Typecheck, lint, format et build successivement |
+## Profil Staging déjà configuré sur cette machine
 
-`npm.cmd run test` exécute Vitest (permissions, routes directes, adaptateur Auth et cookies SSR). `check` commence par ces tests puis types, lint, format, build et `test:smoke`. Le smoke lance un standalone temporaire sur 127.0.0.1:3137 avec Auth explicitement désactivé ; il vérifie les refus HTTP, la redirection, les headers et la disponibilité du CSS, puis arrête le serveur. `postbuild` copie les assets statiques nécessaires au standalone. Les doubles ne constituent pas une preuve de droits SQL ou de connexion distante. Voir [Auth](auth.md) pour les tests nécessaires avant activation.
+`start-staging.cmd` lance [run-staging-admin.mjs](../scripts/run-staging-admin.mjs)
+sur `http://127.0.0.1:3150/login`, sans Docker. Il exige les fichiers privés
+existants `.env` et `.local/staging-admin-config.json`, ainsi que le dossier
+d’instance désigné par cette configuration. Ce n’est pas un bootstrap portable
+pour une nouvelle machine.
 
-## Conventions et structure
+Le lanceur vérifie le projet et l’empreinte de la qualification SQL, puis contacte
+Supabase Staging. Il fixe les capacités conformément au
+[profil actuel](roadmap.md). Ne pas modifier l’empreinte ni contourner un refus
+pour obtenir un démarrage. Utiliser le compte Supabase existant choisi par
+l’utilisateur ; les anciens comptes locaux ne sont pas des comptes Staging.
 
-`npm.cmd run test:math-input:browser` lance le banc local de saisie décrit dans
-[MathLive](math-input.md), uniquement sur 127.0.0.1:3138, sans base ni correcteur.
-Les polices du champ sont préparées automatiquement avant `dev` et `build`.
+Pour arrêter uniquement cette instance :
 
-`node scripts/catalogue-browser.mjs` sert le banc visuel synthétique du catalogue
-sur 127.0.0.1:3139. Aucun accès Supabase ; sa simulation de sauvegarde renvoie
-volontairement 409. Voir [catalogue](catalogue.md) pour les écrans réels et les
-47 assertions SQL. `npm run verify:engine`, inclus dans `check`, vérifie
-l’archive certifiée conservée dans `vendor/` et les empreintes du lockfile.
+```powershell
+node scripts/run-staging-admin.mjs --stop
+```
 
-- TypeScript strict ; App Router dans `src/app/`.
-- Alias `@/*` vers `src/*`.
-- Server Components par défaut ; ajouter du code client seulement quand un besoin d'interaction l'exige.
-- Tailwind pour le style ; conserver une base responsive, sémantique et navigable au clavier.
-- Garder le dépôt simple. Introduire services, hooks, composants partagés ou nouvelles dépendances lorsqu'un usage concret le justifie.
-- Respecter les contrats de l'Exercise Engine pour les exercices.
+Le simple lancement de ce frontend peut conduire à des écritures **réelles dans
+Staging** lors des actions de l’utilisateur. Il ne faut pas l’assimiler à un banc
+fictif. Pour configurer un autre poste, lire [Auth](auth.md) avant toute activation.
 
-## Variables et sécurité
+## Bancs d’essai
 
-Copier `.env.example` vers `.env.local` seulement si une future fonctionnalité l'exige, puis fournir les secrets via un gestionnaire adapté. Les valeurs de l'exemple sont fictives. Ne jamais committer de secret, exposer de clé privilégiée dans `NEXT_PUBLIC_*`, ou connecter directement le navigateur aux capacités Production. Vérifier l'autorisation côté serveur pour chaque opération protégée. Préserver la séparation Staging/Production.
+`node scripts/content-browser.mjs` sert les écrans d’exemple sans base ni calcul
+Engine sur le port 3140. Il ne prouve ni la sauvegarde ni les permissions SQL.
 
-## Procédure par lot
+Les scripts `preview-browser.mjs`, `create-local-admin.mjs`, `run-local-admin.mjs`
+et les bancs HTTP/PG restent dans `scripts/`. Ils concernent des fixtures ou des
+instances Docker distinctes. Les anciens conteneurs Admin ont été retirés après
+sauvegarde : `start-local.cmd` et un ancien dossier d’instance ne garantissent
+pas leur restauration. Reconstituer un banc demande ses dépendances exactes et
+une procédure de restauration vérifiée ; ne pas lancer ces outils comme une
+réparation automatique du profil Staging.
 
-Lire `CDC_reference.md`, `AGENTS.md` et les documents du lot. Confirmer les dépendances et décisions ouvertes, implémenter uniquement le périmètre accepté, ajouter les tests de comportement correspondants, mettre à jour la documentation utile, puis exécuter les vérifications disponibles avant commit. Ne pas modifier les repositories voisins ni le CDC au fil de l'implémentation.
+Les captures et pages de `tests/browser/` permettent les essais manuels. Un HTTP
+200 ou un rendu serveur ne vaut pas réception des interactions navigateur.
 
-Avant commit, lancer au minimum `npm.cmd run check`, examiner `git diff`, vérifier qu'aucun secret ni fichier généré n'est suivi et relire la documentation modifiée. Ne déclarer une vérification distante ou manuelle que si elle a effectivement été exécutée.
+## Contribution
+
+Lire [les consignes](../AGENTS.md), le [CDC](../CDC_reference.md) et
+[l’état actuel](roadmap.md). Ne pas commencer automatiquement le lot suivant.
+Les accès distants, migrations, dépôts voisins, publications et déploiements
+nécessitent leur autorisation propre. Une décision historique n’est pas une
+autorisation permanente pour une nouvelle intervention.
+
+L’alias `@/*` désigne `src/*`. Conserver les contrôles de permissions côté serveur,
+le format canonique Engine et la séparation Staging/Production.
+Les commandes de qualité et leurs limites sont dans
+[Vérifications](verification.md). Éviter `npm run format` à la racine pour une
+retouche documentaire : formater seulement les fichiers concernés.
