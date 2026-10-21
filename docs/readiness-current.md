@@ -1,5 +1,24 @@
 # État de livraison — 21 octobre 2026
 
+**État courant D13 : [préparation Vercel avec Supabase réel](vercel.md).** Docker
+Admin est retiré après archivage, Engine natif désactivé dans cette livraison.
+Le [bilan D13](release-vercel-2026-10-21.json) porte les vérifications courantes
+et les réserves de sécurité. Déploiement et réception Vercel restent à réaliser
+par l’utilisateur. Les états D12 et antérieurs ci-dessous sont historiques.
+
+**État courant D12 : [application reliée à Supabase Staging](staging-app.md).**
+SQL installé après restauration ciblée et 286 assertions inchangées, contenus et
+ancien historique conservés, premier compte administrateur vérifié. Le serveur
+sur 3150 utilise les vrais comptes et données. Réception humaine reçue :
+« connexion et sauvegarde OK », puis « Brouillon enregistré dans Staging. » après
+l’action complémentaire demandée. Le brouillon n°121 est visible dans la base et
+sa fiche a été lue après le POST réussi. Le contrôle complet final passe **1 525
+tests / 79 fichiers**, types, lint sans erreur, format, build, intégrité Engine et smoke.
+Rapports Engine non enregistrés par choix de l’utilisateur. Production, publication
+et déploiement fermés ; le CDC complet et le goal restent ouverts.
+
+Les relevés D11 et précédents ci-dessous sont historiques et conservent leur portée.
+
 **Version essentielle locale prête (D11) :** [ouvrir l’application](http://127.0.0.1:3150/login) ou suivre le [lancement](local-mvp.md). Le contrôle général passe **1 514 tests/78 fichiers**, intégrité Engine, types, lint, format, build et smoke. Sauvegarde, reconnexion, conflits et rapport signé passent réellement ; anciennes lignes métier préservées. Les fonctions étendues restent reportées, les données récentes manquantes explicites et les portes distantes fermées. [Preuves et portée](local-mvp-proof.json).
 
 **21 octobre — priorité à une version essentielle (D11) :** [périmètre et lancement](local-mvp.md). Connexion, catalogue/Creator, sauvegarde, ancien Engine certifié, chapitres, compétences et flashcards sont retenus. Courbes D10, statistiques/utilisateurs, version cible, publication et déploiement sont reportés pour accélérer la livraison. Les vérifications finales portent sur cette portée locale ; le Lot 1A et les portes distantes restent ouverts.

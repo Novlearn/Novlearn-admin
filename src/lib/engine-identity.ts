@@ -8,3 +8,8 @@ export const certifiedEngineIdentity = Object.freeze({
   engineArchiveSha256:
     'd4d3abc408ab37f2f8a5faa512964b48947828bae9209cb1460b47111ca582f9',
 });
+
+/** Vercel is not the certified bounded Linux host. Never start native jobs there. */
+export function isEngineEnabled(env: Record<string, string | undefined>) {
+  return env.ADMIN_ENGINE_ENABLED === 'true' && env.VERCEL !== '1';
+}

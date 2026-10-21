@@ -55,6 +55,7 @@ function endpoint(
 export function readPublicationPgConfiguration(
   env: Record<string, string | undefined>,
 ): PublicationPgConfiguration | null {
+  if (env.VERCEL === '1') return null;
   const auth = readAuthConfiguration(env);
   if (auth?.localPublicationFixture) {
     if (

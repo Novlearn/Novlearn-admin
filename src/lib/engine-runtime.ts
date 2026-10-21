@@ -1,4 +1,5 @@
 import 'server-only';
+import { isEngineEnabled } from './engine-identity';
 import { randomUUID } from 'node:crypto';
 import {
   createNodeHost,
@@ -22,6 +23,8 @@ export async function runEngine(
   payload: JsonObject,
   signal?: AbortSignal,
 ): Promise<JsonValue> {
+  if (process.env.VERCEL === '1' && !isEngineEnabled(process.env))
+    throw new EngineRuntimeError('runtime-profile');
   if (process.platform !== 'linux') {
     const { readLocalEngineConfiguration, runLocalEngine } = await import(
       './engine-local-transport'

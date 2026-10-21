@@ -1,5 +1,63 @@
 # Décisions et arbitrages
 
+## D13 — Préparer Vercel et retirer les instances Docker Admin
+
+**Source : demande explicite de l’utilisateur du 21 octobre 2026.** Nettoyer
+Docker, supprimer les versions locales Admin, vérifier la sécurité et le dépôt.
+L’utilisateur choisit ensuite Vercel et autorise « Effectuer le commit et le push
+après les vérifications ». Le déploiement sera fait ultérieurement par lui.
+
+Le frontend garde Supabase Staging réel pour Auth, le catalogue et les contenus.
+Le profil Engine certifié exige un hôte Linux avec cgroup v2 borné ; cet hôte
+n’est pas qualifié sur Vercel Functions. Les API et les contrôles correspondants
+restent donc fermés sur Vercel, même en cas de drapeau Engine activé par erreur.
+Le lanceur Staging local fonctionne également sans Docker. Aucun calcul de
+remplacement, quota modifié ou test positif fictif n’est introduit. La publication
+de contenu vers Production et la signature de rapports restent désactivées.
+
+Les 33 conteneurs Admin, deux volumes exclusifs et l’image Node exclusive sont
+retirés après dump logique et archives physiques contrôlées hors Docker. Les
+ressources Novlearn, FlyRenov et Dashboard sont préservées. Les anciennes preuves
+restent historiques ; leurs instances ne sont plus disponibles. Aucun changement
+de configuration Auth ou de base distante n’est inclus dans ce nettoyage.
+
+Next.js et sa configuration ESLint passent à 15.5.28. L’audit ne donne pas une
+certification globale : sept alertes de développement sans correctif publié et
+les avertissements Supabase sont documentés dans le [guide Vercel](vercel.md).
+Le CDC reste inchangé ; cette préparation ne termine pas son périmètre complet.
+
+## D12 — Supabase réel reste requis pour la version essentielle
+
+**Source : correction explicite de l’utilisateur du 21 octobre 2026.**
+« ca va pas du tout, moi je veux justement une ap^p qui utilise supabase
+authentification, des données de supabase etc ».
+
+La réduction fonctionnelle D11 n’autorise pas à substituer un banc entièrement
+local aux comptes et contenus Supabase attendus. La cible reste une application
+reliée au vrai projet Staging, même si son frontend tourne localement. La
+précédente clôture ne vaut pas satisfaction de cette attente. Le
+[diagnostic et la proposition de raccordement](supabase-staging-connection.md)
+distinguent le constat initial et l’installation réelle désormais vérifiée.
+L’utilisateur autorise ensuite : « Oui, Staging uniquement après ces vérifications »,
+pour le raccordement, les modifications SQL nécessaires et les essais, après
+qualification du delta et de la sauvegarde/restauration. L’installation Staging
+est effectuée sous cette autorisation ; Production, publication et déploiement
+restent fermés. Le compte choisi et créé par l’utilisateur est confirmé puis
+promu administrateur après vérification de son identité exacte.
+
+L’utilisateur choisit ensuite « Continuer sans enregistrer les rapports Engine »
+après le refus automatique de provisionner une nouvelle clé privée sans accord
+spécifique. Aucune clé de signature n’est installée sur Staging ; la signature
+des rapports et la relecture éditoriale restent désactivées. Les aperçus et tests
+temporaires utilisent toujours le moteur Linux certifié, sans modification des
+délais, quotas ou critères. L’utilisateur répond ensuite « connexion et sauvegarde OK » ;
+les traces confirment la connexion et le catalogue, mais aucune écriture de brouillon
+n’est encore observée dans Staging. Une vérification complémentaire est demandée,
+sans compter prématurément la sauvegarde comme validée. L’utilisateur effectue
+ensuite la sauvegarde demandée : « Brouillon enregistré dans Staging. » Le POST
+réussi, la version stockée du brouillon n°121 et les lectures de sa fiche confirment
+alors cette écriture. [Mise en service et limites](staging-app.md).
+
 ## D11 — Livrer rapidement une version locale essentielle
 
 **Source : demande explicite de l’utilisateur du 21 octobre 2026.**

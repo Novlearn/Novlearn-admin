@@ -1,5 +1,15 @@
 # Version locale essentielle
 
+**D13 — banc retiré après archivage.** Les anciennes instances Docker ne sont
+plus disponibles. Suivre le [guide Vercel](vercel.md) ou `start-staging.cmd` pour
+un frontend sans Docker relié à Supabase réel. Les résultats ci-dessous sont
+historiques ; ils ne prouvent pas la disponibilité actuelle des anciens bancs.
+
+**Document historique D11.** Le serveur sur 3150 utilise désormais le vrai Supabase
+Staging : suivre le [guide courant](staging-app.md) et lancer `start-staging.cmd`.
+Les identifiants et données du banc ci-dessous sont conservés, mais ne servent
+pas sur Staging. Ne pas lancer simultanément les deux profils sur le même port.
+
 L’utilisateur demande de privilégier une application utilisable rapidement,
 avec moins de fonctionnalités si nécessaire : [décision D11](decisions.md#d11--livrer-rapidement-une-version-locale-essentielle).
 

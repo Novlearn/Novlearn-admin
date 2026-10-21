@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from 'next/server';
 import { authorizeAdmin } from '@/lib/auth/authorization';
+import { isEngineEnabled } from '@/lib/engine-identity';
 import { readAuthConfiguration } from '@/lib/auth/config';
 import { isTrustedMutation, privateHeaders } from '@/lib/auth/http';
 import { readBoundedJson } from '@/lib/auth/json';
@@ -30,7 +31,7 @@ export async function POST(request: NextRequest) {
   const json = (body: unknown, status = 200) =>
     NextResponse.json(body, { status, headers: privateHeaders() });
   const config = readAuthConfiguration(process.env);
-  if (!config || process.env.ADMIN_ENGINE_ENABLED !== 'true')
+  if (!config || !isEngineEnabled(process.env))
     return json({ error: 'Aperçu Engine non activé.' }, 503);
   if (!isTrustedMutation(request, config))
     return json({ error: 'Origine refusée.' }, 403);

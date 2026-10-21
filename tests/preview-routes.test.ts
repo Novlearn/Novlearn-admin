@@ -121,6 +121,15 @@ beforeEach(() => {
   }));
 });
 describe('aperçu serveur protégé', () => {
+  it('refuse Vercel avant de générer un aperçu même si le drapeau Engine est actif', async () => {
+    vi.stubEnv('VERCEL', '1');
+    try {
+      expect((await POST(request())).status).toBe(503);
+      expect(fake.generate).not.toHaveBeenCalled();
+    } finally {
+      vi.unstubAllEnvs();
+    }
+  });
   const savedRequest = () =>
     request({
       action: 'test_saved',

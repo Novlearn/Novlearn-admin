@@ -12,8 +12,16 @@ export function readLocalEngineConfiguration(
   env: Record<string, string | undefined>,
 ) {
   const auth = readAuthConfiguration(env);
+  const stagingDevelopment =
+    auth &&
+    !auth.local &&
+    env.NODE_ENV === 'development' &&
+    env.ADMIN_STAGING_LOCAL_ENGINE_ENABLED === 'true' &&
+    auth.appOrigin === 'http://127.0.0.1:3150';
   if (
-    !auth?.local ||
+    env.VERCEL === '1' ||
+    !auth ||
+    (!auth.local && !stagingDevelopment) ||
     env.ADMIN_ENGINE_ENABLED !== 'true' ||
     env.ADMIN_LOCAL_ENGINE_URL !==
       (auth.localPublicationFixture

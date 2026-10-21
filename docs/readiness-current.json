@@ -1,10 +1,10 @@
 {
-  "recordedAt": "2026-10-21T11:17:18.899Z",
+  "recordedAt": "2026-10-21T15:58:15.249Z",
   "scope": "Documentary traceability for all 20 original goal sections; not a functional test, receipt, permission or completion certificate",
   "referenceInputs": {
     "requestSha256": "fb9ac40863c57594878833b8a9fc0bd130a0cba9d0249d29c609051a54bded93",
     "cdcSha256": "b6bfea6d74b008e54ed61aa7598ccd01bd438d496cc22add15da2ff8abb04401",
-    "decisionsSha256": "9a0e32b17f3cdb2ed86422329600d1ef89d45e4314b494bd86832c5177ed195a"
+    "decisionsSha256": "21dc2a915bb2644d4750fcc0e73e93a0c32edf9a13719d3de2f954a99dff2dda"
   },
   "baselineAdminCommitAtAssessment": "2145784757fa4d2281f81ad45016853c446c7fc8",
   "implementationHasUncommittedChangesAtObservation": true,
@@ -218,7 +218,7 @@
     "local-recovery-2026-10-18.md": "ab6e2a667d7b054b673a1b175044ed6504218a993fd9e8c6054b46fb970aac1f",
     "users-readonly.md": "af41c90a92f9f5f8baa0f9ad6094b0c87d6d54f07a1bff828e4494efe829ae20",
     "lot-1a-remote-reconciliation-current.md": "4a2a06adff60f7a6541f261af3bd00a63debc01197030717c389c7c22b813dfe",
-    "progress.md": "50d4249ea8d591ad4e3c769d68527968aa23a913aaf545e9980af36f9748bf26",
+    "progress.md": "fd07e5bf76b9c6cceaafd66acf63b66ef7e55e47704e445fe505f047a0946ec4",
     "lot-1a-preparation.md": "3561164a62bc6690a46d2f472c42037c11bd9aacc40add77d44814abdc5dd271",
     "recovery-cleanup-proof.json": "cb414a4c150ceb55204fcc9fca07696d05463e71642b4b4db35fd62819fa2524",
     "local-recovery-2026-10-18-proof.json": "5c9f10801159d1b94c66aebf2f4f45cb91e6a3447f6098968d85e03c83e0e26d",
@@ -239,7 +239,7 @@
     "activity-readonly-proof.json": "c362635524c4dc6cfe81cdbc489e2130a3e3285f8346462e5075915fddb51401",
     "activity-http-proof.json": "c4ae58e794d8944ecf0947935e799b834bb1742336984c5cd8c51201af35b806",
     "users-readonly-proof.json": "2a2ba32df2dca5050be282939596ed3a0a9e22695a56d4d6c6560f64ab5a8da2",
-    "roadmap.md": "af091745723cdb1391ad6b2bad595ab46cc673eba933a7289c1e8e879eb9a799",
+    "roadmap.md": "a1a74a5d742f03010c723116813c84c1ad98744e64083b67c749a2d45d79b431",
     "activity-readonly.md": "0bc4135dfe48409cb19a8f2ad0b98e9593c65f83f46bc12b53a4a8e6fd1fbdff",
     "activity-pg.md": "ce3ae62c070f728174bc2cae7817d1ed727d42fd1e2e09d162cadd188b028aec",
     "lot-1a-local-statistics-guard.md": "0bd4f19d706296ccb96f8ea246f186c4e52ddc7a23da69519f64c2a1978a7a92",
@@ -289,13 +289,17 @@
     "engine-graph-proposal.md": "1b8b98d48332325adebf75de7d4404023f7dd657a8a08bc8b92cba1a2a81c80a",
     "engine-graph-proposal.json": "3952928915869a5b31160e5e270fe505d23302d6ea74713b173daa4212cdf024",
     "preview.md": "f77378925dfd3ab8e653a989b64de813580c9aaba88df9986866b29ba49989c3",
-    "decisions.md": "9a0e32b17f3cdb2ed86422329600d1ef89d45e4314b494bd86832c5177ed195a",
+    "decisions.md": "21dc2a915bb2644d4750fcc0e73e93a0c32edf9a13719d3de2f954a99dff2dda",
     "engine-graphs.md": "f06fb1637683348bc8f3468a2c759845e7a6d22c3208cea1d80d2eec8fcc845d",
     "docker-cleanup-recovery-2026-10-21.md": "eb3f2e4fffd5f2f8eae2cd643077ce7d80b5f1fcaa1069770578c99fdb909c45",
     "docker-cleanup-recovery-2026-10-21.json": "eeb01f8dfb21d0e4fd0f9cb25938cdc1229670433df461b9c9c5bcf673536e80",
-    "local-mvp.md": "e2961419d9a7cd53e3a198c563a59213d552124f3a68fe17908987be0b61800c",
+    "local-mvp.md": "d97c5d3e08519d4c83a006179075e5a5bd755e478ca24b5ba578a65b88dea027",
     "local-mvp-proof.json": "274003ba619956459d34b34bdf034d08d77d294f1401fbd6fb40f68d56327736",
-    "engine-graphs-proof.json": "137eb03a374f7afbb6bf1c836c6c765efa5d198d74c5424a11a96001093bf11c"
+    "engine-graphs-proof.json": "137eb03a374f7afbb6bf1c836c6c765efa5d198d74c5424a11a96001093bf11c",
+    "staging-app.md": "1a3d95636d47608a6d93ac6b0f6b23e093aab18de3b846fb1df1049eab37a0eb",
+    "staging-sql-qualification-2026-10-21.json": "f9403aed712e43a57c768c5936e31ced6d801db9fb75e80a8037bd6979163d17",
+    "supabase-staging-connection.md": "88e9a7a1447e47b423783018af9f88c52a01ff48993ab5ac8c9d51f1f1473dda",
+    "staging-app-2026-10-21-proof.json": "dbadef794c3e59d2c34e97d609ce4d6c5917c693b1029a30a9315474625e8b2d"
   },
   "unimplemented": [
     "Production analytics identity/source activation and remaining metrics (local general and pedagogical filters, grouping/ranking, PG/TLS and Auth/HTTP page/API qualified)",
@@ -311,9 +315,9 @@
     "Global SQL advisor remediation/security qualification remains open: SQL71 comparable copies 30 WARN/67 INFO; unchanged application target SQL70 previously 33 WARN/67 INFO",
     "Authorized browser reception of active-version indicator and refresh; stored inconsistency not planted in current published target"
   ],
-  "remoteWritesPerformed": false,
+  "remoteWritesPerformed": true,
   "privilegedProductionKeysRetrieved": false,
-  "goalComplete": true,
+  "goalComplete": false,
   "currentLocalServices": {
     "result": "PASS FOR RESTORED CORE ONLY",
     "date": "2026-10-21T10:42:06.339Z",
@@ -842,7 +846,7 @@
     "proof": "local-mvp-proof.json",
     "status": "READY_FOR_ESSENTIAL_LOCAL_USE",
     "scope": "Local content authoring and old certified Engine; deferred features remain closed",
-    "goalComplete": true,
+    "goalComplete": false,
     "lot1AComplete": false,
     "currentExercises": 7,
     "currentTestReports": 10,
@@ -850,8 +854,59 @@
     "tests": 1514,
     "files": 78,
     "completedAt": "2026-10-21T11:17:17.622Z",
-    "completionScope": "D11: essential local version delivered after the user explicitly reduced scope. Original full CDC, Lot1A and remote readiness remain incomplete."
+    "completionScope": "D11: essential local version delivered after the user explicitly reduced scope. Original full CDC, Lot1A and remote readiness remain incomplete.",
+    "supersededBy": "D13: local Docker test bench retired after backup; historical evidence retained"
   },
-  "goalCompletionScope": "D11: essential local version delivered after the user explicitly reduced scope. Original full CDC, Lot1A and remote readiness remain incomplete.",
-  "fullCdcComplete": false
+  "goalCompletionScope": "D13: reduced essential scope with genuine Supabase Staging; Docker retired; Vercel not yet deployed or received. Full CDC and Lot1A incomplete.",
+  "fullCdcComplete": false,
+  "stagingEssentialVersion": {
+    "decision": "D12",
+    "document": "staging-app.md",
+    "proof": "staging-app-2026-10-21-proof.json",
+    "sqlProof": "staging-sql-qualification-2026-10-21.json",
+    "project": "novlearn-staging",
+    "status": "CONNECTED_LOGIN_AND_STORED_DRAFT_VERIFIED",
+    "schemaApplied": true,
+    "sqlAssertions": 286,
+    "backupRoundTripVerified": true,
+    "oldCurriculumRowsPreserved": 147,
+    "oldHistoryEntriesPreserved": 70,
+    "administratorBootstrapped": true,
+    "loginObserved": true,
+    "firstDraftWriteObserved": true,
+    "draftId": "121",
+    "draftReadsAfterWrite": 200,
+    "userReport": "Brouillon enregistré dans Staging.",
+    "signedEngineReportsEnabled": false,
+    "signatureKeyProvisioned": false,
+    "productionWrites": false,
+    "completeCheck": {
+      "result": "PASS",
+      "tests": 1525,
+      "files": 79,
+      "sourceFiles": 612,
+      "at": "2026-10-21T15:15:55.993Z",
+      "proof": "staging-app-2026-10-21-proof.json",
+      "documentaryUpdatesAfterCheck": true
+    },
+    "supersededBy": "D13: genuine Staging retained; Docker/Engine retired; Vercel preparation"
+  },
+  "currentDecision": "D13",
+  "vercelPreparation": {
+    "document": "vercel.md",
+    "proof": "release-vercel-2026-10-21.json",
+    "status": "LOCAL_CHECKS_PASSED_PREPARED_FOR_USER_DEPLOYMENT",
+    "nativeEngineEnabled": false,
+    "dockerAdminRetired": true,
+    "stagingDataRetained": true,
+    "deploymentExecuted": false,
+    "completeCheck": {
+      "result": "PASS",
+      "tests": 1531,
+      "files": 80,
+      "sourceFiles": 616,
+      "at": "2026-10-21T15:57:45.933Z"
+    },
+    "liveWithoutDockerChecks": 7
+  }
 }

@@ -1,0 +1,174 @@
+{
+  "recordedAt": "2026-10-21T15:58:15.249Z",
+  "decision": "D13",
+  "status": "LOCAL_CHECKS_PASSED_PREPARED_FOR_USER_DEPLOYMENT",
+  "hosting": "Vercel planned; no deployment executed",
+  "supabaseProjectRef": "tksvbkvfusrnxulpahky",
+  "databaseChangesThisStep": false,
+  "productionAccess": false,
+  "stagingReception": "D12 already observed: verified login, catalogue, stored draft 121 and reads after POST; no new browser receipt inferred",
+  "nativeEngineEnabled": false,
+  "signingKeyProvisioned": false,
+  "publicationEnabled": false,
+  "docker": {
+    "result": "PASS",
+    "removedContainers": 33,
+    "removedVolumes": 2,
+    "removedExclusiveImages": 1,
+    "remainingAdminContainers": 0,
+    "protectedContainersPreserved": 17,
+    "protectedVolumesPreserved": 4,
+    "diskBefore": "TYPE            TOTAL     ACTIVE    SIZE      RECLAIMABLE\nImages          19        17        11.36GB   592.7MB (5%)\nContainers      50        16        269.1MB   239.7MB (89%)\nLocal Volumes   6         6         311.3MB   0B (0%)\nBuild Cache     86        0         1.529GB   723.4MB\n",
+    "diskAfter": "TYPE            TOTAL     ACTIVE    SIZE      RECLAIMABLE\nImages          18        16        9.722GB   592.7MB (6%)\nContainers      17        11        30.55MB   1.827MB (5%)\nLocal Volumes   4         4         197.9MB   0B (0%)\nBuild Cache     86        0         1.529GB   723.4MB\n",
+    "archives": [
+      {
+        "bytes": 4696128,
+        "sha256": "cd30805600556250dff1158a772e5d60c4c8ae04a58317d8be8bb0808ca5b43c",
+        "validated": true,
+        "restoreExecuted": false
+      },
+      {
+        "bytes": 9883879,
+        "sha256": "5b7ed0dacd220c8bfc4e8d85534fc8b3099cbfa85200dea57e6991765ee1d899",
+        "validated": true,
+        "restoreExecuted": false
+      }
+    ],
+    "backupOutsideDockerAndGit": true
+  },
+  "dependencies": {
+    "next": "15.5.28",
+    "eslintConfigNext": "15.5.28",
+    "sharp": "0.35.5",
+    "production": {
+      "info": 0,
+      "low": 0,
+      "moderate": 0,
+      "high": 0,
+      "critical": 0,
+      "total": 0
+    },
+    "all": {
+      "info": 0,
+      "low": 0,
+      "moderate": 0,
+      "high": 7,
+      "critical": 0,
+      "total": 7
+    },
+    "remainingAdvisory": "GHSA-vfj7-8cjw-p6xm; no published braces fix; development dependency paths; no forced major migration"
+  },
+  "securityAdvisors": {
+    "project": "novlearn-staging",
+    "errors": 0,
+    "warnings": 31,
+    "info": 7,
+    "definerWarnings": 30,
+    "leakedPasswordProtectionEnabled": false,
+    "remoteConfigurationChanged": false
+  },
+  "targetedTests": {
+    "files": 6,
+    "tests": 114,
+    "result": "PASS"
+  },
+  "completeCheck": {
+    "result": "PASS",
+    "date": "2026-10-21T15:57:45.933Z",
+    "artifact": "Private local temporary directory; not published",
+    "exitCode": 0,
+    "tests": 1531,
+    "files": 80,
+    "failedTests": 0,
+    "failedFiles": 0,
+    "sourceFiles": 616,
+    "allCopiedSourcesStillMatch": true,
+    "fullCheckCommand": "npm run check",
+    "separateBuildDirectory": true,
+    "independentTemporaryProject": true,
+    "dependenciesCopied": true,
+    "applicationServersInterrupted": false,
+    "privateEnvironmentFilesCopied": false,
+    "documentationOnlyUpdatesAfterCheck": [
+      "docs/release-vercel-2026-10-21.json",
+      "docs/readiness-current.json"
+    ]
+  },
+  "credentialScan": {
+    "at": "2026-10-21T15:53:28.738Z",
+    "worktreeFiles": 604,
+    "outgoingHistoryBlobs": 947,
+    "findings": 0,
+    "scope": "Targeted high-confidence credential patterns over working tree and all outgoing historical blobs; not an exhaustive secret-detection guarantee"
+  },
+  "preservation": {
+    "cdcSha256": "b6bfea6d74b008e54ed61aa7598ccd01bd438d496cc22add15da2ff8abb04401",
+    "designSha256": "59e40e03702a673632213c354268b11334836fe4b46a1c69a1d7be127d84b2d9",
+    "userAuditSha256": "8ff3bf843fb6221ff8c7cb34435afc67372b25163eb4edbf1268dcae7b38f26a"
+  },
+  "git": {
+    "commitAndPushAuthorized": true,
+    "target": "origin/main",
+    "outgoingExistingCommitsBeforeDelivery": 59,
+    "finalRemoteIdentity": "Verified separately after committing; no force push authorized"
+  },
+  "remaining": [
+    "User Vercel configuration and deployment",
+    "Actual Vercel browser reception",
+    "Review remaining Supabase/Auth warnings before wider opening",
+    "Separate qualified Engine host if capability requested"
+  ],
+  "fullCdcComplete": false,
+  "lot1AComplete": false,
+  "liveWithoutDocker": {
+    "at": "2026-10-21T15:52:52.315Z",
+    "result": "PASS",
+    "checks": [
+      {
+        "route": "/login",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "route": "/admin/exercises",
+        "method": "GET",
+        "status": 307
+      },
+      {
+        "route": "/api/admin/exercises",
+        "method": "GET",
+        "status": 401
+      },
+      {
+        "route": "/api/admin/exercises",
+        "method": "POST",
+        "status": 403
+      },
+      {
+        "route": "/api/admin/exercises",
+        "method": "POST",
+        "status": 401
+      },
+      {
+        "route": "/api/admin/engine",
+        "method": "POST",
+        "status": 503
+      },
+      {
+        "route": "/api/admin/preview",
+        "method": "POST",
+        "status": 503
+      }
+    ],
+    "supabaseProjectRef": "tksvbkvfusrnxulpahky",
+    "nativeEngineEnabled": false,
+    "localDatabase": false,
+    "authenticatedBrowserRetested": false,
+    "remoteMutations": false
+  },
+  "lint": {
+    "errors": 0,
+    "warnings": 1,
+    "warning": "Pre-existing img usage in tests/browser/catalogue.tsx; not a product route"
+  }
+}

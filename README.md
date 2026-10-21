@@ -1,28 +1,38 @@
 # NovLearn Admin
 
-**Première version locale essentielle :** ouvrir [NovLearn Admin](http://127.0.0.1:3150/login).
-Connexion, catalogue, Creator/MathLive, sauvegarde, tests avec le moteur certifié,
-chapitres, compétences et flashcards sont disponibles. Les identifiants et le
-[lanceur simple](docs/local-mvp.md) sont documentés. Courbes avancées, statistiques,
-utilisateurs et publication sont reportés pour livrer plus rapidement (D11).
+**État courant D13 : préparation Vercel avec Supabase Staging réel.**
+[Guide de publication, variables et réception](docs/vercel.md). Les instances
+Docker Admin sont retirées après archivage ; les aperçus/tests Engine sont
+désactivés dans cette livraison. Connexion, catalogue, Creator et sauvegarde
+restent reliés au vrai Supabase. Aucun déploiement Vercel n’est encore effectué.
 
-**Données :** après nettoyage Docker, une [copie du 17 octobre](docs/docker-cleanup-recovery-2026-10-21.md)
-a été récupérée. Elle contient 6 des 18 exercices et 9 des 23 rapports présents
-avant nettoyage ; les données plus récentes manquent. L’application affiche
-cet avertissement. Les nouveaux brouillons restent enregistrés sur cet ordinateur.
+**Version essentielle reliée à Supabase Staging :** ouvrir
+[NovLearn Admin](http://127.0.0.1:3150/login), ou lancer `start-staging.cmd`.
+Utiliser le compte Supabase choisi et créé par l’utilisateur. Le frontend peut
+tourner sans Docker sur cet ordinateur ; les comptes, contenus et brouillons
+utilisent le vrai Supabase Staging. [Guide et état vérifié](docs/staging-app.md).
+
+Le socle SQL est installé après restauration ciblée et 286 assertions SQL inchangées.
+Les 111 exercices, 8 chapitres et 28 compétences existants, ainsi que les 70 anciennes
+migrations, sont préservés. Le compte choisi a reçu le rôle administrateur.
+La connexion et l’ouverture du catalogue sont observées dans les traces serveur.
+Le brouillon n°121 est sauvegardé dans Staging et sa fiche a été relue : la base et
+les requêtes HTTP confirment l’écriture annoncée par l’utilisateur.
+Les aperçus, tests Engine et rapports signés sont désactivés dans ce profil.
 
 NovLearn Admin est indépendante de l’application élève et de l’ancien Creator.
-Le [bilan courant](docs/readiness-current.md) distingue la version locale utilisable,
+Le [bilan courant](docs/readiness-current.md) distingue la version Staging utilisable,
 les résultats historiques et les fonctions reportées. Les anciens parcours de
 statistiques et de publication qualifiés ne sont pas actuellement réactivés.
 
-**Staging distant, Production et déploiement restent fermés.** Le Lot 1A conserve
-ses prérequis SQL et de réception. Cette version locale ne vaut pas validation
+**Supabase Production et publication de contenus restent fermés.** Le banc
+entièrement local D11 est archivé ; ses anciens identifiants ne servent pas sur
+Staging. Le Lot 1A et la réception restent distincts. Cette version essentielle ne vaut pas validation
 complète de la cible du [CDC](CDC_reference.md), qui reste inchangé.
 
 ## Architecture technique retenue
 
-- Next.js 15.5.27 avec App Router et sortie autonome (`standalone`), correctifs de sécurité dans la branche 15.5.
+- Next.js 15.5.28 avec App Router et sortie autonome (`standalone`), correctifs de sécurité dans la branche 15.5.
 - React et React DOM 18.3.1, TypeScript strict 5.9.3.
 - Tailwind CSS 3.4.18, PostCSS et Autoprefixer.
 - ESLint 9 avec la configuration Next.js ; Prettier 3.
@@ -34,6 +44,10 @@ complète de la cible du [CDC](CDC_reference.md), qui reste inchangé.
 Les versions suivent autant que possible le frontend NovLearn observé. Voir [les décisions](docs/decisions.md) pour les limites de cet alignement.
 
 ## Prérequis et démarrage
+
+**Parcours courant :** [Vercel](docs/vercel.md), ou `start-staging.cmd` pour un
+frontend local avec Supabase réel. Les instructions de bancs ci-dessous sont
+historiques : leurs conteneurs ont été retirés et leurs données archivées.
 
 **Pour tester l'application connectée localement**, suivre
 [l'instance avec connexion et sauvegarde](docs/local-admin.md), sur

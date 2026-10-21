@@ -5,6 +5,7 @@ import { isTrustedMutation, privateHeaders } from '@/lib/auth/http';
 import { readBoundedJson } from '@/lib/auth/json';
 import { createRouteAuth, transferAuthCookies } from '@/lib/auth/supabase';
 import { runEngine } from '@/lib/engine-runtime';
+import { isEngineEnabled } from '@/lib/engine-identity';
 import type { JsonObject, JsonValue } from 'novlearn-exercise-engine';
 
 export const runtime = 'nodejs';
@@ -13,7 +14,7 @@ export async function POST(request: NextRequest) {
   const json = (body: unknown, status = 200) =>
     NextResponse.json(body, { status, headers: privateHeaders() });
   const config = readAuthConfiguration(process.env);
-  if (!config || process.env.ADMIN_ENGINE_ENABLED !== 'true')
+  if (!config || !isEngineEnabled(process.env))
     return json({ error: 'Validation Engine non activée.' }, 503);
   if (!isTrustedMutation(request, config))
     return json({ error: 'Origine refusée.' }, 403);

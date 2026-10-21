@@ -5,6 +5,11 @@ import { readLocalEngineConfiguration } from '@/lib/engine-local-transport';
 import { readPublicationConfirmationKey } from '@/lib/publication-service';
 import { localPublicationEnvironment } from './fixtures/local-publication-env';
 vi.mock('server-only', () => ({}));
+it('refuse les transports et la publication locale sur Vercel même avec une configuration complète', () => {
+  const env = { ...localPublicationEnvironment(), VERCEL: '1' };
+  expect(readPublicationPgConfiguration(env)).toBeNull();
+  expect(readLocalEngineConfiguration(env)).toBeNull();
+});
 it('binds the explicit fixture to its separate Auth, SQL, Engine and confirmation namespaces', () => {
   const env = localPublicationEnvironment();
   expect(readAuthConfiguration(env)).toMatchObject({

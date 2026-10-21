@@ -28,6 +28,7 @@ const entries = [
   'package-lock.json',
   'tsconfig.json',
   'next.config.ts',
+  'vercel.json',
   'postcss.config.mjs',
   'tailwind.config.ts',
   'vitest.config.ts',

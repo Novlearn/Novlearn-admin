@@ -56,6 +56,15 @@ beforeEach(() => {
   });
 });
 describe('validation Engine protégée', () => {
+  it('refuse Vercel même en cas de drapeau Engine actif', async () => {
+    vi.stubEnv('VERCEL', '1');
+    try {
+      expect((await POST(request())).status).toBe(503);
+      expect(fake.run).not.toHaveBeenCalled();
+    } finally {
+      vi.unstubAllEnvs();
+    }
+  });
   it.each(['ADMIN_STAGING_AUTH_ENABLED', 'ADMIN_ENGINE_ENABLED'])(
     'reste fermée sans %s, sans initialiser de worker',
     async (flag) => {

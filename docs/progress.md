@@ -1,5 +1,28 @@
 # Progression du goal NovLearn Admin
 
+**21 octobre — état courant D13 : [préparation Vercel](vercel.md).** Les ressources
+Docker Admin sont retirées après archivage ; les autres projets sont conservés.
+Auth et contenus restent sur Supabase Staging réel. Engine natif est désactivé
+dans cette livraison. Le [bilan de vérification](release-vercel-2026-10-21.json)
+distingue les résultats exécutés et la réception Vercel encore à faire. Commit
+et push autorisés après contrôles ; aucun déploiement ni changement distant
+pendant ce nettoyage. Les mentions de services actifs suivantes sont historiques.
+
+**21 octobre — état courant D12 :** [NovLearn Admin sur Supabase Staging](staging-app.md)
+remplace le banc entièrement local comme livraison attendue. Le SQL qualifié et
+les protections des rôles sont installés ; les 147 contenus et l’ancien historique
+SQL sont conservés. Compte administrateur vérifié et promu, page de connexion 200,
+moteur Linux lancé. **286 assertions SQL** et **61 tests ciblés** passent réellement.
+Connexion, catalogue et sauvegarde du brouillon n°121 avec lecture de sa fiche
+confirmés par les traces et la base après l’action complémentaire de l’utilisateur.
+Le contrôle général final passe **1 525 tests / 79 fichiers**, types, lint sans
+erreur, format, build, intégrité Engine et smoke. Les 612 sources sont exactes à sa fin ;
+seules les preuves documentaires sont ensuite complétées. Enregistrement des rapports
+refusé par l’utilisateur ; aucune clé installée. Production et déploiement fermés.
+Goal complet ouvert.
+
+Les relevés D11 et antérieurs suivants conservent leur date et leur portée locale.
+
 **Version essentielle locale prête (D11) :** [ouvrir l’application](http://127.0.0.1:3150/login) ou suivre le [lancement](local-mvp.md). Le contrôle général passe **1 514 tests/78 fichiers**, intégrité Engine, types, lint, format, build et smoke. Sauvegarde, reconnexion, conflits et rapport signé passent réellement ; anciennes lignes métier préservées. Les fonctions étendues restent reportées, les données récentes manquantes explicites et les portes distantes fermées. [Preuves et portée](local-mvp-proof.json).
 
 **21 octobre — priorité à une version essentielle (D11) :** [périmètre et lancement](local-mvp.md). Connexion, catalogue/Creator, sauvegarde, ancien Engine certifié, chapitres, compétences et flashcards sont retenus. Courbes D10, statistiques/utilisateurs, version cible, publication et déploiement sont reportés pour accélérer la livraison. Les vérifications finales portent sur cette portée locale ; le Lot 1A et les portes distantes restent ouverts.

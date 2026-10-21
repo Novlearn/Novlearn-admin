@@ -40,7 +40,10 @@ export default async function AdminLayout({
             <Brand />
           </Link>
           <AdminNavigation
-            publicationEnabled={!local || !!authConfig?.localPublicationFixture}
+            publicationEnabled={
+              !!authConfig?.localPublicationFixture ||
+              process.env.ADMIN_PUBLICATION_ENABLED === 'true'
+            }
             statisticsEnabled={!!readLocalActivityConfiguration(process.env)}
             usersEnabled={!!readLocalUsersConfiguration(process.env)}
           />

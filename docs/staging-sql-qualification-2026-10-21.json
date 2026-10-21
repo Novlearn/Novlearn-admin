@@ -1,0 +1,42 @@
+{
+  "projectRef": "tksvbkvfusrnxulpahky",
+  "project": "novlearn-staging",
+  "applied": true,
+  "migrationName": "novlearn_admin_staging_core",
+  "migrationVersion": "20261021120707",
+  "rolloutSha256": "29666de3a0025aba98ca0cd5d577e6fdbc50871da37357b8038d83bdbb97c6e9",
+  "authorization": "Staging only after delta and backup/restore verification; first administrator chosen by user",
+  "sqlAssertions": 286,
+  "testsChanged": false,
+  "backupRoundTripVerified": true,
+  "backupScope": "Curriculum content and affected application schema; no sensitive Auth row payloads, historical migration statements, managed service data or storage objects exported",
+  "backupCompanions": [
+    "catalogue/schema snapshot",
+    "native local dump",
+    "recorded ACL and extension dependency SQL"
+  ],
+  "sourceTablesCompared": 50,
+  "sourceColumnsCompared": 447,
+  "sourceSequencesPreserved": 11,
+  "remoteDataPreserved": true,
+  "oldPublicTablesPreserved": 22,
+  "oldCurriculumRowsPreserved": 147,
+  "oldMigrationCount": 70,
+  "oldHistorySha256": "be651017a5da54d4ebdbdf67f83b2f7658977501b8df933f38007a1045474550",
+  "currentMigrationCount": 71,
+  "remoteVerificationAt": "2026-10-21T12:07:49.946071+00:00",
+  "migrationOperator": "postgres, non-superuser; locally tested with the same role attributes",
+  "temporaryWriterMembershipRemoved": true,
+  "writerRuntimeAccessAfterApplication": false,
+  "writerInheritedAccessAfterApplication": false,
+  "firstAttempt": "Rolled back fully because SET ROLE was unavailable; no partial installation",
+  "reviewedAdaptations": [
+    "Read the optional historical competence_id via to_jsonb in the private taxonomy usage function",
+    "Use SECURITY INVOKER and fixed search_path for the timestamp-only trigger",
+    "Use and remove a transaction-scoped migration-owner membership for ownership changes"
+  ],
+  "engineArchiveSha256": "d4d3abc408ab37f2f8a5faa512964b48947828bae9209cb1460b47111ca582f9",
+  "productionWrites": false,
+  "deployment": false,
+  "realUserLoginVerified": false
+}

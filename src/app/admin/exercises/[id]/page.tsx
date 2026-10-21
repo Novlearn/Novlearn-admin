@@ -20,6 +20,8 @@ import {
 } from '@/lib/catalogue';
 import { requireCatalogueClient, versionColumns } from '@/lib/catalogue-server';
 import { isCurrentTestReceipt } from '@/lib/test-receipt-state';
+import { readTestSigningConfiguration } from '@/lib/test-receipt';
+import { isEngineEnabled } from '@/lib/engine-identity';
 import {
   ActiveVersionCard,
   type ActiveVersionObservation,
@@ -38,6 +40,8 @@ export default async function ExercisePage({
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
   const client = await requireCatalogueClient();
+  const canRecordTests = !!readTestSigningConfiguration(process.env);
+  const engineEnabled = isEngineEnabled(process.env);
   const publicationConfig = readPublicationPgConfiguration(process.env);
   const { id } = await params;
   const query = await searchParams;
@@ -185,6 +189,8 @@ export default async function ExercisePage({
           )}
           {version && canonical && !editable && (
             <ExercisePreview
+              engineEnabled={engineEnabled}
+              canRecordTests={canRecordTests}
               key={
                 'preview-' + version.id + version.approval_fingerprint_sha256
               }
@@ -229,6 +235,8 @@ export default async function ExercisePage({
             </section>
           ) : editable ? (
             <DraftMetadataForm
+              engineEnabled={engineEnabled}
+              canRecordTests={canRecordTests}
               key={
                 version.id +
                 version.approval_fingerprint_sha256 +
@@ -256,6 +264,8 @@ export default async function ExercisePage({
                   </summary>
                   <div className="mt-5">
                     <DraftMetadataForm
+                      engineEnabled={engineEnabled}
+                      canRecordTests={canRecordTests}
                       key={
                         'new-' +
                         version.id +

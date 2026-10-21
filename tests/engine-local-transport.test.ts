@@ -36,6 +36,41 @@ afterEach(() => {
   vi.unstubAllGlobals();
 });
 describe('private local Linux transport', () => {
+  const stagingEnv = () => ({
+    NODE_ENV: 'development',
+    NEXT_PUBLIC_SUPABASE_URL: 'https://tksvbkvfusrnxulpahky.supabase.co',
+    NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: 'sb_publishable_test',
+    APP_BASE_URL: 'http://127.0.0.1:3150',
+    ADMIN_STAGING_AUTH_ENABLED: 'true',
+    ADMIN_STAGING_SECURITY_REVIEW: 'reviewed-staging-sql',
+    ADMIN_STAGING_LOCAL_ENGINE_ENABLED: 'true',
+    ADMIN_ENGINE_ENABLED: 'true',
+    ADMIN_LOCAL_ENGINE_URL: 'http://127.0.0.1:3151/run',
+    ADMIN_LOCAL_ENGINE_CAPABILITY: 'a'.repeat(64),
+  });
+  it('allows the certified Linux worker for explicitly enabled Staging development', () => {
+    expect(readLocalEngineConfiguration(stagingEnv())).toEqual({
+      url: 'http://127.0.0.1:3151/run',
+      capability: 'a'.repeat(64),
+    });
+  });
+  it.each([
+    { ADMIN_STAGING_LOCAL_ENGINE_ENABLED: '' },
+    { ADMIN_STAGING_AUTH_ENABLED: 'false' },
+    { ADMIN_STAGING_SECURITY_REVIEW: '' },
+    { NODE_ENV: 'production' },
+    { APP_BASE_URL: 'https://admin.example.com' },
+    { NEXT_PUBLIC_SUPABASE_URL: 'https://production.supabase.co' },
+    { ADMIN_LOCAL_ENGINE_URL: 'https://remote.example.com/run' },
+    { ADMIN_LOCAL_ENGINE_CAPABILITY: '' },
+  ])(
+    'refuses incomplete Staging or non-development destinations %#',
+    (change) => {
+      expect(
+        readLocalEngineConfiguration({ ...stagingEnv(), ...change }),
+      ).toBeNull();
+    },
+  );
   it('requires the qualified isolated development Auth configuration', () => {
     expect(readLocalEngineConfiguration(env())).toEqual({
       url: 'http://127.0.0.1:3151/run',

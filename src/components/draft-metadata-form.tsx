@@ -16,6 +16,8 @@ type Props = {
   testEpoch?: number;
   definition?: ExerciseDefinition;
   newRevision?: boolean;
+  canRecordTests?: boolean;
+  engineEnabled?: boolean;
 };
 export function DraftMetadataForm(props: Props) {
   const router = useRouter();
@@ -307,48 +309,52 @@ export function DraftMetadataForm(props: Props) {
           }}
         />
       </fieldset>
-      <section
-        className="rounded-xl border border-slate-200 bg-slate-50 p-5"
-        aria-labelledby="validation-heading"
-      >
-        <h2 id="validation-heading" className="text-lg font-semibold">
-          Validation officielle Engine
-        </h2>
-        <p className="mt-2 text-sm leading-6 text-slate-500">
-          Vérifiez la structure canonique avant les tests et la relecture. Cette
-          vérification n’approuve ni ne publie votre brouillon.
-        </p>
-        <button
-          type="button"
-          className="button mt-4"
-          disabled={busy || validating || recovery.awaitingChoice}
-          onClick={validate}
+      {props.engineEnabled && (
+        <section
+          className="rounded-xl border border-slate-200 bg-slate-50 p-5"
+          aria-labelledby="validation-heading"
         >
-          {validating ? 'Validation…' : 'Vérifier la définition'}
-        </button>
-        {validation && (
-          <div className="mt-4" role="status">
-            {validation.valid ? (
-              <p className="text-sm font-medium text-green-700">
-                Structure canonique correcte. L’exercice reste à tester et à
-                relire.
-              </p>
-            ) : (
-              <ul className="space-y-3 text-sm text-red-800">
-                {validation.diagnostics.map((diagnostic, index) => (
-                  <li key={index}>
-                    <p className="font-mono text-xs text-slate-500">
-                      {diagnostic.path || 'Définition'} · {diagnostic.code}
-                    </p>
-                    <p className="mt-1">{diagnostic.message}</p>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-        )}
-      </section>
+          <h2 id="validation-heading" className="text-lg font-semibold">
+            Validation officielle Engine
+          </h2>
+          <p className="mt-2 text-sm leading-6 text-slate-500">
+            Vérifiez la structure canonique avant les tests et la relecture.
+            Cette vérification n’approuve ni ne publie votre brouillon.
+          </p>
+          <button
+            type="button"
+            className="button mt-4"
+            disabled={busy || validating || recovery.awaitingChoice}
+            onClick={validate}
+          >
+            {validating ? 'Validation…' : 'Vérifier la définition'}
+          </button>
+          {validation && (
+            <div className="mt-4" role="status">
+              {validation.valid ? (
+                <p className="text-sm font-medium text-green-700">
+                  Structure canonique correcte. L’exercice reste à tester et à
+                  relire.
+                </p>
+              ) : (
+                <ul className="space-y-3 text-sm text-red-800">
+                  {validation.diagnostics.map((diagnostic, index) => (
+                    <li key={index}>
+                      <p className="font-mono text-xs text-slate-500">
+                        {diagnostic.path || 'Définition'} · {diagnostic.code}
+                      </p>
+                      <p className="mt-1">{diagnostic.message}</p>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          )}
+        </section>
+      )}
       <ExercisePreview
+        engineEnabled={props.engineEnabled}
+        canRecordTests={props.canRecordTests}
         definition={clean(definition, skills)}
         disabled={busy || recovery.awaitingChoice}
         saved={

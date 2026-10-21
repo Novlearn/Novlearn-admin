@@ -35,10 +35,14 @@ export function ExercisePreview({
   definition,
   disabled = false,
   saved,
+  canRecordTests = false,
+  engineEnabled = false,
 }: {
   definition: ExerciseDefinition;
   disabled?: boolean;
   saved?: { id: string; fingerprint: string; epoch: number };
+  canRecordTests?: boolean;
+  engineEnabled?: boolean;
 }) {
   const source = JSON.stringify(definition),
     latest = useRef(source);
@@ -201,6 +205,12 @@ export function ExercisePreview({
     setCases(cases.map((c, i) => (i === index ? { ...c, ...fields } : c)));
     setReport(null);
   };
+  if (!engineEnabled)
+    return (
+      <p className="notice">
+        Les aperçus et tests ne sont pas disponibles dans cette version.
+      </p>
+    );
   return (
     <section
       className="space-y-6 rounded-xl border border-slate-200 bg-slate-50 p-5"
@@ -505,7 +515,7 @@ export function ExercisePreview({
           >
             Lancer les tests Engine
           </button>
-          {saved && (
+          {saved && canRecordTests && (
             <div className="space-y-3 rounded-lg border border-blue-200 bg-blue-50 p-4">
               <p className="text-sm leading-6 text-blue-900">
                 Consigner les tests de la révision enregistrée. Enregistrez

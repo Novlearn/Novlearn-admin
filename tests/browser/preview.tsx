@@ -41,7 +41,7 @@ function Harness() {
         >
           Modifier le titre du brouillon
         </button>
-        <ExercisePreview definition={definition} />
+        <ExercisePreview definition={definition} engineEnabled />
       </main>
     </div>
   );

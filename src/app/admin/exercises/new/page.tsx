@@ -1,6 +1,8 @@
 import Link from 'next/link';
 import { DraftMetadataForm } from '@/components/draft-metadata-form';
 import { requireAdminPage } from '@/lib/auth/require-admin';
+import { readTestSigningConfiguration } from '@/lib/test-receipt';
+import { isEngineEnabled } from '@/lib/engine-identity';
 
 export default async function NewExercisePage() {
   await requireAdminPage();
@@ -16,7 +18,10 @@ export default async function NewExercisePage() {
       <h1 className="mb-8 mt-2 text-3xl font-semibold tracking-tight">
         Créer un exercice
       </h1>
-      <DraftMetadataForm />
+      <DraftMetadataForm
+        engineEnabled={isEngineEnabled(process.env)}
+        canRecordTests={!!readTestSigningConfiguration(process.env)}
+      />
     </div>
   );
 }
