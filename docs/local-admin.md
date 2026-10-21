@@ -1,5 +1,7 @@
 # Application locale connectée — 16 octobre 2026
 
+**21 octobre — priorité à une version essentielle (D11) :** [périmètre et lancement](local-mvp.md). Connexion, catalogue/Creator, sauvegarde, ancien Engine certifié, chapitres, compétences et flashcards sont retenus. Courbes D10, statistiques/utilisateurs, version cible, publication et déploiement sont reportés pour accélérer la livraison. Les vérifications finales portent sur cette portée locale ; le Lot 1A et les portes distantes restent ouverts.
+
 **19 octobre :** les [résultats pédagogiques](pedagogy-connected.md) sont
 disponibles depuis Statistiques sur 3150, avec filtres, recherche de références,
 regroupements et tri. L’activation locale explicite ajoute `--pedagogy` à

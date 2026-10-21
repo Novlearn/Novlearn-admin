@@ -1,10 +1,10 @@
 {
-  "recordedAt": "2026-10-20T19:17:37.845Z",
+  "recordedAt": "2026-10-21T11:17:18.899Z",
   "scope": "Documentary traceability for all 20 original goal sections; not a functional test, receipt, permission or completion certificate",
   "referenceInputs": {
     "requestSha256": "fb9ac40863c57594878833b8a9fc0bd130a0cba9d0249d29c609051a54bded93",
     "cdcSha256": "b6bfea6d74b008e54ed61aa7598ccd01bd438d496cc22add15da2ff8abb04401",
-    "decisionsSha256": "ee0fe6af2cbf63a7082609c9963890a50de0980695df211eb4ce384e60a676cd"
+    "decisionsSha256": "9a0e32b17f3cdb2ed86422329600d1ef89d45e4314b494bd86832c5177ed195a"
   },
   "baselineAdminCommitAtAssessment": "2145784757fa4d2281f81ad45016853c446c7fc8",
   "implementationHasUncommittedChangesAtObservation": true,
@@ -100,7 +100,7 @@
     {
       "id": 2,
       "title": "Architecture",
-      "evidenceSummary": "Next, TypeScript strict, services serveur et archive Engine verrouillés ; contrôle complet [1505 tests / 76 fichiers](mcp-resume-2026-10-20.json). Les lecteurs locaux minimisés sont qualifiés séparément.",
+      "evidenceSummary": "Next, TypeScript strict, services serveur et archive Engine verrouillés. [Version locale essentielle D11](local-mvp.md) : contrôle général réussi,1 514 tests/78 fichiers, types, lint, format, build et smoke. Les lecteurs étendus sont reportés.",
       "remaining": "Capacité de lecture Production et hébergement à concevoir/qualifier ; aucune clé générale ne vaut un droit limité."
     },
     {
@@ -119,7 +119,7 @@
       "id": 5,
       "title": "Gestion des exercices",
       "evidenceSummary": "CRUD, conflits, versions, duplication et archivage dans [catalogue](catalogue-local-proof.json) et parcours Auth/REST réels. [Version cible préparée](active-version-readonly-proof.json) : 70 migrations, copie peuplée, six observations/16 refus natifs et 103 tests ciblés. Lecteur physique : huit groupes TLS, 17 refus et trois dérives ; quinze prérequis et restauration peuplée réussis le 20 octobre. Cible locale passée à SQL 70, advisors sans erreur et régression réelle de publication/retour arrière réussis : [upgrade](active-version-target-local-proof.json). [Indicateur connecté](active-version-connected-proof.json) : identité dédiée, huit groupes PG/TLS, douze HTTP et sept main, activation locale explicite.",
-      "remaining": "Réception navigateur actuelle et lecteur/mise en service Production soumis aux portes distinctes ; indicateur local raccordé et qualifié."
+      "remaining": "Après nettoyage Docker : rétablir et requalifier les dépendances locales supprimées ; Réception navigateur actuelle et lecteur/mise en service Production soumis aux portes distinctes ; indicateur local raccordé et qualifié."
     },
     {
       "id": 6,
@@ -136,8 +136,8 @@
     {
       "id": 8,
       "title": "Engine officiel",
-      "evidenceSummary": "[1 540 tests et qualification Linux](engine-numeric-cache-proof.json), [adoption](engine-admin-adoption-proof.json), puis huit contrôles natifs après [reprise](local-recovery-2026-10-18-proof.json). [Proposition de calcul des courbes à autoriser](engine-graph-proposal.md), non implémentée.",
-      "remaining": "Hôte de déploiement et compatibilité élève restent séparés. L’extension locale des courbes est proposée mais attend une autorisation explicite ; aucune nouvelle certification Engine."
+      "evidenceSummary": "Ancien Engine installé, génération/correction et protections Linux requalifiés après [restauration partielle](docker-cleanup-recovery-2026-10-21.md). [Extension D10](engine-graphs.md) :109 tests ciblés passent dont28 graphes ;1543 succès et26 échecs au dernier contrôle Windows, causés par la politique de signature. Nouvelle archive non adoptée ; certification Linux en cours.",
+      "remaining": "D10 reporté par D11 ; conserver l’ancien Engine certifié pour la version locale essentielle. Certification complète et intégration des nouvelles courbes à reprendre ultérieurement."
     },
     {
       "id": 9,
@@ -149,7 +149,7 @@
       "id": 10,
       "title": "Validation et publication",
       "evidenceSummary": "[Treize contrôles HTTP locaux](publication-http-connected-proof.json), transferts/retour, puis [huit contrôles après redémarrage](local-recovery-2026-10-18-proof.json). [Lots SQL](publication-batch-proof.json) distincts.",
-      "remaining": "Parcours HTTP par lot local qualifié (trois exercices, réponse perdue et reprise). Réception navigateur et première publication distante soumises à validation ; relecture synthétique sans validation pédagogique humaine."
+      "remaining": "Après nettoyage Docker : rétablir et requalifier les dépendances locales supprimées ; Parcours HTTP par lot local qualifié (trois exercices, réponse perdue et reprise). Réception navigateur et première publication distante soumises à validation ; relecture synthétique sans validation pédagogique humaine."
     },
     {
       "id": 11,
@@ -173,18 +173,18 @@
       "id": 14,
       "title": "Dashboard et statistiques",
       "evidenceSummary": "Dashboard Staging et activité générale locale qualifiés. Filtres pédagogiques, regroupements/tri, lecture TLS minimisée et page/API Auth réels : [raccordement pédagogique](pedagogy-connected-proof.json). [Plans/charge synthétique et vrai pool simultané](pedagogy-performance-proof.json) qualifiés. [Deux compteurs D09](completed-work-local-proof.json) qualifiés par huit rapports SQL/TLS/HTTP ; 28 mesures sur 100 000 réponses passent (maximum 8,278 s).",
-      "remaining": "Source et activation Production ; volumétrie réelle, caches froids, hôte cible et réception navigateur."
+      "remaining": "Après nettoyage Docker : rétablir et requalifier les dépendances locales supprimées ; Source et activation Production ; volumétrie réelle, caches froids, hôte cible et réception navigateur."
     },
     {
       "id": 15,
       "title": "Utilisateurs",
       "evidenceSummary": "[Liste](users-readonly-proof.json) et [fiche détaillée](user-detail-proof.json) locales qualifiées sur copie synthétique, avec progression et historique.",
-      "remaining": "Production, réception navigateur, certification des constats SQL et autorisations distantes restent ouvertes."
+      "remaining": "Après nettoyage Docker : rétablir et requalifier les dépendances locales supprimées ; Production, réception navigateur, certification des constats SQL et autorisations distantes restent ouvertes."
     },
     {
       "id": 16,
       "title": "Qualité et tests",
-      "evidenceSummary": "Contrôle complet [1505 tests / 76 fichiers](mcp-resume-2026-10-20.json), types, lint, format, build, intégrité Engine et smoke ; 71 migrations/restaurations locales qualifiées séparément. Les échecs précédents restent conservés. [Titre récupéré après rechargement accepté par l’utilisateur](recovery-reception-2026-10-21.md).",
+      "evidenceSummary": "Contrôle complet [D11](local-mvp-proof.json) :1 514 tests/78 fichiers, intégrité de l’ancien Engine certifié, types, lint (zéro erreur, un avertissement existant), format, build et smoke.605 sources exactes à sa fin ; seuls les six documents listés sont complétés ensuite. Vrais essais HTTP de sauvegarde/reconnexion, conflits et rapport signé ; aucune nouvelle réception navigateur.",
       "remaining": "Autres parcours navigateur, nettoyage/récupération hors du titre après rechargement, hôte cible et qualifications distantes ouverts."
     },
     {
@@ -197,13 +197,13 @@
       "id": 18,
       "title": "Points d’arrêt",
       "evidenceSummary": "Aucune écriture SQL distante, push, déploiement ou publication réelle. [Reprise normale sans mise à jour](local-recovery-2026-10-18.md). NovLearn limité au SQL local, Engine aux corrections autorisées.",
-      "remaining": "Autorisations distinctes pour futures opérations distantes, éventuelle mise à jour globale ou nouvelle capacité Engine hors D05."
+      "remaining": "D10 autorise explicitement la capacité de courbes locale. Les protections Windows restent actives ; qualification Linux choisie par l’utilisateur. Toute opération distante conserve son accord distinct."
     },
     {
       "id": 19,
       "title": "Réussite complète",
-      "evidenceSummary": "**Non atteinte** : fonctions Production manquantes et P0 de réception/exploitation ouverts.",
-      "remaining": "Vérifier tous les critères initiaux avec des preuves correspondant à leur portée ; aucune clôture sur le seul nombre de tests."
+      "evidenceSummary": "**Version locale essentielle utilisable (D11)** ; cible complète du CDC non atteinte, données restaurées partiellement, fonctions étendues reportées et portes SQL/opérationnelles ouvertes.",
+      "remaining": "Réceptionner la version locale essentielle séparément ; fonctions étendues reportées par D11, sans clôturer les portes SQL ou le Lot1A."
     },
     {
       "id": 20,
@@ -218,7 +218,7 @@
     "local-recovery-2026-10-18.md": "ab6e2a667d7b054b673a1b175044ed6504218a993fd9e8c6054b46fb970aac1f",
     "users-readonly.md": "af41c90a92f9f5f8baa0f9ad6094b0c87d6d54f07a1bff828e4494efe829ae20",
     "lot-1a-remote-reconciliation-current.md": "4a2a06adff60f7a6541f261af3bd00a63debc01197030717c389c7c22b813dfe",
-    "progress.md": "fdd2d677cced98f7f5bc61125ecaaf138aaf12391c69b43ade12b05042f104d2",
+    "progress.md": "50d4249ea8d591ad4e3c769d68527968aa23a913aaf545e9980af36f9748bf26",
     "lot-1a-preparation.md": "3561164a62bc6690a46d2f472c42037c11bd9aacc40add77d44814abdc5dd271",
     "recovery-cleanup-proof.json": "cb414a4c150ceb55204fcc9fca07696d05463e71642b4b4db35fd62819fa2524",
     "local-recovery-2026-10-18-proof.json": "5c9f10801159d1b94c66aebf2f4f45cb91e6a3447f6098968d85e03c83e0e26d",
@@ -239,7 +239,7 @@
     "activity-readonly-proof.json": "c362635524c4dc6cfe81cdbc489e2130a3e3285f8346462e5075915fddb51401",
     "activity-http-proof.json": "c4ae58e794d8944ecf0947935e799b834bb1742336984c5cd8c51201af35b806",
     "users-readonly-proof.json": "2a2ba32df2dca5050be282939596ed3a0a9e22695a56d4d6c6560f64ab5a8da2",
-    "roadmap.md": "d7c19a6e185d796aa8f1cb58d46ed0082d2558b76a8f28560f3d3a3be45e598b",
+    "roadmap.md": "af091745723cdb1391ad6b2bad595ab46cc673eba933a7289c1e8e879eb9a799",
     "activity-readonly.md": "0bc4135dfe48409cb19a8f2ad0b98e9593c65f83f46bc12b53a4a8e6fd1fbdff",
     "activity-pg.md": "ce3ae62c070f728174bc2cae7817d1ed727d42fd1e2e09d162cadd188b028aec",
     "lot-1a-local-statistics-guard.md": "0bd4f19d706296ccb96f8ea246f186c4e52ddc7a23da69519f64c2a1978a7a92",
@@ -255,7 +255,7 @@
     "pedagogy-readonly-proof.json": "a6cb1786154b7284b7be36e02db37aad4cf688306a3a58b880b37c6933dedef4",
     "pedagogy-connected.md": "a73f7ae6b3408100d0233688b5df29245fe112fb837028c251bed1e512f6b46b",
     "pedagogy-connected-proof.json": "28f4b5e1f3623216b2921db5ee38a608234ce7fa50a2b0ab535f81d7fa621598",
-    "local-admin.md": "ff799a6d56bcc2ac59885eb56d1d1084ee847c5372bb8f31ecfab171751ac2d3",
+    "local-admin.md": "beb4fac4bf3d116d21583f012e2cbe036a995ca10c8be246d4a1038a79c486f2",
     "pedagogy-performance.md": "9108e009389a0e65d880478874bb19604ace9943364cb9cd301615097fdafd10",
     "pedagogy-performance-proof.json": "3a4ed57d4fef63ee64d9010230023a7f08ce9da995484c28477ee379a029b619",
     "active-version-readonly.md": "8bafdfd99294b342d61d47ff476512a8e55ed7ea9fd0af60375dbaeba89079c3",
@@ -283,18 +283,25 @@
     "observed-staging-shape-2026-10-20.json": "978a7c9616b6edbb5cc7d9ff72ee3ae4b20d2509db2c87955cbcdcd08940e8e3",
     "observed-staging-shape-2026-10-20.sql": "77a623dd3a287065803c968d5654922cd490023623ec6b98ed2f5a3a9246b272",
     "creator-recovery.md": "ee99fddcd3c8a8bd8c3350b24ebac9da3c1200803e10823dc34e848de37dafde",
-    "local-user-testing.md": "804715828c0d8e96d0f5983afe4b1283d83000435b0d988f1dceead4a9dc6c58",
+    "local-user-testing.md": "c3971d9a7e925e5eb7dc5d3ba63b7f63cafabc55ae7ca7f9aec0ddab141c08f2",
     "recovery-reception-2026-10-21.md": "f9bf72a8378861bd785935639c941055c0f06d74c688f1ae11ce976a23856918",
     "recovery-reception-2026-10-21.json": "ac1c9dfd1d357cbc331d4f0e71dadde1c63e1c1cc568e99af64c85db68eb36fd",
-    "engine-graph-proposal.md": "c4b5ad3c7afe635513b631dd2595fb532ba2af1cfa85de20d387dd199031ffc1",
+    "engine-graph-proposal.md": "1b8b98d48332325adebf75de7d4404023f7dd657a8a08bc8b92cba1a2a81c80a",
     "engine-graph-proposal.json": "3952928915869a5b31160e5e270fe505d23302d6ea74713b173daa4212cdf024",
-    "preview.md": "f77378925dfd3ab8e653a989b64de813580c9aaba88df9986866b29ba49989c3"
+    "preview.md": "f77378925dfd3ab8e653a989b64de813580c9aaba88df9986866b29ba49989c3",
+    "decisions.md": "9a0e32b17f3cdb2ed86422329600d1ef89d45e4314b494bd86832c5177ed195a",
+    "engine-graphs.md": "f06fb1637683348bc8f3468a2c759845e7a6d22c3208cea1d80d2eec8fcc845d",
+    "docker-cleanup-recovery-2026-10-21.md": "eb3f2e4fffd5f2f8eae2cd643077ce7d80b5f1fcaa1069770578c99fdb909c45",
+    "docker-cleanup-recovery-2026-10-21.json": "eeb01f8dfb21d0e4fd0f9cb25938cdc1229670433df461b9c9c5bcf673536e80",
+    "local-mvp.md": "1fc733fefc3375b2b98cc3c787f5f9cc399d3a75960c4221ccad6b681b03d34c",
+    "local-mvp-proof.json": "297519b8253f485f3ea167a7db66f103e444ff031357c2ae706c4e70a95afc3a",
+    "engine-graphs-proof.json": "137eb03a374f7afbb6bf1c836c6c765efa5d198d74c5424a11a96001093bf11c"
   },
   "unimplemented": [
     "Production analytics identity/source activation and remaining metrics (local general and pedagogical filters, grouping/ranking, PG/TLS and Auth/HTTP page/API qualified)",
     "Production user identity/source activation (local list and detailed recorded progression/history qualified)",
     "Current Production active-version indicator",
-    "Official Engine formula sampling and dependent curve rendering: concrete proposal prepared, explicit Engine extension authorization pending",
+    "Official Engine formula sampling and dependent curve rendering: local extension authorized D10, implementation and certification in progress; not adopted",
     "Operational identity policy for MFA/recovery remains undecided; no implicit local MFA activation"
   ],
   "notExecuted": [
@@ -308,46 +315,28 @@
   "privilegedProductionKeysRetrieved": false,
   "goalComplete": false,
   "currentLocalServices": {
-    "result": "PASS for actual retained login and local Engine adoption",
-    "date": "2026-10-20T12:24:50.302Z",
-    "observations": [
-      {
-        "route": "/api/admin/session",
-        "status": 200
-      },
-      {
-        "route": "/admin/statistics",
-        "status": 200
-      },
-      {
-        "route": "/admin/statistics/pedagogy?from=2026-10-15&to=2026-10-17",
-        "status": 200
-      },
-      {
-        "servedClientScriptsScanned": 7,
-        "actualPrivateValuesAbsent": true,
-        "exhaustiveSecurityScan": false
-      },
-      {
-        "origin": "http://127.0.0.1:3150",
-        "loginStatus": 200
-      },
-      {
-        "origin": "http://127.0.0.1:3152",
-        "loginStatus": 200
-      }
-    ],
-    "authenticatedLoginTested": true,
-    "dockerLinuxNamedPipeAvailable": true,
+    "result": "PASS FOR RESTORED CORE ONLY",
+    "date": "2026-10-21T10:42:06.339Z",
     "mainOrigin": "http://127.0.0.1:3150",
-    "publicationSyntheticOrigin": "http://127.0.0.1:3152",
+    "authenticatedLoginTested": true,
+    "sourceBackupDate": "2026-10-17T17:26:39Z",
+    "currentSqlVersion": 64,
+    "statisticsEnabled": false,
+    "usersEnabled": false,
+    "pedagogyEnabled": false,
+    "activeVersionEnabled": false,
+    "publicationEnabled": false,
+    "publicationSyntheticOriginAvailable": false,
+    "exercisesRestored": 6,
+    "exercisesMissing": 12,
+    "testReportsRestored": 9,
+    "testReportsMissing": 14,
     "browserExecuted": false,
     "remoteOperations": false,
-    "dedicatedPublicationInstanceRestartedAfterTargetUpgrade": true,
-    "publicationHttpQualifiedOnSql70Target": true,
-    "publicationHttpQualificationAt": "2026-10-20T12:55:01.353Z",
-    "activeVersionEnabled": true,
-    "actualExistingAdminReaderQualifiedAt": "2026-10-20T13:39:02.858Z"
+    "proof": "docker-cleanup-recovery-2026-10-21.json",
+    "mvpScope": "D11 essential local version; extended readers/publication not being restored for this delivery",
+    "currentExercises": 7,
+    "currentTestReports": 10
   },
   "latestLocalQualification": {
     "sql68Proof": "reader-policies-proof.json",
@@ -357,6 +346,72 @@
     "pedagogySqlProof": "pedagogy-readonly-proof.json",
     "pedagogyConnectedUiDelivered": true,
     "latestFullCheck": {
+      "result": "PASS",
+      "date": "2026-10-21T11:15:40.687Z",
+      "artifact": "C:\\Users\\balth\\AppData\\Local\\Temp\\novlearn-admin-check-1792581048667",
+      "exitCode": 0,
+      "tests": 1514,
+      "files": 78,
+      "failedTests": 0,
+      "failedFiles": 0,
+      "sourceFiles": 605,
+      "allCopiedSourcesStillMatch": true,
+      "fullCheckCommand": "npm run check",
+      "separateBuildDirectory": true,
+      "independentTemporaryProject": true,
+      "dependenciesCopied": true,
+      "applicationServersInterrupted": false,
+      "privateEnvironmentFilesCopied": false,
+      "rawProof": "C:\\Users\\balth\\AppData\\Local\\Temp\\novlearn-admin-check-1792581048667/proof.json",
+      "rawProofSha256": "9a0b4d7eb7c9a8d6064528ca7c99abcb2d6b5d6c34a37df2e3722ad850515cde",
+      "postCheckDocumentationOnly": [
+        "docs/local-mvp-proof.json",
+        "docs/local-mvp.md",
+        "docs/readiness-current.json",
+        "docs/readiness-current.md",
+        "docs/progress.md",
+        "docs/roadmap.md"
+      ]
+    },
+    "pedagogyConnectedProof": "pedagogy-connected-proof.json",
+    "pedagogyPerformanceProof": "pedagogy-performance-proof.json",
+    "pedagogySyntheticPerformanceQualified": true,
+    "currentSqlQuerySha256": "c12775bfc93a843a04146a8685d452f70d9ad4196afeadf41e427d00df32132f",
+    "activeVersionPreparationProof": "active-version-readonly-proof.json",
+    "activeVersionConnectedQualified": true,
+    "previousFullCheck": {
+      "result": "PASS",
+      "date": "2026-10-19T18:32:02.917Z",
+      "artifact": "C:\\Users\\balth\\AppData\\Local\\Temp\\novlearn-admin-check-1792434426920",
+      "exitCode": 0,
+      "tests": 1284,
+      "files": 66,
+      "sourceFiles": 516,
+      "allCopiedSourcesStillMatch": true,
+      "fullCheckCommand": "npm run check",
+      "separateBuildDirectory": true,
+      "independentTemporaryProject": true,
+      "dependenciesCopied": true,
+      "applicationServersInterrupted": false,
+      "privateEnvironmentFilesCopied": false,
+      "scope": "Final optimized pedagogical SQL and performance harness: complete checks on exact source snapshot; only two JSON evidence records populated after completion"
+    },
+    "dockerRecovery20OctoberProof": "local-recovery-2026-10-20-proof.json",
+    "sql70PrerequisiteHarnessPrepared": true,
+    "sql70PrerequisiteHarnessExecuted": true,
+    "currentRuntimeSourcesMatchLatestFullCheck": true,
+    "sql70PhysicalReaderQualified": true,
+    "newVerificationScriptsRequireCurrentFullCheck": false,
+    "currentFullCheckProof": "local-mvp-proof.json",
+    "currentFullCheckTests": 1514,
+    "currentFullCheckFiles": 78,
+    "activeVersionTargetUpgradeProof": "active-version-target-local-proof.json",
+    "activeVersionConnectedProof": "active-version-connected-proof.json",
+    "activeVersionMainEnabled": false,
+    "authExpiryProof": "auth-expiry-local-proof.json",
+    "sql71Proof": "legacy-search-path-proof.json",
+    "previousCurrentCompleteAdminProof": "active-version-connected-proof.json",
+    "previousFullCheckBeforeD11": {
       "result": "PASS",
       "date": "2026-10-20T17:16:09.175Z",
       "artifact": "C:\\Users\\balth\\AppData\\Local\\Temp\\novlearn-admin-check-1792516070840",
@@ -388,44 +443,14 @@
       ],
       "scope": "Full unchanged check on the exact Auth correction, SQL71 verification scripts and bounded scheduling; only these nine documents are completed afterward"
     },
-    "pedagogyConnectedProof": "pedagogy-connected-proof.json",
-    "pedagogyPerformanceProof": "pedagogy-performance-proof.json",
-    "pedagogySyntheticPerformanceQualified": true,
-    "currentSqlQuerySha256": "c12775bfc93a843a04146a8685d452f70d9ad4196afeadf41e427d00df32132f",
-    "activeVersionPreparationProof": "active-version-readonly-proof.json",
-    "activeVersionConnectedQualified": true,
-    "previousFullCheck": {
-      "result": "PASS",
-      "date": "2026-10-19T18:32:02.917Z",
-      "artifact": "C:\\Users\\balth\\AppData\\Local\\Temp\\novlearn-admin-check-1792434426920",
-      "exitCode": 0,
-      "tests": 1284,
-      "files": 66,
-      "sourceFiles": 516,
-      "allCopiedSourcesStillMatch": true,
-      "fullCheckCommand": "npm run check",
-      "separateBuildDirectory": true,
-      "independentTemporaryProject": true,
-      "dependenciesCopied": true,
-      "applicationServersInterrupted": false,
-      "privateEnvironmentFilesCopied": false,
-      "scope": "Final optimized pedagogical SQL and performance harness: complete checks on exact source snapshot; only two JSON evidence records populated after completion"
-    },
-    "dockerRecovery20OctoberProof": "local-recovery-2026-10-20-proof.json",
-    "sql70PrerequisiteHarnessPrepared": true,
-    "sql70PrerequisiteHarnessExecuted": true,
-    "currentRuntimeSourcesMatchLatestFullCheck": true,
-    "sql70PhysicalReaderQualified": true,
-    "newVerificationScriptsRequireCurrentFullCheck": false,
-    "currentFullCheckProof": "auth-expiry-local-proof.json",
-    "currentFullCheckTests": 1422,
-    "currentFullCheckFiles": 75,
-    "activeVersionTargetUpgradeProof": "active-version-target-local-proof.json",
-    "activeVersionConnectedProof": "active-version-connected-proof.json",
-    "activeVersionMainEnabled": true,
-    "authExpiryProof": "auth-expiry-local-proof.json",
-    "sql71Proof": "legacy-search-path-proof.json",
-    "previousCurrentCompleteAdminProof": "active-version-connected-proof.json"
+    "postCheckDocumentationOnly": [
+      "docs/local-mvp-proof.json",
+      "docs/local-mvp.md",
+      "docs/readiness-current.json",
+      "docs/readiness-current.md",
+      "docs/progress.md",
+      "docs/roadmap.md"
+    ]
   },
   "previousLocalServiceObservation": {
     "result": "PASS for actual local login availability",
@@ -703,7 +728,8 @@
       "engine": "PASS:8 native HTTP checks;22 previous receipts preserved",
       "publication": "PASS: fresh native prepare then cancel; no target transfer",
       "applicationOrigins": ["http://127.0.0.1:3150", "http://127.0.0.1:3152"],
-      "remoteOperations": false
+      "remoteOperations": false,
+      "scope": "HISTORICAL BEFORE DOCKER CLEANUP; see currentLocalServices"
     }
   },
   "observedSchemaCompatibility": {
@@ -721,10 +747,108 @@
     "recordedAt": "2026-10-20T22:31:00.809Z",
     "document": "engine-graph-proposal.md",
     "sourceEvidence": "engine-graph-proposal.json",
-    "status": "PENDING_USER_AUTHORIZATION",
+    "status": "DEFERRED_BY_USER_D11",
     "implemented": false,
-    "engineFilesModified": false,
-    "newTestsExecuted": false,
-    "remoteWrites": false
+    "engineFilesModified": true,
+    "newTestsExecuted": true,
+    "remoteWrites": false,
+    "updatedAt": "2026-10-21T10:45:46.498Z",
+    "authorization": "D10",
+    "authorizationQuote": "Oui, autoriser cette extension locale et sa certification",
+    "implementationStarted": true,
+    "focusedTestsPassed": 109,
+    "firstFullCheckPassed": false,
+    "firstFullCheckFailure": "1555 passed,10 failed: nine version/export expectations corrected, one 5131ms graph timeout; historical failures preserved",
+    "newArchiveCertified": false,
+    "newArchiveAdopted": false,
+    "progressDocument": "engine-graphs.md",
+    "sourceEvidenceScope": "Historical observation before approval; source hashes intentionally retained",
+    "focusedGraphTestsPassed": 28,
+    "secondFullCheck": {
+      "passed": 1566,
+      "failed": 3,
+      "reason": "Historical 5s timeouts during low available memory; later diagnostic not a full pass"
+    },
+    "thirdFullWindowsCheck": {
+      "passed": 1543,
+      "failed": 26,
+      "reason": "Windows CodeIntegrity3077/3033 blocks dist/node-host/windows/job.exe; Enterprise signing policy",
+      "policyId": "0283ac0f-fff1-49ae-ada1-8a933130cad6"
+    },
+    "packageSmokeExecuted": true,
+    "packageSmokeArchiveSha256": "0fb9f619a95f82065dba5562ffd82e952cb3351846a39606ee8ef96e2c8c605d",
+    "linuxCertificationStatus": "INCOMPLETE: build/types/lint/format pass, zero tests executed after Vitest EAGAIN",
+    "installedLinuxQualification": {
+      "proof": "engine-graphs-proof.json",
+      "passed": true,
+      "osChecks": 12,
+      "legacyRows": 8,
+      "graphSeeds": [0, 42],
+      "graphsPerSeed": 8,
+      "fullSourceCheckPassed": false
+    },
+    "deferredBy": "D11"
+  },
+  "previousLocalServicesBeforeDockerCleanup": {
+    "result": "PASS for actual retained login and local Engine adoption",
+    "date": "2026-10-20T12:24:50.302Z",
+    "observations": [
+      {
+        "route": "/api/admin/session",
+        "status": 200
+      },
+      {
+        "route": "/admin/statistics",
+        "status": 200
+      },
+      {
+        "route": "/admin/statistics/pedagogy?from=2026-10-15&to=2026-10-17",
+        "status": 200
+      },
+      {
+        "servedClientScriptsScanned": 7,
+        "actualPrivateValuesAbsent": true,
+        "exhaustiveSecurityScan": false
+      },
+      {
+        "origin": "http://127.0.0.1:3150",
+        "loginStatus": 200
+      },
+      {
+        "origin": "http://127.0.0.1:3152",
+        "loginStatus": 200
+      }
+    ],
+    "authenticatedLoginTested": true,
+    "dockerLinuxNamedPipeAvailable": true,
+    "mainOrigin": "http://127.0.0.1:3150",
+    "publicationSyntheticOrigin": "http://127.0.0.1:3152",
+    "browserExecuted": false,
+    "remoteOperations": false,
+    "dedicatedPublicationInstanceRestartedAfterTargetUpgrade": true,
+    "publicationHttpQualifiedOnSql70Target": true,
+    "publicationHttpQualificationAt": "2026-10-20T12:55:01.353Z",
+    "activeVersionEnabled": true,
+    "actualExistingAdminReaderQualifiedAt": "2026-10-20T13:39:02.858Z"
+  },
+  "dockerCleanupRecovery": {
+    "document": "docker-cleanup-recovery-2026-10-21.md",
+    "proof": "docker-cleanup-recovery-2026-10-21.json",
+    "fullRestoration": false
+  },
+  "localEssentialVersion": {
+    "decision": "D11",
+    "document": "local-mvp.md",
+    "proof": "local-mvp-proof.json",
+    "status": "READY_FOR_ESSENTIAL_LOCAL_USE",
+    "scope": "Local content authoring and old certified Engine; deferred features remain closed",
+    "goalComplete": false,
+    "lot1AComplete": false,
+    "currentExercises": 7,
+    "currentTestReports": 10,
+    "completeCheckProof": "local-mvp-proof.json",
+    "tests": 1514,
+    "files": 78,
+    "completedAt": "2026-10-21T11:17:17.622Z"
   }
 }

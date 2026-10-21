@@ -1,5 +1,32 @@
 # Décisions et arbitrages
 
+## D11 — Livrer rapidement une version locale essentielle
+
+**Source : demande explicite de l’utilisateur du 21 octobre 2026.**
+« il faudrait finir rapidmen,t cette application, quitte a ne pas finir toutes
+les fon ctionnalités. »
+
+Prioriser une version utilisable pour créer, enregistrer, rouvrir et tester les
+contenus. Conserver le moteur déjà certifié et les autorisations serveur.
+Reporter la nouvelle capacité de courbes D10, la remise en service des lecteurs
+statistiques/utilisateurs, la version cible, la publication et le déploiement.
+Le code et les preuves existants restent conservés ; aucun critère de test,
+quota ou protection n’est assoupli pour présenter une fonction comme validée.
+Le [périmètre livré et son lancement](local-mvp.md) sont distincts de la cible
+complète du CDC, qui reste inchangé. La restauration est partielle, les portes
+SQL distantes restent ouvertes et le Lot 1A n’est pas déclaré terminé.
+
+## D10 — Extension locale Engine pour les courbes
+
+**Source : réponse explicite de l’utilisateur du 21 octobre 2026.**
+« Oui, autoriser cette extension locale et sa certification » en réponse à la
+[proposition de calcul officiel des courbes](engine-graph-proposal.md).
+Autoriser les modifications locales de Novlearn-Engine pour les fonctions et
+suites, leur certification puis l’intégration locale dans Admin. Conserver les
+délais, quotas, protections et critères de validation existants. Aucun changement
+de l’application élève NovLearn, migration distante, publication réelle, push ou
+déploiement n’est inclus. Cette décision complète D05 et ne valide pas le Lot 1A.
+
 ## D09 — Deux compteurs d’exercices réalisés
 
 **Source : réponse explicite de l’utilisateur du 20 octobre 2026.**

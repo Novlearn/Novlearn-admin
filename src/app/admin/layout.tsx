@@ -5,6 +5,7 @@ import { AdminNavigation } from '@/components/admin-navigation';
 import { readAuthConfiguration } from '@/lib/auth/config';
 import { readLocalActivityConfiguration } from '@/lib/activity-config';
 import { readLocalUsersConfiguration } from '@/lib/users-config';
+import { LocalRecoveryNotice } from '@/components/local-recovery-notice';
 import {
   EditorRecoveryScope,
   AdminLogout,
@@ -39,6 +40,7 @@ export default async function AdminLayout({
             <Brand />
           </Link>
           <AdminNavigation
+            publicationEnabled={!local || !!authConfig?.localPublicationFixture}
             statisticsEnabled={!!readLocalActivityConfiguration(process.env)}
             usersEnabled={!!readLocalUsersConfiguration(process.env)}
           />
@@ -60,6 +62,10 @@ export default async function AdminLayout({
             <AdminLogout />
           </header>
           <main id="main-content" className="px-6 py-9 lg:px-10">
+            <LocalRecoveryNotice
+              local={local && !authConfig?.localPublicationFixture}
+              date={process.env.ADMIN_LOCAL_RECOVERY_DATE}
+            />
             {children}
           </main>
         </div>

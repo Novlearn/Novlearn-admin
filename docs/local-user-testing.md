@@ -1,5 +1,9 @@
 # Tester NovLearn Admin au fil du développement
 
+**21 octobre — priorité à une version essentielle (D11) :** [périmètre et lancement](local-mvp.md). Connexion, catalogue/Creator, sauvegarde, ancien Engine certifié, chapitres, compétences et flashcards sont retenus. Courbes D10, statistiques/utilisateurs, version cible, publication et déploiement sont reportés pour accélérer la livraison. Les vérifications finales portent sur cette portée locale ; le Lot 1A et les portes distantes restent ouverts.
+
+**État après nettoyage Docker du 21 octobre :** [le cœur fonctionne sur 3150 avec une copie du 17 octobre](docker-cleanup-recovery-2026-10-21.md). Des données récentes manquent ; statistiques, utilisateurs, pédagogie, version cible et banc 3152 restent fermés. Les parcours ci-dessous décrivent aussi des fonctions historiquement qualifiées, dont la remise en service doit être vérifiée.
+
 Le [parcours court a été confirmé par l’utilisateur](local-reception-2026-10-20.md).
 Les soucis d’interface sont reportés à sa demande ; les autres contrôles de ce
 guide restent à réceptionner selon leur portée.

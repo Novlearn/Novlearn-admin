@@ -1,0 +1,105 @@
+{
+  "recordedAt": "2026-10-21T11:09:24.275Z",
+  "decision": "D11",
+  "scope": "Essential local content authoring only; not original complete CDC delivery or remote readiness",
+  "status": "READY_FOR_ESSENTIAL_LOCAL_USE",
+  "origin": "http://127.0.0.1:3150/login",
+  "startCommand": "node scripts/start-local-core.mjs",
+  "windowsLauncher": "start-local.cmd",
+  "launcherCheckExecuted": true,
+  "alreadyRunningLaunchExecuted": true,
+  "coreHttpGroups": 9,
+  "persistenceChecks": [
+    "Create and update a new canonical draft through real authorized Next/Auth/PostgREST",
+    "Stale save and foreign origin are refused without altering the retained draft",
+    "Saved revision genuinely passes both seeds and SQL verifies and retains the old-certified Engine signed receipt",
+    "The same saved title reopens after logout and a new login; catalogue and essential navigation agree",
+    "Every preexisting business row, all metadata/policies and eight private configurations are preserved"
+  ],
+  "realSavedDraft": {
+    "exerciseId": "7",
+    "versionId": "0740042e-0125-475a-ab07-4e661aa17225",
+    "title": "Essai local — sauvegarde vérifiée"
+  },
+  "actualSignedReceiptId": "b22942bb-2699-4eb1-aa67-fef0b9f6fd02",
+  "persistenceProof": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\mvp-reception-1792580856350/process.json",
+  "previousFailedAssertion": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\mvp-persistence-1792580678043/process.json",
+  "previousFailureExplanation": "Whole-page publication link assertion also matched the separate disabled publication panel; navigation is verified within its semantic nav element",
+  "allPreexistingBusinessRowsPreserved": true,
+  "metadataAndPoliciesPreserved": true,
+  "privateConfigurationsChanged": 0,
+  "newBusinessRows": {
+    "public.exercises": 1,
+    "public.exercise_versions": 1,
+    "public.admin_content_events": 2,
+    "public.admin_exercise_test_runs": 1
+  },
+  "recoveredExercises": 6,
+  "unrecoveredPreviousExercises": 12,
+  "recoveredTestReports": 9,
+  "unrecoveredPreviousTestReports": 14,
+  "currentExercises": 7,
+  "currentTestReports": 10,
+  "backup": {
+    "sha256": "e80b4f624d160f9e9a2e4d8502189e479feb5b1621ac92c66fa030cd374395fa",
+    "tableDataEntries": 63,
+    "rolesSaved": true,
+    "existingArchivesOverwritten": false,
+    "newBackupRestoreExecuted": false,
+    "privateProof": "C:\\Users\\balth\\Desktop\\Cours\\2A\\PAI\\Novlearn-admin\\.local\\lot1a\\mvp-reception-1792580856350/backup-proof.json"
+  },
+  "currentEngineArchive": "d4d3abc408ab37f2f8a5faa512964b48947828bae9209cb1460b47111ca582f9",
+  "newGraphArchiveAdopted": false,
+  "deferred": [
+    "D10 calculated graphs",
+    "Statistics and users readers",
+    "Active target version",
+    "Publication",
+    "Deployment"
+  ],
+  "completeAdminCheck": {
+    "result": "PASS",
+    "date": "2026-10-21T11:15:40.687Z",
+    "artifact": "C:\\Users\\balth\\AppData\\Local\\Temp\\novlearn-admin-check-1792581048667",
+    "exitCode": 0,
+    "tests": 1514,
+    "files": 78,
+    "failedTests": 0,
+    "failedFiles": 0,
+    "sourceFiles": 605,
+    "allCopiedSourcesStillMatch": true,
+    "fullCheckCommand": "npm run check",
+    "separateBuildDirectory": true,
+    "independentTemporaryProject": true,
+    "dependenciesCopied": true,
+    "applicationServersInterrupted": false,
+    "privateEnvironmentFilesCopied": false,
+    "rawProof": "C:\\Users\\balth\\AppData\\Local\\Temp\\novlearn-admin-check-1792581048667/proof.json",
+    "rawProofSha256": "9a0b4d7eb7c9a8d6064528ca7c99abcb2d6b5d6c34a37df2e3722ad850515cde",
+    "postCheckDocumentationOnly": [
+      "docs/local-mvp-proof.json",
+      "docs/local-mvp.md",
+      "docs/readiness-current.json",
+      "docs/readiness-current.md",
+      "docs/progress.md",
+      "docs/roadmap.md"
+    ]
+  },
+  "oldManualBrowserReceptions": [
+    "local-reception-2026-10-20.json",
+    "recovery-reception-2026-10-21.json"
+  ],
+  "newBrowserTestExecuted": false,
+  "securityRestrictionsBypassed": false,
+  "remoteWrites": false,
+  "lot1AComplete": false,
+  "fullCdcComplete": false,
+  "completedAt": "2026-10-21T11:17:17.622Z",
+  "launcherQualification": {
+    "runningInstanceCheckExecuted": true,
+    "alreadyRunningLaunchExecuted": true,
+    "coldStartOfStoppedServicesExecuted": false,
+    "cmdDoubleClickExecuted": false,
+    "nodeLauncherEquivalentExecuted": true
+  }
+}

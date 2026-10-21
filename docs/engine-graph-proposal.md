@@ -1,10 +1,11 @@
 # Proposition : calcul officiel des courbes pour l’aperçu Admin
 
-**Statut : proposition à autoriser, aucune implémentation ni certification.**
-Cette proposition ne modifie pas le CDC, l’Engine, son archive installée ou une
-base. D05 autorise les corrections et certifications précédentes ; l’ajout
-d’une capacité mathématique publique nécessite un accord distinct conformément
-à `AGENTS.md` et aux [décisions existantes](decisions.md).
+**Statut actuel : autorisée localement par D10 ; implémentation et qualification en cours.**
+Le [suivi de réalisation](engine-graphs.md) distingue code source, tests, runtime
+et adoption. Le plan ci-dessous et ses [empreintes d’origine](engine-graph-proposal.json)
+conservent le périmètre proposé avant cet accord ; ces empreintes ne décrivent
+pas les sources Engine maintenant en cours de modification. L’archive installée
+dans Admin et le CDC ne sont pas modifiés par la seule approbation.
 
 ## Besoin et constat actuel
 
@@ -139,17 +140,21 @@ source canonique autorisée. Aucun changement distant n’est inclus.
 | Régressions     | Suite Engine complète sans retrait de cas ni skip opportuniste, tarball réel, intégrité d’archive, puis contrôles Admin pertinents et contrôle complet |
 | Parcours        | Vraie génération, graphe et correction via Next/Auth/Engine locaux ; réception navigateur distincte, sans contournement du refus d’automatisation      |
 
-Aucun de ces tests nouveaux n’a encore été exécuté. Les 1 540 tests Engine et
+Lors de la proposition, aucun de ces tests nouveaux n’avait été exécuté ; les
+résultats obtenus depuis D10 figurent dans le [suivi](engine-graphs.md).
+Les 1 540 tests Engine et
 1 505 tests Admin précédemment réussis certifient leurs artefacts antérieurs,
 pas la capacité proposée. Les 286 assertions SQL gardent leur portée propre.
 
-## Accord nécessaire
+## Accord obtenu — D10
 
-Autoriser explicitement les modifications **locales** de Novlearn-Engine pour
-cette capacité, sa certification puis son intégration locale dans Admin.
-Cet accord n’autoriserait ni modification de l’application élève NovLearn,
+L’utilisateur répond : « Oui, autoriser cette extension locale et sa certification ».
+La décision [D10](decisions.md#d10--extension-locale-engine-pour-les-courbes)
+autorise les modifications **locales** de Novlearn-Engine pour cette capacité,
+sa certification puis son intégration locale dans Admin.
+Cet accord n’autorise ni modification de l’application élève NovLearn,
 ni migration distante, publication réelle, push, déploiement ou changement de
-protection. Le refus ou le report conserve l’aperçu actuel et sa limite visible.
+protection. L’aperçu installé conserve sa limite tant que l’adoption n’est pas qualifiée.
 
 La qualification SQL sur restauration fidèle de Staging reste un autre
 prérequis ; cette extension ne la remplace pas et ne clôture pas le Lot 1A.

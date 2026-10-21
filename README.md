@@ -1,57 +1,24 @@
 # NovLearn Admin
 
-**Tester maintenant :** ouvrir [l’application locale sur 3150](http://127.0.0.1:3150/login)
-et suivre le [parcours progressif](docs/local-user-testing.md). Les identifiants
-conservés, les fonctions disponibles et les limites de réception y sont précisés.
-Le [bilan actuel](docs/readiness-current.md) est rapproché des preuves du 20 octobre.
+**Première version locale essentielle :** ouvrir [NovLearn Admin](http://127.0.0.1:3150/login).
+Connexion, catalogue, Creator/MathLive, sauvegarde, tests avec le moteur certifié,
+chapitres, compétences et flashcards sont disponibles. Les identifiants et le
+[lanceur simple](docs/local-mvp.md) sont documentés. Courbes avancées, statistiques,
+utilisateurs et publication sont reportés pour livrer plus rapidement (D11).
 
-**Reprise du 19 octobre :** [connexion et services locaux rétablis](docs/local-recovery-2026-10-19.md),
-SQL 68 et parcours de publication par lot qualifiés sur copies synthétiques.
-Aucune activation distante ; voir les preuves et limites datées.
+**Données :** après nettoyage Docker, une [copie du 17 octobre](docs/docker-cleanup-recovery-2026-10-21.md)
+a été récupérée. Elle contient 6 des 18 exercices et 9 des 23 rapports présents
+avant nettoyage ; les données plus récentes manquent. L’application affiche
+cet avertissement. Les nouveaux brouillons restent enregistrés sur cet ordinateur.
 
-NovLearn Admin sera l'application privée d'administration de NovLearn : gestion du contenu pédagogique, validation des exercices et, à terme, consultation contrôlée de données de production. Elle vit dans un repository distinct de l'application élève et de l'ancien Creator.
+NovLearn Admin est indépendante de l’application élève et de l’ancien Creator.
+Le [bilan courant](docs/readiness-current.md) distingue la version locale utilisable,
+les résultats historiques et les fonctions reportées. Les anciens parcours de
+statistiques et de publication qualifiés ne sont pas actuellement réactivés.
 
-## État du projet
-
-**Reprise locale du 19 octobre :** Docker et les services conservés répondent.
-La [correction SQL 68](docs/reader-policies.md) passe ses contrôles natifs,
-restauration, PG/TLS et Auth/HTTP. Treize avertissements SQL sont corrigés ;
-32 restent ouverts. La connexion locale permet les essais progressifs.
-
-La page [Statistiques](http://127.0.0.1:3150/admin/statistics) est désormais
-[raccordée à une base SQL locale synthétique](docs/activity-http.md), avec
-permissions fraîches et filtres de période. Elle permet des essais progressifs ;
-la [liste Utilisateurs](http://127.0.0.1:3150/admin/users) permet maintenant
-[recherche, pagination et activité locales](docs/users-readonly.md), avec nom et
-e-mail autorisés. Les [fiches détaillées](docs/user-detail.md) ajoutent historique
-et progression enregistrée, sans recalcul ni certification mathématique. Les
-fonctions Production et la réception navigateur restent ouvertes.
-
-La [capacité SQL analytique](docs/activity-readonly.md) est qualifiée sur copies :
-rôle limité, agrégats natifs, refus et restauration. Le [login TLS et lecteur serveur](docs/activity-pg.md)
-passent sur copie synthétique ; la page locale est maintenant raccordée.
-Aucun relevé Production n’est activé.
-
-**Connexion et sauvegarde locales rétablies :** ouvrir
-[NovLearn Admin sur 3150](http://127.0.0.1:3150/login). Les identifiants d’essai
-sont dans `.local/local-admin-1792143739689/login.txt`. La [reprise du 18 octobre](docs/local-recovery-2026-10-18.md)
-vérifie Auth, persistance et Engine natif, sans activation distante.
-
-Un [exemple de statistiques](http://127.0.0.1:3140/tests/browser/statistics.html)
-permet aussi les retours d’interface : chiffres fictifs, période fixe et aucune
-lecture réelle. Le [contrat préparatoire](docs/activity-statistics.md) distingue
-ces essais du lecteur Production qui reste à construire et qualifier.
-
-L’[état de livraison actuel](docs/readiness-current.md) distingue les fonctions
-locales, les réceptions encore ouvertes et les statistiques/utilisateurs
-Production à construire. Le [relevé SQL actualisé](docs/lot-1a-remote-reconciliation-current.md)
-ne lit que les métadonnées ; aucune migration distante n’est appliquée.
-
-Le catalogue, le Creator canonique, MathLive, l'aperçu et les tests Engine, la relecture, les chapitres, les compétences, les flashcards et le Dashboard Staging sont implémentés localement. Le [suivi du goal](docs/progress.md) distingue leurs preuves et limites. Les migrations SQL sont vérifiées sur des copies locales isolées ; aucune application distante n'est réalisée. La publication complète et les lectures Production restent à terminer.
-
-**L'accès Staging reste désactivé** jusqu'à validation des portes SQL du [Lot 1A](docs/lot-1a-preparation.md), provisionnement du compte Admin et vérification de l'authentification réelle. Le [code Auth](docs/auth.md) refuse l'accès sans configuration autorisée. Les tests locaux avec doubles ne valent pas une connexion distante opérationnelle.
-
-Le cahier des charges officiel est [CDC_reference.md](CDC_reference.md). Il fait foi pour la cible fonctionnelle et ne doit pas être modifié silencieusement. Le [sommaire documentaire](docs/README.md) donne accès à l'audit, à la stratégie DB, au modèle de versions, à la publication, à la sécurité et aux documents de fonctionnement.
+**Staging distant, Production et déploiement restent fermés.** Le Lot 1A conserve
+ses prérequis SQL et de réception. Cette version locale ne vaut pas validation
+complète de la cible du [CDC](CDC_reference.md), qui reste inchangé.
 
 ## Architecture technique retenue
 
