@@ -1,5 +1,52 @@
 # État actuel et roadmap
 
+**Prochaine mission arrêtée :** [terminer Admin, Engine et quatre/cinq pilotes](mission-admin-engine.md),
+avec le [prompt de lancement](prompt-mission-admin-engine.md). NovLearn reste en
+lecture seule pendant cette mission ; son adaptation développement fera l'objet
+d'une seconde conversation et d'un prompt fondé sur la réception réelle du pilote.
+La mission est engagée : [dossier de réception](mission-admin-engine-reception.md).
+Le banc connecté a constaté le refus du host sur le profil Vercel actuel.
+L'utilisateur demande une [explication avant de décider de l'hébergement](prompt-explication-hebergement-engine.md) ;
+aucune nouvelle infrastructure ou Function conteneurisée n'est autorisée à ce stade.
+Archive 0.1.1, correctif numérique, builder et contrôles locaux préparés ;
+déploiement de qualification Vercel autorisé. La réception distante et les
+pilotes restent à faire. Aucun démarrage de NovLearn classique ni écriture Production.
+
+**3 novembre — identité Engine Admin :** `package.json`, le lockfile, l'identité
+et le manifeste Admin désignent l'archive 0.1.8 (SHA256
+`82e499726db2da454627903ed65802eaa2ab3e7185f7f6cb3c84c1cbdbde3cea`). Le
+contrat/pipeline reste schema 5 / Engine 0.1.0. La capacité optionnelle de
+sampling des courbes n'est pas activée dans l'adaptateur d'aperçu Admin ; le
+travail Engine 0.2.0 reste non adopté. Cette mise à jour statique ne prouve pas
+la disponibilité d'un host ni la réception NovLearn.
+
+**30 octobre — simplification proposée :** le [plan catalogue, builder et publication](plan-simplification.md)
+décrit les sélecteurs de références, les cases Flash/calculatrice, la difficulté,
+la reprise des exercices historiques et un parcours de publication plus court.
+Précision utilisateur : exercices publiés d'abord en préproduction, promotion
+sélective vers production ; flashcards publiées directement en production via
+un circuit distinct. Adapter NovLearn avec quatre/cinq exercices pilotes avant
+la conversion générale. Décision tracée dans le plan ; CDC à aligner explicitement
+avant réalisation du nouveau périmètre flashcards.
+Analyse et documentation uniquement ; aucun de ces nouveaux lots n'est implémenté.
+
+**30 octobre — configuration regroupée :** un seul `.env` privé à la racine ;
+les quatre exemples sont remplacés par le modèle de [configuration](auth.md).
+Le message de connexion décrit désormais une configuration incomplète.
+Après confirmation explicite de l'utilisateur, les marqueurs d'activation Auth
+sont retirés. Cible retenue : Production Vercel, trois variables et base de
+préproduction existante. Session/rôle, permissions et séparation avec la base
+de production élèves restent contrôlés. Engine reste fermé sur Vercel.
+Déploiement Production réalisé et formulaire actif vérifié sur le domaine réel ;
+refus des visiteurs non connectés confirmés. Connexion réelle et parcours connecté
+restent à recevoir : voir la [preuve et ses limites](vercel.md#vérification-du-30-octobre-2026).
+
+**22 octobre — lot 2, distribution Engine :** le [contrat de bibliothèque](engine-library.md)
+formalise l'archive qualifiée 0.1.0, ses exports, diagnostics et compatibilité.
+Manifeste/inventaire complet et consommateurs minimaux Admin/NovLearn ajoutés ;
+installation reproductible et contrats testés. Ni adoption 0.2.0, ni raccordement
+élève, ni qualification d'un nouvel hôte. L'état D13 ci-dessous reste inchangé.
+
 Relecture documentaire du **21 octobre 2026**, à partir du code au commit
 `c2064bf13c0c20b094e30a9eb834869ff4420f3f` et des preuves conservées. Le dépôt
 était propre au démarrage de cette mission. Aucun service, compte ou
@@ -9,7 +56,8 @@ environnement distant n’a été requalifié pendant ce nettoyage.
 
 Le dernier profil préparé (D13) conserve Supabase Staging réel et retire les
 instances Docker Admin après sauvegarde. Le frontend local se lance sans Docker.
-Le dépôt prépare Vercel ; **aucun déploiement ni réception Vercel n’est prouvé**.
+Au moment de D13, **aucun déploiement ni réception Vercel n'était prouvé** ;
+le déploiement et les contrôles HTTP du 30 octobre sont consignés ci-dessus.
 Une ancienne URL locale répondant correctement n’établit pas sa disponibilité
 actuelle.
 

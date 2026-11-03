@@ -1,0 +1,43 @@
+{
+  "date": "2026-10-30",
+  "deploymentId": "dpl_9JmZiJD94mDNC24Ym9ig3wA5dED7",
+  "domain": "https://novlearn-admin.vercel.app",
+  "sourceSha256": "a908ce02a611d5f42e048e86907f10490cf5f3c56f2411b906a1ab4982b2ffa3",
+  "sourceFiles": 187,
+  "privateFilesUploaded": false,
+  "hostingTarget": "production",
+  "databaseEnvironment": "preproduction",
+  "projectRef": "tksvbkvfusrnxulpahky",
+  "connectedAdminBrowser": true,
+  "received": false,
+  "identity": {
+    "packageVersion": "0.1.1",
+    "pipelineVersion": "0.1.0",
+    "schemaVersion": 5,
+    "archiveSha256": "c7116f9310da49478deb43ca64e04b974efd34765b45a22294c13b5235bdf927"
+  },
+  "runtime": {
+    "platform": "linux",
+    "arch": "x64",
+    "node": "24.22.2",
+    "pythonExecutable": false,
+    "cgroup": null
+  },
+  "results": [
+    {
+      "operation": "validateDefinition",
+      "passed": false,
+      "error": "unavailable",
+      "elapsedMs": 0.02696099999593571
+    }
+  ],
+  "engineAuthoringGuardPreserved": true,
+  "remoteSchemaChanges": [],
+  "savedPilotIds": [],
+  "productionContentWrites": false,
+  "limitations": [
+    "Measures the deployed Node profile, not every possible Vercel runtime",
+    "Containerized Functions remain unqualified",
+    "No new remote Linux host or worker provisioned"
+  ]
+}

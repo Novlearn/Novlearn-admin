@@ -2,16 +2,17 @@
 
 ## Contrôles à exécuter selon le changement
 
-| Commande                    | Ce qu’elle contrôle                                                                            |
-| --------------------------- | ---------------------------------------------------------------------------------------------- |
-| `npm.cmd run verify:engine` | Archive, fichier Engine installé, intégrité du lockfile et Cortex épinglé ; aucun calcul natif |
-| `npm.cmd test`              | Tests Vitest, contrats, permissions et rendus serveur selon les suites                         |
-| `npm.cmd run typecheck`     | Types TypeScript                                                                               |
-| `npm.cmd run lint`          | Règles ESLint                                                                                  |
-| `npm.cmd run format:check`  | Format Prettier, avec les exclusions versionnées                                               |
-| `npm.cmd run build`         | Build Next et préparation du standalone                                                        |
-| `npm.cmd run test:smoke`    | Smoke HTTP du build, Auth désactivée                                                           |
-| `npm.cmd run check`         | Les contrôles précédents, dans l’ordre défini par `package.json`                               |
+| Commande                               | Ce qu’elle contrôle                                                                                                                             |
+| -------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| `npm.cmd run verify:engine`            | Archive, inventaire complet installé, exports, dépendances verrouillées et graphe portable ; aucun calcul natif                                 |
+| `npm.cmd run test:engine:distribution` | Protections du manifeste puis deux installations minimales, types stricts et opérations de la bibliothèque ; distinct de la qualification Linux |
+| `npm.cmd test`                         | Tests Vitest, contrats, permissions et rendus serveur selon les suites                                                                          |
+| `npm.cmd run typecheck`                | Types TypeScript                                                                                                                                |
+| `npm.cmd run lint`                     | Règles ESLint                                                                                                                                   |
+| `npm.cmd run format:check`             | Format Prettier, avec les exclusions versionnées                                                                                                |
+| `npm.cmd run build`                    | Build Next et préparation du standalone                                                                                                         |
+| `npm.cmd run test:smoke`               | Smoke HTTP du build, Auth désactivée                                                                                                            |
+| `npm.cmd run check`                    | Les contrôles précédents, dans l’ordre défini par `package.json`                                                                                |
 
 Ne pas annoncer un contrôle complet réussi si une étape échoue. Des tests ciblés
 réussis après un timeout ne transforment pas l’exécution initiale en succès.
@@ -59,7 +60,7 @@ ne suffit pas toujours à reproduire une qualification.
 | Export de structure                    | [Preuve](archives/staging-schema-export-proof.json) et [reprise MCP](archives/mcp-resume-2026-10-20.json) ; dump synthétique qualifié, export standard Staging arrêté avant `pg_dump`                                                                                                                                                                                                                                                                                                       |
 
 Les autres preuves JSON, manifestes, six SQL et captures restent conservés dans
-ce même sous-dossier. La racine de `docs/` garde seulement les sept guides actifs
+ce même sous-dossier. La racine de `docs/` garde seulement les huit guides actifs
 et le design de référence.
 [L’audit du 15 octobre](archives/audit-current-2026-10-15.md) reste une pièce historique
 inchangée dont l’empreinte apparaît dans plusieurs preuves. Il ne décrit pas
@@ -78,8 +79,9 @@ Les scripts ne consomment pas tous seulement du code :
 - `verify-engine-package.mjs` épingle archive, installation et lockfile ; les
   reçus SQL et les approbations sont liés à cette identité. Une rotation exige
   une qualification coordonnée, pas un remplacement de tarball isolé.
-- `.env.publication.example` renvoie à `docs/auth.md` ; ce point d’entrée est
-  maintenu. `AGENTS.md` renvoie à `docs/roadmap.md`.
+- Les paramètres de configuration sont regroupés dans `docs/auth.md` ; le seul
+  fichier `.env` opérationnel local reste privé et exclu des copies de contrôle.
+  `AGENTS.md` renvoie à `docs/roadmap.md`.
 
 Les outils `scripts/test-*.mjs`, les tests SQL et `replay-sql-local.ps1` ne sont
 pas tous de simples lectures : plusieurs créent des bases/conteneurs de copie,

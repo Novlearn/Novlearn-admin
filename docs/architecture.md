@@ -70,8 +70,12 @@ longtemps que sa durée de récupération autorisée.
 
 ## Engine officiel
 
-L’archive consommée est [le tarball versionné](../vendor/novlearn-exercise-engine-0.1.0.tgz),
-package 0.1.0, contrat `schema-5;engine-0.1.0`, Cortex 0.151.0. L’identité exacte,
+Le [contrat de bibliothèque et de distribution](engine-library.md) formalise
+les exports supportés, les identités distinctes, les diagnostics et la mise à
+jour coordonnée. Le manifeste est externe à l'archive qualifiée, conservée intacte.
+
+L’archive consommée est [le tarball versionné](../vendor/novlearn-exercise-engine-0.1.8.tgz),
+package 0.1.8, contrat `schema-5;engine-0.1.0`, Cortex 0.151.0. L’identité exacte,
 y compris le SHA256, est définie dans
 [engine-identity.ts](../src/lib/engine-identity.ts) et vérifiée par
 [verify-engine-package.mjs](../scripts/verify-engine-package.mjs), avec le lockfile
@@ -101,10 +105,12 @@ formats invalides et cas incorrects explicites. Leur réussite n’est pas une
 validation humaine. Les reçus persistés ajoutent une signature liée à la version,
 à l’empreinte, à l’époque et à l’archive exacte.
 
-Le rendu de coordonnées publiques couvre notamment figures et vecteurs ; il ne
-calcule pas les courbes mathématiques. L’extension de sampling 0.2.0 décrite par
-les preuves D10 n’est pas adoptée dans ce dépôt. Ses résultats partiels et ses
-échecs complets restent distingués dans [Vérifications](verification.md).
+Le rendu de coordonnées publiques couvre notamment figures et vecteurs. Engine
+0.1.8 ajoute un échantillonnage optionnel des courbes à la projection publique,
+mais l’adaptateur Admin ne l’active pas encore et l’aperçu signale le tracé comme
+incomplet. Les sources 0.2.0 des preuves D10 ne sont pas adoptées dans ce dépôt ;
+leurs résultats partiels et leurs échecs restent distingués dans
+[Vérifications](verification.md).
 
 ## Publication et reprise
 

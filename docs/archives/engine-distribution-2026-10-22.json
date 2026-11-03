@@ -1,0 +1,79 @@
+{
+  "recordedAt": "2026-10-22T13:20:23.294Z",
+  "result": "PASS",
+  "node": "v24.19.0",
+  "isolatedConsumers": [
+    {
+      "consumer": "admin",
+      "lockSha256": "c62f7d80065df7bc310d78d65963e83211ddecca5c055ce3317b901af1565f80",
+      "result": "PASS",
+      "artifact": "d4d3abc408ab37f2f8a5faa512964b48947828bae9209cb1460b47111ca582f9",
+      "files": 157,
+      "coreModules": 27,
+      "deterministic": true,
+      "publicProjection": true,
+      "nativePositiveExecution": "not-executed"
+    },
+    {
+      "consumer": "novlearn",
+      "lockSha256": "c62f7d80065df7bc310d78d65963e83211ddecca5c055ce3317b901af1565f80",
+      "result": "PASS",
+      "artifact": "d4d3abc408ab37f2f8a5faa512964b48947828bae9209cb1460b47111ca582f9",
+      "files": 157,
+      "coreModules": 27,
+      "deterministic": true,
+      "publicProjection": true,
+      "nativePositiveExecution": "not-executed"
+    }
+  ],
+  "applicationIntegration": "not-performed",
+  "nativeLinuxQualification": "separate-lot",
+  "scope": "Distribution of the unchanged qualified 0.1.0 artifact; two minimal consumers, not application integration",
+  "distributionGuardTests": {
+    "command": "node --test scripts/engine-distribution.test.mjs",
+    "passed": 6,
+    "failed": 0,
+    "skipped": 0
+  },
+  "adminRegression": {
+    "files": 6,
+    "passed": 95,
+    "failed": 0,
+    "pool": "threads",
+    "cache": false,
+    "deadlinesChanged": false,
+    "scope": "Engine/preview contracts and route tests; transport mocks are not native host certification"
+  },
+  "adminTypes": {
+    "command": "tsc --noEmit --incremental false",
+    "result": "PASS"
+  },
+  "modifiedCodeLint": {
+    "result": "PASS"
+  },
+  "nativePositiveExecution": false,
+  "engineSourceModified": false,
+  "archiveModified": false,
+  "databaseAccess": false,
+  "deployment": false,
+  "initialAttempts": [
+    "Offline npm install failed ENOTCACHED; populated cache with the locked packages",
+    "Sandbox npm filesystem writes failed EPERM; normal approved execution used",
+    "Synthetic smoke passed ExerciseDefinition to generateVariables instead of GenerationDefinition; fixture fixed without changing Engine"
+  ],
+  "inputSha256": {
+    "vendor/engine-release.json": "6a28613d759407ac568d15d7d5609ba5b80a0d7125e3c86b903d10cd6172d564",
+    "scripts/engine-distribution.mjs": "04ccf6479532b89ee51a0997e1b22cf27253f82500dfc4b6b344dabcb5a0bbcf",
+    "scripts/verify-engine-package.mjs": "2f9083ade4f2b4e48b57cdb8176534240e6d0e273300326f478d2aa08a3134a2",
+    "scripts/engine-distribution.test.mjs": "76a210dbca407a789cc32746ed684bc8bbdb9edde3f0f315391d81f23b492432",
+    "scripts/prepare-engine-consumer.mjs": "0fc2988927bbaa576566e52432be64350ed1d88b365b087bef658368bdd3e3a1",
+    "scripts/test-engine-distribution.mjs": "4eb43359f626d441f3f73899919450b6d069bd8886aa7f1c06f2028a40e94c97",
+    "examples/engine-consumer/contract.ts": "ce5ccbed40b0379cf42991dacf7b19f969a023bc13bc8331d0ae2440101f7528",
+    "examples/engine-consumer/definition.json": "7dec791b314bddc8d96128a0139466f460129c62a79fb7c512449acd48bc383b",
+    "examples/engine-consumer/package-lock.json": "c62f7d80065df7bc310d78d65963e83211ddecca5c055ce3317b901af1565f80",
+    "examples/engine-consumer/package.json": "c65e447ea9517c999cafe82104dfc05b22fe5a64eaab650546117671723d2f69",
+    "examples/engine-consumer/smoke.mjs": "e399b48d2e15f55c907664c6099d4d47bfdacc2d4897a2e756d801e7fb728fa0",
+    "examples/engine-consumer/tsconfig.json": "cc0dda296e67d092e4e81f2d43b0ec54ced355ed05dd5804e2bc2dfda4f01deb"
+  },
+  "privateProofPath": ".local/engine-distribution-EODq4g/proof.json"
+}

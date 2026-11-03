@@ -1,0 +1,98 @@
+{
+  "date": "2026-10-30T10:13:55.091Z",
+  "deployment": {
+    "id": "dpl_42RMJasZuoDnMonCm665vGkq84LV",
+    "url": "https://novlearn-admin-ebuci0iya-luxods-projects.vercel.app",
+    "inspectorUrl": "https://vercel.com/luxods-projects/novlearn-admin/42RMJasZuoDnMonCm665vGkq84LV",
+    "readyState": "READY",
+    "target": "production",
+    "deploymentApiUrl": "https://api.vercel.com/v13/deployments/dpl_42RMJasZuoDnMonCm665vGkq84LV"
+  },
+  "domain": "https://novlearn-admin.vercel.app",
+  "source": {
+    "commit": "6f590ae",
+    "uncommittedChangesIncluded": true,
+    "files": 322,
+    "sha256": "93108d9fff41f08705465971e7ff4457a9c0e9436e0045f04d23c51217ea64fb",
+    "privateFilesUploaded": false
+  },
+  "configuration": {
+    "target": "production",
+    "database": "preproduction",
+    "supabaseProjectRef": "tksvbkvfusrnxulpahky",
+    "variables": [
+      "APP_BASE_URL",
+      "NEXT_PUBLIC_SUPABASE_URL",
+      "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY"
+    ],
+    "localEnvironmentFiles": [".env"]
+  },
+  "localChecks": {
+    "engineArchiveVerification": "PASS",
+    "vitest": {
+      "files": 80,
+      "tests": 1533,
+      "result": "PASS"
+    },
+    "typecheck": "PASS",
+    "lint": {
+      "errors": 0,
+      "warnings": 1
+    },
+    "fullCheck": {
+      "result": "FAIL",
+      "reason": "Formatting of two unchanged historical reports",
+      "files": [
+        "docs/archives/audit-v1-2026-10-21.md",
+        "docs/archives/plan-v1-2026-10-21.md"
+      ]
+    },
+    "separateBuild": "PASS",
+    "separateServerSmoke": "PASS"
+  },
+  "http": {
+    "login": {
+      "status": 200,
+      "activeControls": 3,
+      "staleDisabledErrorAbsent": true,
+      "preproductionLabel": true,
+      "noStore": true,
+      "frameOptions": "DENY"
+    },
+    "checks": [
+      {
+        "path": "/admin",
+        "status": 307,
+        "location": "/login?error=session",
+        "noStore": true
+      },
+      {
+        "path": "/api/admin/session",
+        "status": 401,
+        "location": null,
+        "noStore": true
+      },
+      {
+        "path": "/api/admin/exercises",
+        "status": 401,
+        "location": null,
+        "noStore": true
+      },
+      {
+        "path": "/api/admin/engine",
+        "status": 503,
+        "enabled": false
+      }
+    ],
+    "date": "2026-10-30T10:13:22.206Z",
+    "authenticatedLoginTested": false,
+    "databaseWrites": false
+  },
+  "limitations": [
+    "Authenticated sign-in and draft lifecycle not tested remotely",
+    "Engine unavailable on Vercel"
+  ],
+  "remoteDatabaseWrites": false,
+  "supabaseConfigurationChanges": false,
+  "pushPerformed": false
+}

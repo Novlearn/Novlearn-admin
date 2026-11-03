@@ -442,6 +442,14 @@ L'éditeur doit couvrir les types réellement pris en charge par le moteur :
 
 Les types avancés pourront être réalisés progressivement suivant une roadmap.
 
+Décision mission Admin/Engine du 30 octobre 2026, confirmée par l'utilisateur :
+Flash et calculatrice sont deux cases indépendantes. Chapitre et compétences
+sont recherchés dans le référentiel existant ; le serveur contrôle leur existence
+et leur association. Le chapitre garde sa représentation textuelle canonique,
+les compétences leurs identifiants. Difficulté : Facile/Moyen/Difficile,
+ordinals Engine 1/2/3, indices NovLearn 0/1/2. Une valeur historique inconnue
+reste signalée et conservée jusqu'à une décision explicite.
+
 ## 8.5 MathLive
 
 Utiliser MathLive pour :
@@ -511,6 +519,10 @@ Permettre :
 Les résultats doivent présenter les seeds, questions et erreurs concernées.
 
 Une vérification automatique ne remplace pas systématiquement la validation mathématique humaine.
+
+La mission du 30 octobre regroupe les contrôles derrière une action, avec seeds
+reproductibles 0, 1 et 42 par défaut et détails avancés accessibles. Les bornes,
+la couverture et l'approbation humaine d'une révision précise restent requises.
 
 ## 9.4 Tests manuels
 
@@ -595,6 +607,12 @@ La structure SQL détaillée, les contraintes d'immuabilité, la référence de 
 ---
 
 # 11. Publication Staging vers Production
+
+Décision mission Admin/Engine du 30 octobre 2026 : brouillon en préproduction,
+puis publication préproduction, puis promotion sélective des révisions choisies
+vers Production. Les pilotes de mission 1 restent exclus des anciens parcours
+élèves jusqu'à réception du lecteur canonique lors de la mission 2. Enregistrer
+un pilote n'établit pas sa publication ni sa réception dans NovLearn.
 
 ## 11.1 Règle fondamentale
 
@@ -762,6 +780,13 @@ Les flashcards restent distinctes des définitions d'exercices du moteur, sauf d
 
 Aucune synchronisation automatique des flashcards vers Production dans cette V1.
 
+Exception fonctionnelle explicitement décidée pour la mission du 30 octobre :
+préparer un circuit dédié d'aperçu, confirmation et publication directe des
+flashcards vers Production. Il reste distinct du transfert des deux tables
+d'exercices. Mission 1 : code et essais sur copie seulement ; aucune activation,
+clé ou écriture distante Production. Les autorisations de mise en service et
+les permissions minimales doivent être reçues séparément.
+
 ---
 
 # 15. Statistiques et utilisateurs
@@ -833,7 +858,10 @@ Une statistique de test ne doit jamais être présentée comme une statistique r
 - Utilisation du moteur officiel partagé.
 - Pas de calcul mathématique concurrent dans l'Admin.
 - Isolation des calculs exposés à des entrées complexes.
-- Validation des définitions avant sauvegarde et publication.
+- Sauvegarde explicite d'un brouillon incomplet autorisée (décision mission du
+  30 octobre 2026), après contrôle de son enveloppe et des références fournies,
+  sans statut vérifié, approbation ou publication implicite. Validation Engine,
+  tests, références et compatibilité courants obligatoires avant publication.
 - Diagnostics explicites.
 
 ## Qualité

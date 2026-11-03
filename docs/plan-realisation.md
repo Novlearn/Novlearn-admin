@@ -1,8 +1,20 @@
 # Plan de réalisation : Admin, Engine et NovLearn
 
+**Ordre d'exécution actualisé :** [mission 1 Admin + Engine + pilotes](mission-admin-engine.md),
+puis mission 2 NovLearn développement dans une conversation distincte, puis
+livraison Production et conversion générale. Le [prompt de mission 1](prompt-mission-admin-engine.md)
+définit les autorisations et exclusions ; les lots historiques ci-dessous sont
+une référence de couverture, pas une invitation à commencer NovLearn maintenant.
+
 Plan retenu le 21 octobre 2026. Il complète [l'état actuel](roadmap.md) et
 [l'architecture](architecture.md), sans annoncer les étapes suivantes comme
 implémentées ou réceptionnées. Le [CDC](../CDC_reference.md) reste inchangé.
+
+Précisions produit du 30 octobre : consulter le [plan de simplification](plan-simplification.md)
+pour le pilote de quatre/cinq exercices avant conversion générale, la publication
+en préproduction puis la promotion sélective en production et le circuit direct
+Production des flashcards. Ce dernier élargit le périmètre produit à formaliser
+dans le CDC avant réalisation ; aucune écriture distante autorisée par ce plan.
 
 ## Objectif et architecture
 
@@ -24,12 +36,13 @@ Les applications ne développent aucun calcul ou correcteur concurrent.
 | Application native, ultérieure | Rendu et consommation des API applicatives ; hors chemin critique                          |
 
 La distribution en bibliothèque n'impose pas un microservice. Le serveur peut
-appeler le host Engine qui exécute les opérations dans un worker isolé. Pour
-Admin, privilégier un hôte Linux avec Next.js standalone et un worker borné sur
-le même hôte. L'appel direct dans le périmètre du serveur reste une alternative
-si les quotas partagés sont qualifiés. Si Vercel est maintenu comme contrainte,
-étudier un transport vers un service Linux exécutant cette même bibliothèque ;
-ce choix ajoute réseau, authentification de service et exploitation.
+appeler le host Engine qui exécute les opérations dans un worker isolé. La cible
+Admin retenue est Vercel : qualifier d'abord l'exécution et les limites réelles
+du package sur cet hôte. Si le profil requis n'y est pas réalisable, présenter
+les alternatives : Admin et worker borné sur un même hôte Linux, ou transport
+depuis Vercel vers un service Linux utilisant la même bibliothèque. Un service
+séparé ajoute réseau, authentification et exploitation ; aucun nouvel hôte n'est
+installé sans autorisation. Aucune variante ne relâche les quotas actuels.
 
 Ne jamais lever le refus Vercel actuel par simple drapeau ni remplacer le host
 officiel par un évaluateur dans le thread applicatif. Voir les contraintes et
@@ -46,8 +59,8 @@ preuves dans [Vérifications](verification.md) et [Déploiement](vercel.md).
   adopter automatiquement la 0.2.0 et ses courbes.
 - Lister les types et parcours à recevoir : Admin, exercice classique, DS et
   duels. Séparer le premier pilote du CDC complet.
-- Prévoir une configuration opérationnelle lisible : un fichier privé local,
-  des exemples publics regroupés et les variables propres à chaque hébergement.
+- Prévoir une configuration opérationnelle lisible : un seul `.env` privé local,
+  le modèle dans la documentation et les variables propres à chaque hébergement.
   Réduire les doublons sans fusionner les secrets Staging/Production ni retirer
   les contrôles de sécurité. Ce point n'autorise aucune suppression immédiate.
 
@@ -55,6 +68,11 @@ preuves dans [Vérifications](verification.md) et [Déploiement](vercel.md).
 contrats à recevoir ; aucune fonction annoncée sur la seule présence d'un écran.
 
 ### 2. Stabiliser Engine comme bibliothèque distribuable
+
+**Réception du 22 octobre :** [distribution de l'archive retenue](engine-library.md)
+testée dans deux consommateurs minimaux indépendants ; API, manifeste et procédure
+de mise à jour formalisés. Le raccordement applicatif NovLearn et la qualification
+d'un nouvel hôte restent respectivement aux lots 6 et 3.
 
 **Dépendance :** 1.
 
