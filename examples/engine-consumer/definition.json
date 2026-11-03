@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 5,
+  "kind": "composed",
+  "id": "distribution-fixture",
+  "revision": "1",
+  "title": "Synthetic distribution fixture",
+  "generation": {
+    "schemaVersion": 5,
+    "definitions": [
+      { "name": "a", "kind": "integer", "min": 1, "max": 5, "exclusions": [] }
+    ],
+    "constraints": [
+      {
+        "kind": "comparison",
+        "left": { "variable": "a" },
+        "operator": ">",
+        "right": { "constant": 0 }
+      }
+    ],
+    "maxAttempts": 4,
+    "maxDraws": 16
+  },
+  "variables": [],
+  "elements": [
+    {
+      "id": "q",
+      "type": "question",
+      "text": "Valeur de a + 1 ?",
+      "points": 1,
+      "response": { "format": "latex", "kind": "rational" },
+      "expectedLatex": "a+1",
+      "policy": { "domain": "rational", "form": "value-only" }
+    }
+  ],
+  "extensions": { "privateSentinel": "NEVER_PUBLIC" }
+}

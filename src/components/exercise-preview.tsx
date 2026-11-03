@@ -58,6 +58,12 @@ export function ExercisePreview({
     [cases, setCases] = useState<PreviewCase[]>([]);
   const controller = useRef<AbortController | null>(null);
   const [receiptId, setReceiptId] = useState<string | null>(null);
+  const [verifying, setVerifying] = useState(false);
+  const verification = useRef(false);
+  useEffect(() => {
+    setReceiptId(null);
+    setReport(null);
+  }, [seeds, cases]);
   useEffect(() => {
     controller.current?.abort();
     setPreview(null);
@@ -109,14 +115,14 @@ export function ExercisePreview({
       }
     }
   };
-  const generate = async () => {
+  const generate = async (preserveReport = false) => {
     const value = numericSeed(seed);
     if (value === null) {
       setError('La seed doit être un entier entre 0 et 4294967295.');
       return;
     }
     setDetails(null);
-    setReport(null);
+    if (!preserveReport) setReport(null);
     setPreview(null);
     try {
       setPreview(
@@ -163,11 +169,27 @@ export function ExercisePreview({
         });
         setReport(result.report);
         setReceiptId(result.receiptId);
-      } else
+        return true;
+      } else {
         setReport(
           await request({ action: 'test', definition, seeds: list, cases }),
         );
-    } catch {}
+        return true;
+      }
+    } catch {
+      return false;
+    }
+  };
+  const verify = async () => {
+    if (verification.current || disabled || busy) return;
+    verification.current = true;
+    setVerifying(true);
+    try {
+      if (await test(!!saved && canRecordTests)) await generate(true);
+    } finally {
+      verification.current = false;
+      setVerifying(false);
+    }
   };
   const submit = async (
     questionId: string,
@@ -226,388 +248,433 @@ export function ExercisePreview({
           n’approuvent ni ne publient le brouillon.
         </p>
       </div>
-      <div className="flex flex-wrap items-end gap-3">
-        <label className="label">
-          Seed
-          <input
-            className="field max-w-48"
-            inputMode="numeric"
-            value={seed}
-            disabled={disabled || busy}
-            onChange={(e) => setSeed(e.target.value)}
-          />
-        </label>
+      <div className="space-y-3">
         <button
           type="button"
           className="button"
-          disabled={disabled || busy}
-          onClick={generate}
+          disabled={disabled || busy || verifying}
+          onClick={() => void verify()}
         >
-          Générer l’aperçu
+          {verifying ? 'Vérification…' : 'Vérifier et prévisualiser'}
         </button>
-        {busy && (
+        {verifying && (
           <button
             type="button"
-            className="rounded-lg border border-slate-300 px-4 py-3 text-sm"
-            onClick={() => {
-              controller.current?.abort();
-              setError(
-                'Annulation demandée. Un rapport déjà enregistré reste conservé.',
-              );
-            }}
+            className="ml-3 underline"
+            onClick={() => controller.current?.abort()}
           >
             Annuler le calcul
           </button>
         )}
-      </div>
-      {busy && (
-        <p role="status" className="text-sm text-brand-700">
-          Calcul officiel en cours…
+        <p className="text-sm text-slate-500">
+          Génération, rejeu, projection et réponses sur les seeds 0, 1 et 42 par
+          défaut. Les cas incorrects à compléter restent indiqués dans le bilan
+          ; aucune approbation automatique.
         </p>
-      )}
-      {error && (
-        <p
-          role="alert"
-          className="rounded-lg bg-red-50 p-4 text-sm text-red-800"
-        >
-          {error}
-        </p>
-      )}
-      {!!diagnostics.length && <Diagnostics items={diagnostics} />}
-      {preview && (
-        <div className="space-y-5">
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <div>
-              <span className="badge">Vue élève · seed {preview.seed}</span>
-              <p className="mt-2 text-xs text-slate-500">
-                Engine {preview.engineVersion} · aperçu temporaire, valable dix
-                minutes
-              </p>
-            </div>
-            <button
-              type="button"
-              className="rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm font-semibold"
-              disabled={disabled || busy}
-              onClick={inspect}
-            >
-              {details
-                ? 'Masquer les attendus privés'
-                : 'Afficher les attendus privés Admin'}
-            </button>
-          </div>
-          <div className="rounded-xl border border-slate-200 bg-white p-5">
-            <PublicExercise
-              key={preview.instance.instanceId}
-              instance={preview.instance}
-              submit={submit}
-              disabled={disabled || busy}
-            />
-          </div>
-          {details && (
-            <aside
-              className="space-y-4 rounded-xl border border-amber-200 bg-amber-50 p-5"
-              aria-label="Données privées Admin"
-            >
-              <h3 className="font-semibold text-amber-950">
-                Données privées · Admin
-              </h3>
-              <p className="text-sm text-amber-900">
-                {details.attempts} essais de génération · {details.draws}{' '}
-                tirages. Ces données sont absentes de la projection élève.
-              </p>
-              <dl className="grid gap-4 sm:grid-cols-2">
-                {Object.entries(details.values).map(([name, v]) => (
-                  <div key={name}>
-                    <dt className="text-sm font-semibold">{name}</dt>
-                    <dd>
-                      <MathDisplay
-                        latex={
-                          v.kind === 'rational'
-                            ? `\\frac{${v.numerator}}{${v.denominator}}`
-                            : v.kind === 'decimal'
-                              ? `\\frac{${v.coefficient}}{${10 ** v.precision}}`
-                              : String(v.value)
-                        }
-                      />
-                    </dd>
-                  </div>
-                ))}
-              </dl>
-              {details.expected.map((q) => (
-                <div key={q.questionId}>
-                  <p className="mb-2 font-mono text-xs text-amber-900">
-                    Question {q.questionId}
-                  </p>
-                  {q.answer.format === 'latex' ? (
-                    <MathDisplay latex={q.answer.source} />
-                  ) : (
-                    <p>
-                      {q.answer.format === 'selection'
-                        ? q.answer.optionIds.join(', ')
-                        : (q.variants ?? [q.answer.source]).join(' · ')}
-                    </p>
-                  )}
-                </div>
-              ))}
-            </aside>
-          )}
-        </div>
-      )}
-      <details className="rounded-xl border border-slate-200 bg-white p-5">
-        <summary className="cursor-pointer font-semibold">
-          Tests sur plusieurs seeds
-        </summary>
-        <div className="mt-5 space-y-5">
-          <p className="text-sm leading-6 text-slate-500">
-            Le serveur vérifie la génération, le rejeu, la projection élève,
-            l’attendu officiel et un format volontairement invalide. Ajoutez au
-            moins un cas incorrect par question pour couvrir les réponses
-            fausses. Aucun verdict indéterminé n’est accepté comme réussite.
+        {report && (
+          <p
+            role="status"
+            className={
+              report.passed && report.complete
+                ? 'text-green-700'
+                : 'text-amber-800'
+            }
+          >
+            {report.passed && report.complete
+              ? 'Contrôles réussis. Relecture humaine nécessaire.'
+              : 'Contrôles en échec ou couverture à compléter dans les détails avancés.'}
           </p>
-          <label className="label">
-            Seeds de test
-            <input
-              className="field"
-              value={seeds}
-              disabled={disabled || busy}
-              maxLength={100}
-              onChange={(e) => {
-                setSeeds(e.target.value);
-                setReport(null);
-              }}
-            />
-          </label>
+        )}
+      </div>
+      <fieldset disabled={disabled || verifying} className="space-y-6">
+        <details>
+          <summary className="cursor-pointer text-sm font-medium">
+            Paramètres avancés de l’aperçu
+          </summary>
           <div className="flex flex-wrap items-end gap-3">
             <label className="label">
-              Question du nouveau cas
-              <select
-                className="field"
-                value={questionId || questions[0]?.id || ''}
+              Seed
+              <input
+                className="field max-w-48"
+                inputMode="numeric"
+                value={seed}
                 disabled={disabled || busy}
-                onChange={(e) => setQuestionId(e.target.value)}
-              >
-                {questions.map((q) => (
-                  <option key={q.id} value={q.id}>
-                    {q.text || q.id}
-                  </option>
-                ))}
-              </select>
+                onChange={(e) => setSeed(e.target.value)}
+              />
             </label>
             <button
               type="button"
-              className="rounded-lg border border-slate-300 px-4 py-3 text-sm font-semibold"
-              disabled={
-                disabled || busy || !questions.length || cases.length >= 16
-              }
-              onClick={addCase}
+              className="button"
+              disabled={disabled || busy}
+              onClick={() => void generate()}
             >
-              Ajouter un cas de réponse
+              Générer l’aperçu
             </button>
-          </div>
-          {cases.map((c, i) => {
-            const q = questions.find((q) => q.id === c.questionId);
-            return (
-              <fieldset
-                key={i}
-                disabled={disabled || busy}
-                className="space-y-3 rounded-lg border border-slate-200 p-4"
-              >
-                <legend className="px-2 text-sm font-semibold">
-                  Cas {i + 1} · {q?.text || c.questionId}
-                </legend>
-                <label className="label">
-                  Résultat attendu
-                  <select
-                    className="field"
-                    value={c.expectedState}
-                    onChange={(e) =>
-                      patchCase(i, {
-                        expectedState: e.target
-                          .value as PreviewCase['expectedState'],
-                      })
-                    }
-                  >
-                    <option value="incorrect">Incorrecte</option>
-                    <option value="correct">Correcte</option>
-                    <option value="invalid">Format invalide</option>
-                  </select>
-                </label>
-                {c.answer.format === 'selection' ? (
-                  q?.type === 'mcq' ? (
-                    <div className="space-y-2">
-                      {q.options.map((o) => (
-                        <label key={o.id} className="flex items-center gap-3">
-                          <input
-                            type="checkbox"
-                            checked={
-                              c.answer.format === 'selection' &&
-                              c.answer.optionIds.includes(o.id)
-                            }
-                            onChange={(e) => {
-                              if (c.answer.format === 'selection')
-                                patchCase(i, {
-                                  answer: {
-                                    format: 'selection',
-                                    optionIds: e.target.checked
-                                      ? [...c.answer.optionIds, o.id]
-                                      : c.answer.optionIds.filter(
-                                          (id) => id !== o.id,
-                                        ),
-                                  },
-                                });
-                            }}
-                          />
-                          {o.content.format === 'text' ? (
-                            o.content.text
-                          ) : (
-                            <MathDisplay latex={o.content.latex} />
-                          )}
-                        </label>
-                      ))}
-                    </div>
-                  ) : (
-                    <p className="text-sm text-red-700">
-                      Cette question n’existe plus. Retirez ce cas.
-                    </p>
-                  )
-                ) : c.answer.format === 'latex' ? (
-                  <MathInput
-                    label="Réponse du cas"
-                    value={c.answer.source}
-                    disabled={disabled || busy}
-                    onChange={(source) =>
-                      patchCase(i, { answer: { format: 'latex', source } })
-                    }
-                  />
-                ) : (
-                  <label className="label">
-                    Réponse du cas
-                    <input
-                      className="field"
-                      value={c.answer.source}
-                      maxLength={8192}
-                      onChange={(e) =>
-                        patchCase(i, {
-                          answer: { format: 'text', source: e.target.value },
-                        })
-                      }
-                    />
-                  </label>
-                )}
-                <button
-                  type="button"
-                  className="text-sm font-medium text-red-700"
-                  onClick={() => {
-                    setCases(cases.filter((_, index) => index !== i));
-                    setReport(null);
-                  }}
-                >
-                  Retirer ce cas
-                </button>
-              </fieldset>
-            );
-          })}
-          <button
-            type="button"
-            className="button"
-            disabled={disabled || busy}
-            onClick={() => void test(false)}
-          >
-            Lancer les tests Engine
-          </button>
-          {saved && canRecordTests && (
-            <div className="space-y-3 rounded-lg border border-blue-200 bg-blue-50 p-4">
-              <p className="text-sm leading-6 text-blue-900">
-                Consigner les tests de la révision enregistrée. Enregistrez
-                toute modification du formulaire pour l’inclure ; le serveur
-                relit le contenu de cette révision avant de tester.
-              </p>
+            {busy && (
               <button
                 type="button"
-                className="button"
-                disabled={disabled || busy}
-                onClick={() => void test(true)}
+                className="rounded-lg border border-slate-300 px-4 py-3 text-sm"
+                onClick={() => {
+                  controller.current?.abort();
+                  setError(
+                    'Annulation demandée. Un rapport déjà enregistré reste conservé.',
+                  );
+                }}
               >
-                Tester et consigner la révision enregistrée
+                Annuler le calcul
+              </button>
+            )}
+          </div>
+        </details>
+        {busy && (
+          <p role="status" className="text-sm text-brand-700">
+            Calcul officiel en cours…
+          </p>
+        )}
+        {error && (
+          <p
+            role="alert"
+            className="rounded-lg bg-red-50 p-4 text-sm text-red-800"
+          >
+            {error}
+          </p>
+        )}
+        {!!diagnostics.length && <Diagnostics items={diagnostics} />}
+        {preview && (
+          <div className="space-y-5">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <span className="badge">Vue élève · seed {preview.seed}</span>
+                <p className="mt-2 text-xs text-slate-500">
+                  Engine {preview.engineVersion} · aperçu temporaire, valable
+                  dix minutes
+                </p>
+              </div>
+              <button
+                type="button"
+                className="rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm font-semibold"
+                disabled={disabled || busy}
+                onClick={inspect}
+              >
+                {details
+                  ? 'Masquer les attendus privés'
+                  : 'Afficher les attendus privés Admin'}
               </button>
             </div>
-          )}
-          {report && (
-            <div className="space-y-4" role="status">
-              <p
-                className={`font-semibold ${report.passed && report.complete ? 'text-green-700' : 'text-red-700'}`}
+            <div className="rounded-xl border border-slate-200 bg-white p-5">
+              <PublicExercise
+                key={preview.instance.instanceId}
+                instance={preview.instance}
+                submit={submit}
+                disabled={disabled || busy}
+              />
+            </div>
+            {details && (
+              <aside
+                className="space-y-4 rounded-xl border border-amber-200 bg-amber-50 p-5"
+                aria-label="Données privées Admin"
               >
-                {report.passed && report.complete
-                  ? 'Tests Engine réussis pour ces seeds et ces cas. La relecture reste nécessaire.'
-                  : 'Tests en échec ou couverture incomplète.'}
-              </p>
-              <p className="break-all font-mono text-xs text-slate-500">
-                Empreinte de définition : {report.definitionDigest}
-              </p>
-              {receiptId && (
-                <p className="break-all text-sm text-blue-800">
-                  Rapport enregistré : {receiptId}. La relecture humaine reste
-                  distincte.
+                <h3 className="font-semibold text-amber-950">
+                  Données privées · Admin
+                </h3>
+                <p className="text-sm text-amber-900">
+                  {details.attempts} essais de génération · {details.draws}{' '}
+                  tirages. Ces données sont absentes de la projection élève.
                 </p>
-              )}
-              {report.seeds.map((r) => (
-                <section
-                  key={r.seed}
+                <dl className="grid gap-4 sm:grid-cols-2">
+                  {Object.entries(details.values).map(([name, v]) => (
+                    <div key={name}>
+                      <dt className="text-sm font-semibold">{name}</dt>
+                      <dd>
+                        <MathDisplay
+                          latex={
+                            v.kind === 'rational'
+                              ? `\\frac{${v.numerator}}{${v.denominator}}`
+                              : v.kind === 'decimal'
+                                ? `\\frac{${v.coefficient}}{${10 ** v.precision}}`
+                                : String(v.value)
+                          }
+                        />
+                      </dd>
+                    </div>
+                  ))}
+                </dl>
+                {details.expected.map((q) => (
+                  <div key={q.questionId}>
+                    <p className="mb-2 font-mono text-xs text-amber-900">
+                      Question {q.questionId}
+                    </p>
+                    {q.answer.format === 'latex' ? (
+                      <MathDisplay latex={q.answer.source} />
+                    ) : (
+                      <p>
+                        {q.answer.format === 'selection'
+                          ? q.answer.optionIds.join(', ')
+                          : (q.variants ?? [q.answer.source]).join(' · ')}
+                      </p>
+                    )}
+                  </div>
+                ))}
+              </aside>
+            )}
+          </div>
+        )}
+        <details className="rounded-xl border border-slate-200 bg-white p-5">
+          <summary className="cursor-pointer font-semibold">
+            Détails avancés : seeds, cas et rapports
+          </summary>
+          <div className="mt-5 space-y-5">
+            <p className="text-sm leading-6 text-slate-500">
+              Le serveur vérifie la génération, le rejeu, la projection élève,
+              l’attendu officiel et un format volontairement invalide. Ajoutez
+              au moins un cas incorrect par question pour couvrir les réponses
+              fausses. Aucun verdict indéterminé n’est accepté comme réussite.
+            </p>
+            <label className="label">
+              Seeds de test
+              <input
+                className="field"
+                value={seeds}
+                disabled={disabled || busy}
+                maxLength={100}
+                onChange={(e) => {
+                  setSeeds(e.target.value);
+                  setReport(null);
+                }}
+              />
+            </label>
+            <div className="flex flex-wrap items-end gap-3">
+              <label className="label">
+                Question du nouveau cas
+                <select
+                  className="field"
+                  value={questionId || questions[0]?.id || ''}
+                  disabled={disabled || busy}
+                  onChange={(e) => setQuestionId(e.target.value)}
+                >
+                  {questions.map((q) => (
+                    <option key={q.id} value={q.id}>
+                      {q.text || q.id}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <button
+                type="button"
+                className="rounded-lg border border-slate-300 px-4 py-3 text-sm font-semibold"
+                disabled={
+                  disabled || busy || !questions.length || cases.length >= 16
+                }
+                onClick={addCase}
+              >
+                Ajouter un cas de réponse
+              </button>
+            </div>
+            {cases.map((c, i) => {
+              const q = questions.find((q) => q.id === c.questionId);
+              return (
+                <fieldset
+                  key={i}
+                  disabled={disabled || busy}
                   className="space-y-3 rounded-lg border border-slate-200 p-4"
                 >
-                  <h3 className="font-semibold">
-                    Seed {r.seed} · {r.passed ? 'Réussie' : 'À corriger'}
-                  </h3>
-                  <p className="text-sm">
-                    Rejeu : {r.reproducible ? 'identique' : 'non validé'} ·
-                    Projection élève :{' '}
-                    {r.publicProjectionSafe ? 'contrôlée' : 'non validée'}
-                  </p>
-                  <Diagnostics items={r.diagnostics} />
-                  <div className="overflow-x-auto">
-                    <table className="preview-table text-sm">
-                      <caption>Vérifications de correction</caption>
-                      <thead>
-                        <tr>
-                          <th>Question</th>
-                          <th>Cas</th>
-                          <th>Attendu</th>
-                          <th>Résultat Engine</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {r.checks.map((c, i) => (
-                          <tr key={i}>
-                            <td className="font-mono text-xs">
-                              {c.questionId}
-                            </td>
-                            <td>{c.label}</td>
-                            <td>
-                              {
-                                correctionLabels[
-                                  c.expectedState as keyof typeof correctionLabels
-                                ]
+                  <legend className="px-2 text-sm font-semibold">
+                    Cas {i + 1} · {q?.text || c.questionId}
+                  </legend>
+                  <label className="label">
+                    Résultat attendu
+                    <select
+                      className="field"
+                      value={c.expectedState}
+                      onChange={(e) =>
+                        patchCase(i, {
+                          expectedState: e.target
+                            .value as PreviewCase['expectedState'],
+                        })
+                      }
+                    >
+                      <option value="incorrect">Incorrecte</option>
+                      <option value="correct">Correcte</option>
+                      <option value="invalid">Format invalide</option>
+                    </select>
+                  </label>
+                  {c.answer.format === 'selection' ? (
+                    q?.type === 'mcq' ? (
+                      <div className="space-y-2">
+                        {q.options.map((o) => (
+                          <label key={o.id} className="flex items-center gap-3">
+                            <input
+                              type="checkbox"
+                              checked={
+                                c.answer.format === 'selection' &&
+                                c.answer.optionIds.includes(o.id)
                               }
-                            </td>
-                            <td
-                              className={
-                                c.passed ? 'text-green-700' : 'text-red-700'
-                              }
-                            >
-                              {correctionLabels[c.result.state]}
-                              <p className="mt-1 text-xs">{c.result.code}</p>
-                            </td>
-                          </tr>
+                              onChange={(e) => {
+                                if (c.answer.format === 'selection')
+                                  patchCase(i, {
+                                    answer: {
+                                      format: 'selection',
+                                      optionIds: e.target.checked
+                                        ? [...c.answer.optionIds, o.id]
+                                        : c.answer.optionIds.filter(
+                                            (id) => id !== o.id,
+                                          ),
+                                    },
+                                  });
+                              }}
+                            />
+                            {o.content.format === 'text' ? (
+                              o.content.text
+                            ) : (
+                              <MathDisplay latex={o.content.latex} />
+                            )}
+                          </label>
                         ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </section>
-              ))}
-            </div>
-          )}
-        </div>
-      </details>
+                      </div>
+                    ) : (
+                      <p className="text-sm text-red-700">
+                        Cette question n’existe plus. Retirez ce cas.
+                      </p>
+                    )
+                  ) : c.answer.format === 'latex' ? (
+                    <MathInput
+                      label="Réponse du cas"
+                      value={c.answer.source}
+                      disabled={disabled || busy}
+                      onChange={(source) =>
+                        patchCase(i, { answer: { format: 'latex', source } })
+                      }
+                    />
+                  ) : (
+                    <label className="label">
+                      Réponse du cas
+                      <input
+                        className="field"
+                        value={c.answer.source}
+                        maxLength={8192}
+                        onChange={(e) =>
+                          patchCase(i, {
+                            answer: { format: 'text', source: e.target.value },
+                          })
+                        }
+                      />
+                    </label>
+                  )}
+                  <button
+                    type="button"
+                    className="text-sm font-medium text-red-700"
+                    onClick={() => {
+                      setCases(cases.filter((_, index) => index !== i));
+                      setReport(null);
+                    }}
+                  >
+                    Retirer ce cas
+                  </button>
+                </fieldset>
+              );
+            })}
+            <button
+              type="button"
+              className="button"
+              disabled={disabled || busy}
+              onClick={() => void test(false)}
+            >
+              Lancer les tests Engine
+            </button>
+            {saved && canRecordTests && (
+              <div className="space-y-3 rounded-lg border border-blue-200 bg-blue-50 p-4">
+                <p className="text-sm leading-6 text-blue-900">
+                  Consigner les tests de la révision enregistrée. Enregistrez
+                  toute modification du formulaire pour l’inclure ; le serveur
+                  relit le contenu de cette révision avant de tester.
+                </p>
+                <button
+                  type="button"
+                  className="button"
+                  disabled={disabled || busy}
+                  onClick={() => void test(true)}
+                >
+                  Tester et consigner la révision enregistrée
+                </button>
+              </div>
+            )}
+            {report && (
+              <div className="space-y-4" role="status">
+                <p
+                  className={`font-semibold ${report.passed && report.complete ? 'text-green-700' : 'text-red-700'}`}
+                >
+                  {report.passed && report.complete
+                    ? 'Tests Engine réussis pour ces seeds et ces cas. La relecture reste nécessaire.'
+                    : 'Tests en échec ou couverture incomplète.'}
+                </p>
+                <p className="break-all font-mono text-xs text-slate-500">
+                  Empreinte de définition : {report.definitionDigest}
+                </p>
+                {receiptId && (
+                  <p className="break-all text-sm text-blue-800">
+                    Rapport enregistré : {receiptId}. La relecture humaine reste
+                    distincte.
+                  </p>
+                )}
+                {report.seeds.map((r) => (
+                  <section
+                    key={r.seed}
+                    className="space-y-3 rounded-lg border border-slate-200 p-4"
+                  >
+                    <h3 className="font-semibold">
+                      Seed {r.seed} · {r.passed ? 'Réussie' : 'À corriger'}
+                    </h3>
+                    <p className="text-sm">
+                      Rejeu : {r.reproducible ? 'identique' : 'non validé'} ·
+                      Projection élève :{' '}
+                      {r.publicProjectionSafe ? 'contrôlée' : 'non validée'}
+                    </p>
+                    <Diagnostics items={r.diagnostics} />
+                    <div className="overflow-x-auto">
+                      <table className="preview-table text-sm">
+                        <caption>Vérifications de correction</caption>
+                        <thead>
+                          <tr>
+                            <th>Question</th>
+                            <th>Cas</th>
+                            <th>Attendu</th>
+                            <th>Résultat Engine</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {r.checks.map((c, i) => (
+                            <tr key={i}>
+                              <td className="font-mono text-xs">
+                                {c.questionId}
+                              </td>
+                              <td>{c.label}</td>
+                              <td>
+                                {
+                                  correctionLabels[
+                                    c.expectedState as keyof typeof correctionLabels
+                                  ]
+                                }
+                              </td>
+                              <td
+                                className={
+                                  c.passed ? 'text-green-700' : 'text-red-700'
+                                }
+                              >
+                                {correctionLabels[c.result.state]}
+                                <p className="mt-1 text-xs">{c.result.code}</p>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </section>
+                ))}
+              </div>
+            )}
+          </div>
+        </details>
+      </fieldset>
     </section>
   );
 }

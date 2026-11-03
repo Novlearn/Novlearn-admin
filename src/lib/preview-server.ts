@@ -49,7 +49,7 @@ export const definitionDigest = (definition: unknown) =>
     .update(JSON.stringify(stable(definition)))
     .digest('hex');
 
-type Snapshot = {
+export type Snapshot = {
   owner: string;
   digest: string;
   seed: number;
@@ -57,6 +57,17 @@ type Snapshot = {
   expiresAt: number;
   bytes: number;
 };
+export interface SnapshotRepository {
+  put(
+    owner: string,
+    digest: string,
+    seed: number,
+    official: ExerciseInstance,
+  ):
+    | ({ previewId: string } & Snapshot)
+    | Promise<{ previewId: string } & Snapshot>;
+  get(owner: string, id: string): Snapshot | Promise<Snapshot>;
+}
 /** Ephemeral process-local snapshots; no official instance is accepted from a browser. */
 export class PreviewStore {
   private readonly entries = new Map<string, Snapshot>();
@@ -288,11 +299,12 @@ export async function generatePreview(
   definition: unknown,
   seed: number,
   signal: AbortSignal,
+  repository: SnapshotRepository = store,
 ): Promise<PreviewResult> {
   const official = await instantiate(definition, seed, randomUUID(), signal);
   const instance = await project(official, signal);
   signal.throwIfAborted();
-  const snapshot = store.put(
+  const snapshot = await repository.put(
     owner,
     definitionDigest(definition),
     seed,
@@ -307,11 +319,12 @@ export async function generatePreview(
     engineVersion: official.engineVersion,
   };
 }
-export function inspectPreview(
+export async function inspectPreview(
   owner: string,
   previewId: string,
-): PreviewDetails {
-  const { official } = store.get(owner, previewId);
+  repository: SnapshotRepository = store,
+): Promise<PreviewDetails> {
+  const { official } = await repository.get(owner, previewId);
   return {
     values: official.generation.values,
     draws: official.generation.draws,
@@ -331,8 +344,9 @@ export async function gradePreview(
   questionId: string,
   answer: JsonValue,
   signal: AbortSignal,
+  repository: SnapshotRepository = store,
 ) {
-  const { official } = store.get(owner, previewId);
+  const { official } = await repository.get(owner, previewId);
   if (!questions(official).some((q) => q.id === questionId))
     throw new PreviewError(400, 'Question inconnue pour cet aperçu.');
   return grade(official, questionId, answer, signal);

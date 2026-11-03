@@ -8,6 +8,8 @@ import { bindEditorNavigation } from '@/lib/editor-navigation';
 import { ExercisePreview } from './exercise-preview';
 import { useCreatorRecovery } from './creator-recovery';
 import { recoveryResource } from '@/lib/creator-recovery';
+import { ExerciseReferenceFields } from './exercise-reference-fields';
+import { difficultyChoices } from '@/lib/exercise-metadata';
 
 type Props = {
   exerciseId?: string;
@@ -233,20 +235,8 @@ export function DraftMetadataForm(props: Props) {
           />
         </label>
         <label className="label">
-          Chapitre
-          <input
-            className="field"
-            maxLength={160}
-            value={catalogue.chapter ?? ''}
-            onChange={(event) => patch({ chapter: event.target.value })}
-          />
-        </label>
-        <label className="label">
           Difficulté
-          <input
-            type="number"
-            min={1}
-            step={1}
+          <select
             className="field"
             value={catalogue.difficulty ?? ''}
             onChange={(event) =>
@@ -256,37 +246,49 @@ export function DraftMetadataForm(props: Props) {
                   : undefined,
               })
             }
-            placeholder="Niveau"
-          />
-        </label>
-        <label className="label">
-          Format
-          <select
-            className="field"
-            value={catalogue.exerciseType ?? 'classic'}
-            onChange={(event) =>
-              patch({ exerciseType: event.target.value as 'classic' | 'flash' })
-            }
           >
-            <option value="classic">Classique</option>
-            <option value="flash">Flash</option>
+            <option value="">À choisir</option>
+            {catalogue.difficulty !== undefined &&
+              !difficultyChoices.some(
+                (c) => c.engine === catalogue.difficulty,
+              ) && (
+                <option value={catalogue.difficulty}>
+                  À rapprocher ({catalogue.difficulty})
+                </option>
+              )}
+            {difficultyChoices.map((choice) => (
+              <option key={choice.engine} value={choice.engine}>
+                {choice.label}
+              </option>
+            ))}
           </select>
         </label>
-        <label className="label md:col-span-2">
-          Compétences{' '}
-          <span className="font-normal text-slate-500">
-            (séparées par une virgule)
-          </span>
+        <label className="flex items-center gap-3 text-sm font-medium text-slate-700">
           <input
-            className="field"
-            maxLength={2000}
-            value={skills}
-            onChange={(event) => {
-              setSkills(event.target.value);
-              setDirty(true);
-            }}
+            type="checkbox"
+            className="h-4 w-4 accent-blue-600"
+            checked={catalogue.exerciseType === 'flash'}
+            onChange={(event) =>
+              patch({
+                exerciseType: event.target.checked ? 'flash' : 'classic',
+              })
+            }
           />
+          Exercice flash
         </label>
+        <ExerciseReferenceFields
+          disabled={busy || recovery.awaitingChoice}
+          chapter={catalogue.chapter ?? ''}
+          skills={skills
+            .split(',')
+            .map((s) => s.trim())
+            .filter(Boolean)}
+          onChapter={(chapter) => patch({ chapter })}
+          onSkills={(ids) => {
+            setSkills(ids.join(', '));
+            setDirty(true);
+          }}
+        />
         <label className="flex items-center gap-3 text-sm font-medium text-slate-700">
           <input
             type="checkbox"
@@ -358,6 +360,7 @@ export function DraftMetadataForm(props: Props) {
         definition={clean(definition, skills)}
         disabled={busy || recovery.awaitingChoice}
         saved={
+          !dirty &&
           !newRevision &&
           props.versionId &&
           props.fingerprint &&
@@ -383,7 +386,7 @@ export function DraftMetadataForm(props: Props) {
               : 'Enregistrer le brouillon'}
         </button>
         <span className="text-sm text-slate-500">
-          {dirty ? 'Modifications non enregistrées' : 'Brouillon Staging'}
+          {dirty ? 'Modifications non enregistrées' : 'Brouillon Préproduction'}
         </span>
       </div>
       {message && (

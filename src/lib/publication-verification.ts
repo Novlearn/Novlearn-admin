@@ -26,7 +26,7 @@ export function matchingPublicationReport(
     if (
       !passedPublicationReport(expected) ||
       !passedPublicationReport(report) ||
-      report.engineVersion !== certifiedEngineIdentity.version ||
+      report.engineVersion !== certifiedEngineIdentity.pipelineVersion ||
       expected.engineVersion !== report.engineVersion ||
       report.definitionDigest !==
         definitionDigest(JSON.parse(source.payload.definitionJson)) ||

@@ -8,6 +8,7 @@
   },
   "scripts": {
     "verify:engine": "node scripts/verify-engine-package.mjs",
+    "test:engine:distribution": "node --test scripts/engine-distribution.test.mjs && node scripts/test-engine-distribution.mjs",
     "test": "vitest run",
     "test:smoke": "node scripts/smoke-auth.mjs",
     "dev": "next dev",

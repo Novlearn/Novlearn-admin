@@ -4,6 +4,7 @@ import { readAuthConfiguration } from '@/lib/auth/config';
 import { isTrustedMutation, privateHeaders } from '@/lib/auth/http';
 import { readBoundedJson } from '@/lib/auth/json';
 import { createRouteAuth, transferAuthCookies } from '@/lib/auth/supabase';
+import { checkExerciseReferences } from '@/lib/exercise-references';
 import {
   catalogueFilter,
   draftEnvelope,
@@ -83,6 +84,8 @@ async function handle(request: NextRequest, mutation: boolean) {
         )
       )
         return finish({ error: 'Brouillon invalide.' }, 400);
+      const issue = await checkExerciseReferences(client, body.definition);
+      if (issue) return finish({ error: issue }, 400);
       name = 'admin_save_exercise_draft';
       args = {
         p_exercise_id: body.exerciseId,

@@ -2,6 +2,7 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { MAX_PUBLICATION_BATCH } from '@/lib/publication-batch';
+import { difficultyLabel } from '@/lib/exercise-metadata';
 import {
   editorialLabels,
   PAGE_SIZE,
@@ -52,7 +53,7 @@ export function CatalogueList({
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <p className="text-sm font-medium text-slate-500">
-            Contenus pédagogiques · Staging
+            Contenus pédagogiques · Préproduction
           </p>
           <h1 className="mt-2 text-3xl font-semibold tracking-tight">
             Exercices
@@ -107,19 +108,19 @@ export function CatalogueList({
       </form>
       {!data ? (
         <div className="notice mt-6" role="status">
-          Le catalogue Staging est indisponible. Réessayez plus tard.
+          Le catalogue Préproduction est indisponible. Réessayez plus tard.
         </div>
       ) : (
         <section
           className="mt-6 overflow-hidden rounded-2xl border border-slate-200 bg-white"
-          aria-label="Catalogue Staging"
+          aria-label="Catalogue Préproduction"
         >
           <form action="/admin/publication/batch" method="get">
             <div className="flex items-center justify-between border-b border-slate-200 px-6 py-4">
               <p className="text-sm font-medium text-slate-600">
                 {data.total} exercice{data.total > 1 ? 's' : ''}
               </p>
-              <span className="badge">Staging</span>
+              <span className="badge">Préproduction</span>
             </div>
             <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 px-6 py-4">
               <p className="text-sm text-slate-600">
@@ -154,7 +155,7 @@ export function CatalogueList({
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-sm">
                   <caption className="sr-only">
-                    Exercices et dernières révisions de Staging
+                    Exercices et dernières révisions de Préproduction
                   </caption>
                   <thead className="bg-slate-50 text-xs text-slate-500">
                     <tr>
@@ -242,7 +243,11 @@ export function CatalogueList({
                         <td className="px-6 py-5">
                           {item.chapter || 'À préciser'}
                           <p className="mt-1 text-xs text-slate-500">
-                            {item.difficulty || 'Niveau à préciser'}
+                            {difficultyLabel(
+                              item.versionId && /^\d+$/.test(item.difficulty)
+                                ? Number(item.difficulty)
+                                : item.difficulty,
+                            )}
                           </p>
                         </td>
                         <td className="px-6 py-5">
@@ -256,15 +261,26 @@ export function CatalogueList({
                           </p>
                         </td>
                         <td className="px-6 py-5">
-                          <EditorialBadge status={item.status} />
+                          {item.status === 'published' ? (
+                            <span className="badge bg-slate-100 text-slate-600">
+                              Publication déclarée · à vérifier
+                            </span>
+                          ) : (
+                            <EditorialBadge status={item.status} />
+                          )}
+                          <p className="mt-1 text-xs text-slate-500">
+                            {item.versionId
+                              ? 'Format canonique'
+                              : 'Ancien format · à convertir'}
+                          </p>
                         </td>
                         <td className="px-6 py-5">
                           {item.revision ? `v${item.revision}` : 'Historique'}
-                          {item.activeVersionId && (
-                            <p className="mt-1 text-xs text-green-700">
-                              Version active Staging
-                            </p>
-                          )}
+                          <p className="mt-1 text-xs text-slate-500">
+                            {item.activeVersionId
+                              ? 'Pointeur actif Préproduction · publication à vérifier'
+                              : 'Publication non vérifiée'}
+                          </p>
                         </td>
                         <td className="whitespace-nowrap px-6 py-5 text-xs text-slate-500">
                           {item.updatedAt

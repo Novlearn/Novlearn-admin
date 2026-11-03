@@ -16,6 +16,7 @@ import {
 import type { JsonValue } from 'novlearn-exercise-engine';
 import type { PreviewCase } from '@/lib/preview';
 import { isUuid, isFingerprint } from '@/lib/catalogue';
+import { DatabasePreviewStore } from '@/lib/preview-database-store';
 import {
   readTestSigningConfiguration,
   signTestReceipt,
@@ -149,6 +150,10 @@ export async function POST(request: NextRequest) {
       ),
     ]);
     release = acquirePreviewJob(access.userId);
+    const repository =
+      process.env.VERCEL === '1'
+        ? new DatabasePreviewStore(client, signal)
+        : undefined;
     let result: unknown;
     if (input.action === 'generate')
       result = await generatePreview(
@@ -156,9 +161,14 @@ export async function POST(request: NextRequest) {
         input.definition,
         input.seed as number,
         signal,
+        repository,
       );
     else if (input.action === 'inspect')
-      result = inspectPreview(access.userId, input.previewId as string);
+      result = await inspectPreview(
+        access.userId,
+        input.previewId as string,
+        repository,
+      );
     else if (input.action === 'grade')
       result = await gradePreview(
         access.userId,
@@ -166,6 +176,7 @@ export async function POST(request: NextRequest) {
         input.questionId as string,
         input.answer as JsonValue,
         signal,
+        repository,
       );
     else if (input.action === 'test_saved') {
       const signing = readTestSigningConfiguration(process.env);

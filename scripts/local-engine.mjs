@@ -5,6 +5,7 @@ import { createHash, randomBytes, timingSafeEqual } from 'node:crypto';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { createServer } from 'node:http';
 import path from 'node:path';
+import { certifiedEngineIdentity } from '../src/lib/engine-identity.ts';
 
 export async function startLocalEngine(
   artifact,
@@ -25,9 +26,20 @@ export async function startLocalEngine(
   );
   const image =
     'node:24.19.0-bookworm@sha256:4196d66a565c6f195728d9952f161f4adfe2ad753052a08b7ec7f1c5a6bda42b';
-  const archiveHash =
-    'd4d3abc408ab37f2f8a5faa512964b48947828bae9209cb1460b47111ca582f9';
-  const engine = path.join(root, 'vendor/novlearn-exercise-engine-0.1.0.tgz');
+  const release = JSON.parse(
+    await readFile(path.join(root, 'vendor/engine-release.json'), 'utf8'),
+  );
+  assert.equal(release.packageVersion, certifiedEngineIdentity.version);
+  assert.equal(
+    release.pipelineVersion,
+    certifiedEngineIdentity.pipelineVersion,
+  );
+  assert.equal(
+    release.archiveSha256,
+    certifiedEngineIdentity.engineArchiveSha256,
+  );
+  const archiveHash = release.archiveSha256;
+  const engine = path.join(root, 'vendor', release.archive);
   assert.equal(
     createHash('sha256')
       .update(await readFile(engine))
