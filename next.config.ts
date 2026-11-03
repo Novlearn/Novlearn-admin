@@ -5,6 +5,12 @@ const nextConfig: NextConfig = {
   output: 'standalone',
   serverExternalPackages: ['novlearn-exercise-engine'],
   outputFileTracingIncludes: {
+    '/api/admin/engine/qualification': [
+      './node_modules/novlearn-exercise-engine/**/*',
+      './node_modules/@cortex-js/compute-engine/**/*',
+      './node_modules/@arnog/colors/**/*',
+      './node_modules/complex.js/**/*',
+    ],
     '/admin/exercises/*': [
       './scripts/active-version-reader-audit.sql',
       './scripts/active-version-query.sql',
