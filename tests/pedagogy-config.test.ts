@@ -9,7 +9,7 @@ it.each([
   ['ADMIN_LOCAL_PEDAGOGY_ENABLED', 'false'],
   ['ADMIN_LOCAL_PEDAGOGY_REVIEW', 'anything'],
   ['ADMIN_PEDAGOGY_ENABLED', 'true'],
-  ['ADMIN_STAGING_AUTH_ENABLED', 'true'],
+  ['NEXT_PUBLIC_SUPABASE_URL', 'https://mixed-project.supabase.co'],
   ['ADMIN_LOCAL_WORKSPACE_ENABLED', 'false'],
   ['APP_BASE_URL', 'https://admin.example.invalid'],
   ['ADMIN_LOCAL_PEDAGOGY_PG_CA', ''],

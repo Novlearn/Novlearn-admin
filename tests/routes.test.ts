@@ -23,8 +23,6 @@ import { POST as login } from '@/app/auth/login/route';
 import { POST as logout } from '@/app/auth/logout/route';
 
 beforeEach(() => {
-  vi.stubEnv('ADMIN_STAGING_AUTH_ENABLED', 'true');
-  vi.stubEnv('ADMIN_STAGING_SECURITY_REVIEW', 'synthetic-review');
   vi.stubEnv(
     'NEXT_PUBLIC_SUPABASE_URL',
     `https://${STAGING_PROJECT_REF}.supabase.co`,
@@ -61,7 +59,7 @@ function post(
 
 describe('appels directs aux Route Handlers', () => {
   it('refuse toute route sans activation, sans initialiser Supabase', async () => {
-    vi.stubEnv('ADMIN_STAGING_AUTH_ENABLED', 'false');
+    vi.stubEnv('NEXT_PUBLIC_SUPABASE_URL', '');
     for (const response of [
       await GET(new NextRequest('http://localhost:3000/api/admin/session')),
       await login(post('/auth/login')),

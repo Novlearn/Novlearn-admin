@@ -17,7 +17,6 @@ export function localUserDetailEnvironment() {
     NODE_ENV: 'development',
     APP_BASE_URL: 'http://127.0.0.1:3150',
     ADMIN_LOCAL_WORKSPACE_ENABLED: 'true',
-    ADMIN_STAGING_AUTH_ENABLED: 'false',
     ADMIN_PUBLICATION_ENABLED: 'false',
     NEXT_PUBLIC_SUPABASE_URL: '',
     NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: '',

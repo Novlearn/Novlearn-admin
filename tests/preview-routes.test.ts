@@ -54,8 +54,6 @@ function request(
   });
 }
 beforeEach(() => {
-  vi.stubEnv('ADMIN_STAGING_AUTH_ENABLED', 'true');
-  vi.stubEnv('ADMIN_STAGING_SECURITY_REVIEW', 'synthetic-only');
   vi.stubEnv('ADMIN_ENGINE_ENABLED', 'true');
   vi.stubEnv(
     'NEXT_PUBLIC_SUPABASE_URL',
@@ -241,7 +239,7 @@ describe('aperçu serveur protégé', () => {
       ).toBe(400);
     expect(fake.rpc).not.toHaveBeenCalled();
   });
-  it.each(['ADMIN_STAGING_AUTH_ENABLED', 'ADMIN_ENGINE_ENABLED'])(
+  it.each(['NEXT_PUBLIC_SUPABASE_URL', 'ADMIN_ENGINE_ENABLED'])(
     'reste fermé sans %s avant tout calcul',
     async (flag) => {
       vi.stubEnv(flag, 'false');
@@ -383,12 +381,13 @@ describe('aperçu serveur protégé', () => {
       newDraft('Test'),
       42,
       expect.any(AbortSignal),
+      undefined,
     );
     const response = await POST(
       request({ action: 'inspect', previewId: reference }),
     );
     expect(response.headers.get('cache-control')).toContain('no-store');
-    expect(fake.inspect).toHaveBeenCalledWith('alice', reference);
+    expect(fake.inspect).toHaveBeenCalledWith('alice', reference, undefined);
     const answer = { format: 'latex', source: '4' };
     await POST(
       request({
@@ -404,6 +403,7 @@ describe('aperçu serveur protégé', () => {
       'q',
       answer,
       expect.any(AbortSignal),
+      undefined,
     );
     expect(fake.release).toHaveBeenCalledTimes(3);
   });

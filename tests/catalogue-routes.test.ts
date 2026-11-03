@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { NextRequest, NextResponse } from 'next/server';
 import { STAGING_PROJECT_REF } from '@/lib/auth/config';
 import { newDraft } from '@/lib/catalogue';
+vi.mock('server-only', () => ({}));
 const fake = vi.hoisted(() => ({
   auth: {
     getVerifiedUser: vi.fn(),
@@ -37,8 +38,6 @@ function post(
   });
 }
 beforeEach(() => {
-  vi.stubEnv('ADMIN_STAGING_AUTH_ENABLED', 'true');
-  vi.stubEnv('ADMIN_STAGING_SECURITY_REVIEW', 'test-only');
   vi.stubEnv(
     'NEXT_PUBLIC_SUPABASE_URL',
     `https://${STAGING_PROJECT_REF}.supabase.co`,
@@ -64,13 +63,13 @@ describe('API catalogue : permission avant toute opération', () => {
   it.each(['save', 'duplicate', 'archive'])(
     'refuse %s sans activation',
     async (action) => {
-      vi.stubEnv('ADMIN_STAGING_AUTH_ENABLED', 'false');
+      vi.stubEnv('NEXT_PUBLIC_SUPABASE_URL', '');
       expect((await POST(post({ ...save, action }))).status).toBe(503);
       expect(fake.create).not.toHaveBeenCalled();
     },
   );
   it('refuse GET sans activation', async () => {
-    vi.stubEnv('ADMIN_STAGING_AUTH_ENABLED', 'false');
+    vi.stubEnv('NEXT_PUBLIC_SUPABASE_URL', '');
     expect(
       (await GET(new NextRequest('http://localhost:3000/api/admin/exercises')))
         .status,

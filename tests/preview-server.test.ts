@@ -103,10 +103,10 @@ it('ne fournit que la projection officielle ; les attendus exigent une inspectio
   );
   expect(JSON.stringify(preview)).not.toContain('NEVER_PUBLIC');
   expect(JSON.stringify(preview)).not.toContain('expected');
-  expect(inspectPreview('alice', preview.previewId).expected[0].answer).toEqual(
-    { format: 'latex', source: '4' },
-  );
-  expect(() => inspectPreview('bob', preview.previewId)).toThrow();
+  expect(
+    (await inspectPreview('alice', preview.previewId)).expected[0].answer,
+  ).toEqual({ format: 'latex', source: '4' });
+  await expect(inspectPreview('bob', preview.previewId)).rejects.toThrow();
   const corrected = await gradePreview(
     'alice',
     preview.previewId,
@@ -269,7 +269,8 @@ it('masque tout champ de correction hors contrat et garde toutes les variantes t
     new AbortController().signal,
   );
   expect(
-    inspectPreview('text-owner', preview.previewId).expected[0].variants,
+    (await inspectPreview('text-owner', preview.previewId)).expected[0]
+      .variants,
   ).toEqual(['oui', 'yes']);
   const run = fake.run.getMockImplementation()!;
   fake.run.mockImplementation(async (op, p, s) => {

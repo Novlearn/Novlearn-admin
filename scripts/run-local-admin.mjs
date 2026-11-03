@@ -43,7 +43,6 @@ if (options.stop) {
     ...disabledActiveVersionEnvironment,
     NEXT_PUBLIC_SUPABASE_URL: '',
     NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: '',
-    ADMIN_STAGING_AUTH_ENABLED: 'false',
     ADMIN_PUBLICATION_ENABLED: 'false',
     ADMIN_ENGINE_ENABLED: 'false',
     ADMIN_EDITORIAL_REVIEW_ENABLED: 'false',

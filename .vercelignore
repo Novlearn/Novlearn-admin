@@ -1,0 +1,11 @@
+.env*
+.local/
+.npm-cache/
+.git/
+.next/
+node_modules/
+coverage/
+*.tsbuildinfo
+docs/
+tests/
+examples/

@@ -44,7 +44,7 @@ it('signe les octets UTF8 complets avec révision, acteur, état et archive, san
   expect(body.versionId).toBe(input.versionId);
   expect(body.epoch).toBe(2);
   expect(body.engineArchiveSha256).toBe(
-    'd4d3abc408ab37f2f8a5faa512964b48947828bae9209cb1460b47111ca582f9',
+    '82e499726db2da454627903ed65802eaa2ab3e7185f7f6cb3c84c1cbdbde3cea',
   );
   expect(signed.signature).toBe(
     createHmac('sha256', config.key)

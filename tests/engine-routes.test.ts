@@ -29,8 +29,6 @@ function request(
   });
 }
 beforeEach(() => {
-  vi.stubEnv('ADMIN_STAGING_AUTH_ENABLED', 'true');
-  vi.stubEnv('ADMIN_STAGING_SECURITY_REVIEW', 'synthetic-only');
   vi.stubEnv('ADMIN_ENGINE_ENABLED', 'true');
   vi.stubEnv(
     'NEXT_PUBLIC_SUPABASE_URL',
@@ -65,7 +63,7 @@ describe('validation Engine protégée', () => {
       vi.unstubAllEnvs();
     }
   });
-  it.each(['ADMIN_STAGING_AUTH_ENABLED', 'ADMIN_ENGINE_ENABLED'])(
+  it.each(['NEXT_PUBLIC_SUPABASE_URL', 'ADMIN_ENGINE_ENABLED'])(
     'reste fermée sans %s, sans initialiser de worker',
     async (flag) => {
       vi.stubEnv(flag, 'false');

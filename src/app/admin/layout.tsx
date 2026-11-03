@@ -50,7 +50,7 @@ export default async function AdminLayout({
           <p className="mt-10 text-xs leading-6 text-slate-500">
             {local
               ? 'Copie locale de Staging : vos modifications restent sur cet ordinateur.'
-              : 'Créez, organisez et préparez vos contenus pédagogiques dans Staging.'}
+              : 'Créez, organisez et préparez vos contenus pédagogiques dans la base de préproduction.'}
           </p>
         </aside>
         <div className="min-w-0">
@@ -60,7 +60,7 @@ export default async function AdminLayout({
                 ? 'Banc de publication local · données synthétiques'
                 : local
                   ? 'Local · données d’essai enregistrées'
-                  : 'Staging · espace d’administration'}
+                  : 'Préproduction · espace d’administration'}
             </span>
             <AdminLogout />
           </header>

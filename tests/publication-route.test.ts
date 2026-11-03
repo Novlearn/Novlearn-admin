@@ -68,8 +68,6 @@ function request(
 beforeEach(() => {
   vi.resetAllMocks();
   const env = {
-    ADMIN_STAGING_AUTH_ENABLED: 'true',
-    ADMIN_STAGING_SECURITY_REVIEW: 'synthetic-only',
     NEXT_PUBLIC_SUPABASE_URL: `https://${STAGING_PROJECT_REF}.supabase.co`,
     NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: 'sb_publishable_fixture',
     APP_BASE_URL: 'http://localhost:3000',
@@ -105,7 +103,7 @@ beforeEach(() => {
 });
 afterEach(() => vi.unstubAllEnvs());
 it.each([
-  'ADMIN_STAGING_AUTH_ENABLED',
+  'NEXT_PUBLIC_SUPABASE_URL',
   'ADMIN_ENGINE_ENABLED',
   'ADMIN_PUBLICATION_ENABLED',
   'ADMIN_PUBLICATION_SECURITY_REVIEW',

@@ -19,7 +19,7 @@ it.each([
   ['ADMIN_LOCAL_ACTIVE_VERSION_ENABLED', 'false'],
   ['ADMIN_LOCAL_ACTIVE_VERSION_REVIEW', 'anything'],
   ['ADMIN_ACTIVE_VERSION_ENABLED', 'true'],
-  ['ADMIN_STAGING_AUTH_ENABLED', 'true'],
+  ['NEXT_PUBLIC_SUPABASE_URL', 'https://mixed-project.supabase.co'],
   ['ADMIN_LOCAL_WORKSPACE_ENABLED', 'false'],
   ['ADMIN_LOCAL_ACTIVE_VERSION_PG_CA', ''],
   ['APP_BASE_URL', 'https://admin.example.invalid'],

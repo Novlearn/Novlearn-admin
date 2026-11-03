@@ -1,10 +1,20 @@
 # Déploiement et exploitation
 
-## Portée de la préparation Vercel
+La mission du 30 octobre prépare maintenant un
+[banc protégé](../src/app/admin/engine-qualification/page.tsx) avec un payload
+serveur synthétique et le host officiel. L'utilisateur a autorisé séparément
+son déploiement de qualification. Les opérations d'édition Engine restent
+fermées sur Vercel. Voir le [dossier de réception](mission-admin-engine-reception.md)
+pour l'archive 0.1.1 et les résultats nouveaux ; les observations ci-dessous
+décrivent le déploiement antérieur tant qu'une réception plus récente n'est pas consignée.
 
-Le dépôt contient [vercel.json](../vercel.json) et
-[.env.vercel.example](../.env.vercel.example), avec Next.js et les données
-**Supabase Staging**. La préparation D13 n’est pas une réception sur Vercel.
+## Déploiement Production Vercel et base de préproduction
+
+Le dépôt contient [vercel.json](../vercel.json) et un
+[guide de configuration unique](auth.md). Next.js utilise la
+**base de préproduction existante**, historiquement nommée Supabase Staging.
+Le 30 octobre, l'utilisateur a autorisé le déploiement Production Vercel avec
+trois variables seulement et le retrait des marqueurs d'activation Auth.
 L’environnement nommé « Production » dans Vercel désigne l’hébergement, pas une
 autorisation d’utiliser Supabase Production.
 
@@ -16,8 +26,33 @@ Le blocage est dans le code, pas seulement dans les variables : changer un
 traiter l’isolation du moteur, son transport authentifié et les snapshots privés
 d’aperçu décrits dans [l’architecture](architecture.md).
 
-Les étapes ci-dessous décrivent la préparation existante pour une future
-intervention autorisée. Elles n’autorisent aucun déploiement dans cette mission.
+La qualification D13 reste historique. La réception du nouveau déploiement doit
+distinguer formulaire disponible, refus non connectés et connexion réelle avec
+le compte de l'utilisateur ; aucun succès de connexion n'est déduit du formulaire.
+
+## Vérification du 30 octobre 2026
+
+Le déploiement `dpl_42RMJasZuoDnMonCm665vGkq84LV` est **READY**, cible
+Production, sur [novlearn-admin.vercel.app](https://novlearn-admin.vercel.app).
+Il provient des fichiers locaux, incluant les changements non commités ; aucun
+push ni changement de données ou de configuration Supabase n'a été effectué.
+La [preuve datée](archives/vercel-production-2026-10-30.json) conserve l'empreinte
+des sources envoyées et les résultats HTTP.
+
+- Formulaire actif : HTTP 200, trois contrôles actifs, ancien `?error=disabled`
+  sans alerte obsolète ; données de préproduction indiquées.
+- Sans session : `/admin` redirige vers la connexion ; les API session et
+  catalogue répondent 401. Réponses privées `no-store`.
+- Engine répond 503 : toujours indisponible sur cet hôte.
+- Installation et build Vercel réussis. Localement : 1 533 tests dans 80 fichiers,
+  types, lint sans erreur, build isolé et smoke du serveur réussis. Le lint
+  conserve un avertissement historique sur une image du banc navigateur.
+  `npm run check` reste en échec sur le format de deux rapports archivés
+  (`audit-v1-2026-10-21.md`, `plan-v1-2026-10-21.md`), conservés sans modification ;
+  le build et le smoke ont donc été exécutés séparément avec succès.
+
+La connexion réelle avec un compte Admin, les sauvegardes de brouillon et leur
+réouverture n'ont pas été testées à distance pendant cette intervention.
 
 ## Préparation de l’hébergement
 
@@ -25,16 +60,18 @@ intervention autorisée. Elles n’autorisent aucun déploiement dans cette miss
    Next.js et Node 24.x. Les commandes versionnées sont `npm ci` et
    `npm run build`. Leur présence ne vaut pas vérification des limites actuelles
    de l’offre d’hébergement.
-2. Choisir un domaine HTTPS stable. Renseigner les variables Staging décrites
-   dans [Auth](auth.md) à partir de `.env.vercel.example`, notamment l’origine
+2. Utiliser `https://novlearn-admin.vercel.app` comme origine stable et renseigner
+   les trois variables de préproduction décrites
+   dans [Auth](auth.md), notamment l’origine
    exacte dans `APP_BASE_URL` et la clé publishable du bon projet.
 3. Le profil préparé conserve à `false` les quatre portes Engine, transport
-   Engine local Staging, relecture et publication listées dans cet exemple.
+   Engine local Staging, relecture et publication. Leur absence conserve aussi
+   ces capacités désactivées ; inutile de multiplier les valeurs `false`.
    Ne pas importer les variables `ADMIN_LOCAL_*`, clés privées, URL PostgreSQL,
    `.env`, dossiers `.local/` ou sauvegardes.
-4. Avant un déploiement destiné à l’usage attendu, résoudre le blocage Engine,
-   reprendre les réserves de sécurité et exécuter les contrôles adaptés à cette
-   cible. Déployer seulement sous l’autorisation correspondante.
+4. Exécuter les contrôles locaux, déployer le code autorisé, puis vérifier le
+   formulaire et les refus d'accès sur le domaine réel. Ce déploiement rend le
+   socle éditorial accessible ; il ne vaut pas réception du parcours Engine.
 
 Une origine Preview différente de `APP_BASE_URL` est refusée pour les mutations.
 Utiliser une origine exacte propre à chaque environnement, sans joker. Une

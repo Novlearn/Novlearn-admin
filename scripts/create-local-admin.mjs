@@ -527,7 +527,6 @@ export async function createLocalAdmin({
       ADMIN_LOCAL_SUPABASE_URL: apiOrigin,
       ADMIN_LOCAL_SUPABASE_ANON_KEY: anonKey,
       APP_BASE_URL: appOrigin,
-      ADMIN_STAGING_AUTH_ENABLED: 'false',
       ADMIN_PUBLICATION_ENABLED: 'false',
       ADMIN_ENGINE_ENABLED: 'false',
     };

@@ -2,6 +2,10 @@
 
 ## Installation
 
+La configuration locale se trouve dans un seul `.env` privé à la racine.
+Le modèle et les paramètres utiles sont dans [Auth](auth.md) ; aucun fichier
+d'exemple `.env.*.example` n'est à copier ni à combiner.
+
 Utiliser Node.js `>=24.19.0 <25` selon [package.json](../package.json).
 Les preuves de qualification utilisent Node 24.19.0 et npm 11.17.0.
 Le lockfile fixe les dépendances, dont l’archive Engine locale.

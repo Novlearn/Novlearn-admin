@@ -54,7 +54,6 @@ if (options.stop) {
     ...disabledActiveVersionEnvironment,
     NEXT_PUBLIC_SUPABASE_URL: '',
     NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: '',
-    ADMIN_STAGING_AUTH_ENABLED: 'false',
     ADMIN_PUBLICATION_ENABLED: 'false',
   });
   if (options.activeVersion)

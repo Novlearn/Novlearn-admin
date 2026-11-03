@@ -38,7 +38,7 @@ it.each([
   { ADMIN_PUBLICATION_ENABLED: 'true' },
   { ADMIN_PUBLICATION_CONFIRMATION_KEY: 'ab'.repeat(32) },
   { ADMIN_PUBLICATION_SOURCE_PG_URL: 'postgresql://remote.example/postgres' },
-  { ADMIN_STAGING_AUTH_ENABLED: 'true' },
+  { NEXT_PUBLIC_SUPABASE_URL: 'https://mixed-project.supabase.co' },
   { NEXT_PUBLIC_SUPABASE_URL: 'https://tksvbkvfusrnxulpahky.supabase.co' },
   { NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: 'sb_publishable_fixture' },
   { APP_BASE_URL: 'http://127.0.0.1:3150' },

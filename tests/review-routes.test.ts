@@ -31,8 +31,6 @@ const request = (value: unknown = body, origin = 'http://localhost:3000') =>
     body: typeof value === 'string' ? value : JSON.stringify(value),
   });
 beforeEach(() => {
-  vi.stubEnv('ADMIN_STAGING_AUTH_ENABLED', 'true');
-  vi.stubEnv('ADMIN_STAGING_SECURITY_REVIEW', 'synthetic-only');
   vi.stubEnv('ADMIN_EDITORIAL_REVIEW_ENABLED', 'true');
   vi.stubEnv(
     'NEXT_PUBLIC_SUPABASE_URL',
@@ -64,7 +62,7 @@ beforeEach(() => {
     error: null,
   });
 });
-it.each(['ADMIN_STAGING_AUTH_ENABLED', 'ADMIN_EDITORIAL_REVIEW_ENABLED'])(
+it.each(['NEXT_PUBLIC_SUPABASE_URL', 'ADMIN_EDITORIAL_REVIEW_ENABLED'])(
   'reste fermé sans %s',
   async (flag) => {
     vi.stubEnv(flag, 'false');

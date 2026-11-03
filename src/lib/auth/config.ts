@@ -9,21 +9,19 @@ export type AuthConfiguration = {
   publishableKey: string;
   appOrigin: string;
   secureCookies: boolean;
-  review: string;
   local?: true;
   localPublicationFixture?: true;
 };
 
 type Environment = Record<string, string | undefined>;
 
-/** Development fixture only. This never enables the operational Staging gate. */
+/** Development fixture only, isolated from operational Supabase settings. */
 function readLocalAuthConfiguration(
   env: Environment,
 ): AuthConfiguration | null {
   const fixture = env.ADMIN_LOCAL_PUBLICATION_FIXTURE_ENABLED === 'true';
   if (
     env.NODE_ENV !== 'development' ||
-    env.ADMIN_STAGING_AUTH_ENABLED === 'true' ||
     env.ADMIN_PUBLICATION_ENABLED === 'true' ||
     (fixture &&
       Object.entries(env).some(
@@ -73,7 +71,6 @@ function readLocalAuthConfiguration(
       publishableKey: key,
       appOrigin: app.origin,
       secureCookies: false,
-      review: 'local-schema:' + LOCAL_SCHEMA_MANIFEST_SHA256,
       local: true,
       ...(fixture ? { localPublicationFixture: true as const } : {}),
     };
@@ -82,16 +79,13 @@ function readLocalAuthConfiguration(
   }
 }
 
-/** Activation is an operator decision after Lot 1A, never an inferred capability. */
+/** Connection settings only. Routes still verify the session, role and origin. */
 export function readAuthConfiguration(
   env: Environment,
 ): AuthConfiguration | null {
   if (env.ADMIN_LOCAL_WORKSPACE_ENABLED === 'true')
     return readLocalAuthConfiguration(env);
   if (env.ADMIN_LOCAL_PUBLICATION_FIXTURE_ENABLED === 'true') return null;
-  if (env.ADMIN_STAGING_AUTH_ENABLED !== 'true') return null;
-  const review = env.ADMIN_STAGING_SECURITY_REVIEW?.trim();
-  if (!review) return null;
   try {
     const supabase = new URL(env.NEXT_PUBLIC_SUPABASE_URL ?? '');
     const app = new URL(env.APP_BASE_URL ?? '');
@@ -118,7 +112,6 @@ export function readAuthConfiguration(
       publishableKey: key,
       appOrigin: app.origin,
       secureCookies: app.protocol === 'https:',
-      review,
     };
   } catch {
     return null;

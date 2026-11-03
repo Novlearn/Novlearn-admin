@@ -60,7 +60,6 @@ describe('adaptateur Auth Supabase', () => {
       publishableKey: 'fixture',
       appOrigin: 'http://127.0.0.1:3152',
       secureCookies: false,
-      review: 'fixture',
       local: true,
       localPublicationFixture: true,
     });
@@ -83,7 +82,6 @@ describe('adaptateur Auth Supabase', () => {
       publishableKey: 'local-fixture-key',
       appOrigin: 'http://127.0.0.1:3150',
       secureCookies: false,
-      review: 'fixture',
       local: true,
     });
     expect(sdk.create).toHaveBeenCalledWith(
@@ -220,8 +218,6 @@ describe('adaptateur Auth Supabase', () => {
     const fake = client();
     sdk.create.mockReturnValue(fake.raw);
     const config = readAuthConfiguration({
-      ADMIN_STAGING_AUTH_ENABLED: 'true',
-      ADMIN_STAGING_SECURITY_REVIEW: 'test',
       NEXT_PUBLIC_SUPABASE_URL: `https://${STAGING_PROJECT_REF}.supabase.co`,
       NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY:
         'sb_publishable_synthetic_test_value',

@@ -12,8 +12,6 @@ import {
 } from '@/lib/auth/http';
 
 export const configuredEnvironment = {
-  ADMIN_STAGING_AUTH_ENABLED: 'true',
-  ADMIN_STAGING_SECURITY_REVIEW: 'local-test-only',
   NEXT_PUBLIC_SUPABASE_URL: `https://${STAGING_PROJECT_REF}.supabase.co`,
   NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: 'sb_publishable_synthetic_test_value',
   APP_BASE_URL: 'http://localhost:3000',
@@ -30,20 +28,39 @@ function gateway(): AuthGateway {
   };
 }
 
-describe('activation Staging', () => {
-  it('refuse par défaut et exige une revue explicite', () => {
+describe('configuration préproduction', () => {
+  it('refuse les configurations incomplètes sans exiger de marqueur d’activation', () => {
     expect(readAuthConfiguration({})).toBeNull();
     expect(
       readAuthConfiguration({
         ...configuredEnvironment,
-        ADMIN_STAGING_AUTH_ENABLED: 'false',
+        NEXT_PUBLIC_SUPABASE_URL: '',
       }),
     ).toBeNull();
     expect(
       readAuthConfiguration({
         ...configuredEnvironment,
-        ADMIN_STAGING_SECURITY_REVIEW: '',
+        NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: '',
       }),
+    ).toBeNull();
+    expect(readAuthConfiguration(configuredEnvironment)).not.toBeNull();
+  });
+  it('configure la production Vercel avec les trois variables préproduction seulement', () => {
+    expect(
+      readAuthConfiguration({
+        NODE_ENV: 'production',
+        VERCEL: '1',
+        NEXT_PUBLIC_SUPABASE_URL: `https://${STAGING_PROJECT_REF}.supabase.co`,
+        NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY:
+          'sb_publishable_synthetic_test_value',
+        APP_BASE_URL: 'https://novlearn-admin.vercel.app',
+      }),
+    ).toMatchObject({
+      secureCookies: true,
+      appOrigin: 'https://novlearn-admin.vercel.app',
+    });
+    expect(
+      readAuthConfiguration({ ...configuredEnvironment, APP_BASE_URL: '' }),
     ).toBeNull();
   });
   it.each([

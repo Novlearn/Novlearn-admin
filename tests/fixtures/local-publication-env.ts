@@ -40,6 +40,5 @@ export function localPublicationEnvironment(): Record<
     ADMIN_LOCAL_PUBLICATION_TARGET_PG_CA: ca,
     ADMIN_LOCAL_PUBLICATION_CONFIRMATION_KEY: 'cd'.repeat(32),
     ADMIN_PUBLICATION_ENABLED: 'false',
-    ADMIN_STAGING_AUTH_ENABLED: 'false',
   };
 }

@@ -9,8 +9,6 @@ vi.mock('@supabase/ssr', () => ({ createServerClient: sdk.create }));
 import { middleware } from '@/middleware';
 
 beforeEach(() => {
-  vi.stubEnv('ADMIN_STAGING_AUTH_ENABLED', 'true');
-  vi.stubEnv('ADMIN_STAGING_SECURITY_REVIEW', 'synthetic-review');
   vi.stubEnv(
     'NEXT_PUBLIC_SUPABASE_URL',
     `https://${STAGING_PROJECT_REF}.supabase.co`,
@@ -54,7 +52,7 @@ describe('renouvellement de session SSR', () => {
     expect(response.headers.get('cache-control')).toContain('no-store');
   });
   it('ne contacte pas Auth quand le verrou est fermé', async () => {
-    vi.stubEnv('ADMIN_STAGING_AUTH_ENABLED', 'false');
+    vi.stubEnv('NEXT_PUBLIC_SUPABASE_URL', '');
     const response = await middleware(
       new NextRequest('https://admin.example.test/admin'),
     );

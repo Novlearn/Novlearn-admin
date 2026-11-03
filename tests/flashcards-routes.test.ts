@@ -25,8 +25,6 @@ const post = (
     body: typeof body === 'string' ? body : JSON.stringify(body),
   });
 beforeEach(() => {
-  vi.stubEnv('ADMIN_STAGING_AUTH_ENABLED', 'true');
-  vi.stubEnv('ADMIN_STAGING_SECURITY_REVIEW', 'synthetic-test');
   vi.stubEnv(
     'NEXT_PUBLIC_SUPABASE_URL',
     `https://${STAGING_PROJECT_REF}.supabase.co`,
@@ -47,7 +45,7 @@ beforeEach(() => {
 });
 describe('Flashcards : permission fraîche et route Staging', () => {
   it('refuses all direct endpoints with activation closed', async () => {
-    vi.stubEnv('ADMIN_STAGING_AUTH_ENABLED', 'false');
+    vi.stubEnv('NEXT_PUBLIC_SUPABASE_URL', '');
     expect((await POST(post())).status).toBe(503);
     expect(
       (await GET(new NextRequest('http://localhost:3000/api/admin/flashcards')))

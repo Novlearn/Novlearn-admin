@@ -55,7 +55,7 @@ describe('Isolated local Auth configuration', () => {
     },
   );
   it.each([
-    { ADMIN_STAGING_AUTH_ENABLED: 'true' },
+    { NEXT_PUBLIC_SUPABASE_URL: 'https://mixed-project.supabase.co' },
     { ADMIN_PUBLICATION_ENABLED: 'true' },
     { NEXT_PUBLIC_SUPABASE_URL: 'https://tksvbkvfusrnxulpahky.supabase.co' },
     { NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: 'sb_publishable_fixture' },

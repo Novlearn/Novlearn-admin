@@ -24,6 +24,7 @@ const entries = [
   'docs',
   'public',
   'vendor',
+  'examples',
   'package.json',
   'package-lock.json',
   'tsconfig.json',

@@ -41,8 +41,6 @@ const sourceLogin = 'novlearn_admin_journal_service',
 const sourceUrl = `postgresql://${sourceLogin}:synthetic-source-password@db.${STAGING_PROJECT_REF}.supabase.co:5432/postgres`;
 const targetUrl = `postgresql://${targetLogin}:synthetic-target-password@db.${target}.supabase.co:5432/postgres`;
 const env = () => ({
-  ADMIN_STAGING_AUTH_ENABLED: 'true',
-  ADMIN_STAGING_SECURITY_REVIEW: 'synthetic auth review',
   NEXT_PUBLIC_SUPABASE_URL: `https://${STAGING_PROJECT_REF}.supabase.co`,
   NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: 'sb_publishable_synthetic_test',
   APP_BASE_URL: 'http://localhost:3000',
@@ -117,8 +115,8 @@ describe('Publication : configuration fermée et séparation', () => {
   it.each([
     { ADMIN_PUBLICATION_ENABLED: undefined },
     { ADMIN_PUBLICATION_SECURITY_REVIEW: '' },
-    { ADMIN_STAGING_AUTH_ENABLED: 'false' },
-    { ADMIN_STAGING_SECURITY_REVIEW: '' },
+    { NEXT_PUBLIC_SUPABASE_URL: '' },
+    { NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: '' },
     { ADMIN_PUBLICATION_TARGET_PROJECT_REF: STAGING_PROJECT_REF },
     { ADMIN_PUBLICATION_TARGET_PROJECT_REF: 'wrong' },
   ])('refuses incomplete approval or environment %j', (change) =>

@@ -29,8 +29,6 @@ const post = (
     body: typeof body === 'string' ? body : JSON.stringify(body),
   });
 beforeEach(() => {
-  vi.stubEnv('ADMIN_STAGING_AUTH_ENABLED', 'true');
-  vi.stubEnv('ADMIN_STAGING_SECURITY_REVIEW', 'synthetic-test');
   vi.stubEnv(
     'NEXT_PUBLIC_SUPABASE_URL',
     `https://${STAGING_PROJECT_REF}.supabase.co`,
@@ -57,7 +55,7 @@ beforeEach(() => {
 });
 describe('Référentiel : routes protégées', () => {
   it('refuses all reads and writes when activation is closed', async () => {
-    vi.stubEnv('ADMIN_STAGING_AUTH_ENABLED', 'false');
+    vi.stubEnv('NEXT_PUBLIC_SUPABASE_URL', '');
     expect(
       (
         await GET(

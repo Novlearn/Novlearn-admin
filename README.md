@@ -15,6 +15,11 @@ d’un brouillon ne prouve pas sa validité mathématique.
 
 ## Où trouver l’information
 
+Pour intégrer Engine comme bibliothèque : [contrat et distribution](docs/engine-library.md).
+
+Configuration locale : **un seul `.env` privé**, avec le modèle dans
+[Auth](docs/auth.md). Sur Vercel, utiliser les variables du projet.
+
 | Besoin                                           | Document de référence                             |
 | ------------------------------------------------ | ------------------------------------------------- |
 | Installer et démarrer                            | [Développement](docs/development.md)              |

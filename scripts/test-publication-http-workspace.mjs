@@ -27,7 +27,7 @@ assert.equal(
 );
 assert.equal(state.authConfig.APP_BASE_URL, 'http://127.0.0.1:3152');
 assert.equal(state.authConfig.ADMIN_PUBLICATION_ENABLED, 'false');
-assert.equal(state.authConfig.ADMIN_STAGING_AUTH_ENABLED, 'false');
+assert.equal(state.authConfig.NEXT_PUBLIC_SUPABASE_URL, undefined);
 assert.equal(bootstrap.sourceRowsUnchanged, true);
 assert.equal(bootstrap.clonedRowsMatch, true);
 assert.equal(bootstrap.sourceAccounts, 0);
@@ -104,7 +104,7 @@ try {
   assert.equal(login.status, 200);
   const html = await login.text();
   assert(html.includes('type="password"'));
-  assert(!html.includes('Connexion en attente d’activation'));
+  assert(!html.includes('Configuration de connexion incomplète'));
   const closed = await fetch('http://127.0.0.1:3150/api/admin/publication', {
     method: 'POST',
     headers: {

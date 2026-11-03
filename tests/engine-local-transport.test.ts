@@ -41,8 +41,6 @@ describe('private local Linux transport', () => {
     NEXT_PUBLIC_SUPABASE_URL: 'https://tksvbkvfusrnxulpahky.supabase.co',
     NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: 'sb_publishable_test',
     APP_BASE_URL: 'http://127.0.0.1:3150',
-    ADMIN_STAGING_AUTH_ENABLED: 'true',
-    ADMIN_STAGING_SECURITY_REVIEW: 'reviewed-staging-sql',
     ADMIN_STAGING_LOCAL_ENGINE_ENABLED: 'true',
     ADMIN_ENGINE_ENABLED: 'true',
     ADMIN_LOCAL_ENGINE_URL: 'http://127.0.0.1:3151/run',
@@ -56,8 +54,8 @@ describe('private local Linux transport', () => {
   });
   it.each([
     { ADMIN_STAGING_LOCAL_ENGINE_ENABLED: '' },
-    { ADMIN_STAGING_AUTH_ENABLED: 'false' },
-    { ADMIN_STAGING_SECURITY_REVIEW: '' },
+    { NEXT_PUBLIC_SUPABASE_URL: '' },
+    { NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: '' },
     { NODE_ENV: 'production' },
     { APP_BASE_URL: 'https://admin.example.com' },
     { NEXT_PUBLIC_SUPABASE_URL: 'https://production.supabase.co' },
@@ -82,7 +80,7 @@ describe('private local Linux transport', () => {
     { NODE_ENV: 'test' },
     { ADMIN_LOCAL_WORKSPACE_ENABLED: 'false' },
     { ADMIN_ENGINE_ENABLED: 'false' },
-    { ADMIN_STAGING_AUTH_ENABLED: 'true' },
+    { NEXT_PUBLIC_SUPABASE_URL: 'https://mixed-project.supabase.co' },
     { ADMIN_PUBLICATION_ENABLED: 'true' },
     { ADMIN_LOCAL_ENGINE_URL: 'http://localhost:3151/run' },
     { ADMIN_LOCAL_ENGINE_URL: 'http://127.0.0.1:3151/other' },

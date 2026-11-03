@@ -6,8 +6,6 @@ import { LoginForm } from './login-form';
 export const dynamic = 'force-dynamic';
 
 const messages: Record<string, string> = {
-  disabled:
-    'La connexion Staging attend la validation de ses prérequis de sécurité.',
   session: 'Votre session a expiré. Connectez-vous à nouveau.',
   invalid: 'Vérifiez votre adresse e-mail et votre mot de passe.',
   credentials: 'Connexion refusée. Vérifiez vos identifiants.',
@@ -55,7 +53,7 @@ export default async function Login({
         <p className="mt-4 text-xs text-slate-500 lg:mt-0 lg:text-sm">
           Environnement de travail{' '}
           <span className="font-semibold text-brand-700">
-            {local ? 'Local · données d’essai' : 'Staging'}
+            {local ? 'Local · données d’essai' : 'Préproduction'}
           </span>
         </p>
       </section>
@@ -65,7 +63,9 @@ export default async function Login({
       >
         <div className="w-full max-w-md">
           <span className="badge">
-            {local ? 'Supabase local · données d’essai' : 'Supabase Staging'}
+            {local
+              ? 'Supabase local · données d’essai'
+              : 'Base de préproduction'}
           </span>
           <h1
             id="login-title"
@@ -78,13 +78,15 @@ export default async function Login({
           </p>
           {!enabled ? (
             <div role="status" className="notice mb-6">
-              <p className="font-semibold">Connexion en attente d’activation</p>
+              <p className="font-semibold">
+                Configuration de connexion incomplète
+              </p>
               <p className="mt-2">
-                Les prérequis de sécurité Staging doivent être validés par
-                l’opérateur avant l’ouverture de cet espace.
+                La connexion n’est pas encore configurée sur ce serveur.
+                Contactez l’administrateur du site.
               </p>
             </div>
-          ) : error && messages[error] ? (
+          ) : error && error !== 'disabled' && messages[error] ? (
             <p role="alert" className="notice mb-6">
               {messages[error]}
             </p>

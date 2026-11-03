@@ -67,7 +67,7 @@ it.each([
   { ADMIN_LOCAL_ACTIVITY_ENABLED: 'false' },
   { ADMIN_LOCAL_ACTIVITY_REVIEW: '' },
   { ADMIN_LOCAL_WORKSPACE_ENABLED: 'false' },
-  { ADMIN_STAGING_AUTH_ENABLED: 'true' },
+  { NEXT_PUBLIC_SUPABASE_URL: 'https://mixed-project.supabase.co' },
   { ADMIN_LOCAL_PUBLICATION_FIXTURE_ENABLED: 'true' },
   { ADMIN_ACTIVITY_ENABLED: 'true' },
   {

@@ -11,7 +11,8 @@ const server = spawn(process.execPath, ['.next/standalone/server.js'], {
     ...process.env,
     HOSTNAME: '127.0.0.1',
     PORT: '3137',
-    ADMIN_STAGING_AUTH_ENABLED: 'false',
+    NEXT_PUBLIC_SUPABASE_URL: '',
+    NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: '',
   },
 });
 let logs = '';
@@ -39,7 +40,7 @@ try {
   assert(ready, 'Local server did not start');
   const login = await fetch(`${origin}/login`);
   const html = await login.text();
-  assert(html.includes('Connexion en attente d’activation'));
+  assert(html.includes('Configuration de connexion incomplète'));
   assert(
     !html.includes('http://127.0.0.1:3140/'),
     'Production login must not advertise a development-only loopback preview',
