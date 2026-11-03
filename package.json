@@ -35,7 +35,7 @@
     "@supabase/supabase-js": "2.117.3",
     "mathlive": "0.111.1",
     "next": "15.5.28",
-    "novlearn-exercise-engine": "file:vendor/novlearn-exercise-engine-0.1.0.tgz",
+    "novlearn-exercise-engine": "file:vendor/novlearn-exercise-engine-0.1.8.tgz",
     "pg": "8.23.1",
     "react": "18.3.1",
     "react-dom": "18.3.1",

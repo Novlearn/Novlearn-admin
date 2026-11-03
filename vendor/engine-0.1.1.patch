@@ -1,0 +1,180 @@
+diff --git a/package.json b/package.json
+--- a/package.json
++++ b/package.json
+@@ -1,6 +1,6 @@
+ {
+   "name": "novlearn-exercise-engine",
+-  "version": "0.1.0",
++  "version": "0.1.1",
+   "private": true,
+   "description": "Independent NovLearn exercise engine foundations",
+   "type": "module",
+diff --git a/package-lock.json b/package-lock.json
+--- a/package-lock.json
++++ b/package-lock.json
+@@ -1,12 +1,12 @@
+ {
+   "name": "novlearn-exercise-engine",
+-  "version": "0.1.0",
++  "version": "0.1.1",
+   "lockfileVersion": 3,
+   "requires": true,
+   "packages": {
+     "": {
+       "name": "novlearn-exercise-engine",
+-      "version": "0.1.0",
++      "version": "0.1.1",
+       "dependencies": {
+         "@cortex-js/compute-engine": "0.151.0"
+       },
+diff --git a/src/math/numeric.ts b/src/math/numeric.ts
+--- a/src/math/numeric.ts
++++ b/src/math/numeric.ts
+@@ -514,7 +514,8 @@ export function prepareNumeric(
+     const exact = exactNumber(evaluated, true);
+     const expression = exactStructure(evaluated) ? evaluated : canonical;
+     const display = expression;
+-    if (!display.isValid || !display.latex || display.latex.length > 4096)
++    const displayLatex = display.toLatex({ digitGroup: 0 });
++    if (!display.isValid || !displayLatex || displayLatex.length > 4096)
+       fail(
+         'substitution-failed',
+         path,
+@@ -528,7 +529,7 @@ export function prepareNumeric(
+           source,
+           syntax: parsed.syntax,
+           substituted: raw,
+-          displayLatex: display.latex,
++          displayLatex,
+         },
+         expression,
+         ...(exact === undefined ? {} : { exact }),
+diff --git a/src/math/substitution.ts b/src/math/substitution.ts
+--- a/src/math/substitution.ts
++++ b/src/math/substitution.ts
+@@ -482,7 +482,8 @@ export function instantiateMath(
+     const display = substituted.canonical.evaluate();
+     if (!display.isValid)
+       fail('substitution-failed', path, 'Unable to produce a valid display.');
+-    const displayLatex = display.latex;
++    // Generated answers must roundtrip through the unchanged numeric admission.
++    const displayLatex = display.toLatex({ digitGroup: 0 });
+     if (!displayLatex || displayLatex.length > 4096)
+       fail('limit', path, 'Display exceeds the text budget.');
+     return {
+diff --git a/tests/canonical.test.ts b/tests/canonical.test.ts
+--- a/tests/canonical.test.ts
++++ b/tests/canonical.test.ts
+@@ -8,7 +8,6 @@ import {
+ } from 'novlearn-exercise-engine';
+ import type { GenerateVariablesOptions } from 'novlearn-exercise-engine';
+ import reference from './fixtures/canonical/reference-vectors.json' with { type: 'json' };
+-import packageJson from '../package.json' with { type: 'json' };
+ 
+ describe('canonical contract and reference vectors', () => {
+   it.each(reference.vectors)(
+@@ -24,7 +23,7 @@ describe('canonical contract and reference vectors', () => {
+         }),
+       ).toEqual(result);
+       if (!generated.ok) throw new Error('Reference generation failed');
+-      expect(generated.replay.engineVersion).toBe(packageJson.version);
++      expect(generated.replay.engineVersion).toBe('0.1.0');
+       const { a, b, c, d, f, g, h } = generated.values;
+       if (
+         a?.kind !== 'integer' ||
+diff --git a/tests/generation.test.ts b/tests/generation.test.ts
+--- a/tests/generation.test.ts
++++ b/tests/generation.test.ts
+@@ -12,7 +12,6 @@ import type {
+ } from 'novlearn-exercise-engine';
+ import { sampleIndex, wordStream } from '../src/generation/random.js';
+ import fixture from './fixtures/contracts/rational-minimum.definition.json' with { type: 'json' };
+-import packageJson from '../package.json' with { type: 'json' };
+ 
+ const integer = (
+   overrides: Partial<IntegerVariableDefinition> = {},
+@@ -88,7 +87,7 @@ describe('generation replay and word mapping', () => {
+         computed: [],
+         replay: {
+           attempts: 1,
+-          engineVersion: packageJson.version,
++          engineVersion: '0.1.0',
+           generationVersion: 'mulberry32-rejection-v1',
+           seed: String(seed),
+           draws: 5,
+diff --git a/tests/numeric-display-roundtrip.test.ts b/tests/numeric-display-roundtrip.test.ts
+new file mode 100644
+--- /dev/null
++++ b/tests/numeric-display-roundtrip.test.ts
+@@ -0,0 +1,71 @@
++import { expect, it } from 'vitest';
++import {
++  instantiateExercise,
++  gradeAnswer,
++  projectPublicInstance,
++} from 'novlearn-exercise-engine';
++import type { ExerciseDefinition } from 'novlearn-exercise-engine';
++
++const definition = (
++  value: string,
++  kind: 'rational' | 'real' = 'rational',
++): ExerciseDefinition => ({
++  schemaVersion: 5,
++  kind: 'composed',
++  id: 'numeric-display-roundtrip',
++  revision: '1',
++  title: 'Numeric display roundtrip',
++  generation: {
++    schemaVersion: 5,
++    definitions: [],
++    constraints: [],
++    maxAttempts: 4,
++    maxDraws: 16,
++  },
++  variables: [],
++  elements: [
++    {
++      id: 'q',
++      type: 'question',
++      text: 'Valeur',
++      points: 1,
++      response: { format: 'latex', kind },
++      expectedLatex: value,
++      policy: { domain: kind, form: 'value-only' },
++    },
++  ],
++});
++it.each(['1287.5', '1326.125', '1000000', '-12345.125'])(
++  'numeric expected display %s is admitted without relaxing grouped-input guards',
++  (value) => {
++    for (const kind of ['rational', 'real'] as const) {
++      const source = definition(value, kind);
++      const run = instantiateExercise(source, {
++        seed: 42,
++        instanceId: 'roundtrip',
++      });
++      expect(run.ok).toBe(true);
++      if (!run.ok) throw Error(JSON.stringify(run));
++      const question = run.value.elements[0]!;
++      if (question.type !== 'question' || question.expected.kind === 'text')
++        throw Error('Expected math');
++      const display = question.expected.math.displayLatex;
++      expect(display).not.toContain('\\,');
++      expect(question.expected.math.source).toBe(value);
++      const grade = (text: string) =>
++        gradeAnswer(run.value, {
++          schemaVersion: 5,
++          instanceId: 'roundtrip',
++          questionId: 'q',
++          answer: { format: 'latex', source: text },
++        });
++      expect(grade(display).state).toBe('correct');
++      expect(grade('0').state).toBe('incorrect');
++      expect(grade('1\\,000').state).toBe('indeterminate');
++      expect(
++        instantiateExercise(source, { seed: 42, instanceId: 'roundtrip' }),
++      ).toEqual(run);
++      expect(projectPublicInstance(run.value)).not.toHaveProperty('expected');
++    }
++  },
++);
