@@ -418,8 +418,10 @@ describe('aperçu serveur protégé', () => {
   it('masque les erreurs techniques et libère la place après un échec', async () => {
     fake.generate.mockRejectedValue(new Error('secret runtime path'));
     const response = await POST(request());
-    expect(response.status).toBe(503);
-    expect(await response.text()).not.toContain('secret runtime path');
+    expect(response.status).toBe(500);
+    const body = await response.text();
+    expect(JSON.parse(body)).toMatchObject({ code: 'engine_internal' });
+    expect(body).not.toContain('secret runtime path');
     expect(fake.release).toHaveBeenCalledOnce();
   });
 });

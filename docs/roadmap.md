@@ -1,5 +1,17 @@
 # État actuel et roadmap
 
+**5 novembre — raccordement Admin → Engine préparé dans une PR :** les actions
+Creator existantes (validation, aperçu, tests de correction) sont reliées à un
+transport serveur HTTPS strict vers `https://staging.novlearn.fr/run` lorsque
+Admin est sur Vercel. Package Admin 0.1.8 conservé ; contrat host vérifié contre
+le code Engine 0.2.1. Le contrôle complet local passe sur l’intégrité Engine, 1 591 tests,
+TypeScript et ESLint (un avertissement historique). Le formatage des fichiers
+modifiés passe ; le contrôle global reste bloqué par neuf fichiers historiques.
+Le build échoue sur `EPERM` lors de la création d’un dossier `.next`. L’accès réel depuis Vercel, la version de l’image servie et la réception
+navigateur restent à établir ; DNS depuis l’environnement courant renvoie
+`ENOTFOUND`. Aucun déploiement n’est déclenché. Voir
+[transport Admin–Engine](admin-engine-transport.md).
+
 **Prochaine mission arrêtée :** [terminer Admin, Engine et quatre/cinq pilotes](mission-admin-engine.md),
 avec le [prompt de lancement](prompt-mission-admin-engine.md). NovLearn reste en
 lecture seule pendant cette mission ; son adaptation développement fera l'objet

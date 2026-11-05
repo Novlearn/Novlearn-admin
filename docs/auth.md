@@ -1,5 +1,13 @@
 # Authentification, permissions et configuration
 
+Mission Admin–Engine (5 novembre 2026) : le transport HTTPS serveur vers le host
+staging est implémenté sur la branche de raccordement, derrière
+`ADMIN_ENGINE_ENABLED`. Vercel requiert aussi `ENGINE_URL`,
+`ENGINE_TOKEN` et `ENGINE_ARTIFACT_SHA256`; voir la
+[configuration et le contrat détaillés](admin-engine-transport.md). Aucune de
+ces valeurs n’est versionnée. Le transport reste inactif tant que les variables
+ne sont pas configurées et que la PR n’est pas déployée.
+
 ## Contrôle d’accès
 
 L’Admin déployé en **Production Vercel** utilise Supabase Auth de la base de
@@ -72,12 +80,12 @@ Les instantanés partagés prévus utilisent deux RPC et une table privée sur l
 base existante : [proposition et limites](mission-admin-engine-reception.md).
 Aucune migration distante ni nouvelle clé n'est implicite dans le déploiement.
 
-| Porte serveur                        | Rôle et limite                                                                                              |
-| ------------------------------------ | ----------------------------------------------------------------------------------------------------------- |
-| `ADMIN_ENGINE_ENABLED`               | Demande l’exécution Engine ; refusée sur Vercel même à `true`                                               |
-| `ADMIN_STAGING_LOCAL_ENGINE_ENABLED` | Transport de développement Staging vers le worker local ; nécessite les autres prérequis, limité à loopback |
-| `ADMIN_EDITORIAL_REVIEW_ENABLED`     | Relecture, soumise aux reçus courants et aux gardes SQL                                                     |
-| `ADMIN_PUBLICATION_ENABLED`          | Publication, soumise aux identités SQL dédiées, à Engine et aux vérifications source/cible                  |
+| Porte serveur                        | Rôle et limite                                                                                                         |
+| ------------------------------------ | ---------------------------------------------------------------------------------------------------------------------- |
+| `ADMIN_ENGINE_ENABLED`               | Active le moteur : local avec son profil qualifié, Vercel seulement avec les trois paramètres HTTPS valides ci-dessous |
+| `ADMIN_STAGING_LOCAL_ENGINE_ENABLED` | Transport de développement Staging vers le worker local ; nécessite les autres prérequis, limité à loopback            |
+| `ADMIN_EDITORIAL_REVIEW_ENABLED`     | Relecture, soumise aux reçus courants et aux gardes SQL                                                                |
+| `ADMIN_PUBLICATION_ENABLED`          | Publication, soumise aux identités SQL dédiées, à Engine et aux vérifications source/cible                             |
 
 Le [profil courant et les désactivations](roadmap.md) sont décrits à un seul
 endroit. Aucun de ces drapeaux ne remplace les prérequis, la qualification de

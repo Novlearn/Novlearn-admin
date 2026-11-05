@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { NextRequest, NextResponse } from 'next/server';
 import { STAGING_PROJECT_REF } from '@/lib/auth/config';
 import { newDraft } from '@/lib/catalogue';
+vi.mock('server-only', () => ({}));
 const fake = vi.hoisted(() => ({
   auth: {
     getVerifiedUser: vi.fn(),
@@ -16,7 +17,43 @@ vi.mock('@/lib/auth/supabase', () => ({
   createRouteAuth: fake.create,
   transferAuthCookies: (_a: unknown, b: unknown) => b,
 }));
-vi.mock('@/lib/engine-runtime', () => ({ runEngine: fake.run }));
+vi.mock('@/lib/engine-runtime', () => ({
+  runEngine: fake.run,
+  engineFailure: (error: unknown) => {
+    const reason = (error as { reason?: string })?.reason;
+    if (reason === 'authentication')
+      return {
+        status: 502,
+        code: 'engine_authentication',
+        message: 'Engine auth refused.',
+      };
+    if (reason === 'archive-mismatch')
+      return {
+        status: 502,
+        code: 'engine_archive_mismatch',
+        message: 'Archive mismatch.',
+      };
+    if (reason === 'contract-mismatch')
+      return {
+        status: 502,
+        code: 'engine_contract_mismatch',
+        message: 'Contract mismatch.',
+      };
+    if (reason === 'network')
+      return {
+        status: 503,
+        code: 'engine_network',
+        message: 'Network unavailable.',
+      };
+    if (reason === 'timeout')
+      return { status: 504, code: 'engine_timeout', message: 'Timeout.' };
+    return {
+      status: 503,
+      code: 'engine_unavailable',
+      message: 'Engine unavailable.',
+    };
+  },
+}));
 import { POST } from '@/app/api/admin/engine/route';
 function request(
   body: unknown = { definition: newDraft('Exercice') },
@@ -152,6 +189,20 @@ describe('validation Engine protégée', () => {
     const response = await POST(request());
     expect(response.status).toBe(503);
     expect(await response.text()).not.toContain('private runtime path');
+  });
+  it.each([
+    ['authentication', 502, 'engine_authentication'],
+    ['archive-mismatch', 502, 'engine_archive_mismatch'],
+    ['contract-mismatch', 502, 'engine_contract_mismatch'],
+    ['network', 503, 'engine_network'],
+    ['timeout', 504, 'engine_timeout'],
+  ] as const)('distingue la panne Engine %s', async (reason, status, code) => {
+    fake.run.mockRejectedValueOnce(
+      Object.assign(new Error('private'), { reason }),
+    );
+    const response = await POST(request());
+    expect(response.status).toBe(status);
+    expect(await response.json()).toMatchObject({ code });
   });
   it.each([
     null,

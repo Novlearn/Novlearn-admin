@@ -1,5 +1,11 @@
 # Déploiement et exploitation
 
+**Mise à jour du 5 novembre 2026 :** la PR de raccordement ajoute le transport
+HTTPS serveur vers le host staging et conserve Engine fermé tant que ses
+variables serveur ne sont pas configurées. Le code ne démarre pas le host natif
+sur Vercel. Voir [transport Admin–Engine](admin-engine-transport.md) pour la
+configuration et les contrôles à refaire après déploiement. Aucun déploiement ni
+accès distant depuis Vercel n’est revendiqué ici.
 La mission du 30 octobre prépare maintenant un
 [banc protégé](../src/app/admin/engine-qualification/page.tsx) avec un payload
 serveur synthétique et le host officiel. L'utilisateur a autorisé séparément

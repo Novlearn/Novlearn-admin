@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from 'next/server';
 import { authorizeAdmin } from '@/lib/auth/authorization';
 import { isEngineEnabled } from '@/lib/engine-identity';
+import { engineFailure } from '@/lib/engine-runtime';
 import { readAuthConfiguration } from '@/lib/auth/config';
 import { isTrustedMutation, privateHeaders } from '@/lib/auth/http';
 import { readBoundedJson } from '@/lib/auth/json';
@@ -267,12 +268,13 @@ export async function POST(request: NextRequest) {
         },
         error.status,
       );
+    const failure = engineFailure(error);
     return finish(
       {
-        error:
-          'Calcul interrompu ou indisponible. Aucun test positif n’est enregistré.',
+        code: failure.code,
+        error: `${failure.message} Aucun test positif n'est enregistré.`,
       },
-      503,
+      failure.status,
     );
   } finally {
     release?.();

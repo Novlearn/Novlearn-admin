@@ -4,7 +4,7 @@ import { readAuthConfiguration } from '@/lib/auth/config';
 import { isTrustedMutation, privateHeaders } from '@/lib/auth/http';
 import { readBoundedJson } from '@/lib/auth/json';
 import { createRouteAuth, transferAuthCookies } from '@/lib/auth/supabase';
-import { runEngine } from '@/lib/engine-runtime';
+import { engineFailure, runEngine } from '@/lib/engine-runtime';
 import { isEngineEnabled } from '@/lib/engine-identity';
 import type { JsonObject, JsonValue } from 'novlearn-exercise-engine';
 
@@ -84,13 +84,14 @@ export async function POST(request: NextRequest) {
       valid: value.ok,
       diagnostics: value.ok ? [] : value.diagnostics,
     });
-  } catch {
+  } catch (error) {
+    const failure = engineFailure(error);
     return finish(
       {
-        error:
-          'Validation momentanément indisponible. Le brouillon reste conservé.',
+        code: failure.code,
+        error: `${failure.message} Le brouillon reste conservé.`,
       },
-      503,
+      failure.status,
     );
   }
 }

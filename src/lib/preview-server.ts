@@ -8,7 +8,7 @@ import type {
   PublicInstance,
   CorrectionResult,
 } from 'novlearn-exercise-engine';
-import { runEngine } from './engine-runtime';
+import { EngineRuntimeError, runEngine } from './engine-runtime';
 import type {
   PreviewCase,
   PreviewDetails,
@@ -184,7 +184,7 @@ function diagnostics(v: unknown): PreviewDiagnostic[] {
         typeof d.message !== 'string',
     )
   )
-    throw new Error('Engine diagnostics protocol');
+    throw new EngineRuntimeError('contract-mismatch');
   return v as PreviewDiagnostic[];
 }
 async function instantiate(
@@ -200,7 +200,7 @@ async function instantiate(
     signal,
   );
   if (!object(result) || typeof result.ok !== 'boolean')
-    throw new Error('Engine instantiation protocol');
+    throw new EngineRuntimeError('contract-mismatch');
   if (!result.ok)
     throw new PreviewError(
       422,
@@ -216,7 +216,7 @@ async function instantiate(
     !Array.isArray(official.elements) ||
     !object(official.generation)
   )
-    throw new Error('Engine instance protocol');
+    throw new EngineRuntimeError('contract-mismatch');
   return official as unknown as ExerciseInstance;
 }
 async function project(official: ExerciseInstance, signal: AbortSignal) {
@@ -229,7 +229,7 @@ async function project(official: ExerciseInstance, signal: AbortSignal) {
     !isSafePublicProjection(value) ||
     value.instanceId !== official.instanceId
   )
-    throw new Error('Engine public projection protocol');
+    throw new EngineRuntimeError('contract-mismatch');
   return value;
 }
 const questions = (official: ExerciseInstance) =>
@@ -275,7 +275,7 @@ async function grade(
     ) ||
     typeof result.code !== 'string'
   )
-    throw new Error('Engine correction protocol');
+    throw new EngineRuntimeError('contract-mismatch');
   const fields = [
     'schemaVersion',
     'instanceId',
@@ -289,7 +289,7 @@ async function grade(
     'code',
   ];
   if (fields.slice(4).some((k) => typeof result[k] !== 'string'))
-    throw new Error('Engine correction fields');
+    throw new EngineRuntimeError('contract-mismatch');
   return Object.fromEntries(
     fields.map((k) => [k, result[k]]),
   ) as unknown as CorrectionResult;

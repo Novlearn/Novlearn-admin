@@ -10,7 +10,35 @@ export const certifiedEngineIdentity = Object.freeze({
     '82e499726db2da454627903ed65802eaa2ab3e7185f7f6cb3c84c1cbdbde3cea',
 });
 
-/** Vercel is not the certified bounded Linux host. Never start native jobs there. */
+/** Vercel can use only the explicitly configured HTTPS Engine transport. */
+export function hasRemoteEngineConfiguration(
+  env: Record<string, string | undefined>,
+) {
+  const endpoint = env.ENGINE_URL;
+  const token = env.ENGINE_TOKEN;
+  const archiveSha256 = env.ENGINE_ARTIFACT_SHA256;
+  if (!endpoint || !token || !archiveSha256) return false;
+  try {
+    const url = new URL(endpoint);
+    return (
+      url.href === 'https://staging.novlearn.fr/run' &&
+      url.protocol === 'https:' &&
+      !url.username &&
+      !url.password &&
+      !url.search &&
+      !url.hash &&
+      url.pathname === '/run' &&
+      new TextEncoder().encode(token).length >= 32 &&
+      /^[a-f0-9]{64}$/.test(archiveSha256)
+    );
+  } catch {
+    return false;
+  }
+}
+
 export function isEngineEnabled(env: Record<string, string | undefined>) {
-  return env.ADMIN_ENGINE_ENABLED === 'true' && env.VERCEL !== '1';
+  return (
+    env.ADMIN_ENGINE_ENABLED === 'true' &&
+    (env.VERCEL !== '1' || hasRemoteEngineConfiguration(env))
+  );
 }
