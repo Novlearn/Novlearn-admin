@@ -59,7 +59,7 @@ politique explicite d'acceptation de toute archive derrière l'URL staging.
 ## Configuration serveur
 
 L’Admin Vercel utilise la base de préproduction existante. Dans l’environnement
-Vercel **Production** qui héberge `novlearn-admin`, renseigner ces trois
+Vercel **Production** qui héberge `novlearn-admin`, renseigner ces quatre
 variables uniquement côté serveur :
 
 ```dotenv
