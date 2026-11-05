@@ -4,7 +4,7 @@ import { readAuthConfiguration } from '@/lib/auth/config';
 import { isTrustedMutation, privateHeaders } from '@/lib/auth/http';
 import { readBoundedJson } from '@/lib/auth/json';
 import { createRouteAuth, transferAuthCookies } from '@/lib/auth/supabase';
-import { runEngine } from '@/lib/engine-runtime';
+import { engineFailure, runEngine } from '@/lib/engine-runtime';
 import { isEngineEnabled } from '@/lib/engine-identity';
 import type { JsonObject, JsonValue } from 'novlearn-exercise-engine';
 
@@ -15,16 +15,16 @@ export async function POST(request: NextRequest) {
     NextResponse.json(body, { status, headers: privateHeaders() });
   const config = readAuthConfiguration(process.env);
   if (!config || !isEngineEnabled(process.env))
-    return json({ error: 'Validation Engine non activée.' }, 503);
+    return json({ error: 'Validation Engine non activ�e.' }, 503);
   if (!isTrustedMutation(request, config))
-    return json({ error: 'Origine refusée.' }, 403);
+    return json({ error: 'Origine refus�e.' }, 403);
   const { gateway, response } = createRouteAuth(request, config);
   const finish = (body: unknown, status = 200) =>
     transferAuthCookies(response, json(body, status));
   const access = await authorizeAdmin(gateway);
   if (!access.allowed)
     return finish(
-      { error: 'Accès refusé.' },
+      { error: 'Acc�s refus�.' },
       access.reason === 'unauthenticated'
         ? 401
         : access.reason === 'forbidden'
@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
   try {
     input = await readBoundedJson(request);
   } catch {
-    return finish({ error: 'Requête invalide ou trop volumineuse.' }, 400);
+    return finish({ error: 'Requ�te invalide ou trop volumineuse.' }, 400);
   }
   if (
     !input ||
@@ -49,7 +49,7 @@ export async function POST(request: NextRequest) {
     Object.keys(input).some((key) => key !== 'definition') ||
     !Object.hasOwn(input, 'definition')
   )
-    return finish({ error: 'Requête invalide.' }, 400);
+    return finish({ error: 'Requ�te invalide.' }, 400);
   try {
     const value = await runEngine(
       'validateDefinition',
@@ -84,13 +84,15 @@ export async function POST(request: NextRequest) {
       valid: value.ok,
       diagnostics: value.ok ? [] : value.diagnostics,
     });
-  } catch {
+  } catch (error) {
+    const failure = engineFailure(error);
     return finish(
       {
-        error:
-          'Validation momentanément indisponible. Le brouillon reste conservé.',
+        code: failure.code,
+        error: `${failure.message} Le brouillon reste conserv�.`,
       },
-      503,
+      failure.status,
     );
   }
 }
+

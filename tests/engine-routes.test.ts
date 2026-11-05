@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { NextRequest, NextResponse } from 'next/server';
 import { STAGING_PROJECT_REF } from '@/lib/auth/config';
 import { newDraft } from '@/lib/catalogue';
+vi.mock('server-only', () => ({}));
 const fake = vi.hoisted(() => ({
   auth: {
     getVerifiedUser: vi.fn(),
@@ -16,7 +17,43 @@ vi.mock('@/lib/auth/supabase', () => ({
   createRouteAuth: fake.create,
   transferAuthCookies: (_a: unknown, b: unknown) => b,
 }));
-vi.mock('@/lib/engine-runtime', () => ({ runEngine: fake.run }));
+vi.mock('@/lib/engine-runtime', () => ({
+  runEngine: fake.run,
+  engineFailure: (error: unknown) => {
+    const reason = (error as { reason?: string })?.reason;
+    if (reason === 'authentication')
+      return {
+        status: 502,
+        code: 'engine_authentication',
+        message: 'Engine auth refused.',
+      };
+    if (reason === 'archive-mismatch')
+      return {
+        status: 502,
+        code: 'engine_archive_mismatch',
+        message: 'Archive mismatch.',
+      };
+    if (reason === 'contract-mismatch')
+      return {
+        status: 502,
+        code: 'engine_contract_mismatch',
+        message: 'Contract mismatch.',
+      };
+    if (reason === 'network')
+      return {
+        status: 503,
+        code: 'engine_network',
+        message: 'Network unavailable.',
+      };
+    if (reason === 'timeout')
+      return { status: 504, code: 'engine_timeout', message: 'Timeout.' };
+    return {
+      status: 503,
+      code: 'engine_unavailable',
+      message: 'Engine unavailable.',
+    };
+  },
+}));
 import { POST } from '@/app/api/admin/engine/route';
 function request(
   body: unknown = { definition: newDraft('Exercice') },
@@ -53,8 +90,8 @@ beforeEach(() => {
     value: { expectedLatex: 'private', title: 'private definition' },
   });
 });
-describe('validation Engine protégée', () => {
-  it('refuse Vercel même en cas de drapeau Engine actif', async () => {
+describe('validation Engine prot�g�e', () => {
+  it('refuse Vercel m�me en cas de drapeau Engine actif', async () => {
     vi.stubEnv('VERCEL', '1');
     try {
       expect((await POST(request())).status).toBe(503);
@@ -64,7 +101,7 @@ describe('validation Engine protégée', () => {
     }
   });
   it.each(['NEXT_PUBLIC_SUPABASE_URL', 'ADMIN_ENGINE_ENABLED'])(
-    'reste fermée sans %s, sans initialiser de worker',
+    'reste ferm�e sans %s, sans initialiser de worker',
     async (flag) => {
       vi.stubEnv(flag, 'false');
       expect((await POST(request())).status).toBe(503);
@@ -73,25 +110,25 @@ describe('validation Engine protégée', () => {
     },
   );
   it.each([null, { id: 'guest', isAnonymous: true }])(
-    'refuse une identité absente ou invitée avant le calcul',
+    'refuse une identit� absente ou invit�e avant le calcul',
     async (user) => {
       fake.auth.getVerifiedUser.mockResolvedValue(user);
       expect([401, 403]).toContain((await POST(request())).status);
       expect(fake.run).not.toHaveBeenCalled();
     },
   );
-  it.each([null, 'user', 'editor'])('refuse le rôle %s', async (role) => {
+  it.each([null, 'user', 'editor'])('refuse le r�le %s', async (role) => {
     fake.auth.getProfileRole.mockResolvedValue(role);
     expect((await POST(request())).status).toBe(403);
     expect(fake.run).not.toHaveBeenCalled();
   });
-  it('refuse l’origine étrangère avant Auth', async () => {
+  it('refuse l'origine �trang�re avant Auth', async () => {
     expect((await POST(request(undefined, 'https://evil.test'))).status).toBe(
       403,
     );
     expect(fake.create).not.toHaveBeenCalled();
   });
-  it('ne permet aucune opération native ni instance officielle fournie par le navigateur', async () => {
+  it('ne permet aucune op�ration native ni instance officielle fournie par le navigateur', async () => {
     for (const extra of [
       { operation: 'gradeAnswer' },
       { official: { expected: 'forged' } },
@@ -103,12 +140,12 @@ describe('validation Engine protégée', () => {
       ).toBe(400);
     expect(fake.run).not.toHaveBeenCalled();
   });
-  it('borne les octets réellement reçus et refuse un JSON invalide', async () => {
+  it('borne les octets r�ellement re�us et refuse un JSON invalide', async () => {
     expect((await POST(request(' '.repeat(262145)))).status).toBe(400);
     expect((await POST(request('{'))).status).toBe(400);
     expect(fake.run).not.toHaveBeenCalled();
   });
-  it('n’échoe pas la définition privée même si l’Engine la retourne en validation', async () => {
+  it('n'�choe pas la d�finition priv�e m�me si l'Engine la retourne en validation', async () => {
     const incoming = request();
     const response = await POST(incoming);
     expect(response.status).toBe(200);
@@ -124,7 +161,7 @@ describe('validation Engine protégée', () => {
       incoming.signal,
     );
   });
-  it('présente les vrais diagnostics de schéma sans les traduire en approbation', async () => {
+  it('pr�sente les vrais diagnostics de sch�ma sans les traduire en approbation', async () => {
     fake.run.mockResolvedValue({
       ok: false,
       diagnostics: [
@@ -147,19 +184,34 @@ describe('validation Engine protégée', () => {
       ],
     });
   });
-  it('ne transforme pas un timeout/worker indisponible en résultat positif et masque les détails', async () => {
+  it('ne transforme pas un timeout/worker indisponible en r�sultat positif et masque les d�tails', async () => {
     fake.run.mockRejectedValue(new Error('private runtime path'));
     const response = await POST(request());
     expect(response.status).toBe(503);
     expect(await response.text()).not.toContain('private runtime path');
   });
   it.each([
+    ['authentication', 502, 'engine_authentication'],
+    ['archive-mismatch', 502, 'engine_archive_mismatch'],
+    ['contract-mismatch', 502, 'engine_contract_mismatch'],
+    ['network', 503, 'engine_network'],
+    ['timeout', 504, 'engine_timeout'],
+  ] as const)('distingue la panne Engine %s', async (reason, status, code) => {
+    fake.run.mockRejectedValueOnce(
+      Object.assign(new Error('private'), { reason }),
+    );
+    const response = await POST(request());
+    expect(response.status).toBe(status);
+    expect(await response.json()).toMatchObject({ code });
+  });
+  it.each([
     null,
     { ok: false },
     { ok: false, diagnostics: [] },
     { ok: false, diagnostics: [{ path: '/elements' }] },
-  ])('refuse un résultat de protocole invalide : %j', async (value) => {
+  ])('refuse un r�sultat de protocole invalide : %j', async (value) => {
     fake.run.mockResolvedValue(value);
     expect((await POST(request())).status).toBe(503);
   });
 });
+

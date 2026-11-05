@@ -3,12 +3,11 @@ import { access, readFile } from 'node:fs/promises';
 import { constants } from 'node:fs';
 import { resolve, sep } from 'node:path';
 import { randomUUID } from 'node:crypto';
-import {
-  createNodeHost,
-  type EngineOperation,
-} from 'novlearn-exercise-engine/node-host';
+import type { EngineOperation } from 'novlearn-exercise-engine/node-host';
 import type { JsonObject, JsonValue } from 'novlearn-exercise-engine';
 import { certifiedEngineIdentity } from './engine-identity';
+import { EngineRuntimeError, runEngine } from './engine-runtime';
+import { readRemoteEngineConfiguration } from './engine-remote-transport';
 
 let active = false;
 const fixture: JsonObject = {
@@ -16,7 +15,7 @@ const fixture: JsonObject = {
   kind: 'composed',
   id: 'host-qualification',
   revision: '1',
-  title: 'Qualification synthétique',
+  title: 'Qualification synth�tique',
   generation: {
     schemaVersion: 5,
     definitions: [],
@@ -90,7 +89,6 @@ async function profile() {
 export async function qualifyEngine(signal: AbortSignal) {
   if (active) return { busy: true as const };
   active = true;
-  const host = createNodeHost({ maxConcurrent: 1, maxQueued: 4 });
   const results: {
     operation: string;
     passed: boolean;
@@ -99,30 +97,46 @@ export async function qualifyEngine(signal: AbortSignal) {
   }[] = [];
   try {
     const runtime = await profile();
+    const remote = readRemoteEngineConfiguration(process.env);
+    const transport =
+      process.env.VERCEL === '1'
+        ? 'remote-https'
+        : process.platform === 'linux'
+          ? 'local-node-host'
+          : 'local-http-worker';
     const run = async (operation: EngineOperation, payload: JsonObject) => {
       signal.throwIfAborted();
-      const result = await host.run(
-        JSON.stringify({
-          protocolVersion: 1,
-          requestId: randomUUID(),
+      const started = performance.now();
+      try {
+        const value = await runEngine(operation, payload, signal);
+        results.push({
           operation,
-          payload,
-        }),
-        { signal },
-      );
-      results.push({
-        operation,
-        passed: result.ok,
-        ...(!result.ok ? { error: result.error } : {}),
-        elapsedMs: result.metrics.elapsedMs,
-      });
-      return result.ok ? result.value : null;
+          passed: true,
+          elapsedMs: performance.now() - started,
+        });
+        return value;
+      } catch (error) {
+        const reason =
+          error instanceof EngineRuntimeError ? error.reason : 'unavailable';
+        results.push({
+          operation,
+          passed: false,
+          error: reason,
+          elapsedMs: performance.now() - started,
+        });
+        return null;
+      }
     };
     const validation = await run('validateDefinition', { definition: fixture });
     if (!validation || !object(validation) || validation.ok !== true)
       return {
         received: false,
-        identity: certifiedEngineIdentity,
+        identity: {
+          adminPackage: certifiedEngineIdentity.version,
+          contract: certifiedEngineIdentity.engineContract,
+          transport,
+          expectedRemoteArchiveSha256: remote?.archiveSha256 ?? null,
+        },
         runtime,
         results,
       };
@@ -141,7 +155,12 @@ export async function qualifyEngine(signal: AbortSignal) {
     )
       return {
         received: false,
-        identity: certifiedEngineIdentity,
+        identity: {
+          adminPackage: certifiedEngineIdentity.version,
+          contract: certifiedEngineIdentity.engineContract,
+          transport,
+          expectedRemoteArchiveSha256: remote?.archiveSha256 ?? null,
+        },
         runtime,
         results,
       };
@@ -181,7 +200,12 @@ export async function qualifyEngine(signal: AbortSignal) {
         publicSafe &&
         verdicts.join(',') === 'correct,incorrect,invalid' &&
         results.every((r) => r.passed),
-      identity: certifiedEngineIdentity,
+      identity: {
+        adminPackage: certifiedEngineIdentity.version,
+        contract: certifiedEngineIdentity.engineContract,
+        transport,
+        expectedRemoteArchiveSha256: remote?.archiveSha256 ?? null,
+      },
       runtime,
       results,
       deterministic,
@@ -189,7 +213,7 @@ export async function qualifyEngine(signal: AbortSignal) {
       verdicts,
     };
   } finally {
-    await host.close();
     active = false;
   }
 }
+

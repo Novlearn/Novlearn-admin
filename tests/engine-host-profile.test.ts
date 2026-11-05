@@ -12,7 +12,7 @@ describe('profil Engine explicite', () => {
     expect(isEngineEnabled({})).toBe(false);
     expect(isEngineEnabled({ ADMIN_ENGINE_ENABLED: 'true' })).toBe(true);
   });
-  it('refuse Vercel avant toute initialisation du host, même si le drapeau est actif', async () => {
+  it('refuse Vercel avant toute initialisation du host, m�me si le drapeau est actif', async () => {
     expect(isEngineEnabled({ VERCEL: '1', ADMIN_ENGINE_ENABLED: 'true' })).toBe(
       false,
     );
@@ -27,4 +27,27 @@ describe('profil Engine explicite', () => {
       vi.unstubAllEnvs();
     }
   });
+  it('n'active le profil Vercel que pour le transport HTTPS staging complet', () => {
+    const remote = {
+      VERCEL: '1',
+      ADMIN_ENGINE_ENABLED: 'true',
+      ADMIN_ENGINE_URL: 'https://staging.novlearn.fr/run',
+      ADMIN_ENGINE_TOKEN: 'private-token-value-long-enough-for-the-host',
+      ADMIN_ENGINE_ARCHIVE_SHA256: 'a'.repeat(64),
+    };
+    expect(isEngineEnabled(remote)).toBe(true);
+    expect(
+      isEngineEnabled({
+        ...remote,
+        ADMIN_ENGINE_URL: 'http://127.0.0.1:3151/run',
+      }),
+    ).toBe(false);
+    expect(
+      isEngineEnabled({ ...remote, ADMIN_ENGINE_ARCHIVE_SHA256: '' }),
+    ).toBe(false);
+    expect(isEngineEnabled({ ...remote, ADMIN_ENGINE_TOKEN: 'short' })).toBe(
+      false,
+    );
+  });
 });
+
