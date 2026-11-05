@@ -16,7 +16,7 @@ describe('profil Engine explicite', () => {
     expect(isEngineEnabled({})).toBe(false);
     expect(isEngineEnabled({ ADMIN_ENGINE_ENABLED: 'true' })).toBe(true);
   });
-  it('refuse Vercel avant toute initialisation du host, m�me si le drapeau est actif', async () => {
+  it('refuse Vercel avant toute initialisation du host, même si le drapeau est actif', async () => {
     expect(isEngineEnabled({ VERCEL: '1', ADMIN_ENGINE_ENABLED: 'true' })).toBe(
       false,
     );
@@ -31,7 +31,7 @@ describe('profil Engine explicite', () => {
       vi.unstubAllEnvs();
     }
   });
-  it('n'active le profil Vercel que pour le transport HTTPS staging complet', () => {
+  it('n’active le profil Vercel que pour le transport HTTPS staging complet', () => {
     const remote = {
       VERCEL: '1',
       ADMIN_ENGINE_ENABLED: 'true',
@@ -68,4 +68,3 @@ describe('profil Engine explicite', () => {
     });
   });
 });
-

@@ -30,7 +30,7 @@ afterEach(() => {
 });
 
 describe('transport HTTPS serveur vers Engine', () => {
-  it('n'accepte que l'URL staging fixe, un token priv� assez long et une empreinte SHA256', () => {
+  it('n’accepte que l’URL staging fixe, un token privé assez long et une empreinte SHA256', () => {
     expect(readRemoteEngineConfiguration(env())).toMatchObject({
       url: 'https://staging.novlearn.fr/run',
     });
@@ -43,7 +43,7 @@ describe('transport HTTPS serveur vers Engine', () => {
       expect(readRemoteEngineConfiguration({ ...env(), ...change })).toBeNull();
   });
 
-  it('envoie exactement la requ�te protocole 1 et accepte la r�ponse r�elle HostResult sans protocolVersion', async () => {
+  it('envoie exactement la requête protocole 1 et accepte la réponse réelle HostResult sans protocolVersion', async () => {
     vi.stubEnv('ADMIN_ENGINE_URL', env().ADMIN_ENGINE_URL);
     vi.stubEnv('ADMIN_ENGINE_TOKEN', env().ADMIN_ENGINE_TOKEN);
     vi.stubEnv('ADMIN_ENGINE_ARCHIVE_SHA256', digest);
@@ -117,7 +117,7 @@ describe('transport HTTPS serveur vers Engine', () => {
     },
   );
 
-  it('refuse les r�ponses d'une autre archive et les r�ponses au contrat inattendu', async () => {
+  it('refuse les réponses d’une autre archive et les réponses au contrat inattendu', async () => {
     vi.stubEnv('ADMIN_ENGINE_URL', env().ADMIN_ENGINE_URL);
     vi.stubEnv('ADMIN_ENGINE_TOKEN', env().ADMIN_ENGINE_TOKEN);
     vi.stubEnv('ADMIN_ENGINE_ARCHIVE_SHA256', digest);
@@ -141,7 +141,7 @@ describe('transport HTTPS serveur vers Engine', () => {
     });
   });
 
-  it('distingue le r�seau et les d�lais sans exposer token ou message transport', async () => {
+  it('distingue le réseau et les délais sans exposer token ou message transport', async () => {
     vi.stubEnv('ADMIN_ENGINE_URL', env().ADMIN_ENGINE_URL);
     vi.stubEnv('ADMIN_ENGINE_TOKEN', env().ADMIN_ENGINE_TOKEN);
     vi.stubEnv('ADMIN_ENGINE_ARCHIVE_SHA256', digest);
@@ -161,4 +161,3 @@ describe('transport HTTPS serveur vers Engine', () => {
     }
   });
 });
-

@@ -42,4 +42,3 @@ export function isEngineEnabled(env: Record<string, string | undefined>) {
     (env.VERCEL !== '1' || hasRemoteEngineConfiguration(env))
   );
 }
-

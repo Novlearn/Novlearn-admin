@@ -15,7 +15,7 @@ const fixture: JsonObject = {
   kind: 'composed',
   id: 'host-qualification',
   revision: '1',
-  title: 'Qualification synth�tique',
+  title: 'Qualification synthétique',
   generation: {
     schemaVersion: 5,
     definitions: [],
@@ -216,4 +216,3 @@ export async function qualifyEngine(signal: AbortSignal) {
     active = false;
   }
 }
-

@@ -158,4 +158,3 @@ export async function runRemoteEngine(
     throw new RemoteEngineError(result.error as HostError);
   throw new RemoteEngineError('contract-mismatch');
 }
-

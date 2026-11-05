@@ -34,16 +34,16 @@ export async function POST(request: NextRequest) {
     NextResponse.json(body, { status, headers: privateHeaders() });
   const config = readAuthConfiguration(process.env);
   if (!config || !isEngineEnabled(process.env))
-    return json({ error: 'Aper�u Engine non activ�.' }, 503);
+    return json({ error: 'Aperçu Engine non activé.' }, 503);
   if (!isTrustedMutation(request, config))
-    return json({ error: 'Origine refus�e.' }, 403);
+    return json({ error: 'Origine refusée.' }, 403);
   const { gateway, response, client } = createRouteAuth(request, config);
   const finish = (body: unknown, status = 200) =>
     transferAuthCookies(response, json(body, status));
   const access = await authorizeAdmin(gateway);
   if (!access.allowed)
     return finish(
-      { error: 'Acc�s refus�.' },
+      { error: 'Accès refusé.' },
       access.reason === 'unauthenticated'
         ? 401
         : access.reason === 'forbidden'
@@ -59,10 +59,10 @@ export async function POST(request: NextRequest) {
   try {
     input = await readBoundedJson(request);
   } catch {
-    return finish({ error: 'Requ�te invalide ou trop volumineuse.' }, 400);
+    return finish({ error: 'Requête invalide ou trop volumineuse.' }, 400);
   }
   if (!object(input) || typeof input.action !== 'string')
-    return finish({ error: 'Requ�te invalide.' }, 400);
+    return finish({ error: 'Requête invalide.' }, 400);
   const fields: Record<string, string[]> = {
     generate: ['action', 'definition', 'seed'],
     inspect: ['action', 'previewId'],
@@ -84,25 +84,25 @@ export async function POST(request: NextRequest) {
     !allowed ||
     Object.keys(input).sort().join(',') !== [...allowed].sort().join(',')
   )
-    return finish({ error: 'Requ�te invalide.' }, 400);
+    return finish({ error: 'Requête invalide.' }, 400);
   if (
     input.action === 'generate' &&
     (!object(input.definition) || !seed(input.seed))
   )
-    return finish({ error: 'D�finition ou seed invalide.' }, 400);
+    return finish({ error: 'Définition ou seed invalide.' }, 400);
   if (
     ['grade', 'inspect'].includes(input.action) &&
     (typeof input.previewId !== 'string' ||
       !/^[a-f0-9-]{36}$/.test(input.previewId))
   )
-    return finish({ error: 'R�f�rence d'aper�u invalide.' }, 400);
+    return finish({ error: 'Référence d’aperçu invalide.' }, 400);
   if (
     input.action === 'grade' &&
     (typeof input.questionId !== 'string' ||
       input.questionId.length > 160 ||
       !object(input.answer))
   )
-    return finish({ error: 'R�ponse invalide.' }, 400);
+    return finish({ error: 'Réponse invalide.' }, 400);
   if (
     ['test', 'test_saved'].includes(input.action) &&
     ((input.action === 'test' && !object(input.definition)) ||
@@ -142,7 +142,7 @@ export async function POST(request: NextRequest) {
       !Number.isSafeInteger(input.epoch) ||
       input.epoch < 0)
   )
-    return finish({ error: 'R�vision ou �tat de test invalide.' }, 400);
+    return finish({ error: 'Révision ou état de test invalide.' }, 400);
   try {
     const signal = AbortSignal.any([
       request.signal,
@@ -183,7 +183,7 @@ export async function POST(request: NextRequest) {
       const signing = readTestSigningConfiguration(process.env);
       if (!signing)
         return finish(
-          { error: 'La signature serveur des rapports n'est pas configur�e.' },
+          { error: 'La signature serveur des rapports n’est pas configurée.' },
           503,
         );
       const { data: version, error: loadError } = await client
@@ -191,19 +191,19 @@ export async function POST(request: NextRequest) {
         .select('id,definition,approval_fingerprint_sha256,test_epoch')
         .eq('id', input.versionId)
         .maybeSingle();
-      if (loadError) return finish({ error: 'R�vision indisponible.' }, 503);
-      if (!version) return finish({ error: 'R�vision introuvable.' }, 404);
+      if (loadError) return finish({ error: 'Révision indisponible.' }, 503);
+      if (!version) return finish({ error: 'Révision introuvable.' }, 404);
       if (
         version.approval_fingerprint_sha256 !== input.fingerprint ||
         version.test_epoch !== input.epoch
       )
         return finish(
-          { error: 'La r�vision a chang�. Rechargez avant de tester.' },
+          { error: 'La révision a changé. Rechargez avant de tester.' },
           409,
         );
       if (Buffer.byteLength(JSON.stringify(version.definition)) > 262144)
         return finish(
-          { error: 'D�finition trop volumineuse pour ce banc.' },
+          { error: 'Définition trop volumineuse pour ce banc.' },
           413,
         );
       const report = await testPreview(
@@ -215,7 +215,7 @@ export async function POST(request: NextRequest) {
       signal.throwIfAborted();
       const fresh = await authorizeAdmin(gateway);
       if (!fresh.allowed || fresh.userId !== access.userId)
-        return finish({ error: 'Acc�s r�voqu� pendant les tests.' }, 403);
+        return finish({ error: 'Accès révoqué pendant les tests.' }, 403);
       signal.throwIfAborted();
       const receipt = signTestReceipt(signing, {
         actorId: access.userId,
@@ -234,8 +234,8 @@ export async function POST(request: NextRequest) {
           {
             error:
               recordError.code === '40001' || recordError.code === 'PT409'
-                ? 'La r�vision a chang� pendant les tests. Le rapport n'est pas enregistr�.'
-                : 'Rapport non enregistr�. V�rifiez la configuration de signature.',
+                ? 'La révision a changé pendant les tests. Le rapport n’est pas enregistré.'
+                : 'Rapport non enregistré. Vérifiez la configuration de signature.',
           },
           recordError.code === '40001' || recordError.code === 'PT409'
             ? 409
@@ -247,7 +247,7 @@ export async function POST(request: NextRequest) {
         record.passed !== report.passed
       )
         return finish(
-          { error: 'Enregistrement du rapport non confirm�.' },
+          { error: 'Enregistrement du rapport non confirmé.' },
           503,
         );
       result = { receiptId: record.receiptId, report };
@@ -272,7 +272,7 @@ export async function POST(request: NextRequest) {
     return finish(
       {
         code: failure.code,
-        error: `${failure.message} Aucun test positif n'est enregistr�.`,
+        error: `${failure.message} Aucun test positif n'est enregistré.`,
       },
       failure.status,
     );
@@ -280,4 +280,3 @@ export async function POST(request: NextRequest) {
     release?.();
   }
 }
-

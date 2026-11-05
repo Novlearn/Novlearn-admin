@@ -1,149 +1,148 @@
-# �tat actuel et roadmap
+# État actuel et roadmap
 
-**5 novembre - raccordement Admin  Engine pr�par� dans une PR :** les actions
-Creator existantes (validation, aper�u, tests de correction) sont reli�es � un
+**5 novembre — raccordement Admin → Engine préparé dans une PR :** les actions
+Creator existantes (validation, aperçu, tests de correction) sont reliées à un
 transport serveur HTTPS strict vers `https://staging.novlearn.fr/run` lorsque
-Admin est sur Vercel. Package Admin 0.1.8 conserv� ; contrat host v�rifi� contre
-le code Engine 0.2.1. Le contr�le complet local passe sur l'int�grit� Engine, 1?591 tests,
+Admin est sur Vercel. Package Admin 0.1.8 conservé ; contrat host vérifié contre
+le code Engine 0.2.1. Le contrôle complet local passe sur l’intégrité Engine, 1 591 tests,
 TypeScript et ESLint (un avertissement historique). Le formatage des fichiers
-modifi�s passe ; le contr�le global reste bloqu� par neuf fichiers historiques.
-Le build �choue sur `EPERM` lors de la cr�ation d'un dossier `.next`. L'acc�s r�el depuis Vercel, la version de l'image servie et la r�ception
-navigateur restent � �tablir ; DNS depuis l'environnement courant renvoie
-`ENOTFOUND`. Aucun d�ploiement n'est d�clench�. Voir
-[transport Admin-Engine](admin-engine-transport.md).
+modifiés passe ; le contrôle global reste bloqué par neuf fichiers historiques.
+Le build échoue sur `EPERM` lors de la création d’un dossier `.next`. L’accès réel depuis Vercel, la version de l’image servie et la réception
+navigateur restent à établir ; DNS depuis l’environnement courant renvoie
+`ENOTFOUND`. Aucun déploiement n’est déclenché. Voir
+[transport Admin–Engine](admin-engine-transport.md).
 
-**Prochaine mission arr�t�e :** [terminer Admin, Engine et quatre/cinq pilotes](mission-admin-engine.md),
+**Prochaine mission arrêtée :** [terminer Admin, Engine et quatre/cinq pilotes](mission-admin-engine.md),
 avec le [prompt de lancement](prompt-mission-admin-engine.md). NovLearn reste en
-lecture seule pendant cette mission ; son adaptation d�veloppement fera l'objet
-d'une seconde conversation et d'un prompt fond� sur la r�ception r�elle du pilote.
-La mission est engag�e : [dossier de r�ception](mission-admin-engine-reception.md).
-Le banc connect� a constat� le refus du host sur le profil Vercel actuel.
-L'utilisateur demande une [explication avant de d�cider de l'h�bergement](prompt-explication-hebergement-engine.md) ;
-aucune nouvelle infrastructure ou Function conteneuris�e n'est autoris�e � ce stade.
-Archive 0.1.1, correctif num�rique, builder et contr�les locaux pr�par�s ;
-d�ploiement de qualification Vercel autoris�. La r�ception distante et les
-pilotes restent � faire. Aucun d�marrage de NovLearn classique ni �criture Production.
+lecture seule pendant cette mission ; son adaptation développement fera l'objet
+d'une seconde conversation et d'un prompt fondé sur la réception réelle du pilote.
+La mission est engagée : [dossier de réception](mission-admin-engine-reception.md).
+Le banc connecté a constaté le refus du host sur le profil Vercel actuel.
+L'utilisateur demande une [explication avant de décider de l'hébergement](prompt-explication-hebergement-engine.md) ;
+aucune nouvelle infrastructure ou Function conteneurisée n'est autorisée à ce stade.
+Archive 0.1.1, correctif numérique, builder et contrôles locaux préparés ;
+déploiement de qualification Vercel autorisé. La réception distante et les
+pilotes restent à faire. Aucun démarrage de NovLearn classique ni écriture Production.
 
-**3 novembre - identit� Engine Admin :** `package.json`, le lockfile, l'identit�
-et le manifeste Admin d�signent l'archive 0.1.8 (SHA256
+**3 novembre — identité Engine Admin :** `package.json`, le lockfile, l'identité
+et le manifeste Admin désignent l'archive 0.1.8 (SHA256
 `82e499726db2da454627903ed65802eaa2ab3e7185f7f6cb3c84c1cbdbde3cea`). Le
-contrat/pipeline reste schema 5 / Engine 0.1.0. La capacit� optionnelle de
-sampling des courbes n'est pas activ�e dans l'adaptateur d'aper�u Admin ; le
-travail Engine 0.2.0 reste non adopt�. Cette mise � jour statique ne prouve pas
-la disponibilit� d'un host ni la r�ception NovLearn.
+contrat/pipeline reste schema 5 / Engine 0.1.0. La capacité optionnelle de
+sampling des courbes n'est pas activée dans l'adaptateur d'aperçu Admin ; le
+travail Engine 0.2.0 reste non adopté. Cette mise à jour statique ne prouve pas
+la disponibilité d'un host ni la réception NovLearn.
 
-**30 octobre - simplification propos�e :** le [plan catalogue, builder et publication](plan-simplification.md)
-d�crit les s�lecteurs de r�f�rences, les cases Flash/calculatrice, la difficult�,
+**30 octobre — simplification proposée :** le [plan catalogue, builder et publication](plan-simplification.md)
+décrit les sélecteurs de références, les cases Flash/calculatrice, la difficulté,
 la reprise des exercices historiques et un parcours de publication plus court.
-Pr�cision utilisateur : exercices publi�s d'abord en pr�production, promotion
-s�lective vers production ; flashcards publi�es directement en production via
+Précision utilisateur : exercices publiés d'abord en préproduction, promotion
+sélective vers production ; flashcards publiées directement en production via
 un circuit distinct. Adapter NovLearn avec quatre/cinq exercices pilotes avant
-la conversion g�n�rale. D�cision trac�e dans le plan ; CDC � aligner explicitement
-avant r�alisation du nouveau p�rim�tre flashcards.
-Analyse et documentation uniquement ; aucun de ces nouveaux lots n'est impl�ment�.
+la conversion générale. Décision tracée dans le plan ; CDC à aligner explicitement
+avant réalisation du nouveau périmètre flashcards.
+Analyse et documentation uniquement ; aucun de ces nouveaux lots n'est implémenté.
 
-**30 octobre - configuration regroup�e :** un seul `.env` priv� � la racine ;
-les quatre exemples sont remplac�s par le mod�le de [configuration](auth.md).
-Le message de connexion d�crit d�sormais une configuration incompl�te.
-Apr�s confirmation explicite de l'utilisateur, les marqueurs d'activation Auth
-sont retir�s. Cible retenue : Production Vercel, trois variables et base de
-pr�production existante. Session/r�le, permissions et s�paration avec la base
-de production �l�ves restent contr�l�s. Engine reste ferm� sur Vercel.
-D�ploiement Production r�alis� et formulaire actif v�rifi� sur le domaine r�el ;
-refus des visiteurs non connect�s confirm�s. Connexion r�elle et parcours connect�
-restent � recevoir : voir la [preuve et ses limites](vercel.md#v�rification-du-30-octobre-2026).
+**30 octobre — configuration regroupée :** un seul `.env` privé à la racine ;
+les quatre exemples sont remplacés par le modèle de [configuration](auth.md).
+Le message de connexion décrit désormais une configuration incomplète.
+Après confirmation explicite de l'utilisateur, les marqueurs d'activation Auth
+sont retirés. Cible retenue : Production Vercel, trois variables et base de
+préproduction existante. Session/rôle, permissions et séparation avec la base
+de production élèves restent contrôlés. Engine reste fermé sur Vercel.
+Déploiement Production réalisé et formulaire actif vérifié sur le domaine réel ;
+refus des visiteurs non connectés confirmés. Connexion réelle et parcours connecté
+restent à recevoir : voir la [preuve et ses limites](vercel.md#vérification-du-30-octobre-2026).
 
-**22 octobre - lot 2, distribution Engine :** le [contrat de biblioth�que](engine-library.md)
-formalise l'archive qualifi�e 0.1.0, ses exports, diagnostics et compatibilit�.
-Manifeste/inventaire complet et consommateurs minimaux Admin/NovLearn ajout�s ;
-installation reproductible et contrats test�s. Ni adoption 0.2.0, ni raccordement
-�l�ve, ni qualification d'un nouvel h�te. L'�tat D13 ci-dessous reste inchang�.
+**22 octobre — lot 2, distribution Engine :** le [contrat de bibliothèque](engine-library.md)
+formalise l'archive qualifiée 0.1.0, ses exports, diagnostics et compatibilité.
+Manifeste/inventaire complet et consommateurs minimaux Admin/NovLearn ajoutés ;
+installation reproductible et contrats testés. Ni adoption 0.2.0, ni raccordement
+élève, ni qualification d'un nouvel hôte. L'état D13 ci-dessous reste inchangé.
 
-Relecture documentaire du **21 octobre 2026**, � partir du code au commit
-`c2064bf13c0c20b094e30a9eb834869ff4420f3f` et des preuves conserv�es. Le d�p�t
-�tait propre au d�marrage de cette mission. Aucun service, compte ou
-environnement distant n'a �t� requalifi� pendant ce nettoyage.
+Relecture documentaire du **21 octobre 2026**, à partir du code au commit
+`c2064bf13c0c20b094e30a9eb834869ff4420f3f` et des preuves conservées. Le dépôt
+était propre au démarrage de cette mission. Aucun service, compte ou
+environnement distant n’a été requalifié pendant ce nettoyage.
 
-## �tat retenu
+## État retenu
 
-Le dernier profil pr�par� (D13) conserve Supabase Staging r�el et retire les
-instances Docker Admin apr�s sauvegarde. Le frontend local se lance sans Docker.
-Au moment de D13, **aucun d�ploiement ni r�ception Vercel n'�tait prouv�** ;
-le d�ploiement et les contr�les HTTP du 30 octobre sont consign�s ci-dessus.
-Une ancienne URL locale r�pondant correctement n'�tablit pas sa disponibilit�
+Le dernier profil préparé (D13) conserve Supabase Staging réel et retire les
+instances Docker Admin après sauvegarde. Le frontend local se lance sans Docker.
+Au moment de D13, **aucun déploiement ni réception Vercel n'était prouvé** ;
+le déploiement et les contrôles HTTP du 30 octobre sont consignés ci-dessus.
+Une ancienne URL locale répondant correctement n’établit pas sa disponibilité
 actuelle.
 
-**L'utilisation d'Engine est centrale dans le CDC. Le profil Vercel qui le
-d�sactive est une pr�paration incompl�te, pas une livraison acceptable de
-l'Admin attendu.** La r�duction ant�rieure du p�rim�tre ne permet pas de
-pr�senter un �diteur sans moteur comme achev�.
+**L’utilisation d’Engine est centrale dans le CDC. Le profil Vercel qui le
+désactive est une préparation incomplète, pas une livraison acceptable de
+l’Admin attendu.** La réduction antérieure du périmètre ne permet pas de
+présenter un éditeur sans moteur comme achevé.
 
-| Domaine                                    | Impl�ment� dans le d�p�t                                                      | V�rifications disponibles                                                           | �tat du profil D13 / reste                                                                             |
+| Domaine                                    | Implémenté dans le dépôt                                                      | Vérifications disponibles                                                           | État du profil D13 / reste                                                                             |
 | ------------------------------------------ | ----------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
-| Auth Staging                               | Connexion, r�le serveur, refus invit�s, expiration                            | Connexion r�elle D12 ; tests et refus HTTP D13                                      | Configurable, sans nouvelle r�ception navigateur ici                                                   |
-| Catalogue et versions                      | Recherche, filtres, brouillons, r�visions, duplication, archivage et conflits | SQL/HTTP locaux ; catalogue et brouillon n�121 sauvegard� puis relu sur Staging D12 | Raccord� � Staging ; ne pas d�duire une r�ception de toutes les actions                                |
-| Creator / MathLive                         | �diteur canonique, champs avanc�s, gardes de sortie, r�cup�ration facultative | Tests unitaires/serveur ; parcours humain local limit�                              | Raccord� ; r�ception compl�te du clavier, focus, navigation et types avanc�s restante                  |
-| Engine / aper�u / correction               | Adaptateur officiel, worker born�, tests multi-seeds et projection publique   | Archive 0.1.0 exacte qualifi�e Linux ; parcours connect�s locaux historiques        | **D�sactiv�** par le lanceur Staging actuel et sur Vercel ; h�te op�rationnel � qualifier et raccorder |
-| Rapports et relecture                      | Re�us sign�s li�s � une r�vision, historique, approbation humaine             | SQL/Engine/HTTP sur bancs locaux                                                    | **D�sactiv�s**, aucune cl� Staging provisionn�e ; d�cision de signature et r�ception requises          |
-| Chapitres, comp�tences, flashcards         | Gestion Staging et contr�les de r�f�rences                                    | Tests SQL/API locaux                                                                | Raccord�s dans le p�rim�tre Staging ; pas de preuve de r�ception compl�te de chaque CRUD distant       |
-| Dashboard catalogue                        | Agr�gats du catalogue et r�f�rentiel Staging                                  | Tests et SQL locaux                                                                 | Code pr�sent ; r�ception sur le profil actuel � compl�ter                                              |
-| Statistiques / utilisateurs                | Agr�gats, filtres p�dagogiques, liste et fiche utilisateur                    | Copies synth�tiques, PostgreSQL/TLS et Auth/HTTP locaux                             | Lecteurs locaux non remis en service ; aucune lecture Production op�rationnelle prouv�e                |
-| Version active cible                       | Lecture du pointeur actif, diff�rente de la derni�re r�vision                 | Cible locale SQL70, refus et rollback                                               | Lecteur local non r�activ� ; acc�s op�rationnel restant                                                |
-| Publication individuelle, lots et rollback | Diff, confirmation, journal, transfert et reprise apr�s issue incertaine      | SQL/HTTP sur **copies locales**, simulations UI distinctes                          | **D�sactiv�e** ; aucune publication Supabase Production livr�e                                         |
-| Courbes Engine 0.2.0 (D10)                 | Travail propri�taire d�crit par une preuve dat�e                              | Phases package Linux r�ussies, contr�le source complet non r�ussi                   | Report� ; archive non adopt�e dans Admin                                                               |
-| H�bergement / exploitation                 | Configuration Vercel, build autonome et en-t�tes                              | Contr�le local D13 ; pas de r�ception sur domaine h�berg�                           | D�ploiement restant, sous autorisation distincte ; d�pendance Engine non r�solue                       |
+| Auth Staging                               | Connexion, rôle serveur, refus invités, expiration                            | Connexion réelle D12 ; tests et refus HTTP D13                                      | Configurable, sans nouvelle réception navigateur ici                                                   |
+| Catalogue et versions                      | Recherche, filtres, brouillons, révisions, duplication, archivage et conflits | SQL/HTTP locaux ; catalogue et brouillon n°121 sauvegardé puis relu sur Staging D12 | Raccordé à Staging ; ne pas déduire une réception de toutes les actions                                |
+| Creator / MathLive                         | Éditeur canonique, champs avancés, gardes de sortie, récupération facultative | Tests unitaires/serveur ; parcours humain local limité                              | Raccordé ; réception complète du clavier, focus, navigation et types avancés restante                  |
+| Engine / aperçu / correction               | Adaptateur officiel, worker borné, tests multi-seeds et projection publique   | Archive 0.1.0 exacte qualifiée Linux ; parcours connectés locaux historiques        | **Désactivé** par le lanceur Staging actuel et sur Vercel ; hôte opérationnel à qualifier et raccorder |
+| Rapports et relecture                      | Reçus signés liés à une révision, historique, approbation humaine             | SQL/Engine/HTTP sur bancs locaux                                                    | **Désactivés**, aucune clé Staging provisionnée ; décision de signature et réception requises          |
+| Chapitres, compétences, flashcards         | Gestion Staging et contrôles de références                                    | Tests SQL/API locaux                                                                | Raccordés dans le périmètre Staging ; pas de preuve de réception complète de chaque CRUD distant       |
+| Dashboard catalogue                        | Agrégats du catalogue et référentiel Staging                                  | Tests et SQL locaux                                                                 | Code présent ; réception sur le profil actuel à compléter                                              |
+| Statistiques / utilisateurs                | Agrégats, filtres pédagogiques, liste et fiche utilisateur                    | Copies synthétiques, PostgreSQL/TLS et Auth/HTTP locaux                             | Lecteurs locaux non remis en service ; aucune lecture Production opérationnelle prouvée                |
+| Version active cible                       | Lecture du pointeur actif, différente de la dernière révision                 | Cible locale SQL70, refus et rollback                                               | Lecteur local non réactivé ; accès opérationnel restant                                                |
+| Publication individuelle, lots et rollback | Diff, confirmation, journal, transfert et reprise après issue incertaine      | SQL/HTTP sur **copies locales**, simulations UI distinctes                          | **Désactivée** ; aucune publication Supabase Production livrée                                         |
+| Courbes Engine 0.2.0 (D10)                 | Travail propriétaire décrit par une preuve datée                              | Phases package Linux réussies, contrôle source complet non réussi                   | Reporté ; archive non adoptée dans Admin                                                               |
+| Hébergement / exploitation                 | Configuration Vercel, build autonome et en-têtes                              | Contrôle local D13 ; pas de réception sur domaine hébergé                           | Déploiement restant, sous autorisation distincte ; dépendance Engine non résolue                       |
 
-## Port�e des preuves r�centes
+## Portée des preuves récentes
 
-- **D12, Staging :** la preuve SQL atteste l'application du bundle
-  `20261021120707`, 286 assertions inchang�es sur restauration cibl�e, 147 lignes
-  p�dagogiques initiales et 70 anciennes entr�es de migration pr�serv�es.
-  La r�ception applicative distincte confirme connexion, catalogue, sauvegarde
-  du brouillon n�121 et lectures de sa fiche. Elle ne prouve pas une reconnexion
-  ult�rieure ni tous les parcours du CDC.
-- **D13, pr�paration Vercel :** la preuve conserve 1 531 tests / 80 fichiers,
-  int�grit� Engine, types, lint, format, build et smoke r�ussis � cette date.
-  Les sept observations HTTP sans Docker incluent les refus Engine/aper�u 503.
-  Ce r�sultat ne d�montre pas un moteur utilisable dans cette pr�paration.
+- **D12, Staging :** la preuve SQL atteste l’application du bundle
+  `20261021120707`, 286 assertions inchangées sur restauration ciblée, 147 lignes
+  pédagogiques initiales et 70 anciennes entrées de migration préservées.
+  La réception applicative distincte confirme connexion, catalogue, sauvegarde
+  du brouillon n°121 et lectures de sa fiche. Elle ne prouve pas une reconnexion
+  ultérieure ni tous les parcours du CDC.
+- **D13, préparation Vercel :** la preuve conserve 1 531 tests / 80 fichiers,
+  intégrité Engine, types, lint, format, build et smoke réussis à cette date.
+  Les sept observations HTTP sans Docker incluent les refus Engine/aperçu 503.
+  Ce résultat ne démontre pas un moteur utilisable dans cette préparation.
 - Le banc D11 a subi une **restauration partielle** : six des 18 exercices et
-  neuf des 23 rapports ant�rieurs au nettoyage ont �t� r�cup�r�s � cette �tape.
+  neuf des 23 rapports antérieurs au nettoyage ont été récupérés à cette étape.
   La sauvegarde finale D13 contient ensuite sept exercices et dix rapports.
-  Ces chiffres d�crivent des �tapes diff�rentes ; ils ne prouvent pas que les
-  donn�es r�centes manquantes ont �t� retrouv�es.
+  Ces chiffres décrivent des étapes différentes ; ils ne prouvent pas que les
+  données récentes manquantes ont été retrouvées.
 
 Les liens vers ces preuves et leurs limites sont dans
-[V�rifications](verification.md). Les comptes rendus et anciens �tats Git sont
-consultables dans l'historique, sans maintenir une seconde chronologie active.
+[Vérifications](verification.md). Les comptes rendus et anciens états Git sont
+consultables dans l’historique, sans maintenir une seconde chronologie active.
 
-## Travail restant et portes de r�ception
+## Travail restant et portes de réception
 
-Le [plan de r�alisation](plan-realisation.md) d�taille les lots, d�pendances et
-crit�res d'acceptation d'Admin, d'Engine comme biblioth�que et de NovLearn
+Le [plan de réalisation](plan-realisation.md) détaille les lots, dépendances et
+critères d'acceptation d'Admin, d'Engine comme bibliothèque et de NovLearn
 classique. L'application native est une extension hors chemin critique.
 
-La sauvegarde actuelle contr�le l'enveloppe du brouillon (`draftEnvelope`), sans
-validation math�matique Engine compl�te. C'est un �cart � l'exigence de validation
-avant sauvegarde du CDC (�16), � r�soudre explicitement : ne pas pr�senter
-l'acceptation d'un brouillon incomplet comme conforme � cette exigence ni modifier
-le CDC sans d�cision trac�e.
+La sauvegarde actuelle contrôle l’enveloppe du brouillon (`draftEnvelope`), sans
+validation mathématique Engine complète. C’est un écart à l’exigence de validation
+avant sauvegarde du CDC (§16), à résoudre explicitement : ne pas présenter
+l’acceptation d’un brouillon incomplet comme conforme à cette exigence ni modifier
+le CDC sans décision tracée.
 
-1. Choisir et qualifier l'h�te Engine officiel, puis raccorder le parcours
-   authentifi� : validation, g�n�ration par seed, projection et correction.
-   Conserver d�lais, quotas et protections. Aucune substitution par MathLive ou
-   un �valuateur Admin, ni activation par simple drapeau sur Vercel.
-2. Compl�ter la r�ception sur Staging et l'h�te retenu : sauvegarde, r�ouverture,
-   reconnexion, conflits, r�cup�ration et interactions MathLive. Les �ventuels
-   rapports persist�s et la relecture demandent leur capacit� de signature.
-3. Avant toute extension distante, reprendre la r�conciliation SQL de la cible,
+1. Choisir et qualifier l’hôte Engine officiel, puis raccorder le parcours
+   authentifié : validation, génération par seed, projection et correction.
+   Conserver délais, quotas et protections. Aucune substitution par MathLive ou
+   un évaluateur Admin, ni activation par simple drapeau sur Vercel.
+2. Compléter la réception sur Staging et l’hôte retenu : sauvegarde, réouverture,
+   reconnexion, conflits, récupération et interactions MathLive. Les éventuels
+   rapports persistés et la relecture demandent leur capacité de signature.
+3. Avant toute extension distante, reprendre la réconciliation SQL de la cible,
    les consommateurs historiques, les ACL/RLS et les sauvegardes/restaurations
-   adapt�es. Le **Lot 1A reste incomplet** ; le bundle Staging n'est pas un delta
+   adaptées. Le **Lot 1A reste incomplet** ; le bundle Staging n’est pas un delta
    universel ni une autorisation Production.
-4. Reprendre uniquement les fonctions report�es explicitement retenues : courbes,
-   lecteurs Production minimaux, version cible et publication s�lective. Chacune
-   exige ses pr�requis, permissions et preuves sur la bonne cible.
-5. Autoriser s�par�ment d�ploiement et mise en service, puis ex�cuter la r�ception
-   sur le domaine r�el. Le **CDC complet n'est pas r�ceptionn�**.
+4. Reprendre uniquement les fonctions reportées explicitement retenues : courbes,
+   lecteurs Production minimaux, version cible et publication sélective. Chacune
+   exige ses prérequis, permissions et preuves sur la bonne cible.
+5. Autoriser séparément déploiement et mise en service, puis exécuter la réception
+   sur le domaine réel. Le **CDC complet n’est pas réceptionné**.
 
-Cet ordre d�crit les d�pendances ; il ne d�marre aucun lot ni n'autorise de
-modification de code, de d�p�t voisin, de secret ou d'environnement distant.
-
+Cet ordre décrit les dépendances ; il ne démarre aucun lot ni n’autorise de
+modification de code, de dépôt voisin, de secret ou d’environnement distant.

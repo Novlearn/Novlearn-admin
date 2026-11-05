@@ -1,34 +1,34 @@
 # Authentification, permissions et configuration
 
-Mission Admin-Engine (5 novembre 2026) : le transport HTTPS serveur vers le host
-staging est impl�ment� sur la branche de raccordement, derri�re
+Mission Admin–Engine (5 novembre 2026) : le transport HTTPS serveur vers le host
+staging est implémenté sur la branche de raccordement, derrière
 `ADMIN_ENGINE_ENABLED`. Vercel requiert aussi `ADMIN_ENGINE_URL`,
 `ADMIN_ENGINE_TOKEN` et `ADMIN_ENGINE_ARCHIVE_SHA256`; voir la
-[configuration et le contrat d�taill�s](admin-engine-transport.md). Aucune de
-ces valeurs n'est versionn�e. Le transport reste inactif tant que les variables
-ne sont pas configur�es et que la PR n'est pas d�ploy�e.
+[configuration et le contrat détaillés](admin-engine-transport.md). Aucune de
+ces valeurs n’est versionnée. Le transport reste inactif tant que les variables
+ne sont pas configurées et que la PR n’est pas déployée.
 
-## Contr�le d'acc�s
+## Contrôle d’accès
 
-L'Admin d�ploy� en **Production Vercel** utilise Supabase Auth de la base de
-**pr�production existante**, puis relit le r�le `admin` dans
-`profiles` c�t� serveur pour chaque op�ration prot�g�e. Une session invit�e est
-refus�e. Les claims du navigateur, `user_metadata` et le masquage des boutons ne
-conf�rent aucun droit. Les erreurs Auth ou SQL ferment l'acc�s.
+L’Admin déployé en **Production Vercel** utilise Supabase Auth de la base de
+**préproduction existante**, puis relit le rôle `admin` dans
+`profiles` côté serveur pour chaque opération protégée. Une session invitée est
+refusée. Les claims du navigateur, `user_metadata` et le masquage des boutons ne
+confèrent aucun droit. Les erreurs Auth ou SQL ferment l’accès.
 
-Les contr�les sont dans [authorization.ts](../src/lib/auth/authorization.ts),
+Les contrôles sont dans [authorization.ts](../src/lib/auth/authorization.ts),
 [supabase.ts](../src/lib/auth/supabase.ts) et les routes de
-[src/app/api/admin](../src/app/api/admin). Les mutations exigent l'origine exacte
-de `APP_BASE_URL`, des corps born�s et une session v�rifi�e. Les r�ponses priv�es
+[src/app/api/admin](../src/app/api/admin). Les mutations exigent l’origine exacte
+de `APP_BASE_URL`, des corps bornés et une session vérifiée. Les réponses privées
 utilisent `no-store`. Les cookies sont HttpOnly, SameSite et Secure sous HTTPS.
-Les contr�les SQL/RLS restent n�cessaires en compl�ment des gardes Next.
+Les contrôles SQL/RLS restent nécessaires en complément des gardes Next.
 
 ## Une configuration, trois variables
 
-La configuration locale utilise **un seul fichier `.env` � la racine**, priv�
-et ignor� par Git. Les quatre fichiers d'exemple dispers�s ont �t� supprim�s
-le 30 octobre 2026 � la demande de l'utilisateur. Le mod�le est conserv� ici,
-sans cr�er d'autre fichier de configuration.
+La configuration locale utilise **un seul fichier `.env` à la racine**, privé
+et ignoré par Git. Les quatre fichiers d'exemple dispersés ont été supprimés
+le 30 octobre 2026 à la demande de l'utilisateur. Le modèle est conservé ici,
+sans créer d'autre fichier de configuration.
 
 ```dotenv
 APP_BASE_URL=http://localhost:3000
@@ -36,92 +36,91 @@ NEXT_PUBLIC_SUPABASE_URL=https://tksvbkvfusrnxulpahky.supabase.co
 NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=sb_publishable_replace_me
 ```
 
-Remplacer la cl� d'exemple par celle du projet de pr�production. Sur Vercel, renseigner
-ces m�mes noms dans les variables du projet, avec l'origine HTTPS exacte du site.
-Ne pas transf�rer le `.env` priv� ni le versionner. Une seule source de valeurs
+Remplacer la clé d'exemple par celle du projet de préproduction. Sur Vercel, renseigner
+ces mêmes noms dans les variables du projet, avec l'origine HTTPS exacte du site.
+Ne pas transférer le `.env` privé ni le versionner. Une seule source de valeurs
 par environnement suffit ; pas de fichiers `.env.auth`, `.env.vercel` ou
-`.env.production` suppl�mentaires � maintenir.
+`.env.production` supplémentaires à maintenir.
 
-[config.ts](../src/lib/auth/config.ts) reste l'autorit� sur les valeurs accept�es.
-Le 30 octobre, l'utilisateur a explicitement confirm� le retrait des anciens
+[config.ts](../src/lib/auth/config.ts) reste l'autorité sur les valeurs acceptées.
+Le 30 octobre, l'utilisateur a explicitement confirmé le retrait des anciens
 marqueurs `ADMIN_STAGING_AUTH_ENABLED` et `ADMIN_STAGING_SECURITY_REVIEW` et le
-d�ploiement en Production Vercel sur la base de pr�production. Ils ne sont plus
-lus ni n�cessaires. Une configuration valide rend la connexion disponible ; elle
-n'accorde aucun droit sans session v�rifi�e et r�le Admin.
+déploiement en Production Vercel sur la base de préproduction. Ils ne sont plus
+lus ni nécessaires. Une configuration valide rend la connexion disponible ; elle
+n'accorde aucun droit sans session vérifiée et rôle Admin.
 
 | Variable                               | Fonction                                                             |
 | -------------------------------------- | -------------------------------------------------------------------- |
-| `APP_BASE_URL`                         | Origine exacte de l'Admin, sans chemin ; HTTPS hors localhost        |
-| `NEXT_PUBLIC_SUPABASE_URL`             | Pr�production existante : `https://tksvbkvfusrnxulpahky.supabase.co` |
-| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Cl� publishable de ce m�me projet                                    |
+| `APP_BASE_URL`                         | Origine exacte de l’Admin, sans chemin ; HTTPS hors localhost        |
+| `NEXT_PUBLIC_SUPABASE_URL`             | Préproduction existante : `https://tksvbkvfusrnxulpahky.supabase.co` |
+| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Clé publishable de ce même projet                                    |
 
-Le projet Supabase conserve son nom historique `novlearn-staging` et sa r�f�rence
-technique ; il sert ici de pr�production. Aucun projet ni environnement de base
-suppl�mentaire n'est cr��. Le projet Supabase de production �l�ves reste distinct.
-Le lanceur historique local v�rifie toujours sa qualification SQL avant de
-lancer son banc ; le d�ploiement Vercel n'a pas besoin de ces fichiers priv�s.
+Le projet Supabase conserve son nom historique `novlearn-staging` et sa référence
+technique ; il sert ici de préproduction. Aucun projet ni environnement de base
+supplémentaire n'est créé. Le projet Supabase de production élèves reste distinct.
+Le lanceur historique local vérifie toujours sa qualification SQL avant de
+lancer son banc ; le déploiement Vercel n'a pas besoin de ces fichiers privés.
 
-Le formulaire signale d�sormais une configuration de connexion incompl�te,
-sans pr�tendre qu'une revue de s�curit� a �chou�. Un ancien param�tre
-`?error=disabled` ne maintient plus ce message lorsque le serveur est configur�.
+Le formulaire signale désormais une configuration de connexion incomplète,
+sans prétendre qu'une revue de sécurité a échoué. Un ancien paramètre
+`?error=disabled` ne maintient plus ce message lorsque le serveur est configuré.
 
-La cl� publishable est publique et ne donne pas le r�le Admin. Ne jamais mettre
-de cl� `service_role`, `sb_secret_*`, mot de passe PostgreSQL ou cl� de signature
+La clé publishable est publique et ne donne pas le rôle Admin. Ne jamais mettre
+de clé `service_role`, `sb_secret_*`, mot de passe PostgreSQL ou clé de signature
 dans `NEXT_PUBLIC_*`, le navigateur ou Git. Conserver `.env`, `.local/`, les
-configurations priv�es et les sauvegardes hors publication.
+configurations privées et les sauvegardes hors publication.
 
-## Capacit�s s�par�es
+## Capacités séparées
 
-Mission Admin/Engine : le banc synth�tique `/api/admin/engine/qualification`
-v�rifie session, r�le et origine avant le host et n'accepte qu'un objet vide.
-Il ne d�pend pas du drapeau d'�dition Engine, qui conserve sa garde Vercel.
-Sa page `/admin/engine-qualification` permet la r�ception avec la session Admin.
-Les instantan�s partag�s pr�vus utilisent deux RPC et une table priv�e sur la
+Mission Admin/Engine : le banc synthétique `/api/admin/engine/qualification`
+vérifie session, rôle et origine avant le host et n'accepte qu'un objet vide.
+Il ne dépend pas du drapeau d'édition Engine, qui conserve sa garde Vercel.
+Sa page `/admin/engine-qualification` permet la réception avec la session Admin.
+Les instantanés partagés prévus utilisent deux RPC et une table privée sur la
 base existante : [proposition et limites](mission-admin-engine-reception.md).
-Aucune migration distante ni nouvelle cl� n'est implicite dans le d�ploiement.
+Aucune migration distante ni nouvelle clé n'est implicite dans le déploiement.
 
-| Porte serveur                        | R�le et limite                                                                                                         |
+| Porte serveur                        | Rôle et limite                                                                                                         |
 | ------------------------------------ | ---------------------------------------------------------------------------------------------------------------------- |
-| `ADMIN_ENGINE_ENABLED`               | Active le moteur : local avec son profil qualifi�, Vercel seulement avec les trois param�tres HTTPS valides ci-dessous |
-| `ADMIN_STAGING_LOCAL_ENGINE_ENABLED` | Transport de d�veloppement Staging vers le worker local ; n�cessite les autres pr�requis, limit� � loopback            |
-| `ADMIN_EDITORIAL_REVIEW_ENABLED`     | Relecture, soumise aux re�us courants et aux gardes SQL                                                                |
-| `ADMIN_PUBLICATION_ENABLED`          | Publication, soumise aux identit�s SQL d�di�es, � Engine et aux v�rifications source/cible                             |
+| `ADMIN_ENGINE_ENABLED`               | Active le moteur : local avec son profil qualifié, Vercel seulement avec les trois paramètres HTTPS valides ci-dessous |
+| `ADMIN_STAGING_LOCAL_ENGINE_ENABLED` | Transport de développement Staging vers le worker local ; nécessite les autres prérequis, limité à loopback            |
+| `ADMIN_EDITORIAL_REVIEW_ENABLED`     | Relecture, soumise aux reçus courants et aux gardes SQL                                                                |
+| `ADMIN_PUBLICATION_ENABLED`          | Publication, soumise aux identités SQL dédiées, à Engine et aux vérifications source/cible                             |
 
-Le [profil courant et les d�sactivations](roadmap.md) sont d�crits � un seul
-endroit. Aucun de ces drapeaux ne remplace les pr�requis, la qualification de
-l'h�te ou l'autorisation d'une op�ration. La signature des rapports demande une
-cl� priv�e explicitement provisionn�e ; aucune cl� n'a �t� install�e dans le
-profil Staging document�. Le refus de consignation reste normal dans ce profil.
+Le [profil courant et les désactivations](roadmap.md) sont décrits à un seul
+endroit. Aucun de ces drapeaux ne remplace les prérequis, la qualification de
+l’hôte ou l’autorisation d’une opération. La signature des rapports demande une
+clé privée explicitement provisionnée ; aucune clé n’a été installée dans le
+profil Staging documenté. Le refus de consignation reste normal dans ce profil.
 
 Ne pas ajouter de variables optionnelles vides au `.env` courant. Lorsque la
-publication sera explicitement mise en service, ses param�tres suppl�mentaires
-iront dans ce m�me fichier local ou dans les variables de l'h�bergeur :
+publication sera explicitement mise en service, ses paramètres supplémentaires
+iront dans ce même fichier local ou dans les variables de l'hébergeur :
 `ADMIN_PUBLICATION_ENABLED`, `ADMIN_PUBLICATION_SECURITY_REVIEW`,
 `ADMIN_PUBLICATION_TARGET_PROJECT_REF`, `ADMIN_PUBLICATION_SOURCE_PG_URL`,
 `ADMIN_PUBLICATION_TARGET_PG_URL` et `ADMIN_PUBLICATION_CONFIRMATION_KEY`.
-Les CA �ventuelles sont `ADMIN_PUBLICATION_SOURCE_PG_CA` et
-`ADMIN_PUBLICATION_TARGET_PG_CA`. Ces capacit�s gardent des identit�s et secrets
+Les CA éventuelles sont `ADMIN_PUBLICATION_SOURCE_PG_CA` et
+`ADMIN_PUBLICATION_TARGET_PG_CA`. Ces capacités gardent des identités et secrets
 distincts ; les regrouper dans un fichier ne fusionne pas leurs permissions.
 
-Les variables `ADMIN_LOCAL_*` sont r�serv�es aux bancs de d�veloppement avec
+Les variables `ADMIN_LOCAL_*` sont réservées aux bancs de développement avec
 origines, ports et manifeste SQL attendus. Elles ne permettent pas de transformer
-une fixture en acc�s Production. Les lecteurs statistiques/utilisateurs et de
-version cible actuellement pr�sents sont limit�s � des copies locales.
+une fixture en accès Production. Les lecteurs statistiques/utilisateurs et de
+version cible actuellement présents sont limités à des copies locales.
 
-## Fronti�re Production et r�serves
+## Frontière Production et réserves
 
-Lecture analytique, consultation nominative et publication requi�rent des
-capacit�s distinctes et minimales. Un nom de variable � readonly � ou une cl�
-Supabase privil�gi�e ne garantit pas un acc�s limit�. La publication pr�vue
-utilise des identit�s PostgreSQL source/journal et cible s�par�es, avec TLS et
-permissions contr�l�es ; voir [l'architecture](architecture.md).
+Lecture analytique, consultation nominative et publication requièrent des
+capacités distinctes et minimales. Un nom de variable « readonly » ou une clé
+Supabase privilégiée ne garantit pas un accès limité. La publication prévue
+utilise des identités PostgreSQL source/journal et cible séparées, avec TLS et
+permissions contrôlées ; voir [l’architecture](architecture.md).
 
-Les derniers advisors conserv�s dans la
-[preuve D13](archives/release-vercel-2026-10-21.json) datent du 21 octobre 2026 : z�ro
+Les derniers advisors conservés dans la
+[preuve D13](archives/release-vercel-2026-10-21.json) datent du 21 octobre 2026 : zéro
 erreur, 31 avertissements et sept informations, dont 30 avertissements definer et
-la protection contre les mots de passe divulgu�s d�sactiv�e. Ces r�sultats ne
-sont pas recontr�l�s ici. Revoir fonctions, ACL/RLS, confidentialit� des r�ponses,
-politique MFA et param�tres Auth avant une ouverture plus large. Les correctifs
-SQL locaux ne prouvent pas la s�curit� actuelle de tous les consommateurs de
-l'application �l�ve ni celle de Production.
-
+la protection contre les mots de passe divulgués désactivée. Ces résultats ne
+sont pas recontrôlés ici. Revoir fonctions, ACL/RLS, confidentialité des réponses,
+politique MFA et paramètres Auth avant une ouverture plus large. Les correctifs
+SQL locaux ne prouvent pas la sécurité actuelle de tous les consommateurs de
+l’application élève ni celle de Production.

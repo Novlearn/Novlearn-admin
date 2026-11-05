@@ -118,8 +118,8 @@ beforeEach(() => {
     error: null,
   }));
 });
-describe('aper�u serveur prot�g�', () => {
-  it('refuse Vercel avant de g�n�rer un aper�u m�me si le drapeau Engine est actif', async () => {
+describe('aperçu serveur protégé', () => {
+  it('refuse Vercel avant de générer un aperçu même si le drapeau Engine est actif', async () => {
     vi.stubEnv('VERCEL', '1');
     try {
       expect((await POST(request())).status).toBe(503);
@@ -148,12 +148,12 @@ describe('aper�u serveur prot�g�', () => {
       isAnonymous: false,
     });
   };
-  it('ne consigne rien sans signature serveur configur�e', async () => {
+  it('ne consigne rien sans signature serveur configurée', async () => {
     expect((await POST(savedRequest())).status).toBe(503);
     expect(fake.load).not.toHaveBeenCalled();
     expect(fake.rpc).not.toHaveBeenCalled();
   });
-  it('relit la d�finition DB et signe un vrai r�sultat serveur plut�t qu'un r�sultat du navigateur', async () => {
+  it('relit la définition DB et signe un vrai résultat serveur plutôt qu’un résultat du navigateur', async () => {
     signer();
     const response = await POST(savedRequest());
     expect(response.status).toBe(200);
@@ -179,7 +179,7 @@ describe('aper�u serveur prot�g�', () => {
     expect(output).not.toContain('42'.repeat(32));
     expect(fake.auth.getProfileRole).toHaveBeenCalledTimes(2);
   });
-  it('refuse une r�vision modifi�e avant le calcul', async () => {
+  it('refuse une révision modifiée avant le calcul', async () => {
     signer();
     fake.load.mockResolvedValue({
       data: {
@@ -194,7 +194,7 @@ describe('aper�u serveur prot�g�', () => {
     expect(fake.test).not.toHaveBeenCalled();
     expect(fake.rpc).not.toHaveBeenCalled();
   });
-  it('ne signe pas apr�s une r�vocation survenue pendant les calculs', async () => {
+  it('ne signe pas après une révocation survenue pendant les calculs', async () => {
     signer();
     fake.auth.getProfileRole
       .mockResolvedValueOnce('admin')
@@ -203,7 +203,7 @@ describe('aper�u serveur prot�g�', () => {
     expect(fake.rpc).not.toHaveBeenCalled();
   });
   it.each(['40001', 'PT409'])(
-    'ne d�clare aucun enregistrement apr�s conflit SQL %s ou r�sultat non confirm�',
+    'ne déclare aucun enregistrement après conflit SQL %s ou résultat non confirmé',
     async (code) => {
       signer();
       fake.rpc.mockResolvedValueOnce({ data: null, error: { code } });
@@ -215,7 +215,7 @@ describe('aper�u serveur prot�g�', () => {
       expect((await POST(savedRequest())).status).toBe(503);
     },
   );
-  it('refuse d�finition, acteur et verdict client dans la requ�te de r�vision', async () => {
+  it('refuse définition, acteur et verdict client dans la requête de révision', async () => {
     signer();
     for (const extra of [
       { definition: newDraft('Forged') },
@@ -240,7 +240,7 @@ describe('aper�u serveur prot�g�', () => {
     expect(fake.rpc).not.toHaveBeenCalled();
   });
   it.each(['NEXT_PUBLIC_SUPABASE_URL', 'ADMIN_ENGINE_ENABLED'])(
-    'reste ferm� sans %s avant tout calcul',
+    'reste fermé sans %s avant tout calcul',
     async (flag) => {
       vi.stubEnv(flag, 'false');
       expect((await POST(request())).status).toBe(503);
@@ -249,7 +249,7 @@ describe('aper�u serveur prot�g�', () => {
     },
   );
   it.each([null, { id: 'guest', isAnonymous: true }])(
-    'refuse une identit� absente ou invit�e',
+    'refuse une identité absente ou invitée',
     async (user) => {
       fake.auth.getVerifiedUser.mockResolvedValue(user);
       expect([401, 403]).toContain((await POST(request())).status);
@@ -257,7 +257,7 @@ describe('aper�u serveur prot�g�', () => {
     },
   );
   it.each([null, 'user', 'editor'])(
-    'refuse le r�le %s et les donn�es priv�es',
+    'refuse le rôle %s et les données privées',
     async (role) => {
       fake.auth.getProfileRole.mockResolvedValue(role);
       expect(
@@ -267,13 +267,13 @@ describe('aper�u serveur prot�g�', () => {
       expect(fake.inspect).not.toHaveBeenCalled();
     },
   );
-  it('refuse une origine �trang�re avant Auth', async () => {
+  it('refuse une origine étrangère avant Auth', async () => {
     expect((await POST(request(undefined, 'https://evil.test'))).status).toBe(
       403,
     );
     expect(fake.create).not.toHaveBeenCalled();
   });
-  it('refuse du texte, JSON malform� et corps r�ellement trop volumineux', async () => {
+  it('refuse du texte, JSON malformé et corps réellement trop volumineux', async () => {
     expect((await POST(request('{}', undefined, 'text/plain'))).status).toBe(
       415,
     );
@@ -282,7 +282,7 @@ describe('aper�u serveur prot�g�', () => {
     expect(fake.acquire).not.toHaveBeenCalled();
   });
   it.each(['gradeAnswer', '__proto__', 'constructor', 'toString'])(
-    'refuse une op�ration non d�clar�e %s',
+    'refuse une opération non déclarée %s',
     async (action) => {
       expect(
         (
@@ -326,7 +326,7 @@ describe('aper�u serveur prot�g�', () => {
       ).toBe(400);
     },
   );
-  it('borne les tests et refuse seeds dupliqu�es, cas ind�termin�s ou champs inconnus', async () => {
+  it('borne les tests et refuse seeds dupliquées, cas indéterminés ou champs inconnus', async () => {
     for (const [seeds, cases] of [
       [[1, 1], []],
       [Array.from({ length: 6 }, (_, i) => i), []],
@@ -374,7 +374,7 @@ describe('aper�u serveur prot�g�', () => {
       ).toBe(400);
     expect(fake.test).not.toHaveBeenCalled();
   });
-  it('rattache g�n�ration, inspection et correction au propri�taire Auth frais, sans choisir le snapshot', async () => {
+  it('rattache génération, inspection et correction au propriétaire Auth frais, sans choisir le snapshot', async () => {
     expect((await POST(request())).status).toBe(200);
     expect(fake.generate).toHaveBeenCalledWith(
       'alice',
@@ -407,7 +407,7 @@ describe('aper�u serveur prot�g�', () => {
     );
     expect(fake.release).toHaveBeenCalledTimes(3);
   });
-  it('relit le r�le � chaque op�ration, y compris apr�s g�n�ration', async () => {
+  it('relit le rôle à chaque opération, y compris après génération', async () => {
     await POST(request());
     fake.auth.getProfileRole.mockResolvedValue('user');
     expect(
@@ -415,7 +415,7 @@ describe('aper�u serveur prot�g�', () => {
     ).toBe(403);
     expect(fake.inspect).not.toHaveBeenCalled();
   });
-  it('masque les erreurs techniques et lib�re la place apr�s un �chec', async () => {
+  it('masque les erreurs techniques et libère la place après un échec', async () => {
     fake.generate.mockRejectedValue(new Error('secret runtime path'));
     const response = await POST(request());
     expect(response.status).toBe(500);
@@ -425,4 +425,3 @@ describe('aper�u serveur prot�g�', () => {
     expect(fake.release).toHaveBeenCalledOnce();
   });
 });
-

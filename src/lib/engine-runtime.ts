@@ -78,13 +78,18 @@ export async function closeEngineRuntime() {
 }
 
 export function engineFailure(error: unknown) {
-  const reason =
-    error instanceof EngineRuntimeError ? error.reason : 'unavailable';
+  if (!(error instanceof EngineRuntimeError))
+    return {
+      status: 500,
+      code: 'engine_internal',
+      message: 'Erreur interne pendant le traitement Engine.',
+    } as const;
+  const reason = error.reason;
   const common = {
     authentication: {
       status: 502,
       code: 'engine_authentication',
-      message: "L'authentification du host Engine a �t� refus�e.",
+      message: "L'authentification du host Engine a été refusée.",
     },
     'archive-mismatch': {
       status: 502,
@@ -95,17 +100,17 @@ export function engineFailure(error: unknown) {
       status: 502,
       code: 'engine_contract_mismatch',
       message:
-        'La r�ponse du host Engine est incompatible avec le contrat attendu.',
+        'La réponse du host Engine est incompatible avec le contrat attendu.',
     },
     network: {
       status: 503,
       code: 'engine_network',
-      message: "Le host Engine est injoignable depuis l'h�bergement Admin.",
+      message: "Le host Engine est injoignable depuis l'hébergement Admin.",
     },
     timeout: {
       status: 504,
       code: 'engine_timeout',
-      message: "Le host Engine n'a pas r�pondu dans le d�lai pr�vu.",
+      message: "Le host Engine n'a pas répondu dans le délai prévu.",
     },
   } as const;
   if (reason in common) return common[reason as keyof typeof common];
@@ -113,20 +118,25 @@ export function engineFailure(error: unknown) {
     return {
       status: 503,
       code: 'engine_not_configured',
-      message: "Le transport Engine serveur n'est pas configur�.",
+      message: "Le transport Engine serveur n'est pas configuré.",
+    };
+  if (reason === 'busy')
+    return {
+      status: 429,
+      code: 'engine_busy',
+      message: 'Engine est occupé. Réessayez dans un instant.',
     };
   if (reason === 'invalid-request' || reason === 'protocol-error')
     return {
       status: 502,
       code: 'engine_contract_mismatch',
       message:
-        'La r�ponse du host Engine est incompatible avec le contrat attendu.',
+        'La réponse du host Engine est incompatible avec le contrat attendu.',
     };
   return {
     status: 503,
     code: 'engine_unavailable',
     message:
-      'Engine est temporairement indisponible. R�essayez dans un instant.',
+      'Engine est temporairement indisponible. Réessayez dans un instant.',
   };
 }
-

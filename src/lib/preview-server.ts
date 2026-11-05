@@ -83,13 +83,13 @@ export class PreviewStore {
     this.expire();
     const bytes = Buffer.byteLength(JSON.stringify(official));
     if (bytes > 524288)
-      throw new PreviewError(413, 'Instance trop volumineuse pour cet aper�u.');
+      throw new PreviewError(413, 'Instance trop volumineuse pour cet aperçu.');
     const own = [...this.entries].filter(([, s]) => s.owner === owner);
     if (own.length >= 2) this.entries.delete(own[0][0]);
     if (this.entries.size >= 32)
       throw new PreviewError(
         429,
-        'Capacit� des aper�us atteinte. R�essayez apr�s expiration.',
+        'Capacité des aperçus atteinte. Réessayez après expiration.',
       );
     const previewId = randomUUID();
     const snapshot = {
@@ -109,7 +109,7 @@ export class PreviewStore {
     if (!snapshot || snapshot.owner !== owner)
       throw new PreviewError(
         410,
-        'Aper�u expir� ou indisponible. G�n�rez une nouvelle instance.',
+        'Aperçu expiré ou indisponible. Générez une nouvelle instance.',
       );
     return structuredClone(snapshot);
   }
@@ -120,7 +120,7 @@ export function acquirePreviewJob(owner: string) {
   if (active.has(owner) || active.size >= 2)
     throw new PreviewError(
       429,
-      'Un calcul est d�j� en cours. R�essayez apr�s sa fin.',
+      'Un calcul est déjà en cours. Réessayez après sa fin.',
     );
   active.add(owner);
   return () => active.delete(owner);
@@ -204,7 +204,7 @@ async function instantiate(
   if (!result.ok)
     throw new PreviewError(
       422,
-      'La g�n�ration a �chou�.',
+      'La génération a échoué.',
       diagnostics(result.diagnostics),
     );
   const official = result.value;
@@ -348,7 +348,7 @@ export async function gradePreview(
 ) {
   const { official } = await repository.get(owner, previewId);
   if (!questions(official).some((q) => q.id === questionId))
-    throw new PreviewError(400, 'Question inconnue pour cet aper�u.');
+    throw new PreviewError(400, 'Question inconnue pour cet aperçu.');
   return grade(official, questionId, answer, signal);
 }
 export async function testPreview(
@@ -382,12 +382,12 @@ export async function testPreview(
           path: '/elements',
           code: 'no-question',
           message:
-            'Aucune question � corriger : la couverture des r�ponses reste � �tablir.',
+            'Aucune question à corriger : la couverture des réponses reste à établir.',
         });
       if (qs.length > 8)
         throw new PreviewError(
           422,
-          'Le banc automatique est limit� � huit questions par requ�te.',
+          'Le banc automatique est limité à huit questions par requête.',
         );
       const check = async (
         questionId: string,
@@ -443,7 +443,7 @@ export async function testPreview(
             path: '/cases',
             questionId: c.questionId,
             code: 'unknown-question',
-            message: 'Le cas de test r�f�rence une question absente.',
+            message: 'Le cas de test référence une question absente.',
           });
       report.passed =
         report.reproducible &&
@@ -465,4 +465,3 @@ export async function testPreview(
     seeds: reports,
   };
 }
-
