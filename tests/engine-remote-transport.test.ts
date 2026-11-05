@@ -9,9 +9,9 @@ import {
 const digest = 'a'.repeat(64);
 const env = () => ({
   VERCEL: '1',
-  ADMIN_ENGINE_URL: 'https://staging.novlearn.fr/run',
-  ADMIN_ENGINE_TOKEN: 'secret-token-material-which-is-not-short',
-  ADMIN_ENGINE_ARCHIVE_SHA256: digest,
+  ENGINE_URL: 'https://staging.novlearn.fr/run',
+  ENGINE_TOKEN: 'secret-token-material-which-is-not-short',
+  ENGINE_ARTIFACT_SHA256: digest,
 });
 const response = (body: unknown, status = 200, archive = digest) =>
   Response.json(body, {
@@ -35,18 +35,18 @@ describe('transport HTTPS serveur vers Engine', () => {
       url: 'https://staging.novlearn.fr/run',
     });
     for (const change of [
-      { ADMIN_ENGINE_URL: 'http://127.0.0.1:3151/run' },
-      { ADMIN_ENGINE_URL: 'https://staging.novlearn.fr/other' },
-      { ADMIN_ENGINE_TOKEN: 'short' },
-      { ADMIN_ENGINE_ARCHIVE_SHA256: 'not-a-sha' },
+      { ENGINE_URL: 'http://127.0.0.1:3151/run' },
+      { ENGINE_URL: 'https://staging.novlearn.fr/other' },
+      { ENGINE_TOKEN: 'short' },
+      { ENGINE_ARTIFACT_SHA256: 'not-a-sha' },
     ])
       expect(readRemoteEngineConfiguration({ ...env(), ...change })).toBeNull();
   });
 
   it('envoie exactement la requête protocole 1 et accepte la réponse réelle HostResult sans protocolVersion', async () => {
-    vi.stubEnv('ADMIN_ENGINE_URL', env().ADMIN_ENGINE_URL);
-    vi.stubEnv('ADMIN_ENGINE_TOKEN', env().ADMIN_ENGINE_TOKEN);
-    vi.stubEnv('ADMIN_ENGINE_ARCHIVE_SHA256', digest);
+    vi.stubEnv('ENGINE_URL', env().ENGINE_URL);
+    vi.stubEnv('ENGINE_TOKEN', env().ENGINE_TOKEN);
+    vi.stubEnv('ENGINE_ARTIFACT_SHA256', digest);
     const fetch = vi.fn(
       async (_url: string | URL | Request, init?: RequestInit) => {
         const sent = JSON.parse(String(init?.body));
@@ -62,7 +62,7 @@ describe('transport HTTPS serveur vers Engine', () => {
           payload: { definition: { kind: 'composed' } },
         });
         expect(init?.headers).toMatchObject({
-          authorization: `Bearer ${env().ADMIN_ENGINE_TOKEN}`,
+          authorization: `Bearer ${env().ENGINE_TOKEN}`,
           'content-type': 'application/json',
           'x-engine-archive-sha256': digest,
         });
@@ -85,7 +85,7 @@ describe('transport HTTPS serveur vers Engine', () => {
       value: { ok: false, diagnostics: [{ code: 'value' }] },
     });
     expect(fetch).toHaveBeenCalledWith(
-      env().ADMIN_ENGINE_URL,
+      env().ENGINE_URL,
       expect.objectContaining({ redirect: 'error', cache: 'no-store' }),
     );
   });
@@ -102,9 +102,9 @@ describe('transport HTTPS serveur vers Engine', () => {
   ] as const)(
     'maps HTTP %i to %s without a success result',
     async (status, reason) => {
-      vi.stubEnv('ADMIN_ENGINE_URL', env().ADMIN_ENGINE_URL);
-      vi.stubEnv('ADMIN_ENGINE_TOKEN', env().ADMIN_ENGINE_TOKEN);
-      vi.stubEnv('ADMIN_ENGINE_ARCHIVE_SHA256', digest);
+      vi.stubEnv('ENGINE_URL', env().ENGINE_URL);
+      vi.stubEnv('ENGINE_TOKEN', env().ENGINE_TOKEN);
+      vi.stubEnv('ENGINE_ARTIFACT_SHA256', digest);
       vi.stubGlobal(
         'fetch',
         vi.fn(async () => response({}, status)),
@@ -118,9 +118,9 @@ describe('transport HTTPS serveur vers Engine', () => {
   );
 
   it('refuse les réponses d’une autre archive et les réponses au contrat inattendu', async () => {
-    vi.stubEnv('ADMIN_ENGINE_URL', env().ADMIN_ENGINE_URL);
-    vi.stubEnv('ADMIN_ENGINE_TOKEN', env().ADMIN_ENGINE_TOKEN);
-    vi.stubEnv('ADMIN_ENGINE_ARCHIVE_SHA256', digest);
+    vi.stubEnv('ENGINE_URL', env().ENGINE_URL);
+    vi.stubEnv('ENGINE_TOKEN', env().ENGINE_TOKEN);
+    vi.stubEnv('ENGINE_ARTIFACT_SHA256', digest);
     vi.stubGlobal(
       'fetch',
       vi.fn(async () => response({}, 200, 'b'.repeat(64))),
@@ -142,9 +142,9 @@ describe('transport HTTPS serveur vers Engine', () => {
   });
 
   it('distingue le réseau et les délais sans exposer token ou message transport', async () => {
-    vi.stubEnv('ADMIN_ENGINE_URL', env().ADMIN_ENGINE_URL);
-    vi.stubEnv('ADMIN_ENGINE_TOKEN', env().ADMIN_ENGINE_TOKEN);
-    vi.stubEnv('ADMIN_ENGINE_ARCHIVE_SHA256', digest);
+    vi.stubEnv('ENGINE_URL', env().ENGINE_URL);
+    vi.stubEnv('ENGINE_TOKEN', env().ENGINE_TOKEN);
+    vi.stubEnv('ENGINE_ARTIFACT_SHA256', digest);
     vi.stubGlobal(
       'fetch',
       vi.fn(async () => {
@@ -156,7 +156,7 @@ describe('transport HTTPS serveur vers Engine', () => {
     } catch (error) {
       expect(error).toBeInstanceOf(RemoteEngineError);
       expect(error).toMatchObject({ reason: 'network' });
-      expect(String(error)).not.toContain(env().ADMIN_ENGINE_TOKEN);
+      expect(String(error)).not.toContain(env().ENGINE_TOKEN);
       expect(String(error)).not.toContain('sensitive fetch details');
     }
   });

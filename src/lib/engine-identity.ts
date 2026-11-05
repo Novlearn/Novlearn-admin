@@ -14,9 +14,9 @@ export const certifiedEngineIdentity = Object.freeze({
 export function hasRemoteEngineConfiguration(
   env: Record<string, string | undefined>,
 ) {
-  const endpoint = env.ADMIN_ENGINE_URL;
-  const token = env.ADMIN_ENGINE_TOKEN;
-  const archiveSha256 = env.ADMIN_ENGINE_ARCHIVE_SHA256;
+  const endpoint = env.ENGINE_URL;
+  const token = env.ENGINE_TOKEN;
+  const archiveSha256 = env.ENGINE_ARTIFACT_SHA256;
   if (!endpoint || !token || !archiveSha256) return false;
   try {
     const url = new URL(endpoint);

@@ -44,6 +44,18 @@ environnement sur `https://staging.novlearn.fr/run` a échoué sur DNS
 le déploiement staging Engine et comparé à son en-tête de réponse ; le hash du
 package Admin 0.1.8 n’est pas substituable.
 
+`ENGINE_ARTIFACT_SHA256` n'est pas un secret : c'est l'empreinte du contenu de
+l'archive Engine exacte que l'on attend du host. Le host exige cette valeur sur
+chaque requête, la compare à son archive active et renvoie `409 archive-mismatch`
+si elle diffère. Le contrôle évite qu'Admin utilise silencieusement une autre
+version que celle attendue. L'empreinte change normalement quand l'archive est
+reconstruite. Le contrat Engine actuel n'expose pas de route de découverte de
+cette empreinte (`/healthz` ne la renvoie pas) : Admin ne peut donc pas suivre
+automatiquement une nouvelle archive tout en conservant ce contrôle. Une mise à
+jour sans changement de configuration nécessiterait une évolution du contrat
+Engine, par exemple une identité authentifiée et récupérable par Admin, ou une
+politique explicite d'acceptation de toute archive derrière l'URL staging.
+
 ## Configuration serveur
 
 L’Admin Vercel utilise la base de préproduction existante. Dans l’environnement
@@ -52,13 +64,15 @@ variables uniquement côté serveur :
 
 ```dotenv
 ADMIN_ENGINE_ENABLED=true
-ADMIN_ENGINE_URL=https://staging.novlearn.fr/run
-ADMIN_ENGINE_TOKEN=<token Engine staging, au moins 32 octets UTF-8>
-ADMIN_ENGINE_ARCHIVE_SHA256=<SHA-256 de l’archive Engine servie en staging>
+ENGINE_URL=https://staging.novlearn.fr/run
+ENGINE_TOKEN=<token Engine staging, au moins 32 octets UTF-8>
+ENGINE_ARTIFACT_SHA256=<SHA-256 de l’archive Engine servie en staging>
 ```
 
-`ADMIN_ENGINE_ARCHIVE_SHA256` est une empreinte publique, mais elle doit être
-provisionnée depuis l’asset de release Engine confirmé. Ne pas copier le token
+`ENGINE_TOKEN` réutilise le nom du token déjà présent dans l'environnement Vercel.
+`ENGINE_ARTIFACT_SHA256` est une empreinte publique, pas un secret ; elle doit
+être provisionnée depuis l'asset de release Engine confirmé et mise à jour si
+l'archive déployée change. Ne pas copier le token
 dans `NEXT_PUBLIC_*`, le client, les logs ou Git. Les déploiements Preview ne
 doivent recevoir ces variables que s’ils sont eux-mêmes protégés et destinés à
 utiliser la préproduction. Les tests locaux distants peuvent utiliser le même

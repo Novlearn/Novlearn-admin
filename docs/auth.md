@@ -2,8 +2,8 @@
 
 Mission Admin–Engine (5 novembre 2026) : le transport HTTPS serveur vers le host
 staging est implémenté sur la branche de raccordement, derrière
-`ADMIN_ENGINE_ENABLED`. Vercel requiert aussi `ADMIN_ENGINE_URL`,
-`ADMIN_ENGINE_TOKEN` et `ADMIN_ENGINE_ARCHIVE_SHA256`; voir la
+`ADMIN_ENGINE_ENABLED`. Vercel requiert aussi `ENGINE_URL`,
+`ENGINE_TOKEN` et `ENGINE_ARTIFACT_SHA256`; voir la
 [configuration et le contrat détaillés](admin-engine-transport.md). Aucune de
 ces valeurs n’est versionnée. Le transport reste inactif tant que les variables
 ne sont pas configurées et que la PR n’est pas déployée.

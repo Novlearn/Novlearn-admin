@@ -35,21 +35,21 @@ describe('profil Engine explicite', () => {
     const remote = {
       VERCEL: '1',
       ADMIN_ENGINE_ENABLED: 'true',
-      ADMIN_ENGINE_URL: 'https://staging.novlearn.fr/run',
-      ADMIN_ENGINE_TOKEN: 'private-token-value-long-enough-for-the-host',
-      ADMIN_ENGINE_ARCHIVE_SHA256: 'a'.repeat(64),
+      ENGINE_URL: 'https://staging.novlearn.fr/run',
+      ENGINE_TOKEN: 'private-token-value-long-enough-for-the-host',
+      ENGINE_ARTIFACT_SHA256: 'a'.repeat(64),
     };
     expect(isEngineEnabled(remote)).toBe(true);
     expect(
       isEngineEnabled({
         ...remote,
-        ADMIN_ENGINE_URL: 'http://127.0.0.1:3151/run',
+        ENGINE_URL: 'http://127.0.0.1:3151/run',
       }),
     ).toBe(false);
     expect(
-      isEngineEnabled({ ...remote, ADMIN_ENGINE_ARCHIVE_SHA256: '' }),
+      isEngineEnabled({ ...remote, ENGINE_ARTIFACT_SHA256: '' }),
     ).toBe(false);
-    expect(isEngineEnabled({ ...remote, ADMIN_ENGINE_TOKEN: 'short' })).toBe(
+    expect(isEngineEnabled({ ...remote, ENGINE_TOKEN: 'short' })).toBe(
       false,
     );
   });
