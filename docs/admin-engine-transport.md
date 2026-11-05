@@ -75,7 +75,8 @@ du navigateur ne contient que les routes Admin.
 Les erreurs de d�finition et de g�n�ration restent des diagnostics m�tier
 Engine. Les erreurs de transport sont diff�renci�es : refus d'authentification,
 empreinte d'archive divergente, incompatibilit� de contrat, panne r�seau,
-timeout, saturation ou indisponibilit�. Les d�tails internes et le token ne sont
+timeout, saturation ou indisponibilit�. Une erreur inattendue d'Admin re�oit un
+statut interne distinct. Les d�tails internes et le token ne sont
 pas renvoy�s au navigateur. Le timeout HTTP c�t� Admin est de 10 secondes ; le
 host Engine garde ses propres limites et quotas.
 
@@ -85,6 +86,14 @@ Les tests simul�s du transport v�rifient payloads, en-t�tes, taille, liais
 `requestId`, empreinte, erreurs HTTP et absence de repli. Les tests unitaires des
 routes conservent les gardes de session, r�le et origine. Ils ne constituent pas
 un appel au serveur staging.
+
+Le contr�le complet local a ex�cut� la v�rification d'int�grit� de l'archive,
+1?591 tests, TypeScript et ESLint. Le lint signale un avertissement existant dans
+`tests/browser/catalogue.tsx`. Le formatage des fichiers modifi�s passe ; le
+contr�le global reste bloqu� par neuf fichiers pr�existants d'archives,
+documentation Engine et manifestes. Le build s'arr�te sur `EPERM` en cr�ant
+`.next/static/chunks/app/admin/statistics/pedagogy`. Le smoke de build n'a donc
+pas �t� ex�cut�.
 
 Un test direct depuis le poste de travail et un code HTTP de route ne suffisent
 pas � prouver l'acc�s depuis Vercel. La r�ception r�elle exige une configuration

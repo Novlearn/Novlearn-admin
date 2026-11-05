@@ -5,7 +5,11 @@ vi.mock('novlearn-exercise-engine/node-host', () => ({
   createNodeHost: fake.create,
 }));
 import { isEngineEnabled } from '@/lib/engine-identity';
-import { runEngine } from '@/lib/engine-runtime';
+import {
+  engineFailure,
+  EngineRuntimeError,
+  runEngine,
+} from '@/lib/engine-runtime';
 
 describe('profil Engine explicite', () => {
   it('demande une activation explicite hors Vercel', () => {
@@ -48,6 +52,20 @@ describe('profil Engine explicite', () => {
     expect(isEngineEnabled({ ...remote, ADMIN_ENGINE_TOKEN: 'short' })).toBe(
       false,
     );
+  });
+  it('distingue surcharge, contrat distant et erreur interne', () => {
+    expect(engineFailure(new EngineRuntimeError('busy'))).toMatchObject({
+      status: 429,
+      code: 'engine_busy',
+    });
+    expect(
+      engineFailure(new EngineRuntimeError('contract-mismatch')),
+    ).toMatchObject({ status: 502, code: 'engine_contract_mismatch' });
+    expect(engineFailure(new Error('private implementation detail'))).toEqual({
+      status: 500,
+      code: 'engine_internal',
+      message: 'Erreur interne pendant le traitement Engine.',
+    });
   });
 });
 

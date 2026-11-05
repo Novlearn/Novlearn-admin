@@ -8,7 +8,7 @@ import type {
   PublicInstance,
   CorrectionResult,
 } from 'novlearn-exercise-engine';
-import { runEngine } from './engine-runtime';
+import { EngineRuntimeError, runEngine } from './engine-runtime';
 import type {
   PreviewCase,
   PreviewDetails,
@@ -83,13 +83,13 @@ export class PreviewStore {
     this.expire();
     const bytes = Buffer.byteLength(JSON.stringify(official));
     if (bytes > 524288)
-      throw new PreviewError(413, 'Instance trop volumineuse pour cet aperçu.');
+      throw new PreviewError(413, 'Instance trop volumineuse pour cet aper�u.');
     const own = [...this.entries].filter(([, s]) => s.owner === owner);
     if (own.length >= 2) this.entries.delete(own[0][0]);
     if (this.entries.size >= 32)
       throw new PreviewError(
         429,
-        'Capacité des aperçus atteinte. Réessayez après expiration.',
+        'Capacit� des aper�us atteinte. R�essayez apr�s expiration.',
       );
     const previewId = randomUUID();
     const snapshot = {
@@ -109,7 +109,7 @@ export class PreviewStore {
     if (!snapshot || snapshot.owner !== owner)
       throw new PreviewError(
         410,
-        'Aperçu expiré ou indisponible. Générez une nouvelle instance.',
+        'Aper�u expir� ou indisponible. G�n�rez une nouvelle instance.',
       );
     return structuredClone(snapshot);
   }
@@ -120,7 +120,7 @@ export function acquirePreviewJob(owner: string) {
   if (active.has(owner) || active.size >= 2)
     throw new PreviewError(
       429,
-      'Un calcul est déjà en cours. Réessayez après sa fin.',
+      'Un calcul est d�j� en cours. R�essayez apr�s sa fin.',
     );
   active.add(owner);
   return () => active.delete(owner);
@@ -184,7 +184,7 @@ function diagnostics(v: unknown): PreviewDiagnostic[] {
         typeof d.message !== 'string',
     )
   )
-    throw new Error('Engine diagnostics protocol');
+    throw new EngineRuntimeError('contract-mismatch');
   return v as PreviewDiagnostic[];
 }
 async function instantiate(
@@ -200,11 +200,11 @@ async function instantiate(
     signal,
   );
   if (!object(result) || typeof result.ok !== 'boolean')
-    throw new Error('Engine instantiation protocol');
+    throw new EngineRuntimeError('contract-mismatch');
   if (!result.ok)
     throw new PreviewError(
       422,
-      'La génération a échoué.',
+      'La g�n�ration a �chou�.',
       diagnostics(result.diagnostics),
     );
   const official = result.value;
@@ -216,7 +216,7 @@ async function instantiate(
     !Array.isArray(official.elements) ||
     !object(official.generation)
   )
-    throw new Error('Engine instance protocol');
+    throw new EngineRuntimeError('contract-mismatch');
   return official as unknown as ExerciseInstance;
 }
 async function project(official: ExerciseInstance, signal: AbortSignal) {
@@ -229,7 +229,7 @@ async function project(official: ExerciseInstance, signal: AbortSignal) {
     !isSafePublicProjection(value) ||
     value.instanceId !== official.instanceId
   )
-    throw new Error('Engine public projection protocol');
+    throw new EngineRuntimeError('contract-mismatch');
   return value;
 }
 const questions = (official: ExerciseInstance) =>
@@ -275,7 +275,7 @@ async function grade(
     ) ||
     typeof result.code !== 'string'
   )
-    throw new Error('Engine correction protocol');
+    throw new EngineRuntimeError('contract-mismatch');
   const fields = [
     'schemaVersion',
     'instanceId',
@@ -289,7 +289,7 @@ async function grade(
     'code',
   ];
   if (fields.slice(4).some((k) => typeof result[k] !== 'string'))
-    throw new Error('Engine correction fields');
+    throw new EngineRuntimeError('contract-mismatch');
   return Object.fromEntries(
     fields.map((k) => [k, result[k]]),
   ) as unknown as CorrectionResult;
@@ -348,7 +348,7 @@ export async function gradePreview(
 ) {
   const { official } = await repository.get(owner, previewId);
   if (!questions(official).some((q) => q.id === questionId))
-    throw new PreviewError(400, 'Question inconnue pour cet aperçu.');
+    throw new PreviewError(400, 'Question inconnue pour cet aper�u.');
   return grade(official, questionId, answer, signal);
 }
 export async function testPreview(
@@ -382,12 +382,12 @@ export async function testPreview(
           path: '/elements',
           code: 'no-question',
           message:
-            'Aucune question à corriger : la couverture des réponses reste à établir.',
+            'Aucune question � corriger : la couverture des r�ponses reste � �tablir.',
         });
       if (qs.length > 8)
         throw new PreviewError(
           422,
-          'Le banc automatique est limité à huit questions par requête.',
+          'Le banc automatique est limit� � huit questions par requ�te.',
         );
       const check = async (
         questionId: string,
@@ -443,7 +443,7 @@ export async function testPreview(
             path: '/cases',
             questionId: c.questionId,
             code: 'unknown-question',
-            message: 'Le cas de test référence une question absente.',
+            message: 'Le cas de test r�f�rence une question absente.',
           });
       report.passed =
         report.reproducible &&
@@ -465,3 +465,4 @@ export async function testPreview(
     seeds: reports,
   };
 }
+

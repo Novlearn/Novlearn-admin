@@ -4,8 +4,10 @@
 Creator existantes (validation, aper�u, tests de correction) sont reli�es � un
 transport serveur HTTPS strict vers `https://staging.novlearn.fr/run` lorsque
 Admin est sur Vercel. Package Admin 0.1.8 conserv� ; contrat host v�rifi� contre
-le code Engine 0.2.1. Les tests simul�s et contr�les seront consign�s dans la
-PR. L'acc�s r�el depuis Vercel, la version de l'image servie et la r�ception
+le code Engine 0.2.1. Le contr�le complet local passe sur l'int�grit� Engine, 1?591 tests,
+TypeScript et ESLint (un avertissement historique). Le formatage des fichiers
+modifi�s passe ; le contr�le global reste bloqu� par neuf fichiers historiques.
+Le build �choue sur `EPERM` lors de la cr�ation d'un dossier `.next`. L'acc�s r�el depuis Vercel, la version de l'image servie et la r�ception
 navigateur restent � �tablir ; DNS depuis l'environnement courant renvoie
 `ENOTFOUND`. Aucun d�ploiement n'est d�clench�. Voir
 [transport Admin-Engine](admin-engine-transport.md).
