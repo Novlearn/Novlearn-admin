@@ -15,7 +15,7 @@ même numéro de version.
 
 Le [manifeste](engine-release.json) fixe l'inventaire complet des 169 fichiers,
 les exports et les identités du package/pipeline. Le vérificateur compare
-désormais tous les fichiers installés. Le [contrat de distribution](../docs/engine-library.md)
+désormais tous les fichiers installés. Le [contrat de distribution](../docs/engine/engine-library.md)
 décrit l'API et le consommateur autonome, sans reconstruire l'archive existante.
 
 L’archive 0.1.8 poursuit les releases 0.1.x et ajoute un échantillonnage de
@@ -26,7 +26,7 @@ releases 0.1.0 et 0.1.1 et leurs manifestes historiques restent disponibles :
 [0.1.0](engine-release-0.1.0.json) et [0.1.1](engine-release-0.1.1.json).
 Le [manifeste 0.1.1](engine-release-0.1.1.json) fixe la provenance du correctif.
 
-Les [preuves de qualification](../docs/verification.md) distinguent l’ancien
+Les [preuves de qualification](../docs/guides/verification.md) distinguent l’ancien
 artefact `650128cd…9190290`, l’adoption de cette archive et le travail 0.2.0 non
 adopté. La qualification porte sur le profil Linux borné ; elle ne rend pas Engine
 actif dans le profil Staging/Vercel actuel.

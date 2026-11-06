@@ -79,6 +79,7 @@ await writeFile(
     2,
   ) + '\n',
 );
+await mkdir(path.join(source, '.local'), { recursive: true });
 const env = { ...process.env };
 for (const key of Object.keys(env))
   if (key.startsWith('ADMIN_') || key.startsWith('NEXT_PUBLIC_SUPABASE_'))
