@@ -12,7 +12,7 @@ export const elementLabels: Record<ExerciseElement['type'], string> = {
   expression: 'Expression mathématique',
   question: 'Question',
   mcq: 'QCM',
-  'rich-text': 'Texte enrichi',
+  'rich-text': 'Texte',
   equation: 'Équation',
   system: 'Système',
   hint: 'Indication',

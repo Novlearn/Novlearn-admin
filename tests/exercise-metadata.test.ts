@@ -49,15 +49,14 @@ describe('métadonnées éditoriales et références', () => {
     ['Inconnu', []],
     ['', ['termes']],
     ['Suites', ['absente']],
-    ['Suites', ['derivee']],
   ])('refuse chapitre/compétences incohérents : %s %j', (chapter, selected) => {
     expect(referenceIssue(chapter, selected, chapters, skills)).toBeTypeOf(
       'string',
     );
   });
-  it('accepte seulement les compétences du chapitre sélectionné', () => {
+  it('accepts a skill from another chapter when its reference exists', () => {
     expect(
-      referenceIssue('Suites et limites', ['termes'], chapters, skills),
+      referenceIssue('Suites et limites', ['derivee'], chapters, skills),
     ).toBeNull();
   });
   it('n’utilise que la session du client et ne consulte pas le référentiel pour un brouillon vide', async () => {
@@ -89,9 +88,7 @@ describe('métadonnées éditoriales et références', () => {
     expect(await checkExerciseReferences(client, draft)).toBeNull();
     expect(calls).toEqual(['chapters', 'competences']);
     draft.catalogue.skills = ['derivee'];
-    expect(await checkExerciseReferences(client, draft)).toContain(
-      'autre chapitre',
-    );
+    expect(await checkExerciseReferences(client, draft)).toBeNull();
     fail = true;
     await expect(checkExerciseReferences(client, draft)).rejects.toThrow(
       'unavailable',

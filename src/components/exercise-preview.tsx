@@ -59,6 +59,11 @@ export function ExercisePreview({
   const controller = useRef<AbortController | null>(null);
   const [receiptId, setReceiptId] = useState<string | null>(null);
   const [verifying, setVerifying] = useState(false);
+  const [engineValidation, setEngineValidation] = useState<{
+    valid: boolean;
+    diagnostics: { path: string; code: string; message: string }[];
+  } | null>(null);
+  const [validating, setValidating] = useState(false);
   const verification = useRef(false);
   useEffect(() => {
     setReceiptId(null);
@@ -72,6 +77,7 @@ export function ExercisePreview({
     setReceiptId(null);
     setError('');
     setDiagnostics([]);
+    setEngineValidation(null);
   }, [source]);
   useEffect(() => () => controller.current?.abort(), []);
   const numericSeed = (text: string) =>
@@ -184,9 +190,34 @@ export function ExercisePreview({
     if (verification.current || disabled || busy) return;
     verification.current = true;
     setVerifying(true);
+    setReport(null);
+    setReceiptId(null);
     try {
-      if (await test(!!saved && canRecordTests)) await generate(true);
+      setEngineValidation(null);
+      setValidating(true);
+      const response = await fetch('/api/admin/engine', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ definition }),
+      });
+      const result = await response.json();
+      if (source !== latest.current) return;
+      if (!response.ok) {
+        setError(result.error ?? 'Validation Engine indisponible.');
+        return;
+      }
+      const validation = {
+        valid: result.valid === true,
+        diagnostics: Array.isArray(result.diagnostics)
+          ? result.diagnostics
+          : [],
+      };
+      setEngineValidation(validation);
+      if (validation.valid) await test(!!saved && canRecordTests);
+    } catch {
+      setError('Validation indisponible. Le brouillon reste conservé.');
     } finally {
+      setValidating(false);
       verification.current = false;
       setVerifying(false);
     }
@@ -240,12 +271,12 @@ export function ExercisePreview({
     >
       <div>
         <h2 id="preview-heading" className="text-lg font-semibold">
-          Aperçu et tests Engine
+          Vérifier et prévisualiser
         </h2>
         <p className="mt-2 text-sm leading-6 text-slate-500">
-          Générez votre exercice, testez les réponses et les seeds. Modifier la
-          définition invalide cet aperçu et ses résultats. Ces tests
-          n’approuvent ni ne publient le brouillon.
+          Vérifiez le format canonique et les réponses. L’aperçu élève se lance
+          séparément. Modifier la définition efface les résultats précédents.
+          Ces contrôles n’approuvent ni ne publient le brouillon.
         </p>
       </div>
       <div className="space-y-3">
@@ -255,7 +286,7 @@ export function ExercisePreview({
           disabled={disabled || busy || verifying}
           onClick={() => void verify()}
         >
-          {verifying ? 'Vérification…' : 'Vérifier et prévisualiser'}
+          {verifying ? 'Vérification…' : 'Vérifier l’exercice'}
         </button>
         {verifying && (
           <button
@@ -286,6 +317,47 @@ export function ExercisePreview({
           </p>
         )}
       </div>
+      {engineValidation && (
+        <div
+          role="status"
+          className={
+            engineValidation.valid
+              ? 'notice border-green-200 bg-green-50 text-green-900'
+              : 'notice'
+          }
+        >
+          <p className="font-semibold">
+            {engineValidation.valid
+              ? 'Format accepté par l’Engine.'
+              : 'Corrigez les erreurs de format avant les tests.'}
+          </p>
+          {!!engineValidation.diagnostics.length && (
+            <ul className="mt-3 space-y-2">
+              {engineValidation.diagnostics.map((item, index) => (
+                <li key={`${item.path}-${item.code}-${index}`}>
+                  <span className="font-mono text-xs">
+                    {item.path || 'Définition'} · {item.code}
+                  </span>
+                  <p>{item.message}</p>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      )}
+      <button
+        type="button"
+        className="button button-secondary"
+        disabled={disabled || busy || verifying}
+        onClick={() => void generate()}
+      >
+        {preview ? 'Régénérer l’aperçu élève' : 'Aperçu comme un élève'}
+      </button>
+      {validating && (
+        <p role="status" className="text-sm text-slate-500">
+          Validation du format…
+        </p>
+      )}
       <fieldset disabled={disabled || verifying} className="space-y-6">
         <details>
           <summary className="cursor-pointer text-sm font-medium">

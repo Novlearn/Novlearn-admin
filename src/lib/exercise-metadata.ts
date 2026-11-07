@@ -33,11 +33,5 @@ export function referenceIssue(
   if (!selected) return 'Choisissez un chapitre existant et non ambigu.';
   if (skills.some((id) => !references.some((s) => s.id === id)))
     return 'Une compétence est inconnue. Rapprochez sa référence avant de sauvegarder.';
-  if (
-    skills.some(
-      (id) => references.find((s) => s.id === id)?.chapter_id !== selected.id,
-    )
-  )
-    return 'Une compétence appartient à un autre chapitre. Corrigez explicitement la sélection.';
   return null;
 }

@@ -1,6 +1,10 @@
 import { beforeEach, expect, it, vi } from 'vitest';
 vi.mock('server-only', () => ({}));
-const fake = vi.hoisted(() => ({ require: vi.fn(), load: vi.fn() }));
+const fake = vi.hoisted(() => ({
+  require: vi.fn(),
+  load: vi.fn(),
+  rpc: vi.fn(),
+}));
 vi.mock('@/lib/catalogue-server', () => ({
   requireCatalogueClient: fake.require,
   loadCatalogue: fake.load,
@@ -25,7 +29,8 @@ const item = () => ({
 });
 beforeEach(() => {
   vi.resetAllMocks();
-  fake.require.mockResolvedValue({ session: 'verified' });
+  fake.require.mockResolvedValue({ session: 'verified', rpc: fake.rpc });
+  fake.rpc.mockResolvedValue({ data: { chapters: [] }, error: null });
   fake.load.mockResolvedValue({ total: 1, items: [item()] });
 });
 it('projects only explicit catalogue metadata across the new client selection boundary', async () => {

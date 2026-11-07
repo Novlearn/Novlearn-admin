@@ -682,6 +682,7 @@ export function CanonicalFields({
     const displayed = Object.entries(value).filter(
       ([name]) =>
         name !== 'schemaVersion' &&
+        name !== 'id' &&
         name !== 'type' &&
         (operand || name !== discriminant?.key) &&
         name !== 'expectedOptionIds' &&

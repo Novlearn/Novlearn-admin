@@ -1,4 +1,4 @@
-import { CatalogueList } from '@/components/catalogue-list';
+﻿import { CatalogueList } from '@/components/catalogue-list';
 import {
   catalogueFilter,
   editorialLabels,
@@ -8,6 +8,37 @@ import {
   type CataloguePage,
 } from '@/lib/catalogue';
 import { loadCatalogue, requireCatalogueClient } from '@/lib/catalogue-server';
+import { readAuthConfiguration } from '@/lib/auth/config';
+
+async function loadChapterNames(
+  client: Awaited<ReturnType<typeof requireCatalogueClient>>,
+): Promise<Map<string, string> | null> {
+  const { data, error } = await client.rpc('admin_list_taxonomy', {
+    p_kind: 'competence',
+    p_query: '',
+    p_chapter: null,
+    p_offset: 0,
+  });
+  if (
+    error ||
+    !data ||
+    typeof data !== 'object' ||
+    !Array.isArray(data.chapters)
+  )
+    return null;
+  const names = new Map<string, string>();
+  for (const chapter of data.chapters) {
+    if (
+      chapter &&
+      typeof chapter === 'object' &&
+      isUuid(chapter.id) &&
+      typeof chapter.name === 'string' &&
+      chapter.name.trim()
+    )
+      names.set(chapter.id.toLowerCase(), chapter.name);
+  }
+  return names;
+}
 
 /** The interactive selection makes this a client boundary. Explicitly project
  * metadata so an unexpected RPC field or nested value never crosses it. */
@@ -77,10 +108,33 @@ export default async function ExercisesPage({
   for (const [key, value] of Object.entries(values))
     if (typeof value === 'string') params.set(key, value);
   const filter = catalogueFilter(params);
+  const auth = readAuthConfiguration(process.env);
+  const [catalogue, chapterNames] = await Promise.all([
+    loadCatalogue(client, filter),
+    loadChapterNames(client),
+  ]);
+  const catalogueWithChapterNames = catalogue
+    ? {
+        ...catalogue,
+        items: catalogue.items.map((item) => ({
+          ...item,
+          chapter: isUuid(item.chapter)
+            ? (chapterNames?.get(item.chapter.toLowerCase()) ??
+              (chapterNames
+                ? 'Chapitre introuvable'
+                : 'Nom du chapitre indisponible'))
+            : item.chapter,
+        })),
+      }
+    : null;
   return (
     <CatalogueList
-      data={presentation(await loadCatalogue(client, filter))}
+      data={presentation(catalogueWithChapterNames)}
       filter={filter}
+      publicationEnabled={
+        !!auth?.localPublicationFixture ||
+        process.env.ADMIN_PUBLICATION_ENABLED === 'true'
+      }
     />
   );
 }

@@ -4,10 +4,16 @@ export const editorialLabels = {
   draft: 'Brouillon',
   in_review: 'À relire',
   approved: 'Approuvé',
-  published: 'Publié',
+  published: 'Publié en préproduction',
   legacy: 'Historique',
   archived: 'Archivé',
 } as const;
+export const catalogueStatusOptions = [
+  { value: 'draft', label: 'Brouillon' },
+  { value: 'approved', label: 'Approuvé' },
+  { value: 'published', label: 'Publié' },
+  { value: 'archived', label: 'Archivé' },
+] as const;
 export type EditorialStatus = keyof typeof editorialLabels;
 export type CatalogueItem = {
   id: string;
