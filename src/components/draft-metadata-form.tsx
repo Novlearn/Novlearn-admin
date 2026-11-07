@@ -9,7 +9,7 @@ import { ExercisePreview } from './exercise-preview';
 import { useCreatorRecovery } from './creator-recovery';
 import { recoveryResource } from '@/lib/creator-recovery';
 import { ExerciseReferenceFields } from './exercise-reference-fields';
-import { difficultyChoices } from '@/lib/exercise-metadata';
+import { elementTemplate } from '@/lib/creator';
 
 type Props = {
   exerciseId?: string;
@@ -23,9 +23,17 @@ type Props = {
 };
 export function DraftMetadataForm(props: Props) {
   const router = useRouter();
-  const [definition, setDefinition] = useState(
-    props.definition ?? newDraft(''),
-  );
+  const [definition, setDefinition] = useState(() => {
+    if (props.definition) return props.definition;
+    const starter = newDraft('');
+    return {
+      ...starter,
+      elements: [
+        elementTemplate('text', 'statement-1'),
+        elementTemplate('question', 'question-1'),
+      ],
+    };
+  });
   const [skills, setSkills] = useState(
     (props.definition?.catalogue?.skills ?? []).join(', '),
   );
@@ -34,13 +42,6 @@ export function DraftMetadataForm(props: Props) {
   dirtyRef.current = dirty;
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState('');
-  const [validating, setValidating] = useState(false);
-  const [validation, setValidation] = useState<{
-    valid: boolean;
-    diagnostics: { path: string; code: string; message: string }[];
-  } | null>(null);
-  const latest = useRef({ definition, skills });
-  latest.current = { definition, skills };
   const [recoveredAsNewRevision, setRecoveredAsNewRevision] = useState(false);
   const newRevision = props.newRevision || recoveredAsNewRevision;
   const recoveryBase = useMemo(
@@ -67,12 +68,8 @@ export function DraftMetadataForm(props: Props) {
       setRecoveredAsNewRevision(changedBase && !!props.exerciseId);
       dirtyRef.current = true;
       setDirty(true);
-      setValidation(null);
     },
   });
-  useEffect(() => {
-    setValidation(null);
-  }, [definition, skills]);
   const clean = (
     value: ExerciseDefinition,
     skillList: string,
@@ -81,6 +78,7 @@ export function DraftMetadataForm(props: Props) {
       ...value,
       catalogue: {
         ...value.catalogue,
+        appTitle: value.title,
         skills: skillList
           .split(',')
           .map((skill) => skill.trim())
@@ -90,36 +88,6 @@ export function DraftMetadataForm(props: Props) {
     if (!result.catalogue.chapter) delete result.catalogue.chapter;
     return result;
   };
-  async function validate() {
-    setValidating(true);
-    setMessage('');
-    const source = JSON.stringify(clean(definition, skills));
-    try {
-      const response = await fetch('/api/admin/engine', {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ definition: JSON.parse(source) }),
-      });
-      const result = await response.json();
-      if (
-        source !==
-        JSON.stringify(clean(latest.current.definition, latest.current.skills))
-      )
-        return;
-      if (!response.ok) {
-        setMessage(result.error ?? 'Validation indisponible.');
-        return;
-      }
-      setValidation({
-        valid: result.valid,
-        diagnostics: result.diagnostics ?? [],
-      });
-    } catch {
-      setMessage('Validation indisponible. Votre saisie reste conservée.');
-    } finally {
-      setValidating(false);
-    }
-  }
   useEffect(() => bindEditorNavigation(() => dirtyRef.current), []);
   const catalogue = definition.catalogue ?? {};
   const patch = (
@@ -138,6 +106,7 @@ export function DraftMetadataForm(props: Props) {
         ...definition,
         catalogue: {
           ...definition.catalogue,
+          appTitle: definition.title,
           skills: skills
             .split(',')
             .map((skill) => skill.trim())
@@ -191,16 +160,7 @@ export function DraftMetadataForm(props: Props) {
     }
   }
   return (
-    <form onSubmit={save} className="card space-y-6">
-      <div>
-        <h2 className="text-xl font-semibold">
-          Creator · informations générales
-        </h2>
-        <p className="mt-2 text-sm leading-6 text-slate-500">
-          Enregistrez un brouillon pour préparer votre exercice. Les versions
-          publiées sont conservées.
-        </p>
-      </div>
+    <form onSubmit={save} className="space-y-7">
       {recovery.panel}
       {recoveredAsNewRevision && (
         <p role="status" className="notice">
@@ -208,99 +168,102 @@ export function DraftMetadataForm(props: Props) {
           actuelle reste conservée.
         </p>
       )}
-      <fieldset
-        disabled={busy || recovery.awaitingChoice}
-        className="grid gap-5 md:grid-cols-2"
+      <section
+        className="editor-section space-y-5"
+        aria-labelledby="metadata-heading"
       >
-        <label className="label md:col-span-2">
-          Titre administratif
-          <input
-            className="field"
-            required
-            maxLength={160}
-            value={definition.title}
-            onChange={(event) => {
-              setDefinition({ ...definition, title: event.target.value });
+        <div>
+          <h2 id="metadata-heading" className="text-xl font-semibold">
+            📋 Informations générales
+          </h2>
+        </div>
+        <fieldset
+          disabled={busy || recovery.awaitingChoice}
+          className="space-y-5"
+        >
+          <label className="label rounded-xl border border-slate-200 bg-slate-50 p-4 md:max-w-2xl">
+            NOM DE L’EXERCICE
+            <input
+              className="field"
+              placeholder="Ex. : Logarithme_Bac"
+              required
+              maxLength={160}
+              value={definition.title}
+              onChange={(event) => {
+                const title = event.target.value;
+                setDefinition({
+                  ...definition,
+                  title,
+                  catalogue: { ...catalogue, appTitle: title },
+                });
+                setDirty(true);
+              }}
+            />
+            <span className="text-xs font-normal text-slate-500">
+              Ce titre sert aussi de nom dans l’application.
+            </span>
+          </label>
+          <div className="flex flex-wrap gap-3">
+            <label
+              className={`inline-flex cursor-pointer items-center gap-2 rounded-xl border px-4 py-3 font-semibold transition-colors ${catalogue.exerciseType === 'flash' ? 'border-amber-400 bg-amber-100 text-amber-950' : 'border-slate-200 bg-white text-slate-700 hover:bg-amber-50'}`}
+            >
+              <input
+                type="checkbox"
+                className="peer sr-only"
+                checked={catalogue.exerciseType === 'flash'}
+                onChange={(event) =>
+                  patch({
+                    exerciseType: event.target.checked ? 'flash' : 'classic',
+                  })
+                }
+              />
+              <span className="rounded-md peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-blue-600">
+                <span aria-hidden="true">⚡</span> Flash Exos
+                {catalogue.exerciseType === 'flash' && (
+                  <span className="ml-2" aria-hidden="true">
+                    ✓
+                  </span>
+                )}
+              </span>
+            </label>
+            <label
+              className={`inline-flex cursor-pointer items-center gap-2 rounded-xl border px-4 py-3 font-semibold transition-colors ${catalogue.needsCalculator ? 'border-emerald-400 bg-emerald-100 text-emerald-950' : 'border-slate-200 bg-white text-slate-700 hover:bg-emerald-50'}`}
+            >
+              <input
+                type="checkbox"
+                className="peer sr-only"
+                checked={catalogue.needsCalculator ?? false}
+                onChange={(event) =>
+                  patch({ needsCalculator: event.target.checked })
+                }
+              />
+              <span className="rounded-md peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-blue-600">
+                <span aria-hidden="true">▦</span> Calculatrice
+                {catalogue.needsCalculator && (
+                  <span className="ml-2" aria-hidden="true">
+                    ✓
+                  </span>
+                )}
+              </span>
+            </label>
+          </div>
+          <ExerciseReferenceFields
+            disabled={busy || recovery.awaitingChoice}
+            chapter={catalogue.chapter ?? ''}
+            difficulty={catalogue.difficulty}
+            skills={skills
+              .split(',')
+              .map((skill) => skill.trim())
+              .filter(Boolean)}
+            onChapter={(chapter) => patch({ chapter })}
+            onDifficulty={(difficulty) => patch({ difficulty })}
+            onSkills={(ids) => {
+              setSkills(ids.join(', '));
               setDirty(true);
             }}
           />
-        </label>
-        <label className="label">
-          Titre dans l’application
-          <input
-            className="field"
-            maxLength={160}
-            value={catalogue.appTitle ?? ''}
-            onChange={(event) => patch({ appTitle: event.target.value })}
-          />
-        </label>
-        <label className="label">
-          Difficulté
-          <select
-            className="field"
-            value={catalogue.difficulty ?? ''}
-            onChange={(event) =>
-              patch({
-                difficulty: event.target.value
-                  ? Number(event.target.value)
-                  : undefined,
-              })
-            }
-          >
-            <option value="">À choisir</option>
-            {catalogue.difficulty !== undefined &&
-              !difficultyChoices.some(
-                (c) => c.engine === catalogue.difficulty,
-              ) && (
-                <option value={catalogue.difficulty}>
-                  À rapprocher ({catalogue.difficulty})
-                </option>
-              )}
-            {difficultyChoices.map((choice) => (
-              <option key={choice.engine} value={choice.engine}>
-                {choice.label}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label className="flex items-center gap-3 text-sm font-medium text-slate-700">
-          <input
-            type="checkbox"
-            className="h-4 w-4 accent-blue-600"
-            checked={catalogue.exerciseType === 'flash'}
-            onChange={(event) =>
-              patch({
-                exerciseType: event.target.checked ? 'flash' : 'classic',
-              })
-            }
-          />
-          Exercice flash
-        </label>
-        <ExerciseReferenceFields
-          disabled={busy || recovery.awaitingChoice}
-          chapter={catalogue.chapter ?? ''}
-          skills={skills
-            .split(',')
-            .map((s) => s.trim())
-            .filter(Boolean)}
-          onChapter={(chapter) => patch({ chapter })}
-          onSkills={(ids) => {
-            setSkills(ids.join(', '));
-            setDirty(true);
-          }}
-        />
-        <label className="flex items-center gap-3 text-sm font-medium text-slate-700">
-          <input
-            type="checkbox"
-            className="h-4 w-4 accent-blue-600"
-            checked={catalogue.needsCalculator ?? false}
-            onChange={(event) =>
-              patch({ needsCalculator: event.target.checked })
-            }
-          />{' '}
-          Calculatrice nécessaire
-        </label>
-      </fieldset>
+        </fieldset>
+      </section>
       <fieldset disabled={busy || recovery.awaitingChoice}>
         <CreatorFields
           definition={definition}
@@ -311,49 +274,6 @@ export function DraftMetadataForm(props: Props) {
           }}
         />
       </fieldset>
-      {props.engineEnabled && (
-        <section
-          className="rounded-xl border border-slate-200 bg-slate-50 p-5"
-          aria-labelledby="validation-heading"
-        >
-          <h2 id="validation-heading" className="text-lg font-semibold">
-            Validation officielle Engine
-          </h2>
-          <p className="mt-2 text-sm leading-6 text-slate-500">
-            Vérifiez la structure canonique avant les tests et la relecture.
-            Cette vérification n’approuve ni ne publie votre brouillon.
-          </p>
-          <button
-            type="button"
-            className="button mt-4"
-            disabled={busy || validating || recovery.awaitingChoice}
-            onClick={validate}
-          >
-            {validating ? 'Validation…' : 'Vérifier la définition'}
-          </button>
-          {validation && (
-            <div className="mt-4" role="status">
-              {validation.valid ? (
-                <p className="text-sm font-medium text-green-700">
-                  Structure canonique correcte. L’exercice reste à tester et à
-                  relire.
-                </p>
-              ) : (
-                <ul className="space-y-3 text-sm text-red-800">
-                  {validation.diagnostics.map((diagnostic, index) => (
-                    <li key={index}>
-                      <p className="font-mono text-xs text-slate-500">
-                        {diagnostic.path || 'Définition'} · {diagnostic.code}
-                      </p>
-                      <p className="mt-1">{diagnostic.message}</p>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
-          )}
-        </section>
-      )}
       <ExercisePreview
         engineEnabled={props.engineEnabled}
         canRecordTests={props.canRecordTests}
@@ -373,7 +293,7 @@ export function DraftMetadataForm(props: Props) {
             : undefined
         }
       />
-      <div className="flex flex-wrap items-center gap-4">
+      <div className="editor-save flex flex-wrap items-center gap-4">
         <button
           className="button"
           type="submit"

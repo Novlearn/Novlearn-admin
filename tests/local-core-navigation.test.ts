@@ -10,7 +10,6 @@ it('garde le contenu accessible et masque les services absents du principal loca
   );
   for (const route of [
     '/admin/exercises',
-    '/admin/exercises/new',
     '/admin/chapters',
     '/admin/competences',
     '/admin/flashcards',

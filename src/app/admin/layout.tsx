@@ -24,7 +24,7 @@ export default async function AdminLayout({
   const recoveryScope = `${authConfig?.supabaseUrl ?? 'disabled'}|${access.userId}`;
   return (
     <EditorRecoveryScope key={recoveryScope} scope={recoveryScope}>
-      <div className="min-h-screen lg:grid lg:grid-cols-[240px_1fr]">
+      <div className="min-h-screen lg:grid lg:grid-cols-[210px_1fr]">
         <a
           href="#main-content"
           className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-white focus:p-3"
@@ -47,11 +47,6 @@ export default async function AdminLayout({
             statisticsEnabled={!!readLocalActivityConfiguration(process.env)}
             usersEnabled={!!readLocalUsersConfiguration(process.env)}
           />
-          <p className="mt-10 text-xs leading-6 text-slate-500">
-            {local
-              ? 'Copie locale de Staging : vos modifications restent sur cet ordinateur.'
-              : 'Créez, organisez et préparez vos contenus pédagogiques dans la base de préproduction.'}
-          </p>
         </aside>
         <div className="min-w-0">
           <header className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 bg-white px-6 py-4 lg:px-10">

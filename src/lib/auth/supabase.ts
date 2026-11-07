@@ -61,6 +61,12 @@ export function asAuthGateway(client: SupabaseClient): AuthGateway {
         email,
         password,
       });
+      if (error && process.env.NODE_ENV === 'development')
+        console.info('[admin-auth] password sign-in rejected', {
+          status: error.status ?? null,
+          code: error.code ?? null,
+          name: error.name,
+        });
       if (error && (error.status === undefined || error.status >= 500))
         throw new Error('Auth unavailable');
       return !error;

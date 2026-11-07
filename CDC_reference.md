@@ -450,6 +450,16 @@ les compétences leurs identifiants. Difficulté : Facile/Moyen/Difficile,
 ordinals Engine 1/2/3, indices NovLearn 0/1/2. Une valeur historique inconnue
 reste signalée et conservée jusqu'à une décision explicite.
 
+Décision fonctionnelle explicite — 7 novembre 2026 : le titre administratif de
+l'exercice sert également de nom dans l'application. L'éditeur ne propose pas
+de titre d'application distinct ; il synchronise le champ canonique `title`
+vers la métadonnée de titre destinée à l'application.
+
+Décision fonctionnelle explicite — 7 novembre 2026 : le titre administratif de
+l'exercice sert également de nom dans l'application. L'éditeur ne propose pas
+de titre d'application distinct ; il synchronise le champ canonique `title`
+vers la métadonnée de titre destinée à l'application.
+
 ## 8.5 MathLive
 
 Utiliser MathLive pour :
@@ -537,17 +547,26 @@ L'administrateur doit pouvoir :
 
 ## 9.5 Validation éditoriale
 
-Cycle cible :
+Les statuts visibles du catalogue sont :
 
-`Brouillon → À tester → Testé → Validé → Publié`
+`Brouillon → Approuvé → Publié`
 
-Prévoir également :
-- À corriger.
-- Archivé.
+`Archivé` est un état terminal de classement qui peut s'appliquer à un exercice
+quel que soit son statut antérieur.
 
-Une modification d'une version déjà validée doit invalider sa validation ou créer une nouvelle révision.
+Un nouvel exercice commence en brouillon. Il devient approuvé après validation
+éditoriale de sa révision. Il devient publié uniquement après confirmation de sa
+publication en Production. Un pointeur actif en Préproduction ou dans une copie
+locale ne suffit pas à établir le statut publié. La validation Engine et les
+rapports de test restent des contrôles requis, mais ne sont pas des statuts.
 
-La validation humaine porte sur une version précise de la définition.
+Une demande de relecture est une étape de travail, pas un statut visible distinct
+du brouillon. L'historique de relecture et l'approbation humaine restent
+attachés à une version précise. Une modification d'une version approuvée doit
+invalider son approbation ou créer une nouvelle révision.
+
+L'archivage dans l'Admin classe l'exercice comme archivé et ne déclenche aucune
+écriture ni suppression en Production.
 
 ---
 
@@ -609,10 +628,10 @@ La structure SQL détaillée, les contraintes d'immuabilité, la référence de 
 # 11. Publication Staging vers Production
 
 Décision mission Admin/Engine du 30 octobre 2026 : brouillon en préproduction,
-puis publication préproduction, puis promotion sélective des révisions choisies
-vers Production. Les pilotes de mission 1 restent exclus des anciens parcours
-élèves jusqu'à réception du lecteur canonique lors de la mission 2. Enregistrer
-un pilote n'établit pas sa publication ni sa réception dans NovLearn.
+puis approbation de la révision, puis promotion sélective vers Production. Les
+pilotes de mission 1 restent exclus des anciens parcours élèves jusqu'à
+réception du lecteur canonique lors de la mission 2. Enregistrer un pilote
+n'établit pas sa publication ni sa réception dans NovLearn.
 
 ## 11.1 Règle fondamentale
 
@@ -1051,3 +1070,16 @@ Les détails techniques suivants restent à résoudre avant leur implémentation
 Ces points doivent être documentés comme décisions ouvertes, jamais résolus par des suppositions cachées.
 
 **Principe directeur : un Admin indépendant, un moteur mathématique commun, Staging comme environnement d'édition, Production comme environnement de données réelles et une publication limitée aux exercices.**
+
+**Décision fonctionnelle explicite — 7 novembre 2026 :** un exercice conserve au plus un chapitre principal dans son classement, et peut référencer des compétences appartenant à plusieurs chapitres.
+
+Le changement du chapitre principal ne retire pas silencieusement les compétences déjà choisies. L’Admin vérifie que le chapitre et toutes les compétences référencées existent ; il ne valide pas une correspondance compétence–chapitre principal.
+
+Les règles de synchronisation des référentiels et leur compatibilité avec les contraintes SQL/RPC restent ouvertes au point 4 ci-dessus et doivent être reçues avant de considérer l’enregistrement de bout en bout comme pris en charge. Cette décision ne modifie ni base de données, ni moteur, ni NovLearn.
+
+**Décision fonctionnelle explicite — 7 novembre 2026 :** les statuts visibles
+sont Brouillon, Approuvé, Publié et Archivé. Un exercice reste Brouillon pendant
+la demande de relecture ; l'approbation porte sur une révision précise. Publié
+signifie que la publication de cette révision en Production a été confirmée,
+jamais seulement qu'un pointeur est actif en Préproduction ou dans une copie
+locale. Archivé est un classement Admin qui n'écrit pas en Production.
