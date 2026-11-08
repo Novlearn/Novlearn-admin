@@ -1,12 +1,12 @@
 import { requireAdminPage } from '@/lib/auth/require-admin';
 import Link from 'next/link';
-import { readLocalPedagogyConfiguration } from '@/lib/pedagogy-config';
-import { readLocalActivityConfiguration } from '@/lib/activity-config';
+import { readPedagogyConfiguration } from '@/lib/pedagogy-config';
+import { readActivityConfiguration } from '@/lib/activity-config';
 import {
   readStatisticsPeriod,
   type ActivityStatistics,
 } from '@/lib/activity-statistics';
-import { loadLocalActivityStatistics } from '@/lib/activity-server';
+import { loadActivityStatistics } from '@/lib/activity-server';
 import { ActivityStatisticsView } from '@/components/activity-statistics';
 
 export const dynamic = 'force-dynamic';
@@ -17,6 +17,7 @@ export default async function StatisticsPage({
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
   await requireAdminPage();
+  const config = readActivityConfiguration(process.env);
   const query = new URLSearchParams();
   for (const [key, value] of Object.entries(await searchParams))
     for (const item of Array.isArray(value)
@@ -32,18 +33,17 @@ export default async function StatisticsPage({
   let error = filter.ok ? undefined : filter.error;
   let data: ActivityStatistics | null = null;
   if (filter.ok) {
-    if (!readLocalActivityConfiguration(process.env))
-      error = 'Lecture statistique locale non activée.';
+    if (!config) error = 'Lecture statistique non configurée.';
     else
       try {
-        data = await loadLocalActivityStatistics(period);
+        data = await loadActivityStatistics(period);
       } catch {
         error = 'Le relevé n’a pas pu être chargé. Réessayez dans un instant.';
       }
   }
   return (
     <div className="space-y-5">
-      {readLocalPedagogyConfiguration(process.env) && (
+      {readPedagogyConfiguration(process.env) && (
         <Link
           href="/admin/statistics/pedagogy"
           prefetch={false}
@@ -55,7 +55,7 @@ export default async function StatisticsPage({
       <ActivityStatisticsView
         data={data}
         period={period}
-        environment="local-copy"
+        environment={config?.environment ?? 'production'}
         error={error}
       />
     </div>

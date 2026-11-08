@@ -3,7 +3,7 @@
   "environment": "local-fixture",
   "asOf": "2026-10-17T18:00:00.000Z",
   "period": { "from": "2026-10-15", "until": "2026-10-18" },
-  "accounts": { "total": "10", "anonymous": "2" },
+  "accounts": { "total": "10", "anonymous": "0" },
   "totals": {
     "activeAccounts": "3",
     "exerciseAttempts": "9",

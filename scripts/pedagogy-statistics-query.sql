@@ -16,12 +16,14 @@ WITH bounds AS NOT MATERIALIZED (
    AND $9::text IN ('attempts','success') AND $10::bigint BETWEEN 1 AND 368934881474191032
 ), pagination AS MATERIALIZED (
  SELECT page FROM bounds
+), registered_accounts AS MATERIALIZED (
+ SELECT id FROM auth.users WHERE is_anonymous IS FALSE
 ), raw_activity AS MATERIALIZED (
  SELECT 'exercise'::text AS kind,a.id AS row_id,a.exercise_id,a.user_id AS account_id,
    CASE WHEN a.is_abandoned IS TRUE THEN 'abandoned'
      WHEN a.is_correct IS TRUE THEN 'correct' WHEN a.is_correct IS FALSE THEN 'incorrect'
      ELSE 'unclassified' END AS verdict
- FROM public.exercise_attempts a CROSS JOIN bounds b
+ FROM public.exercise_attempts a JOIN registered_accounts account ON account.id=a.user_id CROSS JOIN bounds b
  WHERE b.mode IN ('all','exercise')
    AND a.attempted_at>=(b.first_day::timestamp AT TIME ZONE 'UTC')
    AND a.attempted_at<(b.until_day::timestamp AT TIME ZONE 'UTC') AND a.attempted_at<=b.as_of
@@ -29,13 +31,15 @@ WITH bounds AS NOT MATERIALIZED (
  SELECT 'duel',a.id,d.exercise_id,a.player_id,
    CASE WHEN a.is_correct IS TRUE THEN 'correct' WHEN a.is_correct IS FALSE THEN 'incorrect'
      ELSE 'unclassified' END
- FROM public.duel_attempts a LEFT JOIN public.duels d ON d.id=a.duel_id CROSS JOIN bounds b
+ FROM public.duel_attempts a JOIN registered_accounts account ON account.id=a.player_id
+ LEFT JOIN public.duels d ON d.id=a.duel_id CROSS JOIN bounds b
  WHERE b.mode IN ('all','duel')
    AND a.submitted_at>=(b.first_day::timestamp AT TIME ZONE 'UTC')
    AND a.submitted_at<(b.until_day::timestamp AT TIME ZONE 'UTC') AND a.submitted_at<=b.as_of
  UNION ALL
  SELECT 'completion',d.id,d.exercise_id,NULL::uuid,NULL::text
- FROM public.duels d CROSS JOIN bounds b
+ FROM public.duels d JOIN registered_accounts player1 ON player1.id=d.player1_id
+ JOIN registered_accounts player2 ON player2.id=d.player2_id CROSS JOIN bounds b
  WHERE b.mode IN ('all','duel') AND d.status='finished'
    AND d.finished_at>=(b.first_day::timestamp AT TIME ZONE 'UTC')
    AND d.finished_at<(b.until_day::timestamp AT TIME ZONE 'UTC') AND d.finished_at<=b.as_of
@@ -74,7 +78,7 @@ WITH bounds AS NOT MATERIALIZED (
    AND (b.difficulty IS NULL OR coalesce(e.difficulty,'unknown')=b.difficulty)
    AND (b.exercise_type IS NULL OR coalesce(e.exercise_type,'unknown')=b.exercise_type)
 ), identities AS MATERIALIZED (
- SELECT DISTINCT a.id FROM auth.users a WHERE a.id IN (SELECT account_id FROM selected WHERE kind<>'completion')
+ SELECT DISTINCT a.id FROM registered_accounts a WHERE a.id IN (SELECT account_id FROM selected WHERE kind<>'completion')
 ), totals AS (
  SELECT jsonb_build_object(
    'exerciseAttempts',count(*) FILTER(WHERE kind='exercise')::text,

@@ -3,9 +3,9 @@ import { readAuthConfiguration } from '@/lib/auth/config';
 import { authorizeAdmin } from '@/lib/auth/authorization';
 import { privateHeaders } from '@/lib/auth/http';
 import { createRouteAuth, transferAuthCookies } from '@/lib/auth/supabase';
-import { readLocalUserDetailConfiguration } from '@/lib/user-detail-config';
+import { readUserDetailConfiguration } from '@/lib/user-detail-config';
 import { readUserDetailQuery } from '@/lib/user-detail';
-import { loadLocalUserDetail } from '@/lib/user-detail-server';
+import { loadUserDetail } from '@/lib/user-detail-server';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -30,13 +30,13 @@ export async function GET(
           ? 403
           : 503,
     );
-  if (!readLocalUserDetailConfiguration(process.env))
-    return finish({ error: 'Consultation détaillée locale non activée.' }, 503);
+  if (!readUserDetailConfiguration(process.env))
+    return finish({ error: 'Consultation détaillée non configurée.' }, 503);
   const { userId } = await params;
   const filter = readUserDetailQuery(userId, request.nextUrl.searchParams);
   if (!filter.ok) return finish({ error: filter.error }, 400);
   try {
-    const data = await loadLocalUserDetail(filter.value);
+    const data = await loadUserDetail(filter.value);
     return data === null
       ? finish({ error: 'Utilisateur introuvable.' }, 404)
       : finish(data);

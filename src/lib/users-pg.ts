@@ -2,10 +2,7 @@ import 'server-only';
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { Pool, type PoolClient } from 'pg';
-import {
-  validLocalUsersEndpoint,
-  type LocalUsersPgConfiguration,
-} from './users-config';
+import { validUsersEndpoint, type UsersPgConfiguration } from './users-config';
 import {
   decodeUsersPage,
   readUsersQuery,
@@ -85,8 +82,8 @@ function validAudit(value: unknown, assumed: boolean): boolean {
 }
 /** Only returns the bounded decoded nominal list. A raw checked-out SQL client never escapes.
  * The caller must freshly authorize the Admin before each read. */
-export function createLocalUsersReader(config: LocalUsersPgConfiguration) {
-  if (!validLocalUsersEndpoint(config)) throw new UsersPgError();
+export function createUsersReader(config: UsersPgConfiguration) {
+  if (!validUsersEndpoint(config)) throw new UsersPgError();
   const pool = new Pool({
     connectionString: config.url,
     ssl: { rejectUnauthorized: true, ca: config.ca, minVersion: 'TLSv1.2' },

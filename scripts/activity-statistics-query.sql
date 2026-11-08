@@ -7,20 +7,20 @@ WITH bounds AS MATERIALIZED (
     AND $2::date - $1::date BETWEEN 1 AND 90
     AND $2::date <= (statement_timestamp() AT TIME ZONE 'UTC')::date + 1
 ), accounts AS MATERIALIZED (
-  SELECT id,created_at,is_anonymous FROM auth.users
+  SELECT id,created_at,is_anonymous FROM auth.users WHERE is_anonymous IS FALSE
 ), exercise_rows AS MATERIALIZED (
   SELECT a.user_id AS account_id,(a.attempted_at AT TIME ZONE 'UTC')::date AS day,
     CASE WHEN a.is_abandoned IS TRUE THEN 'abandoned'
       WHEN a.is_correct IS TRUE THEN 'correct'
       WHEN a.is_correct IS FALSE THEN 'incorrect'
       ELSE 'unclassified' END AS verdict
-  FROM public.exercise_attempts a CROSS JOIN bounds b
+  FROM public.exercise_attempts a JOIN accounts account ON account.id=a.user_id CROSS JOIN bounds b
   WHERE a.attempted_at >= (b.first_day::timestamp AT TIME ZONE 'UTC')
     AND a.attempted_at < (b.until_day::timestamp AT TIME ZONE 'UTC')
     AND a.attempted_at <= b.as_of
 ), duel_rows AS MATERIALIZED (
   SELECT a.player_id AS account_id,(a.submitted_at AT TIME ZONE 'UTC')::date AS day
-  FROM public.duel_attempts a CROSS JOIN bounds b
+  FROM public.duel_attempts a JOIN accounts account ON account.id=a.player_id CROSS JOIN bounds b
   WHERE a.submitted_at >= (b.first_day::timestamp AT TIME ZONE 'UTC')
     AND a.submitted_at < (b.until_day::timestamp AT TIME ZONE 'UTC')
     AND a.submitted_at <= b.as_of
@@ -41,7 +41,8 @@ WITH bounds AS MATERIALIZED (
   SELECT day,count(*) AS accounts FROM active_rows GROUP BY day
 ), completed_days AS (
   SELECT (d.finished_at AT TIME ZONE 'UTC')::date AS day,count(*) AS duels
-  FROM public.duels d CROSS JOIN bounds b
+  FROM public.duels d JOIN accounts player1 ON player1.id=d.player1_id
+    JOIN accounts player2 ON player2.id=d.player2_id CROSS JOIN bounds b
   WHERE d.status='finished'
     AND d.finished_at >= (b.first_day::timestamp AT TIME ZONE 'UTC')
     AND d.finished_at < (b.until_day::timestamp AT TIME ZONE 'UTC')

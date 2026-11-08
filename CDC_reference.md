@@ -306,6 +306,14 @@ Chaque donnée doit indiquer clairement son environnement d'origine.
 
 Les indicateurs doivent être calculés sur des définitions documentées.
 
+**Décision du responsable — 8 novembre 2026 :** les statistiques et la liste
+des utilisateurs excluent les comptes invités. Les comptes comptés sont les
+identités Auth encore présentes dont `is_anonymous IS FALSE`. Leurs tentatives
+alimentent les volumes, les utilisateurs actifs et les taux de réussite ; les
+tentatives d'invités ou sans compte encore présent sont exclues. Un duel terminé
+est compté lorsque ses deux participants sont inscrits. Les tentatives d'un
+participant inscrit restent comptées même si son adversaire est invité.
+
 Ne pas présenter comme « utilisateurs actifs » un nombre qui correspond seulement aux comptes créés.
 
 ## 6.4 Filtres

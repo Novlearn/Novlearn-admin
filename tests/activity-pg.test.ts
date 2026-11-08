@@ -26,7 +26,7 @@ vi.mock('pg', () => ({
     };
   }),
 }));
-import { createLocalActivityReader } from '@/lib/activity-pg';
+import { createActivityReader } from '@/lib/activity-pg';
 import { statisticsPeriod } from '@/lib/activity-statistics';
 import fixture from './fixtures/activity-statistics.json';
 const config = () => ({
@@ -109,7 +109,7 @@ beforeEach(() => {
   });
 });
 it('constructs a lazy pool with verified TLS and bounded timeouts', () => {
-  const reader = createLocalActivityReader(config());
+  const reader = createActivityReader(config());
   expect(fake.query).not.toHaveBeenCalled();
   expect(fake.make).toHaveBeenCalledWith(
     expect.objectContaining({
@@ -126,7 +126,7 @@ it.each(['?sslmode=disable', '?options=-c%20role%3Dpostgres', '#override'])(
   'rejects URL overrides %s before constructing a pool',
   (suffix) => {
     expect(() =>
-      createLocalActivityReader({ ...config(), url: config().url + suffix }),
+      createActivityReader({ ...config(), url: config().url + suffix }),
     ).toThrow('Statistiques indisponibles');
     expect(fake.make).not.toHaveBeenCalled();
   },
@@ -139,20 +139,20 @@ it.each([
   ['synthetic-fixture-password', 'short'],
 ])('rejects endpoints outside the isolated copy %s', (a, b) => {
   expect(() =>
-    createLocalActivityReader({ ...config(), url: config().url.replace(a, b) }),
+    createActivityReader({ ...config(), url: config().url.replace(a, b) }),
   ).toThrow();
 });
 it('does not accept an operational source label or missing certificate', () => {
   expect(() =>
-    createLocalActivityReader({
+    createActivityReader({
       ...config(),
       environment: 'production' as 'local-copy',
     }),
   ).toThrow();
-  expect(() => createLocalActivityReader({ ...config(), ca: '' })).toThrow();
+  expect(() => createActivityReader({ ...config(), ca: '' })).toThrow();
 });
 it('audits both identities and returns aggregates with a trusted source label', async () => {
-  const reader = createLocalActivityReader(config());
+  const reader = createActivityReader(config());
   const result = await reader.read(period);
   expect(result.environment).toBe('local-copy');
   expect(result.totals).toEqual(fixture.totals);
@@ -183,7 +183,7 @@ it.each([
         ...audit(assumed),
         ...(assumed === target ? { [key]: true } : {}),
       }));
-      const reader = createLocalActivityReader(config());
+      const reader = createActivityReader(config());
       await expect(reader.read(period)).rejects.toThrow(
         'Statistiques indisponibles',
       );
@@ -224,7 +224,7 @@ it.each([
     mutate(a);
     return a;
   });
-  const reader = createLocalActivityReader(config());
+  const reader = createActivityReader(config());
   await expect(reader.read(period)).rejects.toThrow(
     'Statistiques indisponibles',
   );
@@ -242,7 +242,7 @@ it('refuses a modified aggregate without returning partial values or raw SQL err
       ? { rows: [{ statistics: { ...fixture, environment: 'production' } }] }
       : original(sql, ...rest),
   );
-  const reader = createLocalActivityReader(config());
+  const reader = createActivityReader(config());
   await expect(reader.read(period)).rejects.toThrow(
     'Statistiques indisponibles',
   );
@@ -250,14 +250,14 @@ it('refuses a modified aggregate without returning partial values or raw SQL err
   await reader.close();
 });
 it('refuses invalid period metadata before obtaining a connection', async () => {
-  const reader = createLocalActivityReader(config());
+  const reader = createActivityReader(config());
   await expect(reader.read({ ...period, days: 4 })).rejects.toThrow();
   expect(fake.query).not.toHaveBeenCalled();
   await reader.close();
 });
 it('refuses an unverified physical transport even if the query mock would pass', async () => {
   fake.stream.authorized = false;
-  const reader = createLocalActivityReader(config());
+  const reader = createActivityReader(config());
   await expect(reader.read(period)).rejects.toThrow(
     'Statistiques indisponibles',
   );

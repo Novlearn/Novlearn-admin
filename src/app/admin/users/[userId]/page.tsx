@@ -1,12 +1,12 @@
 import { notFound } from 'next/navigation';
 import { requireAdminPage } from '@/lib/auth/require-admin';
-import { readLocalUserDetailConfiguration } from '@/lib/user-detail-config';
+import { readUserDetailConfiguration } from '@/lib/user-detail-config';
 import {
   detailUserId,
   readUserDetailQuery,
   type UserDetailPage,
 } from '@/lib/user-detail';
-import { loadLocalUserDetail } from '@/lib/user-detail-server';
+import { loadUserDetail } from '@/lib/user-detail-server';
 import { UserDetailView } from '@/components/user-detail';
 
 export const dynamic = 'force-dynamic';
@@ -19,6 +19,7 @@ export default async function UserPage({
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
   await requireAdminPage();
+  const config = readUserDetailConfiguration(process.env);
   const { userId } = await params;
   if (!detailUserId(userId)) notFound();
   const values = new URLSearchParams();
@@ -37,16 +38,22 @@ export default async function UserPage({
     error = filter.ok ? undefined : filter.error,
     missing = false;
   if (filter.ok) {
-    if (!readLocalUserDetailConfiguration(process.env))
-      error = 'Consultation détaillée locale non activée.';
+    if (!config) error = 'Consultation détaillée non configurée.';
     else
       try {
-        data = await loadLocalUserDetail(query);
+        data = await loadUserDetail(query);
         missing = data === null;
       } catch {
         error = 'La fiche n’a pas pu être chargée. Réessayez dans un instant.';
       }
   }
   if (missing) notFound();
-  return <UserDetailView data={data} query={query} error={error} />;
+  return (
+    <UserDetailView
+      data={data}
+      query={query}
+      error={error}
+      environment={config?.environment ?? 'production'}
+    />
+  );
 }

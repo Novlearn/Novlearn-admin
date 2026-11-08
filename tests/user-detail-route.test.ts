@@ -1,3 +1,4 @@
+import { productionReadEnvironment } from './fixtures/production-read-env';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { afterEach, beforeEach, expect, it, vi } from 'vitest';
 import { NextRequest, NextResponse } from 'next/server';
@@ -10,7 +11,7 @@ const fake = vi.hoisted(() => ({
   role: vi.fn(),
 }));
 vi.mock('@/lib/user-detail-server', () => ({
-  loadLocalUserDetail: fake.read,
+  loadUserDetail: fake.read,
 }));
 vi.mock('@/lib/auth/require-admin', () => ({
   requireAdminPage: fake.pageAuth,
@@ -27,7 +28,7 @@ vi.mock('@/lib/auth/supabase', () => ({
     return target;
   },
 }));
-import { readLocalUserDetailConfiguration } from '@/lib/user-detail-config';
+import { readUserDetailConfiguration } from '@/lib/user-detail-config';
 import { GET } from '@/app/api/admin/users/[userId]/route';
 import UserPage from '@/app/admin/users/[userId]/page';
 import { localUserDetailEnvironment } from './fixtures/local-user-detail-env';
@@ -58,7 +59,7 @@ beforeEach(() => {
 afterEach(() => vi.unstubAllEnvs());
 it('accepts only the explicitly enabled main local Auth profile', () => {
   expect(
-    readLocalUserDetailConfiguration(localUserDetailEnvironment())?.environment,
+    readUserDetailConfiguration(localUserDetailEnvironment())?.environment,
   ).toBe('local-copy');
 });
 it('refuses a valid independent publication Auth profile even with users credentials', () => {
@@ -66,7 +67,7 @@ it('refuses a valid independent publication Auth profile even with users credent
     ...localUserDetailEnvironment(),
     ...localPublicationEnvironment(),
   };
-  expect(readLocalUserDetailConfiguration(env)).toBeNull();
+  expect(readUserDetailConfiguration(env)).toBeNull();
 });
 it.each([
   { NODE_ENV: 'production' },
@@ -88,7 +89,7 @@ it.each([
   },
 ])('refuses mixed, operational or incomplete configuration %#', (change) => {
   expect(
-    readLocalUserDetailConfiguration({
+    readUserDetailConfiguration({
       ...localUserDetailEnvironment(),
       ...change,
     }),
@@ -241,4 +242,39 @@ it('does not hide a missing page behind an unavailability error', async () => {
 it('refuses invalid UUIDs before loading nominal data', async () => {
   expect((await run(request(), 'invalid')).status).toBe(400);
   expect(fake.read).not.toHaveBeenCalled();
+});
+
+function enableProduction() {
+  vi.unstubAllEnvs();
+  for (const [key, value] of Object.entries(productionReadEnvironment()))
+    vi.stubEnv(key, value);
+  fake.read.mockResolvedValue({ ...data, environment: 'production' });
+}
+it('serves production only after a fresh Admin role check and labels the page truthfully', async () => {
+  enableProduction();
+  const response = await run();
+  expect(response.status).toBe(200);
+  expect((await response.json()).environment).toBe('production');
+  expect(response.headers.get('cache-control')).toContain('no-store');
+  const html = renderToStaticMarkup(
+    await UserPage({
+      params: Promise.resolve({ userId: uid }),
+      searchParams: Promise.resolve({ from: '2026-10-15', to: '2026-10-17' }),
+    }),
+  );
+  expect(html).toContain('Production');
+  expect(html).not.toContain('Base locale synthétique');
+  fake.role.mockResolvedValue('user');
+  const calls = fake.read.mock.calls.length;
+  expect((await run()).status).toBe(403);
+  expect(fake.read).toHaveBeenCalledTimes(calls);
+});
+it('does not expose connection strings on production SQL failures', async () => {
+  enableProduction();
+  fake.read.mockRejectedValue(
+    Error('postgresql://private-api-error-synthetic.invalid'),
+  );
+  const response = await run();
+  expect(response.status).toBe(503);
+  expect(await response.text()).not.toContain('postgresql://');
 });

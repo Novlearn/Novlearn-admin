@@ -3,9 +3,9 @@ import { readAuthConfiguration } from '@/lib/auth/config';
 import { authorizeAdmin } from '@/lib/auth/authorization';
 import { privateHeaders } from '@/lib/auth/http';
 import { createRouteAuth, transferAuthCookies } from '@/lib/auth/supabase';
-import { readLocalPedagogyConfiguration } from '@/lib/pedagogy-config';
+import { readPedagogyConfiguration } from '@/lib/pedagogy-config';
 import { readPedagogyReferenceQuery } from '@/lib/pedagogy-references';
-import { loadLocalPedagogyReferences } from '@/lib/pedagogy-server';
+import { loadPedagogyReferences } from '@/lib/pedagogy-server';
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 export async function GET(request: NextRequest) {
@@ -26,12 +26,12 @@ export async function GET(request: NextRequest) {
           ? 403
           : 503,
     );
-  if (!readLocalPedagogyConfiguration(process.env))
-    return finish({ error: 'Lecture pédagogique locale non activée.' }, 503);
+  if (!readPedagogyConfiguration(process.env))
+    return finish({ error: 'Lecture pédagogique non configurée.' }, 503);
   const parsed = readPedagogyReferenceQuery(request.nextUrl.searchParams);
   if (!parsed.ok) return finish({ error: parsed.error }, 400);
   try {
-    return finish(await loadLocalPedagogyReferences(parsed.query));
+    return finish(await loadPedagogyReferences(parsed.query));
   } catch {
     return finish({ error: 'Recherche de référence indisponible.' }, 503);
   }

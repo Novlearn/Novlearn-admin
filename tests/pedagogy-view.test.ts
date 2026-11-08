@@ -100,3 +100,22 @@ it('keeps exact bigint pages and filters in backward navigation', () => {
   expect(html).toContain('from=2026-10-15');
   expect(html).toContain('Cette page ne contient plus de ligne');
 });
+
+it('renders production pedagogy only with the expected source', () => {
+  const p = { ...data(), environment: 'production' as const };
+  const html = renderToStaticMarkup(
+    createElement(PedagogyStatisticsView, {
+      data: p,
+      query,
+      environment: 'production',
+    }),
+  );
+  expect(html).toContain('Production · résultats pédagogiques · lecture seule');
+  expect(html).toContain('Les résultats des comptes invités sont exclus');
+  expect(html).not.toContain('données de test');
+  expect(
+    renderToStaticMarkup(
+      createElement(PedagogyStatisticsView, { data: p, query }),
+    ),
+  ).toContain('Statistiques pédagogiques indisponibles');
+});

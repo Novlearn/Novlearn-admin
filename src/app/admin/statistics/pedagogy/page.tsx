@@ -1,5 +1,5 @@
 import { requireAdminPage } from '@/lib/auth/require-admin';
-import { readLocalPedagogyConfiguration } from '@/lib/pedagogy-config';
+import { readPedagogyConfiguration } from '@/lib/pedagogy-config';
 import {
   readPedagogyQuery,
   type PedagogyStatistics,
@@ -9,8 +9,8 @@ import {
   type PedagogyReferences,
 } from '@/lib/pedagogy-references';
 import {
-  loadLocalPedagogyStatistics,
-  loadLocalPedagogyReferences,
+  loadPedagogyStatistics,
+  loadPedagogyReferences,
 } from '@/lib/pedagogy-server';
 import { PedagogyStatisticsView } from '@/components/pedagogy-statistics';
 export const runtime = 'nodejs';
@@ -21,6 +21,7 @@ export default async function PedagogyPage({
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
   await requireAdminPage();
+  const config = readPedagogyConfiguration(process.env);
   const params = new URLSearchParams();
   for (const [key, value] of Object.entries(await searchParams))
     for (const item of Array.isArray(value)
@@ -40,20 +41,19 @@ export default async function PedagogyPage({
   let selectedChapter: PedagogyReferences['items'][number] | null = null,
     selectedCompetence: PedagogyReferences['items'][number] | null = null;
   if (parsed.ok) {
-    if (!readLocalPedagogyConfiguration(process.env))
-      error = 'Lecture pédagogique locale non activée.';
+    if (!config) error = 'Lecture pédagogique non configurée.';
     else
       try {
-        data = await loadLocalPedagogyStatistics(query);
+        data = await loadPedagogyStatistics(query);
         const results = await Promise.all([
           parsed.chapterSearch
-            ? loadLocalPedagogyReferences({
+            ? loadPedagogyReferences({
                 kind: 'chapter',
                 q: parsed.chapterSearch,
               })
             : null,
           parsed.competenceSearch
-            ? loadLocalPedagogyReferences({
+            ? loadPedagogyReferences({
                 kind: 'competence',
                 q: parsed.competenceSearch,
               })
@@ -67,7 +67,7 @@ export default async function PedagogyPage({
               ? (chapters?.items ?? data.references.chapters)
               : (competences?.items ?? data.references.competences);
           if (id && !items.some((item) => item.id === id)) {
-            const selected = await loadLocalPedagogyReferences({ kind, q: id });
+            const selected = await loadPedagogyReferences({ kind, q: id });
             const found = selected.items.find((item) => item.id === id);
             if (found) {
               if (kind === 'chapter') selectedChapter = found;
@@ -86,6 +86,7 @@ export default async function PedagogyPage({
       data={data}
       query={query}
       error={error}
+      environment={config?.environment ?? 'production'}
       chapters={chapters}
       competences={competences}
       selectedChapter={selectedChapter}

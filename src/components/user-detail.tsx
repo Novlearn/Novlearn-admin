@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { formatCount, overviewDate } from '@/lib/dashboard';
+import type { ReadEnvironment } from '@/lib/production-read-config';
 import {
   decodeUserDetail,
   userDetailHref,
@@ -220,12 +221,14 @@ export function UserDetailView({
   data,
   query,
   error,
+  environment = 'local-copy',
 }: {
   data: UserDetailPage | null;
   query: UserDetailQuery;
   error?: string;
+  environment?: ReadEnvironment;
 }) {
-  const decoded = decodeUserDetail(data, query);
+  const decoded = decodeUserDetail(data, query, undefined, environment);
   const current = decoded && decoded !== 'not-found' ? decoded : null;
   const back = new URLSearchParams({
     from: query.period.from,
@@ -242,7 +245,9 @@ export function UserDetailView({
       </Link>
       <header>
         <span className="badge">
-          Base locale synthétique · fiche utilisateur
+          {environment === 'production'
+            ? 'Production · fiche utilisateur · lecture seule'
+            : 'Base locale synthétique · fiche utilisateur'}
         </span>
         <h1 className="mt-4 break-words text-3xl font-semibold tracking-tight">
           {current ? current.user.name : 'Fiche utilisateur'}
@@ -260,9 +265,12 @@ export function UserDetailView({
           </p>
         )}
         <p className="notice mt-4">
-          Comptes de test. Les résultats et niveaux enregistrés ne constituent
-          pas une certification par l’Engine. Aucune modification de compte
-          n’est proposée.
+          {environment === 'production'
+            ? 'Données réelles.'
+            : 'Comptes de test.'}{' '}
+          Les résultats et niveaux enregistrés ne constituent pas une
+          certification par l’Engine. Aucune modification de compte n’est
+          proposée.
         </p>
       </header>
       <form

@@ -7,26 +7,31 @@ import {
 } from '@/lib/users';
 import { formatCount, overviewDate } from '@/lib/dashboard';
 import { userDetailHref } from '@/lib/user-detail';
+import type { ReadEnvironment } from '@/lib/production-read-config';
 
 export function UsersListView({
   data,
   query,
   error,
   detailsEnabled = false,
+  environment = 'local-copy',
 }: {
   data: UsersPage | null;
   query: UsersQuery;
   error?: string;
   detailsEnabled?: boolean;
+  environment?: ReadEnvironment;
 }) {
-  const current = decodeUsersPage(data, query);
+  const current = decodeUsersPage(data, query, undefined, environment);
   const attempts = (count: string) =>
     `${formatCount(count)} tentative${count === '1' ? '' : 's'}`;
   return (
     <div className="space-y-7">
       <header>
         <span className="badge">
-          Base locale synthétique · consultation des utilisateurs
+          {environment === 'production'
+            ? 'Production · utilisateurs · lecture seule'
+            : 'Base locale synthétique · consultation des utilisateurs'}
         </span>
         <h1 className="mt-4 text-3xl font-semibold tracking-tight">
           Utilisateurs
@@ -37,9 +42,9 @@ export function UsersListView({
           activité sont affichées à Paris.
         </p>
         <p className="notice mt-4">
-          Cette source SQL contient des comptes de test. Elle ne décrit pas les
-          utilisateurs de Production. Les comptes invités restent sans nom ni
-          e-mail nominatif.
+          {environment === 'production'
+            ? 'Comptes inscrits en Production. Les comptes invités sont exclus de cette liste.'
+            : 'Cette source SQL contient des comptes de test. Elle ne décrit pas les utilisateurs de Production. Les comptes invités sont exclus de cette liste.'}
         </p>
       </header>
       <form

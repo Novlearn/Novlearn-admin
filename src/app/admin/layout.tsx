@@ -3,8 +3,8 @@ import { Brand } from '@/components/brand';
 import { requireAdminPage } from '@/lib/auth/require-admin';
 import { AdminNavigation } from '@/components/admin-navigation';
 import { readAuthConfiguration } from '@/lib/auth/config';
-import { readLocalActivityConfiguration } from '@/lib/activity-config';
-import { readLocalUsersConfiguration } from '@/lib/users-config';
+import { readActivityConfiguration } from '@/lib/activity-config';
+import { readUsersConfiguration } from '@/lib/users-config';
 import { LocalRecoveryNotice } from '@/components/local-recovery-notice';
 import {
   EditorRecoveryScope,
@@ -44,8 +44,8 @@ export default async function AdminLayout({
               !!authConfig?.localPublicationFixture ||
               process.env.ADMIN_PUBLICATION_ENABLED === 'true'
             }
-            statisticsEnabled={!!readLocalActivityConfiguration(process.env)}
-            usersEnabled={!!readLocalUsersConfiguration(process.env)}
+            statisticsEnabled={!!readActivityConfiguration(process.env)}
+            usersEnabled={!!readUsersConfiguration(process.env)}
           />
         </aside>
         <div className="min-w-0">

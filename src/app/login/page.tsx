@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { Brand } from '@/components/brand';
 import { readAuthConfiguration } from '@/lib/auth/config';
 import { LoginForm } from './login-form';
+import { readProductionApiConfiguration } from '@/lib/production-api-config';
 
 export const dynamic = 'force-dynamic';
 
@@ -12,6 +13,14 @@ const messages: Record<string, string> = {
   forbidden: 'Ce compte ne dispose pas des droits administrateur.',
   unavailable:
     'Le service de connexion est indisponible. Réessayez dans quelques instants.',
+  'production-credentials':
+    'Connexion Production refusée. Utilisez les mêmes identifiants pour vos deux comptes administrateur.',
+  'production-forbidden':
+    'Ce compte ne dispose pas des droits administrateur en Production.',
+  'production-unavailable':
+    'La connexion à Production est indisponible. Réessayez dans quelques instants.',
+  'production-invalid':
+    'Vérifiez les identifiants de vos comptes administrateur.',
 };
 
 export default async function Login({
@@ -74,7 +83,9 @@ export default async function Login({
             Connexion à l’Admin
           </h1>
           <p className="mb-8 mt-3 text-slate-600">
-            Utilisez votre compte administrateur autorisé.
+            {readProductionApiConfiguration(process.env)
+              ? 'Utilisez vos identifiants administrateur autorisés en Préproduction et en Production.'
+              : 'Utilisez votre compte administrateur autorisé.'}
           </p>
           {!enabled ? (
             <div role="status" className="notice mb-6">

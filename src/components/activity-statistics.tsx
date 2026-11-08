@@ -49,7 +49,8 @@ export function ActivityStatisticsView({
         </h1>
         <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-600">
           Les dates utilisent UTC. La fin choisie est incluse ; les chiffres du
-          jour restent partiels jusqu’à minuit UTC.
+          jour restent partiels jusqu’à minuit UTC. Seuls les comptes inscrits
+          et leur activité sont comptés ; les comptes invités sont exclus.
         </p>
         {environment === 'local-fixture' && (
           <p className="notice mt-4">
@@ -117,8 +118,7 @@ export function ActivityStatisticsView({
           </p>
           <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
             {[
-              ['Comptes Auth présents', current.accounts.total],
-              ['Dont comptes anonymes', current.accounts.anonymous],
+              ['Comptes inscrits', current.accounts.total],
               [
                 'Nouveaux comptes sur la période',
                 current.totals.accountsCreated,
@@ -233,8 +233,10 @@ export function ActivityStatisticsView({
             <p>
               Un compte actif possède au moins une tentative d’exercice ou de
               duel dans la période et figure encore dans Auth au moment du
-              relevé. Les comptes anonymes sont inclus. Les tentatives sans
-              compte connu restent dans les volumes, sans créer un compte actif.
+              relevé, avec un compte non invité. Les invités et les tentatives
+              sans compte encore présent sont exclus de tous les volumes et du
+              taux de réussite. Les duels terminés comptent seulement lorsque
+              leurs deux participants sont inscrits.
             </p>
             <p>
               Le taux décrit les verdicts enregistrés ; il ne certifie pas

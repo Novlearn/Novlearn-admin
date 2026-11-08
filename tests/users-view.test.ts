@@ -112,3 +112,19 @@ it('does not preserve an obsolete cursor when starting a new search', () => {
   expect(html).not.toContain('name="after"');
   expect(html).toContain('before=');
 });
+
+it('renders production data only with the expected production source', () => {
+  const p = { ...page(), environment: 'production' as const };
+  const html = renderToStaticMarkup(
+    createElement(UsersListView, { data: p, query, environment: 'production' }),
+  );
+  expect(html).toContain('Production · utilisateurs · lecture seule');
+  expect(html).toContain('Les comptes invités sont exclus de cette liste');
+  expect(html).toContain('activity-a@example.test');
+  expect(html).not.toContain('comptes de test');
+  const wrong = renderToStaticMarkup(
+    createElement(UsersListView, { data: p, query }),
+  );
+  expect(wrong).toContain('Utilisateurs indisponibles');
+  expect(wrong).not.toContain('activity-a@example.test');
+});

@@ -8,10 +8,10 @@ const fake = vi.hoisted(() => ({
   close: vi.fn(),
 }));
 vi.mock('@/lib/pedagogy-config', () => ({
-  readLocalPedagogyConfiguration: fake.config,
+  readPedagogyConfiguration: fake.config,
 }));
 vi.mock('@/lib/pedagogy-pg', () => ({
-  createLocalPedagogyReader: fake.create,
+  createPedagogyReader: fake.create,
   PedagogyPgError: class extends Error {
     constructor() {
       super('Analyse pédagogique indisponible');
@@ -42,22 +42,22 @@ beforeEach(() => {
 it('does not create a pool on import or read after activation is withdrawn', async () => {
   const server = await import('@/lib/pedagogy-server');
   expect(fake.create).not.toHaveBeenCalled();
-  await server.loadLocalPedagogyStatistics(query);
+  await server.loadPedagogyStatistics(query);
   fake.config.mockReturnValue(null);
-  expect(() => server.loadLocalPedagogyStatistics(query)).toThrow(
+  await expect(server.loadPedagogyStatistics(query)).rejects.toThrow(
     'indisponible',
   );
-  expect(() =>
-    server.loadLocalPedagogyReferences({ kind: 'chapter', q: '' }),
-  ).toThrow('indisponible');
+  await expect(
+    server.loadPedagogyReferences({ kind: 'chapter', q: '' }),
+  ).rejects.toThrow('indisponible');
   expect(fake.read).toHaveBeenCalledTimes(1);
   expect(fake.references).not.toHaveBeenCalled();
 });
 it('reuses only the pool while executing every report and reference read', async () => {
   const server = await import('@/lib/pedagogy-server');
   for (let i = 0; i < 2; i++) {
-    await server.loadLocalPedagogyStatistics(query);
-    await server.loadLocalPedagogyReferences({ kind: 'chapter', q: 'Analyse' });
+    await server.loadPedagogyStatistics(query);
+    await server.loadPedagogyReferences({ kind: 'chapter', q: 'Analyse' });
   }
   expect(fake.create).toHaveBeenCalledTimes(1);
   expect(fake.read).toHaveBeenCalledTimes(2);
@@ -66,13 +66,13 @@ it('reuses only the pool while executing every report and reference read', async
 });
 it('replaces and closes the old pool on certificate or credential rotation', async () => {
   const server = await import('@/lib/pedagogy-server');
-  await server.loadLocalPedagogyStatistics(query);
+  await server.loadPedagogyStatistics(query);
   fake.config.mockReturnValue({
     url: 'new-local-url',
     ca: 'new-local-ca',
     environment: 'local-copy',
   });
-  await server.loadLocalPedagogyReferences({ kind: 'chapter', q: '' });
+  await server.loadPedagogyReferences({ kind: 'chapter', q: '' });
   expect(fake.create).toHaveBeenCalledTimes(2);
   expect(fake.close).toHaveBeenCalledTimes(1);
 });

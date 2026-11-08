@@ -3,8 +3,8 @@ import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { Pool, type PoolClient } from 'pg';
 import {
-  validLocalUserDetailEndpoint,
-  type LocalUserDetailPgConfiguration,
+  validUserDetailEndpoint,
+  type UserDetailPgConfiguration,
 } from './user-detail-config';
 import {
   decodeUserDetail,
@@ -112,10 +112,8 @@ function validAudit(value: unknown, assumed: boolean): boolean {
 }
 /** Returns one validated profile and a bounded detail page. A raw SQL client never escapes.
  * The caller must freshly authorize the Admin before each read. */
-export function createLocalUserDetailReader(
-  config: LocalUserDetailPgConfiguration,
-) {
-  if (!validLocalUserDetailEndpoint(config)) throw new UserDetailPgError();
+export function createUserDetailReader(config: UserDetailPgConfiguration) {
+  if (!validUserDetailEndpoint(config)) throw new UserDetailPgError();
   const pool = new Pool({
     connectionString: config.url,
     ssl: { rejectUnauthorized: true, ca: config.ca, minVersion: 'TLSv1.2' },

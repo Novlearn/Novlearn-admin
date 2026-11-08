@@ -26,7 +26,7 @@ vi.mock('pg', () => ({
     };
   }),
 }));
-import { createLocalPedagogyReader } from '@/lib/pedagogy-pg';
+import { createPedagogyReader } from '@/lib/pedagogy-pg';
 import { readPedagogyQuery } from '@/lib/pedagogy-statistics';
 import fixture from './fixtures/pedagogy-statistics.json';
 const config = () => ({
@@ -41,6 +41,7 @@ if (!parsed.ok) throw Error('Invalid fixture query');
 const query = parsed.query;
 const columns = [
   'auth.users.id',
+  'auth.users.is_anonymous',
   'public.exercise_attempts.id',
   'public.exercise_attempts.exercise_id',
   'public.exercise_attempts.user_id',
@@ -146,7 +147,7 @@ beforeEach(() => {
   });
 });
 it('constructs a lazy pool with verified TLS and bounded timeouts', () => {
-  const reader = createLocalPedagogyReader(config());
+  const reader = createPedagogyReader(config());
   expect(fake.query).not.toHaveBeenCalled();
   expect(fake.make).toHaveBeenCalledWith(
     expect.objectContaining({
@@ -163,7 +164,7 @@ it.each(['?sslmode=disable', '?options=-c%20role%3Dpostgres', '#override'])(
   'rejects URL overrides %s before constructing a pool',
   (suffix) => {
     expect(() =>
-      createLocalPedagogyReader({ ...config(), url: config().url + suffix }),
+      createPedagogyReader({ ...config(), url: config().url + suffix }),
     ).toThrow('Analyse pédagogique indisponible');
     expect(fake.make).not.toHaveBeenCalled();
   },
@@ -176,20 +177,20 @@ it.each([
   ['synthetic-fixture-password', 'short'],
 ])('rejects endpoints outside the isolated copy %s', (a, b) => {
   expect(() =>
-    createLocalPedagogyReader({ ...config(), url: config().url.replace(a, b) }),
+    createPedagogyReader({ ...config(), url: config().url.replace(a, b) }),
   ).toThrow();
 });
 it('does not accept an operational source label or missing certificate', () => {
   expect(() =>
-    createLocalPedagogyReader({
+    createPedagogyReader({
       ...config(),
       environment: 'production' as 'local-copy',
     }),
   ).toThrow();
-  expect(() => createLocalPedagogyReader({ ...config(), ca: '' })).toThrow();
+  expect(() => createPedagogyReader({ ...config(), ca: '' })).toThrow();
 });
 it('audits both identities and returns aggregates with a trusted source label', async () => {
-  const reader = createLocalPedagogyReader(config());
+  const reader = createPedagogyReader(config());
   const result = await reader.read(query);
   expect(result.environment).toBe('local-copy');
   expect(result.totals).toEqual(fixture.totals);
@@ -215,7 +216,7 @@ it('audits both identities and returns aggregates with a trusted source label', 
   await reader.close();
 });
 it('audits reference reads and binds literal search terms separately from SQL', async () => {
-  const reader = createLocalPedagogyReader(config());
+  const reader = createPedagogyReader(config());
   const value = await reader.references({ kind: 'competence', q: '%_\\' });
   expect(value.environment).toBe('local-copy');
   expect(value.items[0].id).toBe('literal');
@@ -245,7 +246,7 @@ it.each([
         ...audit(assumed),
         ...(assumed === target ? { [key]: true } : {}),
       }));
-      const reader = createLocalPedagogyReader(config());
+      const reader = createPedagogyReader(config());
       await expect(reader.read(query)).rejects.toThrow(
         'Analyse pédagogique indisponible',
       );
@@ -286,7 +287,7 @@ it.each([
     mutate(a);
     return a;
   });
-  const reader = createLocalPedagogyReader(config());
+  const reader = createPedagogyReader(config());
   await expect(reader.read(query)).rejects.toThrow(
     'Analyse pédagogique indisponible',
   );
@@ -304,7 +305,7 @@ it('refuses a modified aggregate without returning partial values or raw SQL err
       ? { rows: [{ statistics: { ...fixture, environment: 'production' } }] }
       : original(sql, ...rest),
   );
-  const reader = createLocalPedagogyReader(config());
+  const reader = createPedagogyReader(config());
   await expect(reader.read(query)).rejects.toThrow(
     'Analyse pédagogique indisponible',
   );
@@ -312,7 +313,7 @@ it('refuses a modified aggregate without returning partial values or raw SQL err
   await reader.close();
 });
 it('refuses invalid period metadata before obtaining a connection', async () => {
-  const reader = createLocalPedagogyReader(config());
+  const reader = createPedagogyReader(config());
   await expect(
     reader.read({ ...query, period: { ...query.period, days: 4 } }),
   ).rejects.toThrow();
@@ -321,7 +322,7 @@ it('refuses invalid period metadata before obtaining a connection', async () => 
 });
 it('refuses an unverified physical transport even if the query mock would pass', async () => {
   fake.stream.authorized = false;
-  const reader = createLocalPedagogyReader(config());
+  const reader = createPedagogyReader(config());
   await expect(reader.read(query)).rejects.toThrow(
     'Analyse pédagogique indisponible',
   );

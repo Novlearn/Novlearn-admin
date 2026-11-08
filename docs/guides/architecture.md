@@ -1,5 +1,11 @@
 # Architecture et contrats
 
+Architecture activée le 8 novembre après confirmation explicite : lectures
+Production par API Supabase, clé publique et session Admin Production soumise
+aux RLS. Une connexion vérifie séparément les rôles Staging et Production.
+Le serveur sur le port 3000 utilise le build API qualifié ; voir
+[le contrat de lecture Production](production-api.md).
+
 Ce document décrit les responsabilités du code présent. Les capacités actives
 et les limites de réception sont dans [l’état actuel](../roadmap.md), les règles
 fonctionnelles dans le [CDC](../../CDC_reference.md).
@@ -22,9 +28,10 @@ MathLive sont locales ; la référence visuelle reste
 | `src/lib/creator*`, `catalogue*`, `taxonomy.ts`, `flashcards.ts` | Contrats d’édition et accès Staging                                                       |
 | `src/lib/engine-*`, `preview*`, `test-receipt*`, `review.ts`     | Identité du moteur, calcul officiel, aperçu, reçus et relecture                           |
 | `src/lib/publication*`                                           | Préparation, confirmation, transfert sélectif, journal et reprise                         |
-| `src/lib/*-pg.ts`, `*-config.ts`                                 | Capacités PostgreSQL et lecteurs spécialisés                                              |
-| `scripts/`                                                       | Préparation/build Engine, aides locales et requêtes SQL utilisées par les lecteurs Admin |
-| `tests/`                                                         | Tests Vitest des contrats, permissions et rendus serveur                                 |
+| `src/lib/production-api*`                                        | Lectures API Production et vérification de sa session Admin                               |
+| `src/lib/*-pg.ts`, `*-config.ts`                                 | Lecteurs des copies PostgreSQL locales et sélection contrôlée de la source                |
+| `scripts/`                                                       | Préparation/build Engine, aides locales et requêtes SQL utilisées par les lecteurs Admin  |
+| `tests/`                                                         | Tests Vitest des contrats, permissions et rendus serveur                                  |
 
 Le navigateur gère la saisie et l’affichage. Le serveur vérifie l’identité et les
 droits, lit Staging et appelle Engine. Les informations de correction privées
@@ -33,8 +40,13 @@ serveur ; voir [Auth et configuration](./auth.md).
 
 Staging porte Auth Admin, brouillons et référentiel. Production est une frontière
 séparée pour les lectures minimisées et la publication approuvée. Les lecteurs
-statistiques/utilisateurs actuellement raccordés dans le code concernent des
-copies locales, pas une connexion Production établie.
+statistiques/utilisateurs acceptent désormais une configuration Production
+explicite par API Supabase avec une session Admin Production. Les copies locales
+restent isolées ; aucune configuration Production invalide ne retombe sur une
+copie. Le [contrat de lecture](./production-api.md) décrit les RPC en mode invoker,
+les rôles vérifiés dans chaque projet et leurs tests. Les RLS du site et celles de
+l'Admin ont des noms distincts et évaluent l'identité authentifiée. Les comptes Auth passent par une projection
+privée minimale, dont les colonnes, le propriétaire et la définition sont contrôlés.
 
 ## Exercices et cycle éditorial
 
@@ -150,8 +162,14 @@ transferts.
 Les statistiques d’activité utilisent des périodes UTC de 1 à 90 jours,
 `[from, until)`. Les tentatives suivent `attempted_at` ou `submitted_at`, les duels
 terminés `finished_at`. Les comptes actifs sont les identités Auth encore présentes
-ayant une tentative datée sur la période, anonymes inclus et dédupliqués ; ils ne
+non invités ayant une tentative datée sur la période, dédupliqués ; ils ne
 sont pas le nombre de comptes créés. Les dates manquantes ne sont pas inventées.
+
+Décision du 8 novembre : les invités sont exclus du stock de comptes, des
+créations, de la liste des utilisateurs et de tous les volumes et taux généraux
+ou pédagogiques. Les tentatives sans compte encore présent sont aussi exclues.
+Les duels terminés exigent deux participants inscrits ; la tentative d'un inscrit
+contre un invité reste une activité de cet inscrit.
 
 La réussite enregistrée vaut `correct / (correct + incorrect)`, abandons exclus ;
 sans dénominateur, elle est non calculable. Elle ne certifie pas les verdicts

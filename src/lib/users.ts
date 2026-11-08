@@ -1,3 +1,4 @@
+import type { ReadEnvironment } from './production-read-config';
 import {
   readStatisticsPeriod,
   statisticsDate,
@@ -23,7 +24,7 @@ export type UserSummary = {
 };
 export type UsersPage = {
   schemaVersion: 1;
-  environment: 'local-copy';
+  environment: ReadEnvironment;
   asOf: string;
   period: Pick<StatisticsPeriod, 'from' | 'until'>;
   query: string;
@@ -108,6 +109,7 @@ export function decodeUsersPage(
   value: unknown,
   expected: UsersQuery,
   limit = USERS_PAGE_SIZE,
+  environment: ReadEnvironment = 'local-copy',
 ): UsersPage | null {
   const p = statisticsPeriod(expected.period.from, expected.period.to);
   if (
@@ -141,7 +143,8 @@ export function decodeUsersPage(
       'next',
     ]) ||
     value.schemaVersion !== 1 ||
-    value.environment !== 'local-copy' ||
+    !['local-copy', 'production'].includes(environment) ||
+    value.environment !== environment ||
     !timestamp(value.asOf) ||
     !object(value.period) ||
     !exact(value.period, ['from', 'until']) ||
@@ -271,7 +274,7 @@ export function decodeUsersPage(
   }
   return {
     schemaVersion: 1,
-    environment: 'local-copy',
+    environment,
     asOf: value.asOf,
     period: { from: p.from, until: p.until },
     query: expected.query,

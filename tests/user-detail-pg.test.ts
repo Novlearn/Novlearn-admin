@@ -26,7 +26,7 @@ vi.mock('pg', () => ({
     };
   }),
 }));
-import { createLocalUserDetailReader } from '@/lib/user-detail-pg';
+import { createUserDetailReader } from '@/lib/user-detail-pg';
 import { statisticsPeriod } from '@/lib/activity-statistics';
 import sqlFixture from './fixtures/user-detail-sql.json';
 const fixture = { ...sqlFixture.history, environment: 'local-copy' };
@@ -142,7 +142,7 @@ beforeEach(() => {
   });
 });
 it('constructs a lazy pool with verified TLS and bounded timeouts', () => {
-  const reader = createLocalUserDetailReader(config());
+  const reader = createUserDetailReader(config());
   expect(fake.query).not.toHaveBeenCalled();
   expect(fake.make).toHaveBeenCalledWith(
     expect.objectContaining({
@@ -159,7 +159,7 @@ it.each(['?sslmode=disable', '?options=-c%20role%3Dpostgres', '#override'])(
   'rejects URL overrides %s before constructing a pool',
   (suffix) => {
     expect(() =>
-      createLocalUserDetailReader({ ...config(), url: config().url + suffix }),
+      createUserDetailReader({ ...config(), url: config().url + suffix }),
     ).toThrow('Fiche utilisateur indisponible');
     expect(fake.make).not.toHaveBeenCalled();
   },
@@ -172,7 +172,7 @@ it.each([
   ['synthetic-fixture-password', 'short'],
 ])('rejects endpoints outside the isolated copy %s', (a, b) => {
   expect(() =>
-    createLocalUserDetailReader({
+    createUserDetailReader({
       ...config(),
       url: config().url.replace(a, b),
     }),
@@ -180,15 +180,15 @@ it.each([
 });
 it('does not accept an operational source label or missing certificate', () => {
   expect(() =>
-    createLocalUserDetailReader({
+    createUserDetailReader({
       ...config(),
       environment: 'production' as 'local-copy',
     }),
   ).toThrow();
-  expect(() => createLocalUserDetailReader({ ...config(), ca: '' })).toThrow();
+  expect(() => createUserDetailReader({ ...config(), ca: '' })).toThrow();
 });
 it('audits both identities and returns aggregates with a trusted source label', async () => {
-  const reader = createLocalUserDetailReader(config());
+  const reader = createUserDetailReader(config());
   const result = await reader.read(period);
   if (!result) throw Error('Expected an existing user fixture');
   expect(result.environment).toBe('local-copy');
@@ -228,7 +228,7 @@ it.each([
         ...audit(assumed),
         ...(assumed === target ? { [key]: true } : {}),
       }));
-      const reader = createLocalUserDetailReader(config());
+      const reader = createUserDetailReader(config());
       await expect(reader.read(period)).rejects.toThrow(
         'Fiche utilisateur indisponible',
       );
@@ -269,7 +269,7 @@ it.each([
     mutate(a);
     return a;
   });
-  const reader = createLocalUserDetailReader(config());
+  const reader = createUserDetailReader(config());
   await expect(reader.read(period)).rejects.toThrow(
     'Fiche utilisateur indisponible',
   );
@@ -287,7 +287,7 @@ it('refuses a modified aggregate without returning partial values or raw SQL err
       ? { rows: [{ detail: { ...fixture, environment: 'production' } }] }
       : original(sql, ...rest),
   );
-  const reader = createLocalUserDetailReader(config());
+  const reader = createUserDetailReader(config());
   await expect(reader.read(period)).rejects.toThrow(
     'Fiche utilisateur indisponible',
   );
@@ -295,7 +295,7 @@ it('refuses a modified aggregate without returning partial values or raw SQL err
   await reader.close();
 });
 it('refuses invalid period metadata before obtaining a connection', async () => {
-  const reader = createLocalUserDetailReader(config());
+  const reader = createUserDetailReader(config());
   await expect(
     reader.read({ ...period, period: { ...period.period, days: 4 } }),
   ).rejects.toThrow();
@@ -304,7 +304,7 @@ it('refuses invalid period metadata before obtaining a connection', async () => 
 });
 it('refuses an unverified physical transport even if the query mock would pass', async () => {
   fake.stream.authorized = false;
-  const reader = createLocalUserDetailReader(config());
+  const reader = createUserDetailReader(config());
   await expect(reader.read(period)).rejects.toThrow(
     'Fiche utilisateur indisponible',
   );
@@ -319,7 +319,7 @@ it('commits a verified absence response and distinguishes it from a broken lease
       ? { rows: [{ detail: structuredClone(sqlFixture.missing) }] }
       : original(sql, ...rest),
   );
-  const reader = createLocalUserDetailReader(config());
+  const reader = createUserDetailReader(config());
   await expect(
     reader.read({ ...period, userId: sqlFixture.missing.userId }),
   ).resolves.toBeNull();
@@ -334,7 +334,7 @@ it('does not accept an absence envelope for another requested identity', async (
       ? { rows: [{ detail: structuredClone(sqlFixture.missing) }] }
       : original(sql, ...rest),
   );
-  const reader = createLocalUserDetailReader(config());
+  const reader = createUserDetailReader(config());
   await expect(reader.read(period)).rejects.toThrow(
     'Fiche utilisateur indisponible',
   );
@@ -343,7 +343,7 @@ it('does not accept an absence envelope for another requested identity', async (
   await reader.close();
 });
 it('copies the validated query before awaiting the connection or files', async () => {
-  const reader = createLocalUserDetailReader(config()),
+  const reader = createUserDetailReader(config()),
     input = structuredClone(period);
   const pending = reader.read(input);
   input.period.from = '2026-10-16';

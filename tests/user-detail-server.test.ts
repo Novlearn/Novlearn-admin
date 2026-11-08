@@ -7,10 +7,10 @@ const fake = vi.hoisted(() => ({
   close: vi.fn(),
 }));
 vi.mock('@/lib/user-detail-config', () => ({
-  readLocalUserDetailConfiguration: fake.config,
+  readUserDetailConfiguration: fake.config,
 }));
 vi.mock('@/lib/user-detail-pg', () => ({
-  createLocalUserDetailReader: fake.create,
+  createUserDetailReader: fake.create,
   UserDetailPgError: class extends Error {
     constructor() {
       super('Fiche utilisateur indisponible');
@@ -42,37 +42,37 @@ beforeEach(() => {
 afterEach(() => vi.resetModules());
 it('does not create a connection pool while importing a disabled capability', async () => {
   fake.config.mockReturnValue(null);
-  const { loadLocalUserDetail } = await import('@/lib/user-detail-server');
+  const { loadUserDetail } = await import('@/lib/user-detail-server');
   expect(fake.create).not.toHaveBeenCalled();
-  await expect(loadLocalUserDetail(period)).rejects.toThrow(
+  await expect(loadUserDetail(period)).rejects.toThrow(
     'Fiche utilisateur indisponible',
   );
   expect(fake.create).not.toHaveBeenCalled();
   expect(fake.read).not.toHaveBeenCalled();
 });
 it('reuses the bounded pool but never caches aggregate results', async () => {
-  const { loadLocalUserDetail } = await import('@/lib/user-detail-server');
-  await Promise.all([loadLocalUserDetail(period), loadLocalUserDetail(period)]);
+  const { loadUserDetail } = await import('@/lib/user-detail-server');
+  await Promise.all([loadUserDetail(period), loadUserDetail(period)]);
   expect(fake.create).toHaveBeenCalledTimes(1);
   expect(fake.read).toHaveBeenCalledTimes(2);
 });
 it('replaces changed operator credentials and closes the preceding pool', async () => {
-  const { loadLocalUserDetail } = await import('@/lib/user-detail-server');
-  await loadLocalUserDetail(period);
+  const { loadUserDetail } = await import('@/lib/user-detail-server');
+  await loadUserDetail(period);
   fake.config.mockReturnValue({
     url: 'rotated-url',
     ca: 'rotated-ca',
     environment: 'local-copy',
   });
-  await loadLocalUserDetail(period);
+  await loadUserDetail(period);
   expect(fake.create).toHaveBeenCalledTimes(2);
   expect(fake.close).toHaveBeenCalledTimes(1);
 });
 it('does not read from a retained pool after activation is withdrawn', async () => {
-  const { loadLocalUserDetail } = await import('@/lib/user-detail-server');
-  await loadLocalUserDetail(period);
+  const { loadUserDetail } = await import('@/lib/user-detail-server');
+  await loadUserDetail(period);
   fake.config.mockReturnValue(null);
-  await expect(loadLocalUserDetail(period)).rejects.toThrow(
+  await expect(loadUserDetail(period)).rejects.toThrow(
     'Fiche utilisateur indisponible',
   );
   expect(fake.read).toHaveBeenCalledTimes(1);

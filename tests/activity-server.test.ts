@@ -7,10 +7,10 @@ const fake = vi.hoisted(() => ({
   close: vi.fn(),
 }));
 vi.mock('@/lib/activity-config', () => ({
-  readLocalActivityConfiguration: fake.config,
+  readActivityConfiguration: fake.config,
 }));
 vi.mock('@/lib/activity-pg', () => ({
-  createLocalActivityReader: fake.create,
+  createActivityReader: fake.create,
   ActivityPgError: class extends Error {
     constructor() {
       super('Statistiques indisponibles');
@@ -37,40 +37,40 @@ beforeEach(() => {
 afterEach(() => vi.resetModules());
 it('does not create a connection pool while importing a disabled capability', async () => {
   fake.config.mockReturnValue(null);
-  const { loadLocalActivityStatistics } = await import('@/lib/activity-server');
+  const { loadActivityStatistics } = await import('@/lib/activity-server');
   expect(fake.create).not.toHaveBeenCalled();
-  await expect(loadLocalActivityStatistics(period)).rejects.toThrow(
+  await expect(loadActivityStatistics(period)).rejects.toThrow(
     'Statistiques indisponibles',
   );
   expect(fake.create).not.toHaveBeenCalled();
   expect(fake.read).not.toHaveBeenCalled();
 });
 it('reuses the bounded pool but never caches aggregate results', async () => {
-  const { loadLocalActivityStatistics } = await import('@/lib/activity-server');
+  const { loadActivityStatistics } = await import('@/lib/activity-server');
   await Promise.all([
-    loadLocalActivityStatistics(period),
-    loadLocalActivityStatistics(period),
+    loadActivityStatistics(period),
+    loadActivityStatistics(period),
   ]);
   expect(fake.create).toHaveBeenCalledTimes(1);
   expect(fake.read).toHaveBeenCalledTimes(2);
 });
 it('replaces changed operator credentials and closes the preceding pool', async () => {
-  const { loadLocalActivityStatistics } = await import('@/lib/activity-server');
-  await loadLocalActivityStatistics(period);
+  const { loadActivityStatistics } = await import('@/lib/activity-server');
+  await loadActivityStatistics(period);
   fake.config.mockReturnValue({
     url: 'rotated-url',
     ca: 'rotated-ca',
     environment: 'local-copy',
   });
-  await loadLocalActivityStatistics(period);
+  await loadActivityStatistics(period);
   expect(fake.create).toHaveBeenCalledTimes(2);
   expect(fake.close).toHaveBeenCalledTimes(1);
 });
 it('does not read from a retained pool after activation is withdrawn', async () => {
-  const { loadLocalActivityStatistics } = await import('@/lib/activity-server');
-  await loadLocalActivityStatistics(period);
+  const { loadActivityStatistics } = await import('@/lib/activity-server');
+  await loadActivityStatistics(period);
   fake.config.mockReturnValue(null);
-  await expect(loadLocalActivityStatistics(period)).rejects.toThrow(
+  await expect(loadActivityStatistics(period)).rejects.toThrow(
     'Statistiques indisponibles',
   );
   expect(fake.read).toHaveBeenCalledTimes(1);

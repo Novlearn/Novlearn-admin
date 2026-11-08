@@ -1,13 +1,19 @@
+import {
+  productionReadRequested,
+  readProductionReadConfiguration,
+} from './production-read-config';
+import type { ProductionApiConfiguration } from './production-api-config';
 import { readAuthConfiguration } from './auth/config';
 
-export type LocalUserDetailPgConfiguration = {
+export type UserDetailPgConfiguration = {
   url: string;
   ca: string;
   environment: 'local-copy';
 };
-export function validLocalUserDetailEndpoint(
-  config: LocalUserDetailPgConfiguration,
-) {
+export type UserDetailReadConfiguration =
+  | UserDetailPgConfiguration
+  | ProductionApiConfiguration;
+export function validUserDetailEndpoint(config: UserDetailPgConfiguration) {
   try {
     const url = new URL(config.url);
     return (
@@ -29,11 +35,11 @@ export function validLocalUserDetailEndpoint(
     return false;
   }
 }
-/** Local-only operator activation. A remote Auth or publication profile cannot
- * accidentally inherit this fixture's database or source label. */
-export function readLocalUserDetailConfiguration(
+/** Explicit production capability or isolated development copy. No fallback on invalid production settings. */
+export function readUserDetailConfiguration(
   env: Record<string, string | undefined>,
-): LocalUserDetailPgConfiguration | null {
+): UserDetailReadConfiguration | null {
+  if (productionReadRequested(env)) return readProductionReadConfiguration(env);
   const auth = readAuthConfiguration(env);
   if (
     !auth?.local ||
@@ -44,10 +50,10 @@ export function readLocalUserDetailConfiguration(
     env.ADMIN_USER_DETAIL_ENABLED === 'true'
   )
     return null;
-  const config: LocalUserDetailPgConfiguration = {
+  const config: UserDetailPgConfiguration = {
     url: env.ADMIN_LOCAL_USER_DETAIL_PG_URL ?? '',
     ca: env.ADMIN_LOCAL_USER_DETAIL_PG_CA ?? '',
     environment: 'local-copy',
   };
-  return validLocalUserDetailEndpoint(config) ? config : null;
+  return validUserDetailEndpoint(config) ? config : null;
 }

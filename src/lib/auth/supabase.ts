@@ -118,8 +118,9 @@ export function createRouteAuth(
   return { gateway: asAuthGateway(client), response, client };
 }
 
-export async function createPageClient() {
-  const config = readAuthConfiguration(process.env);
+export async function createPageClient(override?: AuthConfiguration | null) {
+  const config =
+    override === undefined ? readAuthConfiguration(process.env) : override;
   if (!config) return null;
   const store = await cookies();
   const client = createServerClient(config.supabaseUrl, config.publishableKey, {
