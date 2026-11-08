@@ -5,6 +5,7 @@ import { AdminNavigation } from '@/components/admin-navigation';
 import { readAuthConfiguration } from '@/lib/auth/config';
 import { readActivityConfiguration } from '@/lib/activity-config';
 import { readUsersConfiguration } from '@/lib/users-config';
+import { readProductionApiConfiguration } from '@/lib/production-api-config';
 import { LocalRecoveryNotice } from '@/components/local-recovery-notice';
 import {
   EditorRecoveryScope,
@@ -46,6 +47,7 @@ export default async function AdminLayout({
             }
             statisticsEnabled={!!readActivityConfiguration(process.env)}
             usersEnabled={!!readUsersConfiguration(process.env)}
+            feedbackEnabled={!!readProductionApiConfiguration(process.env)}
           />
         </aside>
         <div className="min-w-0">

@@ -5,10 +5,12 @@ import { usePathname } from 'next/navigation';
 export function AdminNavigation({
   statisticsEnabled = false,
   usersEnabled = false,
+  feedbackEnabled = false,
   publicationEnabled = true,
 }: {
   statisticsEnabled?: boolean;
   usersEnabled?: boolean;
+  feedbackEnabled?: boolean;
   publicationEnabled?: boolean;
 }) {
   const path = usePathname();
@@ -34,6 +36,7 @@ export function AdminNavigation({
         ...(publicationEnabled ? [['/admin/publication', 'Publications']] : []),
         ...(statisticsEnabled ? [['/admin/statistics', 'Statistiques']] : []),
         ...(usersEnabled ? [['/admin/users', 'Utilisateurs']] : []),
+        ...(feedbackEnabled ? [['/admin/feedback', 'Feedbacks']] : []),
       ],
     },
   ];

@@ -2,6 +2,13 @@
 
 **Mis à jour le 8 novembre 2026.** Le responsable confirme que la connexion Admin–Exercise Engine est terminée : validation canonique, aperçu et tests sont disponibles dans l’Admin. Cette réception est basée sur sa confirmation ; aucun nouveau déploiement distant ou état Production n’est attesté ici.
 
+**Décision fonctionnelle explicite du responsable — 8 novembre 2026 :** ajouter
+une page Feedbacks à l’Admin, alimentée exclusivement par les feedbacks de
+Production. La page filtre et trie les catégories et statuts et permet à un
+administrateur de valider ou refuser un feedback en attente. Les décisions sont
+contrôlées côté serveur et auditées en Production. Leur activation distante
+nécessite l’installation explicite du script de permissions dédié.
+
 ## État actuel
 
 - **Périmètre statistique appliqué le 8 novembre :** à la demande du responsable, la migration `20261108145047` exclut les comptes invités des statistiques et de la liste des utilisateurs, avec filtrage SQL avant calcul et pagination. La règle est inscrite au CDC, section 6.3 ; seuls les comptes Auth non invités encore présents et leur activité alimentent les indicateurs. Les duels terminés exigent deux inscrits. Les comparaisons des totaux, volumes, taux et statistiques pédagogiques passent en base, sans export de lignes personnelles. Les 1 643 tests, types, lint, build et smoke tests passent ; le serveur sur le port 3000 a été relancé. Cette évolution ne supprime aucune donnée et ne modifie aucun droit RLS.

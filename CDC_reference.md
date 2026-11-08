@@ -859,6 +859,23 @@ L'interface doit toujours distinguer clairement :
 
 Une statistique de test ne doit jamais être présentée comme une statistique réelle.
 
+## 15.4 Feedbacks Production
+
+**Décision fonctionnelle explicite du responsable — 8 novembre 2026 :**
+l’Admin possède une page dédiée qui consulte uniquement `public.feedbacks` en
+Production. L’administrateur filtre par catégorie (`difficulty`,
+`content_error`, `suggestion`, `other`), statut et ordre ; les retours sont
+présentés par pages. Il peut valider ou refuser un feedback en attente. Chaque
+décision est vérifiée par le serveur, conditionnée à son statut encore en attente
+et inscrite dans un historique d’audit en Production. Ces décisions sont
+distinctes de la publication pédagogique ; elles ne transfèrent ni ne modifient
+les feedbacks en Staging.
+
+L’accès de lecture conserve les sessions et le rôle Admin Production distincts
+de Staging, et les permissions RLS Production. La capacité de décision est
+installée séparément et strictement limitée à cette transition ; aucun secret
+privilégié n’est exposé à l’application.
+
 ---
 
 # 16. Sécurité et exigences transversales

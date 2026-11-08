@@ -67,7 +67,13 @@ export function asAuthGateway(client: SupabaseClient): AuthGateway {
           code: error.code ?? null,
           name: error.name,
         });
-      if (error && (error.status === undefined || error.status >= 500))
+      if (
+        error &&
+        (error.status === undefined ||
+          error.status === 0 ||
+          error.status === 429 ||
+          error.status >= 500)
+      )
         throw new Error('Auth unavailable');
       return !error;
     },
