@@ -28,23 +28,12 @@ export function UsersListView({
   return (
     <div className="space-y-7">
       <header>
-        <span className="badge">
-          {environment === 'production'
-            ? 'Production · utilisateurs · lecture seule'
-            : 'Base locale synthétique · consultation des utilisateurs'}
-        </span>
         <h1 className="mt-4 text-3xl font-semibold tracking-tight">
           Utilisateurs
         </h1>
         <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-600">
           Nom, e-mail du compte et tentatives enregistrées sur la période
-          choisie. Les dates du filtre utilisent UTC ; les heures de dernière
-          activité sont affichées à Paris.
-        </p>
-        <p className="notice mt-4">
-          {environment === 'production'
-            ? 'Comptes inscrits en Production. Les comptes invités sont exclus de cette liste.'
-            : 'Cette source SQL contient des comptes de test. Elle ne décrit pas les utilisateurs de Production. Les comptes invités sont exclus de cette liste.'}
+          choisie. 
         </p>
       </header>
       <form

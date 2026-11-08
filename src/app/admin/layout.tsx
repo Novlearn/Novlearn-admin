@@ -52,13 +52,6 @@ export default async function AdminLayout({
         </aside>
         <div className="min-w-0">
           <header className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 bg-white px-6 py-4 lg:px-10">
-            <span className="badge">
-              {authConfig?.localPublicationFixture
-                ? 'Banc de publication local · données synthétiques'
-                : local
-                  ? 'Local · données d’essai enregistrées'
-                  : 'Préproduction · espace d’administration'}
-            </span>
             <AdminLogout />
           </header>
           <main id="main-content" className="px-6 py-9 lg:px-10">

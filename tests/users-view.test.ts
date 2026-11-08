@@ -118,8 +118,6 @@ it('renders production data only with the expected production source', () => {
   const html = renderToStaticMarkup(
     createElement(UsersListView, { data: p, query, environment: 'production' }),
   );
-  expect(html).toContain('Production · utilisateurs · lecture seule');
-  expect(html).toContain('Les comptes invités sont exclus de cette liste');
   expect(html).toContain('activity-a@example.test');
   expect(html).not.toContain('comptes de test');
   const wrong = renderToStaticMarkup(
