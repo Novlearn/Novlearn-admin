@@ -49,6 +49,27 @@ Le champ technique `accounts.anonymous` reste présent dans le contrat et vaut
 zéro ; son ancienne carte a été retirée de l'interface.
 La projection Auth et la consultation directe d'une fiche existante restent
 inchangées ; les droits RLS ne sont pas élargis.
+
+La synthèse Statistiques effectue aussi des lectures Production `head/count`
+sur `public.exercises` et `public.feedbacks`. Elle sépare les indicateurs de la
+période des repères cumulés : le stock actuel du catalogue et le total de
+comptes inscrits restent hors période, tandis que les exercices créés sont
+comptés selon `public.exercises.created_at` dans la période sélectionnée. Les
+compteurs de feedbacks sont aussi bornés à cette période et séparés par statut ;
+aucune ligne de feedback ni aucun contenu d'exercice n'est transféré au
+navigateur. Ces lectures utilisent la session Admin Production existante et
+restent soumises aux droits RLS. Elles n'écrivent aucune donnée.
+
+La rétention J+7/J+30 utilise l'agrégat dédié
+`public.admin_read_cohort_retention`, défini dans
+[`production-cohort-retention.sql`](../../scripts/production-cohort-retention.sql).
+Les deux taux couvrent les mêmes comptes inscrits entre 31 et 60 jours avant
+le relevé ; ils restent indépendants de la période d’activité choisie.
+Le contrat est préparé dans ce dépôt mais n'est pas installé en Production :
+la page indique que la rétention n'est pas activée tant que cette fonction
+n'a pas été intégrée à la migration canonique du dépôt NovLearn puis déployée
+par le processus approuvé. Aucun SQL distant n'a été exécuté depuis l'Admin.
+
 La [qualification dédiée](../../scripts/production-registered-users-qualification.sql)
 compare les résultats aux comptes et activités inscrits, en base, sans exporter
 de lignes personnelles. Elle vérifie aussi la pagination et la cohérence avec

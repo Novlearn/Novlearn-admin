@@ -9,6 +9,13 @@ administrateur de valider ou refuser un feedback en attente. Les décisions sont
 contrôlées côté serveur et auditées en Production. Leur activation distante
 nécessite l’installation explicite du script de permissions dédié.
 
+**Décision fonctionnelle explicite du responsable — 10 novembre 2026 :** la
+page Utilisateurs recherche par nom uniquement, présente le nom et l’e-mail,
+affiche la dernière activité des 30 derniers jours sans filtre de date, ouvre
+une fiche synthétique au clic sur le nom (historique et compétences, sans vue
+par chapitre) et propose l’export CSV de la liste filtrée. Voir le détail et la
+limite de date dans le [CDC, section 15.2](../CDC_reference.md#152-consultation-des-utilisateurs).
+
 ## État actuel
 
 - **Périmètre statistique appliqué le 8 novembre :** à la demande du responsable, la migration `20261108145047` exclut les comptes invités des statistiques et de la liste des utilisateurs, avec filtrage SQL avant calcul et pagination. La règle est inscrite au CDC, section 6.3 ; seuls les comptes Auth non invités encore présents et leur activité alimentent les indicateurs. Les duels terminés exigent deux inscrits. Les comparaisons des totaux, volumes, taux et statistiques pédagogiques passent en base, sans export de lignes personnelles. Les 1 643 tests, types, lint, build et smoke tests passent ; le serveur sur le port 3000 a été relancé. Cette évolution ne supprime aucune donnée et ne modifie aucun droit RLS.

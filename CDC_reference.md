@@ -835,6 +835,34 @@ Sources envisageables :
 
 Privilégier les agrégations côté serveur.
 
+**Décision fonctionnelle explicite du responsable — 10 novembre 2026 :** la
+page Statistiques affiche la rétention de cohorte à J+7 et J+30. Un compte est
+retenu s’il réalise au moins une tentative d’exercice ou de duel exactement le
+7e ou le 30e jour calendaire UTC après sa création. Les agrégats et taux sont
+calculés côté serveur, sans transmettre d’identifiants de comptes au
+navigateur.
+
+**Décision fonctionnelle explicite du responsable — 10 novembre 2026 :** les
+deux taux utilisent la même cohorte mature, composée des comptes non invités
+créés entre 31 et 60 jours avant la date UTC du relevé, indépendamment du filtre
+d’activité choisi. La journée UTC en cours est exclue. Ce choix rend J+30
+disponible sur les périodes d’activité courtes et permet de comparer les deux
+taux sur la même cohorte. L’activation du lecteur Production dédié reste
+soumise au mécanisme de migration approuvé.
+
+La synthèse affiche également le stock courant d’exercices du catalogue
+Production et le nombre de feedbacks reçus pendant la période sélectionnée,
+ventilé entre en attente, validés et refusés. Ces indicateurs sont des
+comptages côté serveur soumis à RLS ; les lignes d’exercices et de feedbacks
+ne sont pas transférées à la synthèse.
+
+**Décision fonctionnelle explicite du responsable — 10 novembre 2026 :**
+les indicateurs liés à la période sont regroupés séparément des repères cumulés
+(comptes inscrits au total et stock actuel du catalogue). Le nombre d’exercices
+créés est calculé sur la période à partir de `public.exercises.created_at`.
+Chaque graphique d’activité affiche ses dates sur l’axe horizontal et une
+échelle numérique graduée sur l’axe vertical.
+
 ## 15.2 Consultation des utilisateurs
 
 Fonctionnalités cibles :
@@ -845,6 +873,20 @@ Fonctionnalités cibles :
 - Statistiques d'activité.
 - Progression.
 - Historique synthétique des exercices et duels.
+
+**Décision fonctionnelle explicite du responsable — 10 novembre 2026 :** la
+recherche de la liste porte uniquement sur le nom affiché. La liste montre le
+nom et l’e-mail ; le nom ouvre une fiche avec quelques indicateurs d’activité
+lisibles. L’Admin peut exporter en CSV la liste filtrée avec le nom, l’e-mail
+et la dernière activité datée dans les 30 derniers jours. La page n’expose pas
+de filtre par date ; cette fenêtre est appliquée automatiquement.
+La fiche utilisateur conserve l’historique et la vue compétences ; la vue de
+progression par chapitre est retirée.
+L’export reste soumis aux autorisations Admin Production existantes et ne
+modifie aucune donnée. L’API actuellement installée ne fournit pas de date
+globale de dernière activité ; l’interface et l’export indiquent donc
+explicitement la fenêtre de 30 jours au lieu de présenter cette date comme une
+dernière activité tous temps.
 
 Aucune modification directe des utilisateurs Production dans la V1.
 
