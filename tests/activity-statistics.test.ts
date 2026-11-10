@@ -14,6 +14,22 @@ import fixture from './fixtures/activity-statistics.json';
 const period = statisticsPeriod('2026-10-15', '2026-10-17')!;
 const expected = { environment: 'local-fixture' as const, period };
 const copy = () => structuredClone(fixture);
+it('explique le périmètre des comptes inscrits sans afficher de compteur invité', () => {
+  const html = renderToStaticMarkup(
+    createElement(ActivityStatisticsView, {
+      data: decodeActivityStatistics(
+        { ...copy(), environment: 'production' },
+        { environment: 'production', period },
+      ),
+      period,
+      environment: 'production',
+    }),
+  );
+  expect(html).toContain('Comptes inscrits');
+  expect(html).toContain('les comptes invités sont exclus');
+  expect(html).not.toContain('Dont comptes anonymes');
+  expect(html).not.toContain('Les comptes anonymes sont inclus');
+});
 it('distingue une vraie lecture SQL synthétique de la démonstration sans base', () => {
   const data = decodeActivityStatistics(
     { ...copy(), environment: 'local-copy' },
@@ -221,7 +237,7 @@ it('distingue un relevé réellement vide de l’absence de relevé', () => {
       environment: 'local-fixture',
     }),
   );
-  expect(html).toContain('Comptes Auth présents');
+  expect(html).toContain('Comptes inscrits');
   expect(html).toContain('Non calculable');
   expect(html).not.toContain('Statistiques indisponibles');
 });

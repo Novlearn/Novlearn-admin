@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { NextRequest, NextResponse } from 'next/server';
 import { STAGING_PROJECT_REF } from '@/lib/auth/config';
 
@@ -7,6 +7,9 @@ vi.mock('server-only', () => ({}));
 vi.mock('@supabase/ssr', () => ({ createServerClient: sdk.create }));
 
 import { middleware } from '@/middleware';
+import { productionReadEnvironment } from './fixtures/production-read-env';
+
+afterEach(() => vi.unstubAllEnvs());
 
 beforeEach(() => {
   vi.stubEnv(
@@ -22,6 +25,48 @@ beforeEach(() => {
 });
 
 describe('renouvellement de session SSR', () => {
+  it('renouvelle les deux sessions dans leurs espaces de cookies indépendants', async () => {
+    for (const [key, value] of Object.entries(productionReadEnvironment()))
+      vi.stubEnv(key, value);
+    sdk.create.mockImplementation((url, _key, options) => ({
+      auth: {
+        getUser: async () => {
+          const name = new URL(url).hostname.split('.')[0] + '-session';
+          options.cookies.setAll([
+            { name, value: 'renewed', options: { httpOnly: true, path: '/' } },
+          ]);
+          return { data: { user: null }, error: null };
+        },
+      },
+    }));
+    const response = await middleware(
+      new NextRequest('https://admin.example.com/admin'),
+    );
+    expect(sdk.create).toHaveBeenCalledTimes(2);
+    for (const project of ['tksvbkvfusrnxulpahky', 'abwipnppcrghdhwriyjp']) {
+      expect(response.cookies.get(project + '-session')?.value).toBe('renewed');
+      expect(response.headers.get('x-middleware-request-cookie')).toContain(
+        project + '-session=renewed',
+      );
+    }
+    expect(response.headers.get('cache-control')).toContain('no-store');
+  });
+  it('renouvelle Production avant les routes API qui gèrent elles-mêmes Staging', async () => {
+    for (const [key, value] of Object.entries(productionReadEnvironment()))
+      vi.stubEnv(key, value);
+    sdk.create.mockReturnValue({
+      auth: {
+        getUser: vi
+          .fn()
+          .mockResolvedValue({ data: { user: null }, error: null }),
+      },
+    });
+    await middleware(
+      new NextRequest('https://admin.example.com/api/admin/users'),
+    );
+    expect(sdk.create).toHaveBeenCalledOnce();
+    expect(sdk.create.mock.calls[0][0]).toContain('abwipnppcrghdhwriyjp');
+  });
   it('transmet les cookies renouvelés au rendu serveur et au navigateur', async () => {
     sdk.create.mockImplementation((_url, _key, options) => ({
       auth: {

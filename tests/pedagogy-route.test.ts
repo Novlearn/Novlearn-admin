@@ -1,3 +1,4 @@
+import { productionReadEnvironment } from './fixtures/production-read-env';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { beforeEach, afterEach, expect, it, vi } from 'vitest';
 import { NextRequest, NextResponse } from 'next/server';
@@ -11,8 +12,8 @@ const fake = vi.hoisted(() => ({
   pageAuth: vi.fn(),
 }));
 vi.mock('@/lib/pedagogy-server', () => ({
-  loadLocalPedagogyStatistics: fake.read,
-  loadLocalPedagogyReferences: fake.references,
+  loadPedagogyStatistics: fake.read,
+  loadPedagogyReferences: fake.references,
 }));
 vi.mock('@/lib/auth/require-admin', () => ({
   requireAdminPage: fake.pageAuth,
@@ -235,4 +236,38 @@ it('looks up a selected reference outside the bounded search results', async () 
   expect(fake.references).toHaveBeenCalledWith({ kind: 'competence', q: id });
   expect(html).toContain('Référence retrouvée');
   expect(html).toContain('value="out-of-first-200" selected');
+});
+
+function enableProduction() {
+  vi.unstubAllEnvs();
+  for (const [key, value] of Object.entries(productionReadEnvironment()))
+    vi.stubEnv(key, value);
+  fake.read.mockResolvedValue({ ...fixture, environment: 'production' });
+}
+it('serves production only after a fresh Admin role check and labels the page truthfully', async () => {
+  enableProduction();
+  const response = await GET(request());
+  expect(response.status).toBe(200);
+  expect((await response.json()).environment).toBe('production');
+  expect(response.headers.get('cache-control')).toContain('no-store');
+  const html = renderToStaticMarkup(
+    await PedagogyPage({
+      searchParams: Promise.resolve({ from: '2026-10-15', to: '2026-10-17' }),
+    }),
+  );
+  expect(html).toContain('Production');
+  expect(html).not.toContain('Base locale synthétique');
+  fake.role.mockResolvedValue('user');
+  const calls = fake.read.mock.calls.length;
+  expect((await GET(request())).status).toBe(403);
+  expect(fake.read).toHaveBeenCalledTimes(calls);
+});
+it('does not expose connection strings on production SQL failures', async () => {
+  enableProduction();
+  fake.read.mockRejectedValue(
+    Error('postgresql://private-api-error-synthetic.invalid'),
+  );
+  const response = await GET(request());
+  expect(response.status).toBe(503);
+  expect(await response.text()).not.toContain('postgresql://');
 });

@@ -3,8 +3,8 @@ import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { Pool, type PoolClient } from 'pg';
 import {
-  validLocalActivityEndpoint,
-  type LocalActivityPgConfiguration,
+  validActivityEndpoint,
+  type ActivityPgConfiguration,
 } from './activity-config';
 import {
   decodeActivityStatistics,
@@ -85,10 +85,8 @@ function validAudit(value: unknown, assumed: boolean): boolean {
 }
 /** Only returns decoded aggregates. A raw checked-out SQL client never escapes.
  * The caller must freshly authorize the Admin before each read. */
-export function createLocalActivityReader(
-  config: LocalActivityPgConfiguration,
-) {
-  if (!validLocalActivityEndpoint(config)) throw new ActivityPgError();
+export function createActivityReader(config: ActivityPgConfiguration) {
+  if (!validActivityEndpoint(config)) throw new ActivityPgError();
   const pool = new Pool({
     connectionString: config.url,
     ssl: { rejectUnauthorized: true, ca: config.ca, minVersion: 'TLSv1.2' },

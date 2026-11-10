@@ -1,3 +1,4 @@
+import type { ReadEnvironment } from './production-read-config';
 import {
   readStatisticsPeriod,
   type StatisticsPeriod,
@@ -70,7 +71,7 @@ export type UserDetailItem =
   | CompetenceProgressItem;
 export type UserDetailPage = {
   schemaVersion: 1;
-  environment: 'local-copy';
+  environment: ReadEnvironment;
   found: true;
   asOf: string;
   userId: string;
@@ -127,7 +128,7 @@ const micros = (v: string) =>
   BigInt(Date.parse(v)) * BigInt(1000) +
   BigInt((v.split('.')[1]?.slice(0, -1) ?? '').padEnd(6, '0').slice(3));
 const viewName = (v: unknown): v is UserDetailView =>
-  v === 'history' || v === 'chapters' || v === 'competences';
+  v === 'history' || v === 'competences';
 const label = (v: unknown, truncated: unknown, nullable = false) => {
   if (typeof truncated !== 'boolean') return false;
   if (v === null) return nullable && !truncated;
@@ -241,6 +242,7 @@ export function decodeUserDetail(
   value: unknown,
   expected: UserDetailQuery,
   limit = USER_DETAIL_PAGE_SIZE,
+  environment: ReadEnvironment = 'local-copy',
 ): UserDetailPage | 'not-found' | null {
   const params = new URLSearchParams({
     from: expected.period.from,
@@ -273,7 +275,8 @@ export function decodeUserDetail(
   if (
     value.userId !== expected.userId ||
     value.schemaVersion !== 1 ||
-    value.environment !== 'local-copy' ||
+    !['local-copy', 'production'].includes(environment) ||
+    value.environment !== environment ||
     !timestamp(value.asOf) ||
     !object(value.period) ||
     !exact(value.period, ['from', 'until']) ||

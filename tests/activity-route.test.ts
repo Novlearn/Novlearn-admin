@@ -1,3 +1,4 @@
+import { productionReadEnvironment } from './fixtures/production-read-env';
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { afterEach, beforeEach, expect, it, vi } from 'vitest';
@@ -11,7 +12,7 @@ const fake = vi.hoisted(() => ({
   role: vi.fn(),
 }));
 vi.mock('@/lib/activity-server', () => ({
-  loadLocalActivityStatistics: fake.read,
+  loadActivityStatistics: fake.read,
 }));
 vi.mock('@/lib/auth/require-admin', () => ({
   requireAdminPage: fake.pageAuth,
@@ -24,7 +25,7 @@ vi.mock('@/lib/auth/supabase', () => ({
     return target;
   },
 }));
-import { readLocalActivityConfiguration } from '@/lib/activity-config';
+import { readActivityConfiguration } from '@/lib/activity-config';
 import { GET } from '@/app/api/admin/statistics/route';
 import StatisticsPage from '@/app/admin/statistics/page';
 import { AdminNavigation } from '@/components/admin-navigation';
@@ -52,7 +53,7 @@ beforeEach(() => {
 afterEach(() => vi.unstubAllEnvs());
 it('accepts only the explicitly enabled main local Auth profile', () => {
   expect(
-    readLocalActivityConfiguration(localActivityEnvironment())?.environment,
+    readActivityConfiguration(localActivityEnvironment())?.environment,
   ).toBe('local-copy');
 });
 it('refuses a valid independent publication Auth profile even with activity credentials', () => {
@@ -60,7 +61,7 @@ it('refuses a valid independent publication Auth profile even with activity cred
     ...localActivityEnvironment(),
     ...localPublicationEnvironment(),
   };
-  expect(readLocalActivityConfiguration(env)).toBeNull();
+  expect(readActivityConfiguration(env)).toBeNull();
 });
 it.each([
   { NODE_ENV: 'production' },
@@ -82,7 +83,7 @@ it.each([
   },
 ])('refuses mixed, operational or incomplete configuration %#', (change) => {
   expect(
-    readLocalActivityConfiguration({
+    readActivityConfiguration({
       ...localActivityEnvironment(),
       ...change,
     }),
@@ -207,4 +208,38 @@ it('adds the statistics navigation only when the server enables it', () => {
   );
   expect(html).toContain('/admin/statistics');
   expect(html).toContain('aria-current="page"');
+});
+
+function enableProduction() {
+  vi.unstubAllEnvs();
+  for (const [key, value] of Object.entries(productionReadEnvironment()))
+    vi.stubEnv(key, value);
+  fake.read.mockResolvedValue({ ...data, environment: 'production' });
+}
+it('serves production only after a fresh Admin role check and labels the page truthfully', async () => {
+  enableProduction();
+  const response = await GET(request());
+  expect(response.status).toBe(200);
+  expect((await response.json()).environment).toBe('production');
+  expect(response.headers.get('cache-control')).toContain('no-store');
+  const html = renderToStaticMarkup(
+    await StatisticsPage({
+      searchParams: Promise.resolve({ from: '2026-10-15', to: '2026-10-17' }),
+    }),
+  );
+  expect(html).toContain('Production');
+  expect(html).not.toContain('Base locale synthétique');
+  fake.role.mockResolvedValue('user');
+  const calls = fake.read.mock.calls.length;
+  expect((await GET(request())).status).toBe(403);
+  expect(fake.read).toHaveBeenCalledTimes(calls);
+});
+it('does not expose connection strings on production SQL failures', async () => {
+  enableProduction();
+  fake.read.mockRejectedValue(
+    Error('postgresql://private-api-error-synthetic.invalid'),
+  );
+  const response = await GET(request());
+  expect(response.status).toBe(503);
+  expect(await response.text()).not.toContain('postgresql://');
 });

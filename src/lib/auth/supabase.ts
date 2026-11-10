@@ -67,7 +67,13 @@ export function asAuthGateway(client: SupabaseClient): AuthGateway {
           code: error.code ?? null,
           name: error.name,
         });
-      if (error && (error.status === undefined || error.status >= 500))
+      if (
+        error &&
+        (error.status === undefined ||
+          error.status === 0 ||
+          error.status === 429 ||
+          error.status >= 500)
+      )
         throw new Error('Auth unavailable');
       return !error;
     },
@@ -118,8 +124,9 @@ export function createRouteAuth(
   return { gateway: asAuthGateway(client), response, client };
 }
 
-export async function createPageClient() {
-  const config = readAuthConfiguration(process.env);
+export async function createPageClient(override?: AuthConfiguration | null) {
+  const config =
+    override === undefined ? readAuthConfiguration(process.env) : override;
   if (!config) return null;
   const store = await cookies();
   const client = createServerClient(config.supabaseUrl, config.publishableKey, {

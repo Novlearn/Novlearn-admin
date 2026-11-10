@@ -26,7 +26,7 @@ vi.mock('pg', () => ({
     };
   }),
 }));
-import { createLocalUsersReader } from '@/lib/users-pg';
+import { createUsersReader } from '@/lib/users-pg';
 import { statisticsPeriod } from '@/lib/activity-statistics';
 import { usersPageFixture as fixture } from './fixtures/users-page';
 const config = () => ({
@@ -111,7 +111,7 @@ beforeEach(() => {
   });
 });
 it('constructs a lazy pool with verified TLS and bounded timeouts', () => {
-  const reader = createLocalUsersReader(config());
+  const reader = createUsersReader(config());
   expect(fake.query).not.toHaveBeenCalled();
   expect(fake.make).toHaveBeenCalledWith(
     expect.objectContaining({
@@ -128,7 +128,7 @@ it.each(['?sslmode=disable', '?options=-c%20role%3Dpostgres', '#override'])(
   'rejects URL overrides %s before constructing a pool',
   (suffix) => {
     expect(() =>
-      createLocalUsersReader({ ...config(), url: config().url + suffix }),
+      createUsersReader({ ...config(), url: config().url + suffix }),
     ).toThrow('Utilisateurs indisponibles');
     expect(fake.make).not.toHaveBeenCalled();
   },
@@ -141,20 +141,20 @@ it.each([
   ['synthetic-fixture-password', 'short'],
 ])('rejects endpoints outside the isolated copy %s', (a, b) => {
   expect(() =>
-    createLocalUsersReader({ ...config(), url: config().url.replace(a, b) }),
+    createUsersReader({ ...config(), url: config().url.replace(a, b) }),
   ).toThrow();
 });
 it('does not accept an operational source label or missing certificate', () => {
   expect(() =>
-    createLocalUsersReader({
+    createUsersReader({
       ...config(),
       environment: 'production' as 'local-copy',
     }),
   ).toThrow();
-  expect(() => createLocalUsersReader({ ...config(), ca: '' })).toThrow();
+  expect(() => createUsersReader({ ...config(), ca: '' })).toThrow();
 });
 it('audits both identities and returns aggregates with a trusted source label', async () => {
-  const reader = createLocalUsersReader(config());
+  const reader = createUsersReader(config());
   const result = await reader.read(period);
   expect(result.environment).toBe('local-copy');
   expect(result.items).toEqual(fixture.items);
@@ -192,7 +192,7 @@ it.each([
         ...audit(assumed),
         ...(assumed === target ? { [key]: true } : {}),
       }));
-      const reader = createLocalUsersReader(config());
+      const reader = createUsersReader(config());
       await expect(reader.read(period)).rejects.toThrow(
         'Utilisateurs indisponibles',
       );
@@ -233,7 +233,7 @@ it.each([
     mutate(a);
     return a;
   });
-  const reader = createLocalUsersReader(config());
+  const reader = createUsersReader(config());
   await expect(reader.read(period)).rejects.toThrow(
     'Utilisateurs indisponibles',
   );
@@ -251,7 +251,7 @@ it('refuses a modified aggregate without returning partial values or raw SQL err
       ? { rows: [{ users: { ...fixture, environment: 'production' } }] }
       : original(sql, ...rest),
   );
-  const reader = createLocalUsersReader(config());
+  const reader = createUsersReader(config());
   await expect(reader.read(period)).rejects.toThrow(
     'Utilisateurs indisponibles',
   );
@@ -259,7 +259,7 @@ it('refuses a modified aggregate without returning partial values or raw SQL err
   await reader.close();
 });
 it('refuses invalid period metadata before obtaining a connection', async () => {
-  const reader = createLocalUsersReader(config());
+  const reader = createUsersReader(config());
   await expect(
     reader.read({ ...period, period: { ...period.period, days: 4 } }),
   ).rejects.toThrow();
@@ -268,7 +268,7 @@ it('refuses invalid period metadata before obtaining a connection', async () => 
 });
 it('refuses an unverified physical transport even if the query mock would pass', async () => {
   fake.stream.authorized = false;
-  const reader = createLocalUsersReader(config());
+  const reader = createUsersReader(config());
   await expect(reader.read(period)).rejects.toThrow(
     'Utilisateurs indisponibles',
   );

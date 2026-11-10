@@ -54,8 +54,9 @@ fictif. Pour configurer un autre poste, lire [Auth](./auth.md) avant toute activ
 `node scripts/content-browser.mjs` sert les écrans d’exemple sans base ni calcul
 Engine sur le port 3140. Il ne prouve ni la sauvegarde ni les permissions SQL.
 
-Le lanceur Staging est le seul démarrage local qui contacte une vraie base. Il
-exige les fichiers privés décrits plus haut. Les scripts conservés couvrent les
+Le lanceur Staging exige les fichiers privés décrits plus haut. Le démarrage
+Next normal peut aussi utiliser les [lectures Production par API/RLS](./production-api.md)
+explicitement configurées dans le `.env` privé. Les scripts conservés couvrent les
 outils de build et de distribution Engine, quelques aides de développement,
 ainsi que les requêtes SQL utilisées par les lecteurs Admin. Les anciens bancs
 locaux Docker/PostgreSQL ont été supprimés.

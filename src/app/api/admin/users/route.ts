@@ -3,9 +3,9 @@ import { readAuthConfiguration } from '@/lib/auth/config';
 import { authorizeAdmin } from '@/lib/auth/authorization';
 import { privateHeaders } from '@/lib/auth/http';
 import { createRouteAuth, transferAuthCookies } from '@/lib/auth/supabase';
-import { readLocalUsersConfiguration } from '@/lib/users-config';
+import { readUsersConfiguration } from '@/lib/users-config';
 import { readUsersQuery } from '@/lib/users';
-import { loadLocalUsers } from '@/lib/users-server';
+import { loadUsersByName } from '@/lib/users-server';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -27,15 +27,15 @@ export async function GET(request: NextRequest) {
           ? 403
           : 503,
     );
-  if (!readLocalUsersConfiguration(process.env))
+  if (!readUsersConfiguration(process.env))
     return finish(
-      { error: 'Consultation locale des utilisateurs non activée.' },
+      { error: 'Consultation des utilisateurs non configurée.' },
       503,
     );
   const filter = readUsersQuery(request.nextUrl.searchParams);
   if (!filter.ok) return finish({ error: filter.error }, 400);
   try {
-    return finish(await loadLocalUsers(filter.value));
+    return finish(await loadUsersByName(filter.value));
   } catch {
     return finish({ error: 'Utilisateurs indisponibles' }, 503);
   }

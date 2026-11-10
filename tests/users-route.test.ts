@@ -1,3 +1,4 @@
+import { productionReadEnvironment } from './fixtures/production-read-env';
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { afterEach, beforeEach, expect, it, vi } from 'vitest';
@@ -11,7 +12,7 @@ const fake = vi.hoisted(() => ({
   role: vi.fn(),
 }));
 vi.mock('@/lib/users-server', () => ({
-  loadLocalUsers: fake.read,
+  loadUsers: fake.read,
 }));
 vi.mock('@/lib/auth/require-admin', () => ({
   requireAdminPage: fake.pageAuth,
@@ -24,7 +25,7 @@ vi.mock('@/lib/auth/supabase', () => ({
     return target;
   },
 }));
-import { readLocalUsersConfiguration } from '@/lib/users-config';
+import { readUsersConfiguration } from '@/lib/users-config';
 import { GET } from '@/app/api/admin/users/route';
 import UsersPage from '@/app/admin/users/page';
 import { AdminNavigation } from '@/components/admin-navigation';
@@ -51,16 +52,16 @@ beforeEach(() => {
 });
 afterEach(() => vi.unstubAllEnvs());
 it('accepts only the explicitly enabled main local Auth profile', () => {
-  expect(
-    readLocalUsersConfiguration(localUsersEnvironment())?.environment,
-  ).toBe('local-copy');
+  expect(readUsersConfiguration(localUsersEnvironment())?.environment).toBe(
+    'local-copy',
+  );
 });
 it('refuses a valid independent publication Auth profile even with users credentials', () => {
   const env = {
     ...localUsersEnvironment(),
     ...localPublicationEnvironment(),
   };
-  expect(readLocalUsersConfiguration(env)).toBeNull();
+  expect(readUsersConfiguration(env)).toBeNull();
 });
 it.each([
   { NODE_ENV: 'production' },
@@ -81,7 +82,7 @@ it.each([
   },
 ])('refuses mixed, operational or incomplete configuration %#', (change) => {
   expect(
-    readLocalUsersConfiguration({
+    readUsersConfiguration({
       ...localUsersEnvironment(),
       ...change,
     }),
@@ -215,4 +216,38 @@ it('adds the statistics navigation only when the server enables it', () => {
   );
   expect(html).toContain('/admin/users');
   expect(html).toContain('aria-current="page"');
+});
+
+function enableProduction() {
+  vi.unstubAllEnvs();
+  for (const [key, value] of Object.entries(productionReadEnvironment()))
+    vi.stubEnv(key, value);
+  fake.read.mockResolvedValue({ ...data, environment: 'production' });
+}
+it('serves production only after a fresh Admin role check and labels the page truthfully', async () => {
+  enableProduction();
+  const response = await GET(request());
+  expect(response.status).toBe(200);
+  expect((await response.json()).environment).toBe('production');
+  expect(response.headers.get('cache-control')).toContain('no-store');
+  const html = renderToStaticMarkup(
+    await UsersPage({
+      searchParams: Promise.resolve({ from: '2026-10-15', to: '2026-10-17' }),
+    }),
+  );
+  expect(html).toContain('Production');
+  expect(html).not.toContain('Base locale synthétique');
+  fake.role.mockResolvedValue('user');
+  const calls = fake.read.mock.calls.length;
+  expect((await GET(request())).status).toBe(403);
+  expect(fake.read).toHaveBeenCalledTimes(calls);
+});
+it('does not expose connection strings on production SQL failures', async () => {
+  enableProduction();
+  fake.read.mockRejectedValue(
+    Error('postgresql://private-api-error-synthetic.invalid'),
+  );
+  const response = await GET(request());
+  expect(response.status).toBe(503);
+  expect(await response.text()).not.toContain('postgresql://');
 });

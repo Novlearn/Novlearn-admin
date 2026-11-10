@@ -173,6 +173,15 @@ describe('adaptateur Auth Supabase', () => {
     expect(raw.auth.signOut).toHaveBeenCalledWith({ scope: 'local' });
   });
   it.each([
+    { name: 'AuthRetryableFetchError', status: 0 },
+    { name: 'AuthApiError', status: 429, code: 'over_request_rate_limit' },
+    { name: 'AuthApiError', status: 500 },
+  ])('signale une indisponibilité Auth au lieu de faux identifiants : %j', async (error) => {
+    const { gateway, raw } = client();
+    raw.auth.signInWithPassword.mockResolvedValueOnce({ error } as never);
+    await expect(gateway.signIn('admin@example.test', 'password')).rejects.toThrow('Auth unavailable');
+  });
+  it.each([
     'refresh_token_not_found',
     'refresh_token_already_used',
     'session_not_found',

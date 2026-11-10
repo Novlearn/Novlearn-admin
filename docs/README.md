@@ -10,6 +10,7 @@ de travail.
   Admin, Engine, Staging et Production.
 - [Développement](guides/development.md) — installation et lancement local.
 - [Authentification](guides/auth.md) — configuration et permissions.
+- [API Production](guides/production-api.md) — clé publique, double session, lectures et RLS activées.
 - [Vérifications](guides/verification.md) — commandes de contrôle.
 - [Vercel](guides/vercel.md) — configuration et réception de l’hébergement.
 - [Transport Admin–Engine](guides/admin-engine-transport.md) — contrat HTTPS,

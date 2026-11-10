@@ -1,5 +1,12 @@
 # Authentification, permissions et configuration
 
+Architecture du 8 novembre : une double session Staging/Production avec un seul
+formulaire est activée localement, sans clé privilégiée. Chaque projet vérifie
+son propre `profiles.role = 'admin'` ; ouvrir l'Admin ne confère aucun droit.
+La migration Production est appliquée et le compte choisi est Admin dans les
+deux projets. L'opérateur a confirmé le réglage du mot de passe Production. Voir
+[identité, variables et RLS du parcours API](production-api.md).
+
 Mission Admin–Engine (5 novembre 2026) : le transport HTTPS serveur vers le host
 staging est implémenté sur la branche de raccordement, derrière
 `ADMIN_ENGINE_ENABLED`. Vercel requiert aussi `ENGINE_URL`,
@@ -10,11 +17,12 @@ ne sont pas configurées et que la PR n’est pas déployée.
 
 ## Contrôle d’accès
 
-L’Admin déployé en **Production Vercel** utilise Supabase Auth de la base de
-**préproduction existante**, puis relit le rôle `admin` dans
-`profiles` côté serveur pour chaque opération protégée. Une session invitée est
-refusée. Les claims du navigateur, `user_metadata` et le masquage des boutons ne
-confèrent aucun droit. Les erreurs Auth ou SQL ferment l’accès.
+L’Admin vérifie Supabase Auth de **préproduction** pour protéger ses pages et
+vérifie aussi Auth Production pour chaque lecture des données Production. Le
+rôle `admin` est relu dans `profiles` côté serveur dans le projet concerné. Une
+session invitée est refusée. Les claims du navigateur, `user_metadata` et le
+masquage des boutons ne confèrent aucun droit. Les erreurs Auth ou API ferment
+l’accès.
 
 Les contrôles sont dans [authorization.ts](../../src/lib/auth/authorization.ts),
 [supabase.ts](../../src/lib/auth/supabase.ts) et les routes de
@@ -23,7 +31,7 @@ de `APP_BASE_URL`, des corps bornés et une session vérifiée. Les réponses pr
 utilisent `no-store`. Les cookies sont HttpOnly, SameSite et Secure sous HTTPS.
 Les contrôles SQL/RLS restent nécessaires en complément des gardes Next.
 
-## Une configuration, trois variables
+## Une configuration de connexion par projet
 
 La configuration locale utilise **un seul fichier `.env` à la racine**, privé
 et ignoré par Git. Les quatre fichiers d'exemple dispersés ont été supprimés
@@ -34,10 +42,15 @@ sans créer d'autre fichier de configuration.
 APP_BASE_URL=http://localhost:3000
 NEXT_PUBLIC_SUPABASE_URL=https://tksvbkvfusrnxulpahky.supabase.co
 NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=sb_publishable_replace_me
+PRODUCTION_SUPABASE_URL=https://abwipnppcrghdhwriyjp.supabase.co
+PRODUCTION_SUPABASE_PUBLISHABLE_KEY=sb_publishable_replace_me
 ```
 
-Remplacer la clé d'exemple par celle du projet de préproduction. Sur Vercel, renseigner
-ces mêmes noms dans les variables du projet, avec l'origine HTTPS exacte du site.
+Remplacer chaque clé d'exemple par celle de son projet. Sur Vercel, renseigner
+également l'URL et la clé publique Production si les lectures sont activées.
+Le `.env` local utilise actuellement sa clé publique `anon` existante, acceptée
+par l'adaptateur Production avec vérification du rôle et du projet. Utiliser
+ces mêmes noms dans les variables de l'hébergeur, avec l'origine HTTPS exacte du site.
 Ne pas transférer le `.env` privé ni le versionner. Une seule source de valeurs
 par environnement suffit ; pas de fichiers `.env.auth`, `.env.vercel` ou
 `.env.production` supplémentaires à maintenir.
@@ -104,8 +117,9 @@ distincts ; les regrouper dans un fichier ne fusionne pas leurs permissions.
 
 Les variables `ADMIN_LOCAL_*` sont réservées aux bancs de développement avec
 origines, ports et manifeste SQL attendus. Elles ne permettent pas de transformer
-une fixture en accès Production. Les lecteurs statistiques/utilisateurs et de
-version cible actuellement présents sont limités à des copies locales.
+une fixture en accès Production. Les lecteurs statistiques/utilisateurs ont un
+profil Production séparé, décrit dans le [contrat de lecture Production](./production-api.md).
+Le lecteur de version cible reste limité aux copies locales.
 
 ## Frontière Production et réserves
 

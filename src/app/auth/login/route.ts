@@ -7,6 +7,7 @@ import {
   readBoundedForm,
 } from '@/lib/auth/http';
 import { createRouteAuth, transferAuthCookies } from '@/lib/auth/supabase';
+import { productionAuthConfiguration } from '@/lib/production-api-config';
 
 export async function POST(request: NextRequest) {
   const config = readAuthConfiguration(process.env);
@@ -42,9 +43,31 @@ export async function POST(request: NextRequest) {
     form.get('email'),
     form.get('password'),
   );
-  const destination = result.ok ? '/admin' : `/login?error=${result.reason}`;
-  return transferAuthCookies(
+  const productionConfig = productionAuthConfiguration(process.env);
+  const production = productionConfig
+    ? createRouteAuth(request, productionConfig)
+    : null;
+  let destination = result.ok ? '/admin' : `/login?error=${result.reason}`;
+  if (result.ok && production) {
+    const second = await loginAdmin(
+      production.gateway,
+      form.get('email'),
+      form.get('password'),
+    );
+    if (!second.ok) {
+      // A primary Admin cannot inherit a previous user's Production session.
+      await Promise.allSettled([
+        gateway.signOut(),
+        production.gateway.signOut(),
+      ]);
+      destination = `/login?error=production-${second.reason}`;
+    }
+  } else if (!result.ok && production) {
+    await Promise.allSettled([gateway.signOut(), production.gateway.signOut()]);
+  }
+  const target = transferAuthCookies(
     response,
     NextResponse.redirect(new URL(destination, config.appOrigin), 303),
   );
+  return production ? transferAuthCookies(production.response, target) : target;
 }

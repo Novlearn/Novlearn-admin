@@ -3,9 +3,9 @@ import { readAuthConfiguration } from '@/lib/auth/config';
 import { authorizeAdmin } from '@/lib/auth/authorization';
 import { privateHeaders } from '@/lib/auth/http';
 import { createRouteAuth, transferAuthCookies } from '@/lib/auth/supabase';
-import { readLocalActivityConfiguration } from '@/lib/activity-config';
+import { readActivityConfiguration } from '@/lib/activity-config';
 import { readStatisticsPeriod } from '@/lib/activity-statistics';
-import { loadLocalActivityStatistics } from '@/lib/activity-server';
+import { loadActivityStatistics } from '@/lib/activity-server';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -27,12 +27,12 @@ export async function GET(request: NextRequest) {
           ? 403
           : 503,
     );
-  if (!readLocalActivityConfiguration(process.env))
-    return finish({ error: 'Lecture statistique locale non activée.' }, 503);
+  if (!readActivityConfiguration(process.env))
+    return finish({ error: 'Lecture statistique non configurée.' }, 503);
   const filter = readStatisticsPeriod(request.nextUrl.searchParams);
   if (!filter.ok) return finish({ error: filter.error }, 400);
   try {
-    return finish(await loadLocalActivityStatistics(filter.period));
+    return finish(await loadActivityStatistics(filter.period));
   } catch {
     return finish({ error: 'Statistiques indisponibles' }, 503);
   }

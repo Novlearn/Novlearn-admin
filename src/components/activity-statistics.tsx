@@ -1,99 +1,114 @@
+import Link from 'next/link';
 import { formatCount, overviewDate } from '@/lib/dashboard';
 import {
-  recordedSuccessRate,
-  dailyBarHeight,
+  cohortRetentionRate,
   decodeActivityStatistics,
+  recordedSuccessRate,
   type ActivityStatistics,
-  type StatisticsPeriod,
+  type CohortRetention,
   type StatisticsEnvironment,
+  type StatisticsPeriod,
 } from '@/lib/activity-statistics';
+import type { ProductionOverviewMetrics } from '@/lib/production-api';
+import { ActivityStatisticsCharts } from './activity-statistics-charts';
+
+const periodOptions = [
+  { days: 7, label: '7 jours' },
+  { days: 14, label: '14 jours' },
+  { days: 30, label: '1 mois' },
+  { days: 60, label: '2 mois' },
+] as const;
 
 export function ActivityStatisticsView({
   data,
   period,
   environment,
-  action = '/admin/statistics',
   error,
+  exerciseAnalysisEnabled = false,
+  overviewMetrics = null,
+  overviewMetricsError = false,
+  retention = null,
+  retentionUnavailable = false,
 }: {
   data: ActivityStatistics | null;
   period: StatisticsPeriod;
-  environment: StatisticsEnvironment;
-  action?: string;
+  environment: StatisticsEnvironment | null;
   error?: string;
+  exerciseAnalysisEnabled?: boolean;
+  overviewMetrics?: ProductionOverviewMetrics | null;
+  overviewMetricsError?: boolean;
+  retention?: CohortRetention | null;
+  retentionUnavailable?: boolean;
 }) {
-  // A caller cannot accidentally label a local response as Production.
-  const current = decodeActivityStatistics(data, { environment, period });
+  const current = environment
+    ? decodeActivityStatistics(data, { environment, period })
+    : null;
   const rate = current
     ? recordedSuccessRate(current.totals.correct, current.totals.incorrect)
     : null;
-  const max =
-    current?.daily.reduce(
-      (largest, row) =>
-        BigInt(row.exerciseAttempts) > BigInt(largest)
-          ? row.exerciseAttempts
-          : largest,
-      '0',
-    ) ?? '0';
+  const sourceLabel = !environment
+    ? 'Non configuré'
+    : environment === 'production'
+      ? 'Production'
+      : environment === 'local-fixture'
+        ? 'Démo locale'
+        : 'Copie locale';
+
   return (
     <div className="space-y-7">
-      <header>
-        <span className="badge">
-          {environment === 'local-fixture'
-            ? 'Démonstration locale · chiffres fictifs'
-            : environment === 'local-copy'
-              ? 'Base locale synthétique · lecture seule'
-              : 'Production · consultation en lecture seule'}
-        </span>
-        <h1 className="mt-4 text-3xl font-semibold tracking-tight">
-          Activité de la plateforme
-        </h1>
-        <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-600">
-          Les dates utilisent UTC. La fin choisie est incluse ; les chiffres du
-          jour restent partiels jusqu’à minuit UTC.
-        </p>
-        {environment === 'local-fixture' && (
-          <p className="notice mt-4">
-            Cet exemple ne lit aucune base et ne décrit pas l’activité réelle
-            des utilisateurs. Le lecteur Production n’est pas activé.
-          </p>
-        )}
-        {environment === 'local-copy' && (
-          <p className="notice mt-4">
-            Ces chiffres proviennent d’une base SQL locale de test. Ils ne
-            décrivent pas l’activité réelle des utilisateurs de Production.
-          </p>
-        )}
+      <header className="flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <span className="badge">{sourceLabel}</span>
+          <h1 className="mt-4 text-3xl font-semibold tracking-tight">
+            Statistiques
+          </h1>
+        </div>
+        <div className="flex flex-wrap items-center gap-4">
+          {exerciseAnalysisEnabled && (
+            <Link
+              href="/admin/statistics/pedagogy"
+              prefetch={false}
+              className="text-sm font-medium text-blue-700 hover:text-blue-900"
+            >
+              Comparer par chapitre, compétence ou exercice →
+            </Link>
+          )}
+          {current && (
+            <p className="text-sm text-slate-500">
+              Actualisé le {overviewDate(current.asOf)}
+            </p>
+          )}
+        </div>
       </header>
-      <form
-        action={action}
-        method="get"
-        className="card flex flex-wrap items-end gap-4"
+
+      <nav
+        aria-label="Période des statistiques"
+        className="flex flex-wrap gap-2"
       >
-        <label className="label">
-          Début (UTC)
-          <input
-            type="date"
-            name="from"
-            className="field"
-            required
-            defaultValue={period.from}
-          />
-        </label>
-        <label className="label">
-          Fin incluse (UTC)
-          <input
-            type="date"
-            name="to"
-            className="field"
-            required
-            defaultValue={period.to}
-          />
-        </label>
-        <button type="submit" className="button">
-          Afficher la période
-        </button>
-        <p className="text-sm text-slate-500">90 jours au maximum.</p>
-      </form>
+        {periodOptions.map(({ days, label }) => {
+          const to = period.to;
+          const end = Date.parse(`${to}T00:00:00.000Z`);
+          const from = new Date(
+            Math.max(
+              Date.parse('2000-01-01T00:00:00.000Z'),
+              end - (days - 1) * 86400000,
+            ),
+          )
+            .toISOString()
+            .slice(0, 10);
+          return (
+            <Link
+              key={days}
+              href={`/admin/statistics?from=${from}&to=${to}`}
+              aria-current={period.days === days ? 'page' : undefined}
+              className={`rounded-lg border px-4 py-2.5 text-sm font-medium transition-colors ${period.days === days ? 'border-blue-700 bg-blue-700 text-white' : 'border-slate-200 bg-white text-slate-700 hover:border-blue-300 hover:bg-blue-50'}`}
+            >
+              {label}
+            </Link>
+          );
+        })}
+      </nav>
+
       {error && (
         <p role="alert" className="notice">
           {error}
@@ -103,155 +118,168 @@ export function ActivityStatisticsView({
         <section className="card" role="status">
           <h2 className="text-lg font-semibold">Statistiques indisponibles</h2>
           <p className="mt-3 text-sm leading-7 text-slate-600">
-            Aucun chiffre ne peut être confirmé pour cette période. La connexion
-            de lecture et ses permissions doivent être qualifiées avant
-            utilisation de données réelles.
+            Aucun chiffre confirmé ne peut être affiché pour cette période.
           </p>
         </section>
       ) : (
         <>
-          <p className="text-sm text-slate-500">
-            Relevé du {overviewDate(current.asOf)} (heure de Paris) ·{' '}
-            {period.days} jour
-            {period.days > 1 ? 's' : ''} UTC.
-          </p>
-          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-            {[
-              ['Comptes Auth présents', current.accounts.total],
-              ['Dont comptes anonymes', current.accounts.anonymous],
-              [
-                'Nouveaux comptes sur la période',
-                current.totals.accountsCreated,
-              ],
-              ['Comptes actifs sur la période', current.totals.activeAccounts],
-              [
-                'Tentatives d’exercices enregistrées',
-                current.totals.exerciseAttempts,
-              ],
-              ['Tentatives de duel enregistrées', current.totals.duelAttempts],
-              ['Duels terminés sur la période', current.totals.completedDuels],
-            ].map(([label, value]) => (
-              <section className="card" key={label}>
-                <h2 className="text-sm font-medium text-slate-600">{label}</h2>
-                <p className="mt-3 break-all text-3xl font-semibold tabular-nums">
-                  {formatCount(value)}
-                </p>
-              </section>
-            ))}
-            <section className="card">
-              <h2 className="text-sm font-medium text-slate-600">
-                Réussite déclarée des tentatives d’exercice
-              </h2>
-              <p className="mt-3 text-3xl font-semibold tabular-nums">
-                {rate ?? 'Non calculable'}
-              </p>
-              <p className="mt-3 text-xs leading-6 text-slate-500">
-                {rate === null
-                  ? 'Aucune tentative avec verdict classé.'
-                  : 'Calculée sur les verdicts vrai/faux enregistrés, hors abandons et cas non classés.'}
-              </p>
-            </section>
-          </div>
-          <section className="card space-y-5">
-            <h2 className="text-xl font-semibold">Tentatives par jour UTC</h2>
-            <div
-              className="flex h-36 items-end gap-px border-b border-slate-200"
-              aria-hidden="true"
-            >
-              {current.daily.map((row) => (
-                <div
-                  key={row.date}
-                  className="min-w-0 flex-1 rounded-t bg-blue-600"
-                  style={{
-                    height: dailyBarHeight(row.exerciseAttempts, max) + '%',
-                  }}
+          {environment === 'local-fixture' && (
+            <p className="notice">Les chiffres affichés sont fictifs.</p>
+          )}
+          {environment === 'local-copy' && (
+            <p className="notice">
+              Les chiffres affichés viennent d’une copie locale.
+            </p>
+          )}
+
+          <section className="space-y-4" aria-label="Indicateurs de la période">
+            <h2 className="text-xl font-semibold">Sur la période</h2>
+            <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+              <MetricCard
+                label="Comptes actifs"
+                value={current.totals.activeAccounts}
+                accent
+              />
+              <MetricCard
+                label="Tentatives réalisées"
+                value={sum(
+                  current.totals.exerciseAttempts,
+                  current.totals.duelAttempts,
+                )}
+              />
+              <MetricCard label="Réussite aux exercices" value={rate ?? '—'} />
+              <MetricCard
+                label="Duels terminés"
+                value={current.totals.completedDuels}
+              />
+              <MetricCard
+                label="Nouveaux comptes"
+                value={current.totals.accountsCreated}
+              />
+              {overviewMetrics && (
+                <MetricCard
+                  label="Exercices créés"
+                  value={overviewMetrics.exercisesCreated}
                 />
-              ))}
-            </div>
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-sm">
-                <caption className="mb-4 text-left leading-6 text-slate-500">
-                  Valeurs exactes du graphique et de l’activité quotidienne. Un
-                  compte actif plusieurs jours compte une fois par jour et une
-                  seule fois dans le total de la période.
-                </caption>
-                <thead>
-                  <tr className="border-b border-slate-200">
-                    {[
-                      'Date UTC',
-                      'Comptes actifs',
-                      'Nouveaux comptes',
-                      'Tentatives exercices',
-                      'Tentatives duel',
-                      'Duels terminés',
-                    ].map((label) => (
-                      <th
-                        key={label}
-                        scope="col"
-                        className="whitespace-nowrap px-3 py-3 font-semibold"
-                      >
-                        {label}
-                      </th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {current.daily.map((row) => (
-                    <tr key={row.date} className="border-b border-slate-100">
-                      <th
-                        scope="row"
-                        className="whitespace-nowrap px-3 py-3 font-medium"
-                      >
-                        {row.date}
-                      </th>
-                      {[
-                        'activeAccounts',
-                        'accountsCreated',
-                        'exerciseAttempts',
-                        'duelAttempts',
-                        'completedDuels',
-                      ].map((key) => (
-                        <td className="px-3 py-3 tabular-nums" key={key}>
-                          {formatCount(row[key as keyof typeof row])}
-                        </td>
-                      ))}
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+              )}
+              {overviewMetrics && (
+                <MetricCard
+                  label="Feedbacks reçus"
+                  value={overviewMetrics.feedbacks.total}
+                  detail={`${formatCount(overviewMetrics.feedbacks.pending)} à traiter · ${formatCount(overviewMetrics.feedbacks.approved)} validés · ${formatCount(overviewMetrics.feedbacks.rejected)} refusés`}
+                />
+              )}
             </div>
           </section>
-          <section className="card space-y-3 text-sm leading-7 text-slate-600">
-            <h2 className="text-lg font-semibold text-slate-900">
-              Comment lire ces indicateurs
-            </h2>
-            <p>
-              Le stock de comptes provient d’Auth au moment du relevé, pas du
-              nombre de profils. Il est distinct des nouveaux comptes et des
-              comptes actifs de la période.
-            </p>
-            <p>
-              Un compte actif possède au moins une tentative d’exercice ou de
-              duel dans la période et figure encore dans Auth au moment du
-              relevé. Les comptes anonymes sont inclus. Les tentatives sans
-              compte connu restent dans les volumes, sans créer un compte actif.
-            </p>
-            <p>
-              Le taux décrit les verdicts enregistrés ; il ne certifie pas
-              rétroactivement la correction mathématique des données
-              historiques. Les états indéterminés du moteur ne doivent pas être
-              convertis en échecs.
-            </p>
-            <p>
-              Exercices : {formatCount(current.totals.correct)} verdicts
-              positifs, {formatCount(current.totals.incorrect)} négatifs,{' '}
-              {formatCount(current.totals.abandoned)} abandons,{' '}
-              {formatCount(current.totals.unclassified)} non classés. Ces quatre
-              catégories couvrent les tentatives enregistrées.
-            </p>
+          <section className="space-y-4" aria-label="Totaux actuels">
+            <h2 className="text-xl font-semibold">Repères actuels</h2>
+            <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+              <MetricCard
+                label="Comptes inscrits actuellement"
+                value={current.accounts.total}
+              />
+              {overviewMetrics && (
+                <MetricCard
+                  label="Exercices actuellement au catalogue"
+                  value={overviewMetrics.exerciseCatalogCount}
+                />
+              )}
+            </div>
           </section>
+          {overviewMetricsError && (
+            <p role="status" className="notice">
+              Les compteurs du catalogue, des créations et des feedbacks sont
+              indisponibles.
+            </p>
+          )}
+          {retention && <RetentionCard retention={retention} />}
+          {retentionUnavailable && (
+            <p role="status" className="notice">
+              La mesure de rétention n’est pas encore activée en Production.
+            </p>
+          )}
+
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <h2 className="text-xl font-semibold">Activité sur la période</h2>
+            <Link
+              href={`/admin/statistics/daily?from=${period.from}&to=${period.to}`}
+              prefetch={false}
+              className="button"
+            >
+              Voir le détail quotidien
+            </Link>
+          </div>
+          <ActivityStatisticsCharts daily={current.daily} />
         </>
       )}
+    </div>
+  );
+}
+
+function sum(a: string, b: string) {
+  return (BigInt(a) + BigInt(b)).toString();
+}
+
+function MetricCard({
+  label,
+  value,
+  accent = false,
+  detail,
+}: {
+  label: string;
+  value: string;
+  accent?: boolean;
+  detail?: string;
+}) {
+  return (
+    <section
+      className={`card ${accent ? 'border-blue-200 bg-blue-50/70' : ''}`}
+    >
+      <h2 className="text-sm font-medium text-slate-600">{label}</h2>
+      <p className="mt-3 break-all text-3xl font-semibold tabular-nums tracking-tight">
+        {label === 'Réussite aux exercices' ? value : formatCount(value)}
+      </p>
+      {detail && <p className="mt-2 text-xs text-slate-500">{detail}</p>}
+    </section>
+  );
+}
+
+function RetentionCard({ retention }: { retention: CohortRetention }) {
+  return (
+    <section className="card space-y-4">
+      <div>
+        <h2 className="font-semibold">Rétention des nouveaux comptes</h2>
+        <p className="mt-1 text-sm text-slate-500">
+          Retours le 7ᵉ et le 30ᵉ jour après l’inscription · même cohorte,
+          inscrite du {retention.cohortPeriod.from} au{' '}
+          {retention.cohortPeriod.until} exclu.
+        </p>
+      </div>
+      <div className="grid gap-4 sm:grid-cols-2">
+        <RetentionValue label="J+7" bucket={retention.d7} />
+        <RetentionValue label="J+30" bucket={retention.d30} />
+      </div>
+    </section>
+  );
+}
+
+function RetentionValue({
+  label,
+  bucket,
+}: {
+  label: string;
+  bucket: CohortRetention['d7'];
+}) {
+  const rate = cohortRetentionRate(bucket);
+  return (
+    <div className="rounded-lg border border-slate-200 p-4">
+      <p className="text-sm font-medium text-slate-600">Rétention {label}</p>
+      <p className="mt-2 text-3xl font-semibold tabular-nums">{rate ?? '—'}</p>
+      <p className="mt-1 text-xs text-slate-500">
+        {rate === null
+          ? `Aucune cohorte arrivée à ${label}`
+          : `${formatCount(bucket.returnedAccounts)} retours sur ${formatCount(bucket.eligibleAccounts)} comptes éligibles`}
+      </p>
     </div>
   );
 }

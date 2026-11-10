@@ -17,6 +17,7 @@ WITH bounds AS MATERIALIZED (
        U&'\0009\000a\000b\000c\000d\0020\00a0\1680\2000\2001\2002\2003\2004\2005\2006\2007\2008\2009\200a\2028\2029\202f\205f\3000\feff'),''),'Nom non renseigné') END AS display_name,
    CASE WHEN a.is_anonymous THEN NULL ELSE a.email END AS email
  FROM auth.users a LEFT JOIN public.profiles p ON p.id=a.id CROSS JOIN bounds
+ WHERE a.is_anonymous IS FALSE
 ), matched AS MATERIALIZED (
  SELECT i.* FROM identities i CROSS JOIN bounds b
  WHERE b.search='' OR strpos(lower(i.display_name),lower(b.search))>0

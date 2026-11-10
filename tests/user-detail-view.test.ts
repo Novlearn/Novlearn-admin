@@ -171,3 +171,22 @@ it('distinguishes an empty activity period from a missing account or failure', (
   expect(html).toContain('Aucune sur la période');
   expect(html).not.toContain('Fiche utilisateur indisponible');
 });
+
+it('renders production details only with an independently supplied production source', () => {
+  const p = { ...data(), environment: 'production' as const };
+  const html = renderToStaticMarkup(
+    createElement(UserDetailView, {
+      data: p,
+      query: query(),
+      environment: 'production',
+    }),
+  );
+  expect(html).toContain('Production · fiche utilisateur · lecture seule');
+  expect(html).toContain('activity-a@example.test');
+  expect(html).not.toContain('Comptes de test.');
+  expect(
+    renderToStaticMarkup(
+      createElement(UserDetailView, { data: p, query: query() }),
+    ),
+  ).not.toContain('activity-a@example.test');
+});

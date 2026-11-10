@@ -1,13 +1,19 @@
+import {
+  productionReadRequested,
+  readProductionReadConfiguration,
+} from './production-read-config';
+import type { ProductionApiConfiguration } from './production-api-config';
 import { readAuthConfiguration } from './auth/config';
 
-export type LocalPedagogyPgConfiguration = {
+export type PedagogyPgConfiguration = {
   url: string;
   ca: string;
   environment: 'local-copy';
 };
-export function validLocalPedagogyEndpoint(
-  config: LocalPedagogyPgConfiguration,
-) {
+export type PedagogyReadConfiguration =
+  | PedagogyPgConfiguration
+  | ProductionApiConfiguration;
+export function validPedagogyEndpoint(config: PedagogyPgConfiguration) {
   try {
     const url = new URL(config.url);
     return (
@@ -28,10 +34,11 @@ export function validLocalPedagogyEndpoint(
     return false;
   }
 }
-/** Explicit isolated fixture activation only; never an operational source selector. */
-export function readLocalPedagogyConfiguration(
+/** Explicit production capability or isolated development copy. */
+export function readPedagogyConfiguration(
   env: Record<string, string | undefined>,
-): LocalPedagogyPgConfiguration | null {
+): PedagogyReadConfiguration | null {
+  if (productionReadRequested(env)) return readProductionReadConfiguration(env);
   const auth = readAuthConfiguration(env);
   if (
     !auth?.local ||
@@ -41,10 +48,10 @@ export function readLocalPedagogyConfiguration(
     env.ADMIN_PEDAGOGY_ENABLED === 'true'
   )
     return null;
-  const config: LocalPedagogyPgConfiguration = {
+  const config: PedagogyPgConfiguration = {
     url: env.ADMIN_LOCAL_PEDAGOGY_PG_URL ?? '',
     ca: env.ADMIN_LOCAL_PEDAGOGY_PG_CA ?? '',
     environment: 'local-copy',
   };
-  return validLocalPedagogyEndpoint(config) ? config : null;
+  return validPedagogyEndpoint(config) ? config : null;
 }

@@ -9,8 +9,8 @@ import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { Pool, type PoolClient } from 'pg';
 import {
-  validLocalPedagogyEndpoint,
-  type LocalPedagogyPgConfiguration,
+  validPedagogyEndpoint,
+  type PedagogyPgConfiguration,
 } from './pedagogy-config';
 import {
   decodePedagogyStatistics,
@@ -24,6 +24,7 @@ const login = 'novlearn_admin_pedagogy_service';
 const role = 'novlearn_pedagogy_reader';
 const columns = [
   'auth.users.id',
+  'auth.users.is_anonymous',
   'public.exercise_attempts.id',
   'public.exercise_attempts.exercise_id',
   'public.exercise_attempts.user_id',
@@ -109,10 +110,8 @@ function validAudit(value: unknown, assumed: boolean): boolean {
 }
 /** Only returns decoded aggregates. A raw checked-out SQL client never escapes.
  * The caller must freshly authorize the Admin before each read. */
-export function createLocalPedagogyReader(
-  config: LocalPedagogyPgConfiguration,
-) {
-  if (!validLocalPedagogyEndpoint(config)) throw new PedagogyPgError();
+export function createPedagogyReader(config: PedagogyPgConfiguration) {
+  if (!validPedagogyEndpoint(config)) throw new PedagogyPgError();
   const pool = new Pool({
     connectionString: config.url,
     ssl: { rejectUnauthorized: true, ca: config.ca, minVersion: 'TLSv1.2' },

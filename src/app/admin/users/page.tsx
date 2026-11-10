@@ -1,9 +1,9 @@
 import { requireAdminPage } from '@/lib/auth/require-admin';
-import { readLocalUsersConfiguration } from '@/lib/users-config';
+import { readUsersConfiguration } from '@/lib/users-config';
 import { readUsersQuery, type UsersPage } from '@/lib/users';
-import { loadLocalUsers } from '@/lib/users-server';
+import { loadUsersByName } from '@/lib/users-server';
 import { UsersListView } from '@/components/users-list';
-import { readLocalUserDetailConfiguration } from '@/lib/user-detail-config';
+import { readUserDetailConfiguration } from '@/lib/user-detail-config';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
@@ -13,6 +13,7 @@ export default async function UsersPage({
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
   await requireAdminPage();
+  const config = readUsersConfiguration(process.env);
   const params = new URLSearchParams();
   for (const [key, value] of Object.entries(await searchParams))
     for (const item of Array.isArray(value)
@@ -21,6 +22,8 @@ export default async function UsersPage({
         ? []
         : [value])
       params.append(key, item);
+  params.delete('from');
+  params.delete('to');
   const filter = readUsersQuery(params);
   const fallback = readUsersQuery(new URLSearchParams());
   if (!fallback.ok) throw Error('Période indisponible');
@@ -28,11 +31,10 @@ export default async function UsersPage({
   let error = filter.ok ? undefined : filter.error;
   let data: UsersPage | null = null;
   if (filter.ok) {
-    if (!readLocalUsersConfiguration(process.env))
-      error = 'Consultation locale des utilisateurs non activée.';
+    if (!config) error = 'Consultation des utilisateurs non configurée.';
     else
       try {
-        data = await loadLocalUsers(query);
+        data = await loadUsersByName(query);
       } catch {
         error = 'La liste n’a pas pu être chargée. Réessayez dans un instant.';
       }
@@ -42,7 +44,8 @@ export default async function UsersPage({
       data={data}
       query={query}
       error={error}
-      detailsEnabled={!!readLocalUserDetailConfiguration(process.env)}
+      environment={config?.environment ?? 'production'}
+      detailsEnabled={!!readUserDetailConfiguration(process.env)}
     />
   );
 }

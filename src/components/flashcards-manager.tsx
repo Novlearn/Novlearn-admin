@@ -44,11 +44,15 @@ export function FlashcardsManager({
     }),
     dirtyRef = useRef(false),
     heading = useRef<HTMLHeadingElement>(null),
+    editor = useRef<HTMLDialogElement>(null),
     confirmation = useRef<HTMLDialogElement>(null);
   dirtyRef.current = dirty;
   useEffect(() => bindEditorNavigation(() => dirtyRef.current), []);
   useEffect(() => {
-    if (open) heading.current?.focus();
+    if (open) {
+      if (!editor.current?.open) editor.current?.showModal();
+      heading.current?.focus();
+    } else if (editor.current?.open) editor.current.close();
   }, [open, item?.id]);
   useEffect(() => {
     if (pending) confirmation.current?.showModal();
@@ -160,9 +164,6 @@ export function FlashcardsManager({
     <>
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="text-sm font-medium text-slate-500">
-            Contenus pédagogiques · Staging
-          </p>
           <h1 className="mt-2 text-3xl font-semibold tracking-tight">
             Flashcards
           </h1>
@@ -257,9 +258,6 @@ export function FlashcardsManager({
                         {card.question.slice(0, 160)}
                         {card.question.length > 160 ? '…' : ''}
                       </p>
-                      <span className="mt-1 block break-all font-mono text-xs text-slate-500">
-                        {card.id}
-                      </span>
                     </td>
                     <td className="p-4">
                       {card.chapter}
@@ -322,7 +320,16 @@ export function FlashcardsManager({
         </>
       )}
       {open && (
-        <section className="mt-8 space-y-6" aria-labelledby="flashcard-editor">
+        <dialog
+          ref={editor}
+          aria-labelledby="flashcard-editor"
+          onCancel={(event) => {
+            event.preventDefault();
+            if (dirty) setPending({ type: 'close' });
+            else setOpen(false);
+          }}
+          className="max-h-[90dvh] w-[calc(100%_-_1rem)] max-w-6xl overflow-y-auto rounded-2xl border border-slate-200 bg-slate-50 p-3 shadow-2xl backdrop:bg-slate-950/40 sm:w-[calc(100%_-_2rem)] sm:p-6"
+        >
           <div className="card">
             <div className="flex items-center justify-between gap-4">
               <h2
@@ -357,139 +364,148 @@ export function FlashcardsManager({
                 unique. Choisissez explicitement un chapitre pour enregistrer.
               </p>
             )}
-            <form
-              className="mt-5 space-y-5"
-              onSubmit={(e) => {
-                e.preventDefault();
-                void mutate('save');
-              }}
-            >
-              <label className="label">
-                Chapitre de la flashcard
-                <select
-                  className="field"
-                  required
-                  value={value.chapterId}
-                  disabled={busy}
-                  onChange={(e) => {
-                    setValue({ ...value, chapterId: e.target.value });
-                    setDirty(true);
+            <div className="mt-5 grid min-w-0 gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(18rem,0.8fr)]">
+              <div className="min-w-0">
+                <form
+                  className="space-y-5"
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    void mutate('save');
                   }}
                 >
-                  <option value="">Choisir un chapitre</option>
-                  {data?.chapters.map((c) => (
-                    <option value={c.id} key={c.id}>
-                      {c.name}
-                    </option>
-                  ))}
-                </select>
-              </label>
-              <div className="grid min-w-0 gap-5 lg:grid-cols-2">
-                {(['question', 'answer'] as const).map((face) => (
-                  <label className="label min-w-0" key={face}>
-                    {face === 'question'
-                      ? 'Question (recto)'
-                      : 'Réponse (verso)'}
-                    <textarea
-                      className="field min-h-36"
-                      value={value[face]}
+                  <label className="label">
+                    Chapitre de la flashcard
+                    <select
+                      className="field"
                       required
-                      maxLength={FLASHCARD_TEXT_LIMIT}
+                      value={value.chapterId}
                       disabled={busy}
                       onChange={(e) => {
-                        setValue({ ...value, [face]: e.target.value });
+                        setValue({ ...value, chapterId: e.target.value });
                         setDirty(true);
                       }}
-                      onSelect={(e) => {
-                        selection.current[face] = {
-                          start: e.currentTarget.selectionStart,
-                          end: e.currentTarget.selectionEnd,
-                        };
-                      }}
-                      onFocus={() => setTarget(face)}
-                    />
-                    <span className="text-xs font-normal text-slate-500">
-                      {value[face].length} / {FLASHCARD_TEXT_LIMIT} · Texte et
-                      expressions entre $…$ ou $$…$$.
-                    </span>
+                    >
+                      <option value="">Choisir un chapitre</option>
+                      {data?.chapters.map((c) => (
+                        <option value={c.id} key={c.id}>
+                          {c.name}
+                        </option>
+                      ))}
+                    </select>
                   </label>
-                ))}
-              </div>
-              <div className="flex flex-wrap items-center gap-4">
-                <button className="button" type="submit" disabled={busy}>
-                  {busy ? 'Enregistrement…' : 'Enregistrer dans Staging'}
-                </button>
-                {dirty && (
-                  <span className="text-sm text-amber-800">
-                    Modifications non enregistrées
-                  </span>
+                  <div className="grid min-w-0 gap-5 lg:grid-cols-2">
+                    {(['question', 'answer'] as const).map((face) => (
+                      <label className="label min-w-0" key={face}>
+                        {face === 'question'
+                          ? 'Question (recto)'
+                          : 'Réponse (verso)'}
+                        <textarea
+                          className="field min-h-36"
+                          value={value[face]}
+                          required
+                          maxLength={FLASHCARD_TEXT_LIMIT}
+                          disabled={busy}
+                          onChange={(e) => {
+                            setValue({ ...value, [face]: e.target.value });
+                            setDirty(true);
+                          }}
+                          onSelect={(e) => {
+                            selection.current[face] = {
+                              start: e.currentTarget.selectionStart,
+                              end: e.currentTarget.selectionEnd,
+                            };
+                          }}
+                          onFocus={() => setTarget(face)}
+                        />
+                        <span className="text-xs font-normal text-slate-500">
+                          {value[face].length} / {FLASHCARD_TEXT_LIMIT} · Texte
+                          et expressions entre $…$ ou $$…$$.
+                        </span>
+                      </label>
+                    ))}
+                  </div>
+                  <div className="flex flex-wrap items-center gap-4">
+                    <button className="button" type="submit" disabled={busy}>
+                      {busy ? 'Enregistrement…' : 'Enregistrer dans Staging'}
+                    </button>
+                    {dirty && (
+                      <span className="text-sm text-amber-800">
+                        Modifications non enregistrées
+                      </span>
+                    )}
+                  </div>
+                </form>
+                <details className="mt-6 rounded-xl border border-slate-200 p-4">
+                  <summary className="cursor-pointer font-semibold">
+                    Insérer une expression avec MathLive
+                  </summary>
+                  <p className="mt-3 text-sm text-slate-600">
+                    Composez une expression, puis insérez-la à l’endroit
+                    sélectionné dans la question ou la réponse.
+                  </p>
+                  <div className="mt-4">
+                    <MathInput
+                      label="Expression à insérer"
+                      value={latex}
+                      onChange={setLatex}
+                      disabled={busy}
+                    />
+                  </div>
+                  <div className="mt-4 flex flex-wrap items-end gap-4">
+                    <label className="label">
+                      Insérer dans
+                      <select
+                        className="field"
+                        value={target}
+                        onChange={(e) =>
+                          setTarget(e.target.value as 'question' | 'answer')
+                        }
+                        disabled={busy}
+                      >
+                        <option value="question">Question</option>
+                        <option value="answer">Réponse</option>
+                      </select>
+                    </label>
+                    <label className="flex items-center gap-2 text-sm">
+                      <input
+                        type="checkbox"
+                        checked={display}
+                        onChange={(e) => setDisplay(e.target.checked)}
+                        disabled={busy}
+                      />
+                      Expression sur une ligne séparée
+                    </label>
+                    <button
+                      type="button"
+                      className="button"
+                      disabled={busy || !latex.trim()}
+                      onClick={insert}
+                    >
+                      Insérer l’expression
+                    </button>
+                  </div>
+                </details>
+                {item && (
+                  <div className="mt-6 border-t border-slate-200 pt-5">
+                    <button
+                      className="rounded-lg border border-red-200 px-4 py-2 text-sm font-semibold text-red-700 disabled:opacity-50"
+                      disabled={busy || dirty}
+                      onClick={() => void mutate('delete')}
+                    >
+                      Supprimer de Staging
+                    </button>
+                  </div>
                 )}
               </div>
-            </form>
-            <details className="mt-6 rounded-xl border border-slate-200 p-4">
-              <summary className="cursor-pointer font-semibold">
-                Insérer une expression avec MathLive
-              </summary>
-              <p className="mt-3 text-sm text-slate-600">
-                Composez une expression, puis insérez-la à l’endroit sélectionné
-                dans la question ou la réponse.
-              </p>
-              <div className="mt-4">
-                <MathInput
-                  label="Expression à insérer"
-                  value={latex}
-                  onChange={setLatex}
-                  disabled={busy}
+              <div className="min-w-0">
+                <FlashcardPreview
+                  question={value.question}
+                  answer={value.answer}
                 />
               </div>
-              <div className="mt-4 flex flex-wrap items-end gap-4">
-                <label className="label">
-                  Insérer dans
-                  <select
-                    className="field"
-                    value={target}
-                    onChange={(e) =>
-                      setTarget(e.target.value as 'question' | 'answer')
-                    }
-                    disabled={busy}
-                  >
-                    <option value="question">Question</option>
-                    <option value="answer">Réponse</option>
-                  </select>
-                </label>
-                <label className="flex items-center gap-2 text-sm">
-                  <input
-                    type="checkbox"
-                    checked={display}
-                    onChange={(e) => setDisplay(e.target.checked)}
-                    disabled={busy}
-                  />
-                  Expression sur une ligne séparée
-                </label>
-                <button
-                  type="button"
-                  className="button"
-                  disabled={busy || !latex.trim()}
-                  onClick={insert}
-                >
-                  Insérer l’expression
-                </button>
-              </div>
-            </details>
-            {item && (
-              <div className="mt-6 border-t border-slate-200 pt-5">
-                <button
-                  className="rounded-lg border border-red-200 px-4 py-2 text-sm font-semibold text-red-700 disabled:opacity-50"
-                  disabled={busy || dirty}
-                  onClick={() => void mutate('delete')}
-                >
-                  Supprimer de Staging
-                </button>
-              </div>
-            )}
+            </div>
           </div>
-          <FlashcardPreview question={value.question} answer={value.answer} />
-        </section>
+        </dialog>
       )}
       <dialog
         ref={confirmation}

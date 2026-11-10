@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { formatCount, overviewDate } from '@/lib/dashboard';
 import { recordedSuccessRate } from '@/lib/activity-statistics';
+import type { ReadEnvironment } from '@/lib/production-read-config';
 import {
   decodePedagogyStatistics,
   pedagogyQueryParams,
@@ -23,6 +24,7 @@ export function PedagogyStatisticsView({
   selectedCompetence = null,
   chapterSearch = '',
   competenceSearch = '',
+  environment = 'local-copy',
 }: {
   data: PedagogyStatistics | null;
   query: PedagogyQuery;
@@ -33,17 +35,18 @@ export function PedagogyStatisticsView({
   selectedCompetence?: Choice | null;
   chapterSearch?: string;
   competenceSearch?: string;
+  environment?: ReadEnvironment;
 }) {
   const current = decodePedagogyStatistics(data, {
-    environment: 'local-copy',
+    environment,
     query,
   });
   const chapterResult = decodePedagogyReferences(chapters, {
-    environment: 'local-copy',
+    environment,
     query: { kind: 'chapter', q: chapterSearch },
   });
   const competenceResult = decodePedagogyReferences(competences, {
-    environment: 'local-copy',
+    environment,
     query: { kind: 'competence', q: competenceSearch },
   });
   const chapterItems =
@@ -97,23 +100,12 @@ export function PedagogyStatisticsView({
         >
           ← Activité générale
         </Link>
-        <div className="mt-4">
-          <span className="badge">
-            Base pédagogique locale · données synthétiques
-          </span>
-        </div>
         <h1 className="mt-4 text-3xl font-semibold tracking-tight">
-          Résultats pédagogiques
+          Résultats par exercice
         </h1>
         <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-600">
-          Explorer les résultats enregistrés par chapitre, compétence et
-          exercice. Les références sont celles d’aujourd’hui ; aucune version
-          historique manquante n’est inventée.
-        </p>
-        <p className="notice mt-4">
-          Ce jeu de données de test est distinct de l’activité générale et ne
-          décrit pas les utilisateurs de Production. Consultation en lecture
-          seule.
+          Comparez le nombre de tentatives et le taux de réussite par chapitre,
+          compétence ou exercice. Les comptes invités sont exclus.
         </p>
       </header>
       <form method="get" action={base} className="card space-y-5">
@@ -278,7 +270,7 @@ export function PedagogyStatisticsView({
       {!current ? (
         <section className="card" role="status">
           <h2 className="text-lg font-semibold">
-            Statistiques pédagogiques indisponibles
+            Résultats par exercice indisponibles
           </h2>
           <p className="mt-3 text-sm text-slate-600">
             Aucun chiffre ne peut être confirmé pour ces filtres. Réessayez
@@ -443,7 +435,7 @@ export function PedagogyStatisticsView({
                 </p>
               )}
               <nav
-                aria-label="Pagination des résultats pédagogiques"
+                aria-label="Pagination des résultats par exercice"
                 className="mt-5 flex flex-wrap items-center gap-4"
               >
                 {BigInt(query.page) > BigInt(1) && (

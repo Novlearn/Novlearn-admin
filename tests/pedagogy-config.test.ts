@@ -1,9 +1,9 @@
 import { expect, it } from 'vitest';
-import { readLocalPedagogyConfiguration } from '@/lib/pedagogy-config';
+import { readPedagogyConfiguration } from '@/lib/pedagogy-config';
 import { localPedagogyEnvironment } from './fixtures/local-pedagogy-env';
 it('requires a reviewed local source with its own physical login', () => {
   const env = localPedagogyEnvironment();
-  expect(readLocalPedagogyConfiguration(env)?.environment).toBe('local-copy');
+  expect(readPedagogyConfiguration(env)?.environment).toBe('local-copy');
 });
 it.each([
   ['ADMIN_LOCAL_PEDAGOGY_ENABLED', 'false'],
@@ -15,7 +15,7 @@ it.each([
   ['ADMIN_LOCAL_PEDAGOGY_PG_CA', ''],
 ])('refuses missing or operational activation %s', (key, value) => {
   expect(
-    readLocalPedagogyConfiguration({
+    readPedagogyConfiguration({
       ...localPedagogyEnvironment(),
       [key]: value,
     }),
@@ -32,13 +32,13 @@ it.each([
     a,
     b,
   );
-  expect(readLocalPedagogyConfiguration(env)).toBeNull();
+  expect(readPedagogyConfiguration(env)).toBeNull();
 });
 it.each(['?sslmode=disable', '?options=-c%20role%3Dpostgres', '#target'])(
   'rejects connection overrides %s',
   (suffix) => {
     const env = localPedagogyEnvironment();
     env.ADMIN_LOCAL_PEDAGOGY_PG_URL += suffix;
-    expect(readLocalPedagogyConfiguration(env)).toBeNull();
+    expect(readPedagogyConfiguration(env)).toBeNull();
   },
 );
