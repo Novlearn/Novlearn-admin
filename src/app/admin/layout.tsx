@@ -25,14 +25,14 @@ export default async function AdminLayout({
   const recoveryScope = `${authConfig?.supabaseUrl ?? 'disabled'}|${access.userId}`;
   return (
     <EditorRecoveryScope key={recoveryScope} scope={recoveryScope}>
-      <div className="min-h-screen lg:grid lg:grid-cols-[210px_1fr]">
+      <div className="min-h-screen lg:grid lg:grid-cols-[230px_1fr]">
         <a
           href="#main-content"
           className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-white focus:p-3"
         >
           Aller au contenu
         </a>
-        <aside className="border-b border-slate-200 bg-white p-6 lg:border-b-0 lg:border-r">
+        <aside className="flex flex-col border-b border-sky-100 bg-sky-50 p-6 lg:sticky lg:top-0 lg:h-screen lg:border-b-0 lg:border-r">
           <Link
             href="/admin"
             className="inline-flex"
@@ -49,11 +49,11 @@ export default async function AdminLayout({
             usersEnabled={!!readUsersConfiguration(process.env)}
             feedbackEnabled={!!readProductionApiConfiguration(process.env)}
           />
+          <div className="mt-6 border-t border-sky-200 pt-4 lg:mt-auto">
+            <AdminLogout buttonClassName="w-full rounded-lg px-3 py-2.5 text-left text-sm font-semibold text-slate-600 transition-colors hover:bg-white/80 hover:text-blue-700" />
+          </div>
         </aside>
         <div className="min-w-0">
-          <header className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 bg-white px-6 py-4 lg:px-10">
-            <AdminLogout />
-          </header>
           <main id="main-content" className="px-6 py-9 lg:px-10">
             <LocalRecoveryNotice
               local={local && !authConfig?.localPublicationFixture}

@@ -43,7 +43,7 @@ export function AdminNavigation({
   return (
     <nav
       aria-label="Navigation principale"
-      className="mt-4 flex gap-2 overflow-x-auto pb-2 lg:mt-8 lg:block lg:space-y-6 lg:overflow-visible lg:pb-0"
+      className="mt-4 flex gap-2 overflow-x-auto pb-2 lg:mt-8 lg:block lg:flex-1 lg:space-y-6 lg:overflow-visible lg:pb-0"
     >
       {groups
         .filter((group) => group.links.length > 0)
@@ -66,7 +66,7 @@ export function AdminNavigation({
                   key={href}
                   href={href}
                   aria-current={active ? 'page' : undefined}
-                  className={`block whitespace-nowrap rounded-lg px-3 py-2.5 text-sm font-semibold transition-colors lg:px-4 ${active ? 'bg-blue-50 text-blue-800 ring-1 ring-blue-100' : 'text-slate-600 hover:bg-slate-50 hover:text-blue-700'}`}
+                  className={`block whitespace-nowrap rounded-lg px-3 py-2.5 text-sm font-semibold transition-colors lg:px-4 ${active ? 'bg-sky-100 text-blue-900 ring-1 ring-sky-200' : 'text-slate-600 hover:bg-white/80 hover:text-blue-700'}`}
                 >
                   {label}
                 </Link>

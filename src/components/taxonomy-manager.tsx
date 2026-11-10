@@ -324,9 +324,6 @@ export function TaxonomyManager({
     <>
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="text-sm font-medium text-slate-500">
-            Référentiel pédagogique · Staging
-          </p>
           <h1 className="mt-2 text-3xl font-semibold tracking-tight">
             {plural}
           </h1>
