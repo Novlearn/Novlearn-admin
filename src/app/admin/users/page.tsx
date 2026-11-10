@@ -1,7 +1,7 @@
 import { requireAdminPage } from '@/lib/auth/require-admin';
 import { readUsersConfiguration } from '@/lib/users-config';
 import { readUsersQuery, type UsersPage } from '@/lib/users';
-import { loadUsers } from '@/lib/users-server';
+import { loadUsersByName } from '@/lib/users-server';
 import { UsersListView } from '@/components/users-list';
 import { readUserDetailConfiguration } from '@/lib/user-detail-config';
 
@@ -22,6 +22,8 @@ export default async function UsersPage({
         ? []
         : [value])
       params.append(key, item);
+  params.delete('from');
+  params.delete('to');
   const filter = readUsersQuery(params);
   const fallback = readUsersQuery(new URLSearchParams());
   if (!fallback.ok) throw Error('Période indisponible');
@@ -32,7 +34,7 @@ export default async function UsersPage({
     if (!config) error = 'Consultation des utilisateurs non configurée.';
     else
       try {
-        data = await loadUsers(query);
+        data = await loadUsersByName(query);
       } catch {
         error = 'La liste n’a pas pu être chargée. Réessayez dans un instant.';
       }

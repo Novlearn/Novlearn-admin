@@ -5,7 +5,7 @@ import { privateHeaders } from '@/lib/auth/http';
 import { createRouteAuth, transferAuthCookies } from '@/lib/auth/supabase';
 import { readUsersConfiguration } from '@/lib/users-config';
 import { readUsersQuery } from '@/lib/users';
-import { loadUsers } from '@/lib/users-server';
+import { loadUsersByName } from '@/lib/users-server';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -35,7 +35,7 @@ export async function GET(request: NextRequest) {
   const filter = readUsersQuery(request.nextUrl.searchParams);
   if (!filter.ok) return finish({ error: filter.error }, 400);
   try {
-    return finish(await loadUsers(filter.value));
+    return finish(await loadUsersByName(filter.value));
   } catch {
     return finish({ error: 'Utilisateurs indisponibles' }, 503);
   }

@@ -23,18 +23,18 @@ export function UsersListView({
   environment?: ReadEnvironment;
 }) {
   const current = decodeUsersPage(data, query, undefined, environment);
-  const attempts = (count: string) =>
-    `${formatCount(count)} tentative${count === '1' ? '' : 's'}`;
+  const exportParams = new URLSearchParams({
+    from: query.period.from,
+    to: query.period.to,
+  });
+  if (query.query) exportParams.set('q', query.query);
   return (
     <div className="space-y-7">
       <header>
         <h1 className="mt-4 text-3xl font-semibold tracking-tight">
           Utilisateurs
         </h1>
-        <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-600">
-          Nom, e-mail du compte et tentatives enregistrées sur la période
-          choisie. 
-        </p>
+        <p className="mt-2 text-sm text-slate-600">Nom et e-mail</p>
       </header>
       <form
         method="get"
@@ -42,42 +42,21 @@ export function UsersListView({
         className="card flex flex-wrap items-end gap-4"
       >
         <label className="label min-w-56 flex-1">
-          Nom ou e-mail
+          Nom
           <input
             className="field"
             name="q"
             type="search"
             maxLength={100}
             defaultValue={query.query}
-            placeholder="Rechercher un compte"
-          />
-        </label>
-        <label className="label">
-          Début (UTC)
-          <input
-            className="field"
-            name="from"
-            type="date"
-            required
-            defaultValue={query.period.from}
-          />
-        </label>
-        <label className="label">
-          Fin incluse (UTC)
-          <input
-            className="field"
-            name="to"
-            type="date"
-            required
-            defaultValue={query.period.to}
+            placeholder="Rechercher par nom"
           />
         </label>
         <button className="button" type="submit">
-          Rechercher
+          Filtrer
         </button>
         <p className="w-full text-sm text-slate-500">
-          90 jours au maximum. L’activité compte les tentatives d’exercice et de
-          duel datées, sans déduire l’activité des seules connexions.
+          Dernière activité relevée sur les 30 derniers jours.
         </p>
       </form>
       {error && (
@@ -94,11 +73,17 @@ export function UsersListView({
         </section>
       ) : (
         <>
-          <div className="flex flex-wrap justify-between gap-3 text-sm text-slate-600">
-            <p>
-              {formatCount(current.total)} comptes correspondent à la recherche.
-            </p>
-            <p>Relevé du {overviewDate(current.asOf)}</p>
+          <div className="flex flex-wrap items-center justify-between gap-3 text-sm text-slate-600">
+            <p>{formatCount(current.total)} utilisateurs</p>
+            <div className="flex flex-wrap items-center gap-4">
+              <p>Mis à jour le {overviewDate(current.asOf)}</p>
+              <a
+                className="button"
+                href={'/api/admin/users/export?' + exportParams.toString()}
+              >
+                Exporter CSV
+              </a>
+            </div>
           </div>
           {current.items.length === 0 ? (
             <section className="card" role="status">
@@ -119,7 +104,7 @@ export function UsersListView({
             <div className="card overflow-x-auto">
               <table className="w-full text-left text-sm">
                 <caption className="mb-4 text-left font-semibold">
-                  Comptes et activité sur la période UTC
+                  Liste des utilisateurs
                 </caption>
                 <thead>
                   <tr className="border-b border-slate-200 text-slate-500">
@@ -130,7 +115,7 @@ export function UsersListView({
                       E-mail
                     </th>
                     <th scope="col" className="px-3 py-3">
-                      Activité
+                      Dernière activité (30 jours)
                     </th>
                   </tr>
                 </thead>
@@ -170,17 +155,10 @@ export function UsersListView({
                       <td className="max-w-xs break-all px-3 py-4 text-slate-600">
                         {user.email ?? '—'}
                       </td>
-                      <td className="px-3 py-4">
-                        <p>
-                          {attempts(user.exerciseAttempts)} d’exercice ·{' '}
-                          {attempts(user.duelAttempts)} de duel
-                        </p>
-                        <p className="mt-1 text-xs text-slate-500">
-                          {user.lastActivity
-                            ? 'Dernière tentative : ' +
-                              overviewDate(user.lastActivity)
-                            : 'Aucune tentative datée sur cette période.'}
-                        </p>
+                      <td className="whitespace-nowrap px-3 py-4 text-slate-600">
+                        {user.lastActivity
+                          ? overviewDate(user.lastActivity)
+                          : '—'}
                       </td>
                     </tr>
                   ))}

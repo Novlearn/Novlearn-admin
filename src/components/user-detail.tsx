@@ -8,13 +8,11 @@ import {
   type UserDetailQuery,
   type UserDetailView,
   type UserHistoryItem,
-  type ChapterProgressItem,
   type CompetenceProgressItem,
 } from '@/lib/user-detail';
 
 const views: [UserDetailView, string][] = [
   ['history', 'Historique'],
-  ['chapters', 'Chapitres'],
   ['competences', 'Compétences'],
 ];
 const issueLabels: Record<string, string> = {
@@ -111,57 +109,6 @@ function HistoryRows({ items }: { items: UserHistoryItem[] }) {
     </table>
   );
 }
-function ChapterRows({ items }: { items: ChapterProgressItem[] }) {
-  return (
-    <table className="w-full text-left text-sm">
-      <caption className="mb-4 text-left font-semibold">
-        Progression enregistrée par chapitre · état actuel
-      </caption>
-      <thead>
-        <tr className="border-b border-slate-200 text-slate-500">
-          <th scope="col" className="p-3">
-            Libellé enregistré
-          </th>
-          <th scope="col" className="p-3">
-            Niveau enregistré
-          </th>
-          <th scope="col" className="p-3">
-            Exercices terminés
-          </th>
-          <th scope="col" className="p-3">
-            Dernière date enregistrée
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        {items.map((row) => (
-          <tr key={row.id} className="border-b border-slate-100 last:border-0">
-            <th scope="row" className="max-w-md break-words p-3 font-semibold">
-              {row.label}
-              {row.labelTruncated && (
-                <span className="mt-1 block text-xs font-normal text-slate-500">
-                  Libellé abrégé
-                </span>
-              )}
-              <Issues issues={row.issues} />
-            </th>
-            <td className="p-3">
-              {row.level === null ? 'Non renseigné' : row.level + ' / 100'}
-            </td>
-            <td className="p-3">
-              {row.completed === null
-                ? row.issues.includes('invalid-count')
-                  ? 'Valeur incohérente'
-                  : 'Non renseigné'
-                : formatCount(row.completed)}
-            </td>
-            <td className="p-3">{recordedDate(row.recordedAt)}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  );
-}
 function CompetenceRows({ items }: { items: CompetenceProgressItem[] }) {
   return (
     <table className="w-full text-left text-sm">
@@ -244,11 +191,6 @@ export function UserDetailView({
         ← Retour aux utilisateurs
       </Link>
       <header>
-        <span className="badge">
-          {environment === 'production'
-            ? 'Production · fiche utilisateur · lecture seule'
-            : 'Base locale synthétique · fiche utilisateur'}
-        </span>
         <h1 className="mt-4 break-words text-3xl font-semibold tracking-tight">
           {current ? current.user.name : 'Fiche utilisateur'}
         </h1>
@@ -264,14 +206,6 @@ export function UserDetailView({
             )}
           </p>
         )}
-        <p className="notice mt-4">
-          {environment === 'production'
-            ? 'Données réelles.'
-            : 'Comptes de test.'}{' '}
-          Les résultats et niveaux enregistrés ne constituent pas une
-          certification par l’Engine. Aucune modification de compte n’est
-          proposée.
-        </p>
       </header>
       <form
         method="get"
@@ -302,10 +236,8 @@ export function UserDetailView({
         <button type="submit" className="button">
           Actualiser la période
         </button>
-        <p className="w-full text-sm leading-6 text-slate-500">
-          90 jours au maximum. La période filtre les tentatives ; les chapitres
-          et compétences montrent l’état enregistré actuel, hors filtre de
-          période. Les dates sont affichées à Paris.
+        <p className="w-full text-sm text-slate-500">
+          Jusqu’à 90 jours. Dates affichées à Paris.
         </p>
       </form>
       {error && (
@@ -324,7 +256,7 @@ export function UserDetailView({
         <>
           <section
             aria-label="Activité sur la période"
-            className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4"
+            className="grid gap-4 sm:grid-cols-3"
           >
             {[
               [
@@ -336,11 +268,7 @@ export function UserDetailView({
                 formatCount(current.activity.duelAttempts),
               ],
               [
-                'Abandons déclarés',
-                formatCount(current.activity.exerciseAbandoned),
-              ],
-              [
-                'Dernière tentative',
+                'Dernière activité',
                 current.activity.lastActivity
                   ? overviewDate(current.activity.lastActivity)
                   : 'Aucune sur la période',
@@ -352,14 +280,6 @@ export function UserDetailView({
               </div>
             ))}
           </section>
-          <p className="text-sm leading-7 text-slate-600">
-            Déclarations dans la période : exercices,{' '}
-            {counted(current.activity.exerciseCorrect, 'réussite')} et{' '}
-            {counted(current.activity.exerciseIncorrect, 'échec')} ; duels,{' '}
-            {counted(current.activity.duelCorrect, 'réussite')} et{' '}
-            {counted(current.activity.duelIncorrect, 'échec')}. Les abandons
-            restent comptés séparément.
-          </p>
           {(current.activity.undatedExerciseAttempts !== '0' ||
             current.activity.undatedDuelAttempts !== '0') && (
             <p className="notice">
@@ -388,13 +308,6 @@ export function UserDetailView({
               </Link>
             ))}
           </nav>
-          <p className="text-sm leading-7 text-slate-600">
-            {query.view === 'history'
-              ? 'Une ligne représente une tentative d’exercice ou une réponse enregistrée en duel. Les titres consultés sont actuels ; une version historique absente n’est jamais déduite de la version active.'
-              : query.view === 'chapters'
-                ? 'Les libellés de chapitre sont ceux enregistrés dans la progression historique ; ils ne sont pas rattachés arbitrairement au référentiel actuel.'
-                : 'Les points sont affichés tels qu’enregistrés, face au barème actuel lorsqu’il est connu. Un barème manquant ou dépassé reste signalé, sans recalcul ni plafonnement.'}
-          </p>
           <div className="flex flex-wrap justify-between gap-3 text-sm text-slate-500">
             <p>{counted(current.page.total, 'ligne')} dans cette vue</p>
             <p>Relevé du {overviewDate(current.asOf)}</p>
@@ -422,8 +335,6 @@ export function UserDetailView({
             <div className="card overflow-x-auto">
               {query.view === 'history' ? (
                 <HistoryRows items={current.items as UserHistoryItem[]} />
-              ) : query.view === 'chapters' ? (
-                <ChapterRows items={current.items as ChapterProgressItem[]} />
               ) : (
                 <CompetenceRows
                   items={current.items as CompetenceProgressItem[]}

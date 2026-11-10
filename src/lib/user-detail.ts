@@ -128,7 +128,7 @@ const micros = (v: string) =>
   BigInt(Date.parse(v)) * BigInt(1000) +
   BigInt((v.split('.')[1]?.slice(0, -1) ?? '').padEnd(6, '0').slice(3));
 const viewName = (v: unknown): v is UserDetailView =>
-  v === 'history' || v === 'chapters' || v === 'competences';
+  v === 'history' || v === 'competences';
 const label = (v: unknown, truncated: unknown, nullable = false) => {
   if (typeof truncated !== 'boolean') return false;
   if (v === null) return nullable && !truncated;
