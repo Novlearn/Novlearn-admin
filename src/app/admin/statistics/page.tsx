@@ -1,12 +1,17 @@
 import { requireAdminPage } from '@/lib/auth/require-admin';
-import Link from 'next/link';
 import { readPedagogyConfiguration } from '@/lib/pedagogy-config';
 import { readActivityConfiguration } from '@/lib/activity-config';
 import {
   readStatisticsPeriod,
   type ActivityStatistics,
+  type CohortRetention,
 } from '@/lib/activity-statistics';
 import { loadActivityStatistics } from '@/lib/activity-server';
+import {
+  loadProductionCohortRetention,
+  loadProductionOverviewMetrics,
+  type ProductionOverviewMetrics,
+} from '@/lib/production-api';
 import { ActivityStatisticsView } from '@/components/activity-statistics';
 
 export const dynamic = 'force-dynamic';
@@ -18,6 +23,7 @@ export default async function StatisticsPage({
 }) {
   await requireAdminPage();
   const config = readActivityConfiguration(process.env);
+  const exerciseAnalysisEnabled = !!readPedagogyConfiguration(process.env);
   const query = new URLSearchParams();
   for (const [key, value] of Object.entries(await searchParams))
     for (const item of Array.isArray(value)
@@ -32,6 +38,10 @@ export default async function StatisticsPage({
   const period = filter.ok ? filter.period : fallback.period;
   let error = filter.ok ? undefined : filter.error;
   let data: ActivityStatistics | null = null;
+  let overviewMetrics: ProductionOverviewMetrics | null = null;
+  let overviewMetricsError = false;
+  let retention: CohortRetention | null = null;
+  let retentionUnavailable = false;
   if (filter.ok) {
     if (!config) error = 'Lecture statistique non configurée.';
     else
@@ -40,23 +50,31 @@ export default async function StatisticsPage({
       } catch {
         error = 'Le relevé n’a pas pu être chargé. Réessayez dans un instant.';
       }
+    if (config?.environment === 'production') {
+      const [metricsResult, retentionResult] = await Promise.allSettled([
+        loadProductionOverviewMetrics(period),
+        loadProductionCohortRetention(),
+      ]);
+      if (metricsResult.status === 'fulfilled')
+        overviewMetrics = metricsResult.value;
+      else overviewMetricsError = true;
+      if (retentionResult.status === 'fulfilled')
+        retention = retentionResult.value;
+      else retentionUnavailable = true;
+    }
   }
   return (
     <div className="space-y-5">
-      {readPedagogyConfiguration(process.env) && (
-        <Link
-          href="/admin/statistics/pedagogy"
-          prefetch={false}
-          className="button"
-        >
-          Explorer les résultats pédagogiques
-        </Link>
-      )}
       <ActivityStatisticsView
         data={data}
         period={period}
-        environment={config?.environment ?? 'production'}
+        environment={config?.environment ?? null}
         error={error}
+        exerciseAnalysisEnabled={exerciseAnalysisEnabled}
+        overviewMetrics={overviewMetrics}
+        overviewMetricsError={overviewMetricsError}
+        retention={retention}
+        retentionUnavailable={retentionUnavailable}
       />
     </div>
   );

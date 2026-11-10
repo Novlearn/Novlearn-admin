@@ -29,6 +29,18 @@ export type ActivityStatistics = {
   totals: ActivityCounts;
   daily: ({ date: string } & ActivityCounts)[];
 };
+export type CohortRetentionBucket = {
+  eligibleAccounts: string;
+  returnedAccounts: string;
+};
+export type CohortRetention = {
+  schemaVersion: 1;
+  environment: StatisticsEnvironment;
+  asOf: string;
+  cohortPeriod: Pick<StatisticsPeriod, 'from' | 'until'>;
+  d7: CohortRetentionBucket;
+  d30: CohortRetentionBucket;
+};
 const dayMs = 86400000;
 const countKeys = [
   'activeAccounts',
@@ -230,6 +242,77 @@ export function decodeActivityStatistics(
     daily,
   };
 }
+
+/** Strict count-only projection for exact-day D+7/D+30 retention cohorts. */
+export function decodeCohortRetention(
+  value: unknown,
+  expected: { environment: StatisticsEnvironment },
+): CohortRetention | null {
+  if (
+    !['production', 'local-fixture', 'local-copy'].includes(
+      expected.environment,
+    ) ||
+    !object(value) ||
+    !exact(value, [
+      'schemaVersion',
+      'environment',
+      'asOf',
+      'cohortPeriod',
+      'd7',
+      'd30',
+    ]) ||
+    value.schemaVersion !== 1 ||
+    value.environment !== expected.environment ||
+    typeof value.asOf !== 'string' ||
+    !/^\d{4}-\d{2}-\d{2}T(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.\d{1,6})?Z$/.test(
+      value.asOf,
+    ) ||
+    statisticsDate(value.asOf.slice(0, 10)) === null ||
+    !Number.isFinite(Date.parse(value.asOf)) ||
+    !object(value.cohortPeriod) ||
+    !exact(value.cohortPeriod, ['from', 'until'])
+  )
+    return null;
+  const today = statisticsDate(value.asOf.slice(0, 10));
+  if (today === null) return null;
+  const expectedFrom = new Date(today - 60 * dayMs).toISOString().slice(0, 10);
+  const expectedUntil = new Date(today - 30 * dayMs).toISOString().slice(0, 10);
+  if (
+    value.cohortPeriod.from !== expectedFrom ||
+    value.cohortPeriod.until !== expectedUntil
+  )
+    return null;
+  const bucket = (candidate: unknown): candidate is CohortRetentionBucket =>
+    object(candidate) &&
+    exact(candidate, ['eligibleAccounts', 'returnedAccounts']) &&
+    count(candidate.eligibleAccounts) &&
+    count(candidate.returnedAccounts) &&
+    BigInt(candidate.returnedAccounts) <= BigInt(candidate.eligibleAccounts);
+  if (
+    !bucket(value.d7) ||
+    !bucket(value.d30) ||
+    value.d30.eligibleAccounts !== value.d7.eligibleAccounts
+  )
+    return null;
+  return structuredClone(value) as CohortRetention;
+}
+
+/** One decimal percent; no eligible accounts is unavailable, not zero. */
+export function cohortRetentionRate(bucket: CohortRetentionBucket) {
+  if (!count(bucket.eligibleAccounts) || !count(bucket.returnedAccounts))
+    return null;
+  const eligible = BigInt(bucket.eligibleAccounts);
+  if (eligible === BigInt(0)) return null;
+  const tenths =
+    (BigInt(bucket.returnedAccounts) * BigInt(1000) + eligible / BigInt(2)) /
+    eligible;
+  return new Intl.NumberFormat('fr-FR', {
+    style: 'percent',
+    minimumFractionDigits: 1,
+    maximumFractionDigits: 1,
+  }).format(Number(tenths) / 1000);
+}
+
 /** One decimal percentage, rounded once using integer arithmetic. Null is not 0%. */
 export function recordedSuccessRate(
   correct: string,

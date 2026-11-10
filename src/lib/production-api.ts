@@ -3,8 +3,10 @@ import { authorizeAdmin } from './auth/authorization';
 import { asAuthGateway, createPageClient } from './auth/supabase';
 import { productionAuthConfiguration } from './production-api-config';
 import {
+  decodeCohortRetention,
   decodeActivityStatistics,
   readStatisticsPeriod,
+  type CohortRetention,
   type StatisticsPeriod,
 } from './activity-statistics';
 import {
@@ -80,6 +82,132 @@ export async function loadProductionActivity(period: StatisticsPeriod) {
     throw new ProductionApiError();
   return result;
 }
+
+export async function loadProductionCohortRetention(): Promise<CohortRetention> {
+  const row = await rpc('admin_read_cohort_retention', {});
+  const result = decodeCohortRetention(row, { environment: 'production' });
+  if (!result) throw new ProductionApiError();
+  return result;
+}
+
+export type ProductionOverviewMetrics = {
+  exerciseCatalogCount: string;
+  exercisesCreated: string;
+  feedbacks: {
+    total: string;
+    pending: string;
+    approved: string;
+    rejected: string;
+  };
+};
+
+/** Count-only Production reads; no exercise or feedback rows reach the browser. */
+export async function loadProductionOverviewMetrics(
+  periodInput: StatisticsPeriod,
+): Promise<ProductionOverviewMetrics> {
+  try {
+    const periodQuery = new URLSearchParams({
+      from: periodInput.from,
+      to: periodInput.to,
+    });
+    const validatedPeriod = readStatisticsPeriod(periodQuery);
+    if (
+      !validatedPeriod.ok ||
+      validatedPeriod.period.until !== periodInput.until ||
+      validatedPeriod.period.days !== periodInput.days
+    )
+      throw new ProductionApiError();
+    const config = productionAuthConfiguration(process.env);
+    if (!config) throw new ProductionApiError();
+    const client = await createPageClient(config);
+    if (!client || !(await authorizeAdmin(asAuthGateway(client))).allowed)
+      throw new ProductionApiError();
+
+    const [
+      exerciseCatalog,
+      exercisesCreated,
+      pending,
+      approved,
+      rejected,
+      total,
+    ] = await Promise.all([
+      client
+        .from('exercises')
+        .select('id', { count: 'exact', head: true })
+        .abortSignal(AbortSignal.timeout(12000)),
+      client
+        .from('exercises')
+        .select('id', { count: 'exact', head: true })
+        .gte('created_at', `${periodInput.from}T00:00:00.000Z`)
+        .lt('created_at', `${periodInput.until}T00:00:00.000Z`)
+        .abortSignal(AbortSignal.timeout(12000)),
+      client
+        .from('feedbacks')
+        .select('id', { count: 'exact', head: true })
+        .or('status.eq.pending,status.is.null')
+        .gte('created_at', `${periodInput.from}T00:00:00.000Z`)
+        .lt('created_at', `${periodInput.until}T00:00:00.000Z`)
+        .abortSignal(AbortSignal.timeout(12000)),
+      client
+        .from('feedbacks')
+        .select('id', { count: 'exact', head: true })
+        .eq('status', 'approved')
+        .gte('created_at', `${periodInput.from}T00:00:00.000Z`)
+        .lt('created_at', `${periodInput.until}T00:00:00.000Z`)
+        .abortSignal(AbortSignal.timeout(12000)),
+      client
+        .from('feedbacks')
+        .select('id', { count: 'exact', head: true })
+        .eq('status', 'rejected')
+        .gte('created_at', `${periodInput.from}T00:00:00.000Z`)
+        .lt('created_at', `${periodInput.until}T00:00:00.000Z`)
+        .abortSignal(AbortSignal.timeout(12000)),
+      client
+        .from('feedbacks')
+        .select('id', { count: 'exact', head: true })
+        .gte('created_at', `${periodInput.from}T00:00:00.000Z`)
+        .lt('created_at', `${periodInput.until}T00:00:00.000Z`)
+        .abortSignal(AbortSignal.timeout(12000)),
+    ]);
+    const results = [
+      exerciseCatalog,
+      exercisesCreated,
+      pending,
+      approved,
+      rejected,
+      total,
+    ];
+    const counts = results.map((result) => result.count);
+    if (
+      results.some((result) => result.error) ||
+      counts.some(
+        (value) => value === null || !Number.isSafeInteger(value) || value < 0,
+      )
+    )
+      throw new ProductionApiError();
+    const [
+      exerciseCatalogCount,
+      exercisesCreatedCount,
+      pendingCount,
+      approvedCount,
+      rejectedCount,
+      totalCount,
+    ] = counts as number[];
+    return {
+      exerciseCatalogCount: String(exerciseCatalogCount),
+      exercisesCreated: String(exercisesCreatedCount),
+      feedbacks: {
+        total: String(totalCount),
+        pending: String(pendingCount),
+        approved: String(approvedCount),
+        rejected: String(rejectedCount),
+      },
+    };
+  } catch {
+    throw new ProductionApiError();
+  }
+}
+
 export async function loadProductionUsers(query: UsersQuery) {
   const params = new URLSearchParams({
     from: query.period.from,
