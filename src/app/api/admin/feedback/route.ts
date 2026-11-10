@@ -21,6 +21,8 @@ export async function GET(request: NextRequest) {
         { count: 'exact' },
       );
     if (query.categories.length) rows = rows.in('category', query.categories);
+    if (query.exerciseId !== null)
+      rows = rows.eq('exercise_id', query.exerciseId);
     if (query.status === 'pending')
       rows = rows.or('status.eq.pending,status.is.null');
     else if (query.status !== 'all') rows = rows.eq('status', query.status);

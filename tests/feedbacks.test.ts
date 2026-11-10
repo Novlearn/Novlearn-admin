@@ -13,6 +13,7 @@ const query = {
   categories: [],
   status: 'all' as const,
   sort: 'newest' as const,
+  exerciseId: null,
   page: 1,
 };
 const page = {
@@ -46,6 +47,7 @@ it('valide et borne les filtres, le tri et la pagination', () => {
     categories: ['difficulty', 'other'],
     status: 'pending',
     sort: 'oldest',
+    exerciseId: null,
     page: 2,
   });
   for (const invalid of [
@@ -86,7 +88,6 @@ it('affiche la source Production, les catégories, les statuts et échappe les m
       reviewEnabled: false,
     }),
   );
-  expect(html).toContain('Production · données réelles');
   expect(html).toContain('Erreur de contenu');
   expect(html).toContain('À traiter');
   expect(html).toContain('&lt;script&gt;');

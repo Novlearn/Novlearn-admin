@@ -12,6 +12,8 @@ import {
 function feedbackHref(query: FeedbackQuery, page: number) {
   const params = new URLSearchParams();
   for (const category of query.categories) params.append('category', category);
+  if (query.exerciseId !== null)
+    params.set('exerciseId', String(query.exerciseId));
   if (query.status !== 'all') params.set('status', query.status);
   if (query.sort !== 'newest') params.set('sort', query.sort);
   if (page > 1) params.set('page', String(page));
@@ -66,25 +68,27 @@ export function FeedbacksManager({
     ? Math.max(1, Math.ceil(data.total / data.pageSize))
     : 1;
   return (
-    <div className="space-y-7">
-      <header className="editor-intro">
-        <p className="text-sm font-semibold text-blue-800">
-          Retours utilisateurs
-        </p>
-        <h1 className="mt-2 text-3xl font-semibold tracking-tight">
-          Feedbacks
-        </h1>
-        <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-600">
-          Consultez les retours envoyés depuis NovLearn en Production,
-          classez-les par catégorie et enregistrez votre décision.
-        </p>
-        <p className="mt-4 inline-flex items-center gap-2 rounded-full bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-800">
-          <span
-            aria-hidden="true"
-            className="size-2 rounded-full bg-emerald-500"
-          />
-          Production · données réelles
-        </p>
+    <div className="space-y-6">
+      <header className="flex flex-wrap items-end justify-between gap-4 border-b border-slate-200 pb-5">
+        <div>
+          <h1 className="mt-1 text-2xl font-semibold tracking-tight text-slate-900">
+            Feedbacks
+          </h1>
+          <p className="mt-1 text-sm text-slate-600">
+            Consultez, classez et traitez les retours reçus.
+          </p>
+        </div>
+        <button
+          type="button"
+          className="button button-secondary min-h-10 px-3 py-2"
+          onClick={() => router.refresh()}
+          aria-label="Actualiser les feedbacks"
+        >
+          <span aria-hidden="true" className="mr-2">
+            ↻
+          </span>
+          Actualiser
+        </button>
       </header>
 
       {data && (
@@ -94,24 +98,18 @@ export function FeedbacksManager({
         >
           {(
             [
-              ['Total', data.summary.total, 'bg-blue-50 text-blue-800'],
-              ['À traiter', data.summary.pending, 'bg-amber-50 text-amber-900'],
-              [
-                'Validés',
-                data.summary.approved,
-                'bg-emerald-50 text-emerald-900',
-              ],
-              ['Refusés', data.summary.rejected, 'bg-slate-100 text-slate-700'],
+              ['Total', data.summary.total],
+              ['À traiter', data.summary.pending],
+              ['Validés', data.summary.approved],
+              ['Refusés', data.summary.rejected],
             ] as const
-          ).map(([label, count, color]) => (
+          ).map(([label, count]) => (
             <article
               key={label}
-              className="card flex items-center justify-between gap-3"
+              className="rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm"
             >
-              <h2 className="text-sm font-medium text-slate-600">{label}</h2>
-              <p
-                className={`rounded-xl px-3 py-2 text-xl font-bold tabular-nums ${color}`}
-              >
+              <h2 className="text-xs font-medium text-slate-500">{label}</h2>
+              <p className="mt-1 text-2xl font-semibold tabular-nums text-slate-900">
                 {count.toLocaleString('fr-FR')}
               </p>
             </article>
@@ -119,52 +117,87 @@ export function FeedbacksManager({
         </section>
       )}
 
-      <form action="/admin/feedback" method="get" className="card space-y-5">
-        <fieldset>
-          <legend className="label">Catégories</legend>
-          <p className="mt-1 text-xs text-slate-500">
-            {query.categories.length === 0
-              ? 'Toutes les catégories'
-              : `${query.categories.length} catégorie${query.categories.length > 1 ? 's' : ''} sélectionnée${query.categories.length > 1 ? 's' : ''}`}
-          </p>
-          <div className="mt-3 flex flex-wrap gap-3">
-            {Object.entries(FEEDBACK_CATEGORIES).map(([value, label]) => (
-              <label
-                key={value}
-                className="inline-flex min-h-11 cursor-pointer items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 hover:border-blue-300 hover:bg-blue-50"
-              >
-                <input
-                  className="size-4 accent-blue-700"
-                  type="checkbox"
-                  name="category"
-                  value={value}
-                  defaultChecked={query.categories.includes(value)}
-                />
-                {label}
-              </label>
-            ))}
-          </div>
-        </fieldset>
-        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-[1fr_1fr_auto] xl:items-end">
-          <label className="label">
+      <form
+        action="/admin/feedback"
+        method="get"
+        className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm"
+      >
+        <div className="flex flex-wrap items-end gap-3">
+          <fieldset className="min-w-52">
+            <legend className="mb-1 text-xs font-medium text-slate-500">
+              Catégories
+            </legend>
+            <details className="group relative">
+              <summary className="field flex min-h-10 cursor-pointer list-none items-center justify-between gap-3 py-2 text-sm">
+                <span>
+                  {query.categories.length === 0
+                    ? 'Toutes les catégories'
+                    : `${query.categories.length} sélectionnée${query.categories.length > 1 ? 's' : ''}`}
+                </span>
+                <span aria-hidden="true" className="text-slate-400">
+                  ⌄
+                </span>
+              </summary>
+              <div className="absolute left-0 top-full z-20 mt-1 w-64 rounded-lg border border-slate-200 bg-white p-2 shadow-lg">
+                {Object.entries(FEEDBACK_CATEGORIES).map(([value, label]) => (
+                  <label
+                    key={value}
+                    className="flex cursor-pointer items-center gap-2 rounded-md px-2 py-2 text-sm text-slate-700 hover:bg-slate-50"
+                  >
+                    <input
+                      className="size-4 accent-slate-700"
+                      type="checkbox"
+                      name="category"
+                      value={value}
+                      defaultChecked={query.categories.includes(value)}
+                    />
+                    {label}
+                  </label>
+                ))}
+              </div>
+            </details>
+          </fieldset>
+          {query.categories.includes('difficulty') && (
+            <label className="min-w-52 flex-1 text-xs font-medium text-slate-500">
+              Exercice de difficulté
+              <input
+                className="field mt-1 min-h-10"
+                type="search"
+                name="exerciseId"
+                inputMode="numeric"
+                pattern="[1-9][0-9]*"
+                placeholder="Rechercher par identifiant"
+                defaultValue={query.exerciseId ?? ''}
+              />
+            </label>
+          )}
+          <label className="min-w-40 text-xs font-medium text-slate-500">
             Statut
-            <select className="field" name="status" defaultValue={query.status}>
-              <option value="all">Tous les statuts</option>
+            <select
+              className="field mt-1 min-h-10"
+              name="status"
+              defaultValue={query.status}
+            >
+              <option value="all">Tous</option>
               <option value="pending">À traiter</option>
               <option value="approved">Validés</option>
               <option value="rejected">Refusés</option>
             </select>
           </label>
-          <label className="label">
+          <label className="min-w-40 text-xs font-medium text-slate-500">
             Trier par
-            <select className="field" name="sort" defaultValue={query.sort}>
+            <select
+              className="field mt-1 min-h-10"
+              name="sort"
+              defaultValue={query.sort}
+            >
               <option value="newest">Plus récents</option>
               <option value="oldest">Plus anciens</option>
               <option value="category">Catégorie</option>
             </select>
           </label>
-          <button className="button" type="submit">
-            Appliquer les filtres
+          <button className="button min-h-10 px-4 py-2" type="submit">
+            Filtrer
           </button>
         </div>
       </form>
@@ -202,13 +235,16 @@ export function FeedbacksManager({
               ] ?? item.category;
             const status = item.status ?? 'pending';
             return (
-              <article key={item.id} className="card space-y-4">
+              <article
+                key={item.id}
+                className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm"
+              >
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div className="flex flex-wrap items-center gap-2">
-                    <span className="badge">{category}</span>
-                    <span
-                      className={`rounded-full px-3 py-1 text-xs font-semibold ${status === 'pending' ? 'bg-amber-50 text-amber-900' : status === 'approved' ? 'bg-emerald-50 text-emerald-900' : 'bg-slate-100 text-slate-700'}`}
-                    >
+                    <span className="rounded-md border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs font-medium text-slate-700">
+                      {category}
+                    </span>
+                    <span className="rounded-md bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-600">
                       {statusLabels[status]}
                     </span>
                   </div>
@@ -251,7 +287,7 @@ export function FeedbacksManager({
                   <div className="flex flex-wrap gap-2 border-t border-slate-100 pt-3">
                     <button
                       type="button"
-                      className="button min-h-10 px-4 py-2"
+                      className="button button-secondary min-h-10 px-4 py-2"
                       disabled={!reviewEnabled || busy === item.id}
                       onClick={() => void decide(item.id, 'approve')}
                     >

@@ -20,6 +20,8 @@ export async function loadProductionFeedbacks(query: FeedbackQuery) {
   for (const category of query.categories) params.append('category', category);
   params.set('status', query.status);
   params.set('sort', query.sort);
+  if (query.exerciseId !== null)
+    params.set('exerciseId', String(query.exerciseId));
   params.set('page', String(query.page));
   const validated = readFeedbackQuery(params);
   if (
@@ -27,6 +29,7 @@ export async function loadProductionFeedbacks(query: FeedbackQuery) {
     query.categories.join('\0') !== validated.categories.join('\0') ||
     query.status !== validated.status ||
     query.sort !== validated.sort ||
+    query.exerciseId !== validated.exerciseId ||
     query.page !== validated.page
   )
     throw new FeedbacksUnavailableError();
@@ -61,6 +64,8 @@ export async function loadProductionFeedbacks(query: FeedbackQuery) {
           );
         if (validated.categories.length)
           q = q.in('category', validated.categories);
+        if (validated.exerciseId !== null)
+          q = q.eq('exercise_id', validated.exerciseId);
         if (validated.status === 'pending')
           q = q.or('status.eq.pending,status.is.null');
         else if (validated.status !== 'all')

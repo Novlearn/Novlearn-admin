@@ -20,6 +20,7 @@ export type FeedbackQuery = {
   categories: string[];
   status: 'all' | FeedbackStatus;
   sort: 'newest' | 'oldest' | 'category';
+  exerciseId: number | null;
   page: number;
 };
 export type FeedbackSummary = Record<FeedbackStatus, number> & {
@@ -43,12 +44,14 @@ export function readFeedbackQuery(
   const categories = [...new Set(params.getAll('category').filter(Boolean))];
   const status = params.get('status') ?? 'all';
   const sort = params.get('sort') ?? 'newest';
+  const rawExerciseId = params.get('exerciseId') ?? '';
   const rawPage = params.get('page') ?? '1';
   if (
     categories.length > Object.keys(FEEDBACK_CATEGORIES).length ||
     categories.some((category) => category.length > 80) ||
     !['all', 'pending', 'approved', 'rejected'].includes(status) ||
     !['newest', 'oldest', 'category'].includes(sort) ||
+    (rawExerciseId !== '' && !/^[1-9]\d{0,9}$/.test(rawExerciseId)) ||
     !/^[1-9]\d{0,5}$/.test(rawPage)
   )
     return null;
@@ -58,6 +61,7 @@ export function readFeedbackQuery(
     categories,
     status: status as FeedbackQuery['status'],
     sort: sort as FeedbackQuery['sort'],
+    exerciseId: rawExerciseId === '' ? null : Number(rawExerciseId),
     page,
   };
 }

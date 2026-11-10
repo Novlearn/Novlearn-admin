@@ -25,6 +25,7 @@ export default async function FeedbackPage({
     categories: [],
     status: 'all' as const,
     sort: 'newest' as const,
+    exerciseId: null,
     page: 1,
   };
   let data = null;
