@@ -40,7 +40,6 @@ createRoot(document.getElementById('root')!).render(
         data={data}
         period={period}
         environment="local-fixture"
-        action="/tests/browser/statistics.html"
         error={error}
       />
     </main>

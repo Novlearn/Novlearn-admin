@@ -40,7 +40,7 @@ export function ActivityStatisticsCharts({ daily }: { daily: DailyRow[] }) {
             BigInt(row[key]) > BigInt(largest) ? row[key] : largest,
           '0',
         );
-        const half = (BigInt(max) + 1n) / 2n;
+        const half = (BigInt(max) + BigInt('1')) / BigInt('2');
         const ticks = [...new Set(['0', half.toString(), max])];
         const xIndexes = dateTickIndexes(daily.length);
         const plotHeight = plot.bottom - plot.top;
@@ -163,7 +163,7 @@ export function ActivityStatisticsCharts({ daily }: { daily: DailyRow[] }) {
 
 function ratio(value: string, max: string) {
   if (max === '0') return 0;
-  return Number((BigInt(value) * 10000n) / BigInt(max)) / 10000;
+  return Number((BigInt(value) * BigInt('10000')) / BigInt(max)) / 10000;
 }
 
 function dateTickIndexes(length: number) {
