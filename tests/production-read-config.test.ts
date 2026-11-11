@@ -74,8 +74,15 @@ it('uses a publishable API client for all Production reads while retaining Stagi
     env.NEXT_PUBLIC_SUPABASE_URL,
   );
 });
+it('keeps Production reads configured even when the removed toggle is present as false', () => {
+  expect(
+    readProductionApiConfiguration({
+      ...productionReadEnvironment(),
+      ADMIN_PRODUCTION_READ_ENABLED: 'false',
+    })?.environment,
+  ).toBe('production');
+});
 it.each([
-  { ADMIN_PRODUCTION_READ_ENABLED: 'false' },
   { PRODUCTION_SUPABASE_URL: '' },
   { PRODUCTION_SUPABASE_URL: 'https://tksvbkvfusrnxulpahky.supabase.co' },
   { PRODUCTION_SUPABASE_URL: 'https://abwipnppcrghdhwriyjp.supabase.co/evil' },

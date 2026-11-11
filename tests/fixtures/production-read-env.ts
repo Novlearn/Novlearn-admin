@@ -5,7 +5,6 @@ export function productionReadEnvironment(): Record<string, string> {
     NEXT_PUBLIC_SUPABASE_URL: 'https://tksvbkvfusrnxulpahky.supabase.co',
     NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY:
       'sb_publishable_synthetic_staging_key',
-    ADMIN_PRODUCTION_READ_ENABLED: 'true',
     PRODUCTION_SUPABASE_URL: `https://${PRODUCTION_PROJECT_REF}.supabase.co`,
     PRODUCTION_SUPABASE_PUBLISHABLE_KEY:
       'sb_publishable_synthetic_production_key',

@@ -103,8 +103,10 @@ variable, sans modifier le parcours.
 La clé publique identifie le projet ; le jeton de session
 identifie l'utilisateur et permet aux RLS de décider de ses droits. Aucune clé
 `service_role` ou `sb_secret_*`, chaîne PostgreSQL ou clé de signature JWT
-n'est nécessaire pour ces lectures. `ADMIN_PRODUCTION_READ_ENABLED=false`
-les désactive. Les modes locaux et Production ne peuvent pas être mélangés.
+n'est nécessaire pour ces lectures. Une configuration Production valide suffit
+à activer les lectures, sans indicateur d'environnement supplémentaire. Les
+autorisations Admin côté serveur et les RLS Production restent vérifiées à
+chaque lecture. Les modes locaux et Production ne peuvent pas être mélangés.
 
 Les adaptateurs PostgreSQL encore présents dans les sources servent uniquement
 aux fixtures locales isolées ; les lectures Production utilisent cette API.

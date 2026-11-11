@@ -44,7 +44,6 @@ export function readProductionApiConfiguration(
   if (
     !auth ||
     auth.local ||
-    env.ADMIN_PRODUCTION_READ_ENABLED === 'false' ||
     Object.entries(env).some(
       ([k, v]) => k.startsWith('ADMIN_LOCAL_') && !!v && v !== 'false',
     )
