@@ -23,11 +23,10 @@ calcul local de remplacement.
 ## Contrat vérifié
 
 La dépendance embarquée et le lockfile Admin épinglent `novlearn-exercise-engine`
-**0.1.8**, schéma 5, pipeline Engine `0.1.0`, archive locale SHA-256
-`82e499726db2da454627903ed65802eaa2ab3e7185f7f6cb3c84c1cbdbde3cea`. Aucune
-mise à jour de ce package n’est faite dans ce raccordement.
+**0.2.3**, schéma 5, pipeline Engine `0.1.0`, archive locale SHA-256
+`3068549e521d1f643ced8564e94ad645dbccace22a9ec173c912530af3766028`.
 
-Le code public du dépôt Engine, tag `v0.2.1`, confirme la route `POST /run`, le
+Le code public du dépôt Engine, tag `v0.2.3`, confirme la route `POST /run`, le
 protocole de requête 1, les opérations utilisées ci-dessus, les payloads, le
 token Bearer et `x-engine-archive-sha256`. Le host attend un token d’au moins 32
 octets UTF-8 et une empreinte SHA-256 de 64 caractères hexadécimaux. Il renvoie
@@ -37,12 +36,11 @@ présent dans cette réponse HTTP. Le résumé Engine joint indique à tort ce c
 dans sa forme de réponse. Le transport Admin contrôle `requestId`, les mesures,
 la taille, l’en-tête d’empreinte et les erreurs documentées par le host.
 
-La source du tag 0.2.1 vérifie le contrat de transport, mais ne révèle pas la
-version de l’image actuellement servie par l’URL. Le test réseau de cet
-environnement sur `https://staging.novlearn.fr/run` a échoué sur DNS
-(`ENOTFOUND`). Le digest configuré doit être celui de l’archive référencée par
-le déploiement staging Engine et comparé à son en-tête de réponse ; le hash du
-package Admin 0.1.8 n’est pas substituable.
+La source du tag 0.2.3 vérifie le contrat de transport, mais ne révèle pas la
+version de l’image actuellement servie par l’URL. Le test réseau historique sur
+`https://staging.novlearn.fr/run` a échoué sur DNS (`ENOTFOUND`). Le workflow
+44165765404 rapporte le déploiement réussi de la release Engine ; un appel réseau
+depuis l'Admin reste à effectuer avant de recevoir ce transport.
 
 `ENGINE_ARTIFACT_SHA256` n'est pas un secret : c'est l'empreinte du contenu de
 l'archive Engine exacte que l'on attend du host. Le host exige cette valeur sur
@@ -66,7 +64,7 @@ variables uniquement côté serveur :
 ADMIN_ENGINE_ENABLED=true
 ENGINE_URL=https://staging.novlearn.fr/run
 ENGINE_TOKEN=<token Engine staging, au moins 32 octets UTF-8>
-ENGINE_ARTIFACT_SHA256=<SHA-256 de l’archive Engine servie en staging>
+ENGINE_ARTIFACT_SHA256=3068549e521d1f643ced8564e94ad645dbccace22a9ec173c912530af3766028
 ```
 
 `ENGINE_TOKEN` réutilise le nom du token déjà présent dans l'environnement Vercel.

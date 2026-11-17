@@ -30,6 +30,7 @@ export const operations: Record<EngineOperation, true> = {
   projectPublicInstance: true,
   gradeAnswer: true,
   adaptLegacyExercise: true,
+  sampleDisplayGraph: true,
 };
 
 export function contracts(

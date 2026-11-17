@@ -11,6 +11,6 @@
     "test": "node smoke.mjs"
   },
   "dependencies": {
-    "novlearn-exercise-engine": "file:vendor/novlearn-exercise-engine-0.1.8.tgz"
+    "novlearn-exercise-engine": "file:vendor/novlearn-exercise-engine-0.2.3.tgz"
   }
 }

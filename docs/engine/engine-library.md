@@ -1,8 +1,7 @@
 # Engine : bibliothèque distribuable
 
-L'Admin consomme l'archive **0.1.8**. Elle poursuit la série 0.1.x et ajoute
-l'échantillonnage optionnel de courbes dans la projection publique ; les sources
-du travail principal 0.2.0 ne sont pas adoptées. L'archive 0.1.1 et son
+L'Admin consomme l'archive officielle **0.2.3**. L'archive 0.1.8 et les releases
+antérieures restent conservées pour le rejeu et le rollback. L'archive 0.1.1 et son
 [correctif ciblé](../../vendor/engine-0.1.1.patch), ainsi que l'archive 0.1.0,
 restent conservés pour le rejeu. Le code du transport ne prouve pas à lui seul
 la réception depuis Vercel ; consulter la [roadmap](../roadmap.md).
@@ -10,7 +9,7 @@ la réception depuis Vercel ; consulter la [roadmap](../roadmap.md).
 ## Artefact et responsabilités
 
 Le [manifeste de distribution](../../vendor/engine-release.json) identifie le package,
-les exports, dépendances, opérations du protocole et les 169 fichiers de l'archive.
+les exports, dépendances, opérations du protocole et les 189 fichiers de l'archive.
 Chaque fichier a son SHA256. La racine portable ne dépend que de CortexJS ; le
 graphe des 27 modules ESM est contrôlé. Next.js, React, Supabase, Auth, stockage,
 MathLive et rendu restent hors de ce cœur. `legacy` et le host sont des sous-chemins
@@ -18,8 +17,8 @@ explicites, absents du graphe portable.
 
 | Identité                 | Valeur et portée                                                                                                       |
 | ------------------------ | ---------------------------------------------------------------------------------------------------------------------- |
-| Package ESM              | `novlearn-exercise-engine`, version `0.1.8`, Node `>=24.19.0 <25`, npm `>=11.17.0 <12`                                 |
-| Artefact                 | `vendor/novlearn-exercise-engine-0.1.8.tgz`, SHA256 `82e499726db2da454627903ed65802eaa2ab3e7185f7f6cb3c84c1cbdbde3cea` |
+| Package ESM              | `novlearn-exercise-engine`, version `0.2.3`, Node `>=24.19.0 <25`, npm `>=11.17.0 <12`                                 |
+| Artefact                 | `vendor/novlearn-exercise-engine-0.2.3.tgz`, SHA256 `3068549e521d1f643ced8564e94ad645dbccace22a9ec173c912530af3766028` |
 | Schéma                   | `5` : définition, instance et soumission                                                                               |
 | Pipeline                 | `0.1.0`, champ `engineVersion` des instances ; distinct de la version npm                                              |
 | Génération               | `mulberry32-rejection-v1` ; champ `generation.version` du snapshot                                                     |
@@ -54,15 +53,15 @@ discriminés ; `NodeHost`, `HostResult`, `HostError`, `HostLimits`, `EngineOpera
 appartiennent au sous-chemin host. L'exemple [contract.ts](../../examples/engine-consumer/contract.ts)
 compile les imports publics et refuse un import profond.
 
-| Opération racine        | Entrée / résultat et limite                                                                                                               |
-| ----------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| `validateDefinition`    | Définition inconnue → `ok/value` ou `ok:false/diagnostics` ; validation structurelle, pas preuve mathématique de générabilité             |
-| `validateSubmission`    | Soumission inconnue → union de validation ; ne prouve ni identité ni propriété d'instance                                                 |
-| `parseMathInput`        | Source, contexte et profil → parsing/diagnostics ; conserver source, domaine et forme, sans lui attribuer une preuve de correction        |
-| `generateVariables`     | **GenerationDefinition**, options seed/version → valeurs/replay ou diagnostics ; ne pas passer l'exercice complet                         |
-| `instantiateExercise`   | ExerciseDefinition + seed + instanceId → snapshot privé détaché ou diagnostics ; génération et contraintes restent dans Engine            |
+| Opération racine        | Entrée / résultat et limite                                                                                                                                        |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `validateDefinition`    | Définition inconnue → `ok/value` ou `ok:false/diagnostics` ; validation structurelle, pas preuve mathématique de générabilité                                      |
+| `validateSubmission`    | Soumission inconnue → union de validation ; ne prouve ni identité ni propriété d'instance                                                                          |
+| `parseMathInput`        | Source, contexte et profil → parsing/diagnostics ; conserver source, domaine et forme, sans lui attribuer une preuve de correction                                 |
+| `generateVariables`     | **GenerationDefinition**, options seed/version → valeurs/replay ou diagnostics ; ne pas passer l'exercice complet                                                  |
+| `instantiateExercise`   | ExerciseDefinition + seed + instanceId → snapshot privé détaché ou diagnostics ; génération et contraintes restent dans Engine                                     |
 | `projectPublicInstance` | Snapshot officiel serveur → sélection publique ; `sampleGraphs: true` ajoute des points de courbe approximatifs ; ne valide pas la provenance d'un snapshot client |
-| `gradeAnswer`           | Snapshot officiel + soumission → `correct`, `incorrect`, `invalid`, `indeterminate` ou `error` ; aucune décision depuis un verdict client |
+| `gradeAnswer`           | Snapshot officiel + soumission → `correct`, `incorrect`, `invalid`, `indeterminate` ou `error` ; aucune décision depuis un verdict client                          |
 
 Ces fonctions synchrones ne sont pas préemptées par une Promise ou un timeout de
 test. Les appels directs du consommateur minimal ci-dessous utilisent uniquement
@@ -109,7 +108,7 @@ du lanceur. Aucune limite ni garde Vercel/Windows n'est modifiée ici.
 
 ## Installation reproductible sans dépôt voisin
 
-L'Admin garde sa dépendance `file:vendor/novlearn-exercise-engine-0.1.8.tgz` et son
+L'Admin garde sa dépendance `file:vendor/novlearn-exercise-engine-0.2.3.tgz` et son
 lockfile. `npm run verify:engine` contrôle désormais tous les fichiers installés,
 les exports, le graphe portable, le manifeste et les versions des dépendances,
 en cohérence avec `certifiedEngineIdentity`. Le tarball conserve aussi son
