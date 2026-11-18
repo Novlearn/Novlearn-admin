@@ -27,6 +27,30 @@ const archive = await readFile(
   new URL('../vendor/' + manifest.archive, import.meta.url),
 );
 
+test('pin the official Engine 0.2.3 release and its release checksum', async () => {
+  assert.equal(manifest.packageVersion, '0.2.3');
+  assert.equal(
+    manifest.archiveSha256,
+    '3068549e521d1f643ced8564e94ad645dbccace22a9ec173c912530af3766028',
+  );
+  assert.equal(
+    (
+      await readFile(
+        new URL('../vendor/engine-artifact-sha256.txt', import.meta.url),
+        'utf8',
+      )
+    )
+      .trim()
+      .split(/\s+/)[0]
+      .toLowerCase(),
+    manifest.archiveSha256,
+  );
+  assert.equal(
+    manifest.provenance.release,
+    'https://github.com/Novlearn/Novlearn-Engine/releases/tag/v0.2.3',
+  );
+});
+
 test('reject a changed archive even when its filename and package version remain identical', () => {
   const changed = Buffer.from(archive);
   changed[100] ^= 1;
@@ -78,8 +102,8 @@ test('all installed files are compared, not only instantiation.js', async () => 
 });
 test('current Admin installation matches every file and its dependency lock', async () => {
   assert.deepEqual(await checkInstallation(root, manifest), {
-    files: 157,
-    coreModules: 27,
+    files: Object.keys(manifest.files).length,
+    coreModules: 33,
   });
 });
 test('refuse a consumer lock with a substituted artifact or dependency version', async () => {

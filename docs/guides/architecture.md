@@ -87,8 +87,8 @@ Le [contrat de bibliothèque et de distribution](../engine/engine-library.md) fo
 les exports supportés, les identités distinctes, les diagnostics et la mise à
 jour coordonnée. Le manifeste est externe à l'archive qualifiée, conservée intacte.
 
-L’archive consommée est [le tarball versionné](../../vendor/novlearn-exercise-engine-0.1.8.tgz),
-package 0.1.8, contrat `schema-5;engine-0.1.0`, Cortex 0.151.0. L’identité exacte,
+L’archive consommée est [le tarball versionné](../../vendor/novlearn-exercise-engine-0.2.3.tgz),
+package 0.2.3, contrat `schema-5;engine-0.1.0`, Cortex 0.151.0. L’identité exacte,
 y compris le SHA256, est définie dans
 [engine-identity.ts](../../src/lib/engine-identity.ts) et vérifiée par
 [verify-engine-package.mjs](../../scripts/verify-engine-package.mjs), avec le lockfile
@@ -119,7 +119,7 @@ validation humaine. Les reçus persistés ajoutent une signature liée à la ver
 à l’empreinte, à l’époque et à l’archive exacte.
 
 Le rendu de coordonnées publiques couvre notamment figures et vecteurs. Engine
-0.1.8 ajoute un échantillonnage optionnel des courbes à la projection publique,
+0.1.8 a ajouté un échantillonnage optionnel des courbes à la projection publique,
 mais l’adaptateur Admin ne l’active pas encore et l’aperçu signale le tracé comme
 incomplet. Les sources 0.2.0 des preuves D10 ne sont pas adoptées dans ce dépôt ;
 leurs résultats partiels et leurs échecs restent distingués dans
