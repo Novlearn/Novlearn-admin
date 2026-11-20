@@ -26,6 +26,11 @@ export class DatabasePreviewStore implements SnapshotRepository {
       .rpc(name, args)
       .abortSignal(this.signal);
     if (error) {
+      if (error.code === 'PGRST202' || error.code === '42883')
+        throw new PreviewError(
+          503,
+          'Le contrat SQL du stockage privé des aperçus est absent ou désynchronisé en Staging.',
+        );
       if (error.code === 'P0002')
         throw new PreviewError(410, 'Aperçu expiré ou indisponible.');
       if (error.code === 'P0001')
@@ -34,7 +39,6 @@ export class DatabasePreviewStore implements SnapshotRepository {
     }
     if (
       !data ||
-      data.owner !== owner ||
       !isUuid(data.previewId) ||
       !/^[a-f0-9]{64}$/.test(data.digest) ||
       !Number.isSafeInteger(data.seed) ||
@@ -50,6 +54,8 @@ export class DatabasePreviewStore implements SnapshotRepository {
       Buffer.byteLength(JSON.stringify(data.official)) > 524288
     )
       throw new PreviewError(503, 'Instantané privé incompatible.');
+    if (data.owner !== owner)
+      throw new PreviewError(410, 'Aperçu expiré ou indisponible.');
     return {
       previewId: data.previewId as string,
       owner,

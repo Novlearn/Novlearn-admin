@@ -92,6 +92,39 @@ statut interne distinct. Les détails internes et le token ne sont
 pas renvoyés au navigateur. Le timeout HTTP côté Admin est de 10 secondes ; le
 host Engine garde ses propres limites et quotas.
 
+## Stockage privé des aperçus sur Vercel
+
+Sur Vercel, `POST /api/admin/preview` transmet le snapshot officiel privé aux
+RPC `admin_put_preview_snapshot` et le relit avec
+`admin_get_preview_snapshot`, via le client Supabase de la session Staging
+courante. Les fonctions doivent dériver le propriétaire de `auth.uid()`, refuser
+les non-Admins côté serveur, appliquer la limite de dix minutes et n’exposer le
+snapshot par aucune table publique. La route vérifie à nouveau la session et le
+rôle pour chaque action ; l’instance privée ne vient jamais du navigateur.
+
+**Constat Staging du 20 novembre 2026 :** l’historique de migrations ne contient
+pas de migration de stockage d’aperçus et une lecture du catalogue PostgreSQL
+ne trouve aucune fonction portant ces deux noms. Le résultat n’établit donc pas
+un défaut de permissions de fonctions existantes. Les journaux Supabase montrent
+deux appels `POST /rest/v1/rpc/admin_put_preview_snapshot` en HTTP 404 à 09:56
+et 09:57 UTC ; aucun appel de lecture n’a été observé. Le code de l’Admin affiche
+désormais un diagnostic spécifique quand PostgREST signale une fonction absente
+ou une signature non chargée.
+
+Le dépôt Admin ne porte pas les migrations canoniques : leur historique reste
+dans le dépôt NovLearn, conformément à la frontière décrite dans
+[Architecture](./architecture.md#schéma-et-migrations). La migration canonique
+est préparée dans [NovLearn, PR #23](https://github.com/Novlearn/Novlearn/pull/23)
+et a été appliquée au projet Supabase `novlearn-staging` le 20 novembre 2026.
+La vérification du catalogue confirme les deux fonctions `SECURITY DEFINER`,
+exécutables par `authenticated` seulement ; `anon` ne peut pas les appeler et
+les utilisateurs authentifiés n’ont pas d’accès direct à la table privée. Une
+[copie de référence SQL](../proposals/admin-preview-snapshot-storage.sql)
+accompagne cette correction ; la migration canonique est dans le dépôt NovLearn.
+Après publication Admin, tester génération, inspection et correction depuis
+Vercel avec une session Admin, puis vérifier que l’autre utilisateur reçoit le
+même refus qu’un aperçu expiré.
+
 ## Contrôles et limites de réception
 
 Les tests simulés du transport vérifient payloads, en-têtes, taille, liaison par
