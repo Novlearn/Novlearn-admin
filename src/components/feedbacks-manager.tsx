@@ -31,12 +31,10 @@ export function FeedbacksManager({
   data,
   query,
   error,
-  reviewEnabled,
 }: {
   data: FeedbackPage | null;
   query: FeedbackQuery;
   error?: string;
-  reviewEnabled: boolean;
 }) {
   const router = useRouter();
   const [busy, setBusy] = useState<string | null>(null);
@@ -288,7 +286,7 @@ export function FeedbacksManager({
                     <button
                       type="button"
                       className="button button-secondary min-h-10 px-4 py-2"
-                      disabled={!reviewEnabled || busy === item.id}
+                      disabled={busy === item.id}
                       onClick={() => void decide(item.id, 'approve')}
                     >
                       {busy === item.id ? 'Enregistrement…' : 'Valider'}
@@ -296,17 +294,11 @@ export function FeedbacksManager({
                     <button
                       type="button"
                       className="button button-secondary min-h-10 px-4 py-2"
-                      disabled={!reviewEnabled || busy === item.id}
+                      disabled={busy === item.id}
                       onClick={() => void decide(item.id, 'reject')}
                     >
                       Refuser
                     </button>
-                    {!reviewEnabled && (
-                      <p className="self-center text-xs text-slate-500">
-                        Les décisions seront activées après installation du
-                        script de permissions Production.
-                      </p>
-                    )}
                   </div>
                 )}
               </article>

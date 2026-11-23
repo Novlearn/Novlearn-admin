@@ -2,6 +2,12 @@
 
 **Mis à jour le 8 novembre 2026.** Le responsable confirme que la connexion Admin–Exercise Engine est terminée : validation canonique, aperçu et tests sont disponibles dans l’Admin. Cette réception est basée sur sa confirmation ; aucun nouveau déploiement distant ou état Production n’est attesté ici.
 
+**Mise à jour du 23 novembre 2026 :** le responsable confirme l’application en
+Production du script de permissions de décision des feedbacks. La qualification
+de ce parcours reste à effectuer. La porte d’activation par variable a été
+retirée du code ; les contrôles de session, d’origine et de rôle Admin restent
+en place. Voir le [guide Feedbacks](guides/feedbacks.md).
+
 **Décision fonctionnelle explicite du responsable — 8 novembre 2026 :** ajouter
 une page Feedbacks à l’Admin, alimentée exclusivement par les feedbacks de
 Production. La page filtre et trie les catégories et statuts et permet à un

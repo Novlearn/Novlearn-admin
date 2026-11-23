@@ -85,14 +85,13 @@ it('affiche la source Production, les catégories, les statuts et échappe les m
     createElement(FeedbacksManager, {
       data,
       query: selectedQuery,
-      reviewEnabled: false,
     }),
   );
   expect(html).toContain('Erreur de contenu');
   expect(html).toContain('À traiter');
   expect(html).toContain('&lt;script&gt;');
   expect(html).not.toContain('<script>alert');
-  expect(html).toContain('disabled=""');
+  expect(html).toContain('Valider');
   expect(html).toContain('Exercice Production');
   expect(html).toContain('name="category" checked="" value="content_error"');
   expect(html).toContain('name="category" checked="" value="difficulty"');
@@ -104,7 +103,6 @@ it('distingue une lecture Production indisponible d’une liste vide', () => {
       data: null,
       query,
       error: 'Lecture impossible',
-      reviewEnabled: false,
     }),
   );
   expect(html).toContain('Liste des feedbacks indisponible');

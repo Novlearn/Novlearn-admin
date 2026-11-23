@@ -16,7 +16,6 @@ const makeRequest = (body: unknown, origin = 'http://localhost:3000') =>
   });
 
 beforeEach(() => {
-  vi.stubEnv('ADMIN_FEEDBACK_REVIEW_ENABLED', 'true');
   vi.stubEnv(
     'NEXT_PUBLIC_SUPABASE_URL',
     'https://tksvbkvfusrnxulpahky.supabase.co',
@@ -51,12 +50,7 @@ beforeEach(() => {
   });
 });
 
-it('refuse les mutations désactivées ou de provenance étrangère', async () => {
-  vi.stubEnv('ADMIN_FEEDBACK_REVIEW_ENABLED', 'false');
-  expect(
-    (await POST(makeRequest({ feedbackId: id, action: 'approve' }))).status,
-  ).toBe(503);
-  vi.stubEnv('ADMIN_FEEDBACK_REVIEW_ENABLED', 'true');
+it('refuse les mutations de provenance étrangère', async () => {
   expect(
     (
       await POST(

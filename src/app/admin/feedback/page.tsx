@@ -45,7 +45,6 @@ export default async function FeedbackPage({
       data={data}
       query={query}
       error={error}
-      reviewEnabled={process.env.ADMIN_FEEDBACK_REVIEW_ENABLED === 'true'}
     />
   );
 }

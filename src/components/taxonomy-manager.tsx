@@ -93,9 +93,6 @@ function CompetenceGroups({
                     <h3 className="font-semibold text-slate-900">
                       {value.name}
                     </h3>
-                    <code className="mt-1 block break-all text-xs text-slate-500">
-                      {item.id}
-                    </code>
                   </div>
                   <div className="flex flex-wrap items-center gap-4">
                     <span className="text-sm text-slate-600">
@@ -135,7 +132,6 @@ function CompetenceGroups({
               >
                 <span>
                   <strong>{item.value.name}</strong>
-                  <code className="ml-3 text-xs">{item.id}</code>
                 </span>
                 <button
                   type="button"
@@ -400,9 +396,6 @@ export function TaxonomyManager({
                         <span className="font-semibold">
                           {chapter ? (row.value as ChapterValue).emoji : ''}{' '}
                           {row.value.name}
-                        </span>
-                        <span className="mt-1 block break-all font-mono text-xs text-slate-500">
-                          {row.id}
                         </span>
                       </td>
                       <td className="p-4">

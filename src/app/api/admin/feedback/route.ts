@@ -100,11 +100,6 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   const json = (body: unknown, status: number) =>
     NextResponse.json(body, { status, headers: privateHeaders() });
-  if (process.env.ADMIN_FEEDBACK_REVIEW_ENABLED !== 'true')
-    return json(
-      { error: 'La validation des feedbacks n’est pas activée.' },
-      503,
-    );
   const stagingConfig = readAuthConfiguration(process.env);
   if (!stagingConfig || !isTrustedMutation(request, stagingConfig))
     return json({ error: 'Origine refusée.' }, 403);
