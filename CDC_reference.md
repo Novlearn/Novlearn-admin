@@ -1150,3 +1150,18 @@ la demande de relecture ; l'approbation porte sur une révision précise. Publi�
 signifie que la publication de cette révision en Production a été confirmée,
 jamais seulement qu'un pointeur est actif en Préproduction ou dans une copie
 locale. Archivé est un classement Admin qui n'écrit pas en Production.
+
+**Décision fonctionnelle explicite du responsable — 23 novembre 2026 :** ajouter
+un parcours de synchronisation atomique Staging → Production pour les chapitres,
+compétences, flashcards et révisions d’exercices prêts ou archivés, selon le
+contrat « atomic-catalogue-target-v1 » de NovLearn PR #25. Un renommage de chapitre
+ne peut réussir que si le lot contient chaque flashcard active concernée et chaque
+exercice concerné avec une nouvelle révision; toute omission est présentée comme
+un refus, jamais comme un succès. Les aperçus et reçus présentent tous les éléments
+et leurs effets. Les versions publiées antérieures restent immuables et les
+archives conservent les lignes. La reprise après état concurrent ou résultat
+incertain observe la cible avant toute répétition. L’activation est distincte et
+reste fermée tant que la capacité SQL cible n’est pas installée et qualifiée.
+Cette décision autorise l’implémentation dans Admin uniquement; elle n’autorise
+aucune migration, écriture ou activation sur une base Supabase partagée, ni aucune
+modification de NovLearn ou de l’Exercise Engine.

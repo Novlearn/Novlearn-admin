@@ -6,6 +6,7 @@ import { readAuthConfiguration } from '@/lib/auth/config';
 import { readActivityConfiguration } from '@/lib/activity-config';
 import { readUsersConfiguration } from '@/lib/users-config';
 import { readProductionApiConfiguration } from '@/lib/production-api-config';
+import { readCatalogueSyncConfiguration } from '@/lib/catalogue-sync-config';
 import { LocalRecoveryNotice } from '@/components/local-recovery-notice';
 import {
   EditorRecoveryScope,
@@ -45,6 +46,7 @@ export default async function AdminLayout({
               !!authConfig?.localPublicationFixture ||
               process.env.ADMIN_PUBLICATION_ENABLED === 'true'
             }
+            catalogueSyncEnabled={!!readCatalogueSyncConfiguration(process.env)}
             statisticsEnabled={!!readActivityConfiguration(process.env)}
             usersEnabled={!!readUsersConfiguration(process.env)}
             feedbackEnabled={!!readProductionApiConfiguration(process.env)}

@@ -98,6 +98,7 @@ ni nouvelle clé n’est implicite dans le déploiement.
 | `ADMIN_STAGING_LOCAL_ENGINE_ENABLED` | Transport de développement Staging vers le worker local ; nécessite les autres prérequis, limité à loopback            |
 | `ADMIN_EDITORIAL_REVIEW_ENABLED`     | Relecture, soumise aux reçus courants et aux gardes SQL                                                                |
 | `ADMIN_PUBLICATION_ENABLED`          | Publication, soumise aux identités SQL dédiées, à Engine et aux vérifications source/cible                             |
+| `ADMIN_CATALOGUE_SYNC_ENABLED`       | Synchronisation atomique de catalogue; exige le marqueur SQL cible `atomic-catalogue-target-v1`                        |
 
 Le [profil courant et les désactivations](../roadmap.md) sont décrits à un seul
 endroit. Aucun de ces drapeaux ne remplace les prérequis, la qualification de
@@ -114,6 +115,13 @@ iront dans ce même fichier local ou dans les variables de l'hébergeur :
 Les CA éventuelles sont `ADMIN_PUBLICATION_SOURCE_PG_CA` et
 `ADMIN_PUBLICATION_TARGET_PG_CA`. Ces capacités gardent des identités et secrets
 distincts ; les regrouper dans un fichier ne fusionne pas leurs permissions.
+La synchronisation de catalogue possède sa porte séparée
+`ADMIN_CATALOGUE_SYNC_ENABLED`. Elle reste désactivée tant que la capacité cible
+n’est pas installée et qualifiée. Quand elle est explicitement configurée,
+l’Admin vérifie le marqueur cible avant d’afficher la liste ou d’accepter un lot.
+La synchronisation utilise les identités PostgreSQL source/journal et cible
+dédiées, sans appeler Engine. Aucun drapeau ne remplace l’installation et la
+qualification SQL.
 
 Les variables `ADMIN_LOCAL_*` sont réservées aux bancs de développement avec
 origines, ports et manifeste SQL attendus. Elles ne permettent pas de transformer

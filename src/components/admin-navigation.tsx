@@ -7,11 +7,13 @@ export function AdminNavigation({
   usersEnabled = false,
   feedbackEnabled = false,
   publicationEnabled = true,
+  catalogueSyncEnabled = false,
 }: {
   statisticsEnabled?: boolean;
   usersEnabled?: boolean;
   feedbackEnabled?: boolean;
   publicationEnabled?: boolean;
+  catalogueSyncEnabled?: boolean;
 }) {
   const path = usePathname();
   const groups = [
@@ -34,6 +36,9 @@ export function AdminNavigation({
       label: 'Suivi',
       links: [
         ...(publicationEnabled ? [['/admin/publication', 'Publications']] : []),
+        ...(catalogueSyncEnabled
+          ? [['/admin/catalogue-sync', 'Synchronisation']]
+          : []),
         ...(statisticsEnabled ? [['/admin/statistics', 'Statistiques']] : []),
         ...(usersEnabled ? [['/admin/users', 'Utilisateurs']] : []),
         ...(feedbackEnabled ? [['/admin/feedback', 'Feedbacks']] : []),
