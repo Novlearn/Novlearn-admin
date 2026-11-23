@@ -1168,8 +1168,14 @@ exercice concerné avec une nouvelle révision; toute omission est présentée c
 un refus, jamais comme un succès. Les aperçus et reçus présentent tous les éléments
 et leurs effets. Les versions publiées antérieures restent immuables et les
 archives conservent les lignes. La reprise après état concurrent ou résultat
-incertain observe la cible avant toute répétition. L’activation est distincte et
-reste fermée tant que la capacité SQL cible n’est pas installée et qualifiée.
+incertain observe la cible avant toute répétition. Le parcours réutilise la
+configuration serveur PostgreSQL de publication et vérifie le marqueur SQL
+cible avant toute opération; il ne requiert pas de variable d’activation dédiée.
 Cette décision autorise l’implémentation dans Admin uniquement; elle n’autorise
 aucune migration, écriture ou activation sur une base Supabase partagée, ni aucune
 modification de NovLearn ou de l’Exercise Engine.
+
+**Décision complémentaire explicite du responsable — 24 novembre 2026 :** retirer
+la dépendance au drapeau `ADMIN_CATALOGUE_SYNC_ENABLED`. L’accès au parcours
+réutilise la configuration PostgreSQL serveur déjà requise par la publication,
+et reste conditionné à la présence du contrat cible `atomic-catalogue-target-v1`.

@@ -16,7 +16,7 @@ export default async function CatalogueSyncPage({
   const config = readCatalogueSyncConfiguration(process.env);
   if (!config)
     return (
-      <Unavailable reason="La capacité de synchronisation n’est pas activée sur cette instance." />
+      <Unavailable reason="La configuration serveur de synchronisation source/cible est absente ou invalide." />
     );
   if (!(await catalogueSyncTargetAvailable(config)))
     return (

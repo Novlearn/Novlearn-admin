@@ -51,7 +51,10 @@ export async function GET(request: NextRequest) {
     config = readCatalogueSyncConfiguration(process.env);
   if (!authConfig || !config)
     return json(
-      { code: 'disabled', error: 'Synchronisation du catalogue désactivée.' },
+      {
+        code: 'unavailable',
+        error: 'Configuration serveur de synchronisation indisponible.',
+      },
       503,
     );
   const { gateway, client, response } = createRouteAuth(request, authConfig);
@@ -101,7 +104,10 @@ export async function POST(request: NextRequest) {
     config = readCatalogueSyncConfiguration(process.env);
   if (!authConfig || !config)
     return json(
-      { code: 'disabled', error: 'Synchronisation du catalogue désactivée.' },
+      {
+        code: 'unavailable',
+        error: 'Configuration serveur de synchronisation indisponible.',
+      },
       503,
     );
   if (!isTrustedMutation(request, authConfig))
