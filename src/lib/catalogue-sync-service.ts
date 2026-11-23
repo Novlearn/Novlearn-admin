@@ -13,10 +13,9 @@ import {
   type CatalogueSyncPayload,
   type CatalogueSyncReceipt,
 } from './catalogue-sync';
-import {
-  createPublicationPgPools,
-  type PublicationPgConfiguration,
-} from './publication-pg';
+import type { CatalogueSyncConfiguration } from './catalogue-sync-config';
+import type { PublicationConnection } from './publication-journal-server';
+import { createPublicationPgPools } from './publication-pg';
 
 export class CatalogueSyncError extends Error {
   constructor(
@@ -88,14 +87,13 @@ const authFailure = async (auth: AuthGateway, expected: string) => {
   if (access.userId !== expected) throw new CatalogueSyncError('forbidden');
 };
 
-/** Service for the catalogue-sync SQL contract. It is closed unless the
- * separately configured feature flag is on and the target marker matches. */
+/** Server-side transfer through the catalogue sync SQL contract. */
 export class CatalogueSyncService {
   private readonly pools;
   constructor(
     private readonly auth: AuthGateway,
     private readonly sourceClient: SupabaseClient,
-    private readonly config: PublicationPgConfiguration,
+    private readonly config: CatalogueSyncConfiguration,
   ) {
     this.pools = createPublicationPgPools(config);
   }
@@ -104,18 +102,7 @@ export class CatalogueSyncService {
   }
 
   async targetReady() {
-    let client;
-    try {
-      client = await this.pools.target();
-      const result = await client.query(
-        'SELECT novlearn_admin_private.catalogue_sync_target_contract() AS contract',
-      );
-      return result.rows[0]?.contract === 'atomic-catalogue-target-v1';
-    } catch {
-      return false;
-    } finally {
-      client?.release();
-    }
+    return catalogueSyncTargetReady(this.pools);
   }
 
   async list(after = '', limit = 50) {
@@ -208,7 +195,7 @@ export class CatalogueSyncService {
               p_batch_id: batchId,
               p_kind: candidate.kind,
               p_catalog_id: candidate.catalogId,
-              p_fingerprint: candidate.fingerprint,
+              p_fingerprint: payload.fingerprint,
               p_target_key: this.config.targetKey,
               p_inspection: inspection,
             },
@@ -292,13 +279,31 @@ export class CatalogueSyncService {
     }
     if (!isFingerprint(batchDigest))
       throw new CatalogueSyncError('unavailable');
-    await authFailure(this.auth, actor.userId);
+    return this.withTargetLease((target) =>
+      this.applyClaimedBatch(
+        target,
+        actor.userId,
+        batchId,
+        batchDigest,
+        payloadDigest,
+      ),
+    );
+  }
+
+  private async applyClaimedBatch(
+    target: PublicationConnection,
+    actorId: string,
+    batchId: string,
+    batchDigest: string,
+    payloadDigest: string,
+  ) {
+    await authFailure(this.auth, actorId);
     const journal = await this.pools.source();
     let claimed: unknown;
     try {
       const result = await journal.query(
         'SELECT novlearn_admin_private.claim_catalogue_sync_batch($1::uuid,$2::uuid,$3::text) AS batch',
-        [actor.userId, batchId, batchDigest],
+        [actorId, batchId, batchDigest],
       );
       claimed = result.rows[0]?.batch;
     } catch (error) {
@@ -318,7 +323,11 @@ export class CatalogueSyncService {
       !object(claimed) ||
       claimed.batchId !== batchId ||
       claimed.batchDigest !== batchDigest ||
-      !Array.isArray(claimed.operations)
+      !Array.isArray(claimed.operations) ||
+      !claimed.operations.every(
+        (operation: unknown) =>
+          object(operation) && operation.target_key === this.config.targetKey,
+      )
     )
       throw new CatalogueSyncError('unavailable');
     const operations = claimed.operations.map(asOperation);
@@ -347,7 +356,6 @@ export class CatalogueSyncService {
       payload: op.payload,
       inspection: op.inspection,
     }));
-    const target = await this.pools.target();
     let receipt: CatalogueSyncReceipt | null = null;
     let rejected: string | null = null;
     let rollbackKnown = false;
@@ -368,7 +376,8 @@ export class CatalogueSyncService {
         throw Object.assign(new Error('invalid receipt'), {
           code: 'RECEIPT_INVALID',
         });
-      await target.query('COMMIT');
+      if ((await target.query('COMMIT')).command !== 'COMMIT')
+        throw new CatalogueSyncError('uncertain');
       receipt = value;
     } catch (error) {
       rejected = errorCode(error);
@@ -378,11 +387,9 @@ export class CatalogueSyncService {
       } catch {
         rollbackKnown = false;
       }
-    } finally {
-      target.release(!rollbackKnown && !receipt);
     }
     if (!receipt) {
-      const observed = await this.observeTarget(batchId, payloadDigest);
+      const observed = await this.observeTarget(target, batchId, payloadDigest);
       if (
         observed.state === 'committed' &&
         observed.receipt &&
@@ -398,7 +405,7 @@ export class CatalogueSyncService {
         rejected !== 'RECEIPT_INVALID'
       ) {
         await this.record(
-          actor.userId,
+          actorId,
           batchId,
           batchDigest,
           'executing',
@@ -412,7 +419,7 @@ export class CatalogueSyncService {
         );
       } else {
         await this.record(
-          actor.userId,
+          actorId,
           batchId,
           batchDigest,
           'executing',
@@ -425,7 +432,7 @@ export class CatalogueSyncService {
     }
     try {
       await this.record(
-        actor.userId,
+        actorId,
         batchId,
         batchDigest,
         'executing',
@@ -436,7 +443,7 @@ export class CatalogueSyncService {
       return { state: 'committed' as const, receipt };
     } catch {
       await this.record(
-        actor.userId,
+        actorId,
         batchId,
         batchDigest,
         'executing',
@@ -465,13 +472,24 @@ export class CatalogueSyncService {
     }
     if (!isFingerprint(batchDigest))
       throw new CatalogueSyncError('unavailable');
-    const validatedBatchDigest = batchDigest;
-    const observed = await this.observeTarget(batchId, payloadDigest);
+    return this.withTargetLease((target) =>
+      this.reconcileBatch(target, actorId, batchId, batchDigest, payloadDigest),
+    );
+  }
+
+  private async reconcileBatch(
+    target: PublicationConnection,
+    actorId: string,
+    batchId: string,
+    batchDigest: string,
+    payloadDigest: string,
+  ) {
+    const observed = await this.observeTarget(target, batchId, payloadDigest);
     if (observed.state === 'committed' && observed.receipt) {
       await this.recordRecovering(
         actorId,
         batchId,
-        validatedBatchDigest,
+        batchDigest,
         'committed',
         observed.receipt,
         null,
@@ -482,7 +500,7 @@ export class CatalogueSyncService {
       await this.recordRecovering(
         actorId,
         batchId,
-        validatedBatchDigest,
+        batchDigest,
         'failed',
         null,
         'not_applied',
@@ -492,7 +510,7 @@ export class CatalogueSyncService {
     await this.recordRecovering(
       actorId,
       batchId,
-      validatedBatchDigest,
+      batchDigest,
       'uncertain',
       null,
       null,
@@ -536,8 +554,40 @@ export class CatalogueSyncService {
     }
   }
 
-  private async observeTarget(batchId: string, payloadDigest: string) {
+  /** Hold the SQL contract's lock across the source transition too, so recovery
+   * cannot observe absence between a claim and its target transaction. */
+  private async withTargetLease<T>(
+    work: (target: PublicationConnection) => Promise<T>,
+  ) {
     const target = await this.pools.target();
+    let locked = false;
+    let destroy = true;
+    try {
+      await target.query(
+        "SELECT pg_catalog.pg_advisory_lock(pg_catalog.hashtextextended('novlearn-catalogue-sync-v1',0))",
+      );
+      locked = true;
+      return await work(target);
+    } finally {
+      if (locked) {
+        try {
+          const result = await target.query(
+            "SELECT pg_catalog.pg_advisory_unlock(pg_catalog.hashtextextended('novlearn-catalogue-sync-v1',0)) AS unlocked",
+          );
+          destroy = result.rows[0]?.unlocked !== true;
+        } catch {
+          // Do not reuse a session whose lock release was not confirmed.
+        }
+      }
+      target.release(destroy);
+    }
+  }
+
+  private async observeTarget(
+    target: PublicationConnection,
+    batchId: string,
+    payloadDigest: string,
+  ) {
     try {
       const result = await target.query(
         'SELECT novlearn_admin_private.observe_catalogue_sync_batch($1::uuid,$2::text) AS observation',
@@ -560,8 +610,6 @@ export class CatalogueSyncService {
       return { state: value.state as 'not_applied' | 'committed', receipt };
     } catch {
       return { state: 'uncertain' as const, receipt: null };
-    } finally {
-      target.release();
     }
   }
 
@@ -613,24 +661,29 @@ export class CatalogueSyncService {
   }
 }
 
+async function catalogueSyncTargetReady(
+  pools: ReturnType<typeof createPublicationPgPools>,
+) {
+  let target: PublicationConnection | undefined;
+  try {
+    target = await pools.target();
+    const result = await target.query(
+      'SELECT novlearn_admin_private.catalogue_sync_target_contract() AS contract',
+    );
+    return result.rows[0]?.contract === 'atomic-catalogue-target-v1';
+  } catch {
+    return false;
+  } finally {
+    target?.release();
+  }
+}
+
 export async function catalogueSyncTargetAvailable(
-  config: PublicationPgConfiguration,
+  config: CatalogueSyncConfiguration,
 ) {
   const pools = createPublicationPgPools(config);
   try {
-    const target = await pools.target();
-    try {
-      const result = await target.query(
-        'SELECT novlearn_admin_private.catalogue_sync_target_contract() AS contract',
-      );
-      return result.rows[0]?.contract === 'atomic-catalogue-target-v1';
-    } catch {
-      return false;
-    } finally {
-      target.release();
-    }
-  } catch {
-    return false;
+    return await catalogueSyncTargetReady(pools);
   } finally {
     await pools.close().catch(() => undefined);
   }

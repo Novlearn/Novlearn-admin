@@ -1179,3 +1179,10 @@ modification de NovLearn ou de l’Exercise Engine.
 la dépendance au drapeau `ADMIN_CATALOGUE_SYNC_ENABLED`. L’accès au parcours
 réutilise la configuration PostgreSQL serveur déjà requise par la publication,
 et reste conditionné à la présence du contrat cible `atomic-catalogue-target-v1`.
+
+**Décision complémentaire explicite du responsable — 24 novembre 2026 :**
+déployer le parcours de synchronisation directement en Production Vercel.
+L’accès utilise le compte Admin Staging. Les secrets PostgreSQL du journal
+Staging et de la cible Production sont réservés au serveur de cet environnement.
+La mise en service dépend des fonctions SQL et de leurs permissions sur les
+deux projets. Les lots restent soumis à l’aperçu et à la confirmation Admin.

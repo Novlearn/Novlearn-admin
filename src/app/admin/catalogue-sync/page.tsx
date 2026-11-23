@@ -16,11 +16,17 @@ export default async function CatalogueSyncPage({
   const config = readCatalogueSyncConfiguration(process.env);
   if (!config)
     return (
-      <Unavailable reason="La configuration serveur de synchronisation source/cible est absente ou invalide." />
+      <Unavailable
+        reason={
+          process.env.VERCEL === '1' && process.env.VERCEL_ENV === 'production'
+            ? 'Les connexions PostgreSQL de synchronisation Staging et Production doivent être configurées sur Vercel.'
+            : 'La configuration serveur de synchronisation source/cible est absente ou invalide.'
+        }
+      />
     );
   if (!(await catalogueSyncTargetAvailable(config)))
     return (
-      <Unavailable reason="La capacité SQL cible atomic-catalogue-target-v1 n’est pas disponible. Aucun lot ne peut être confirmé." />
+      <Unavailable reason="La connexion à la cible ou le contrat SQL atomic-catalogue-target-v1 est indisponible." />
     );
   const client = await requireCatalogueClient();
   const { data, error } = await client.rpc('admin_list_catalogue_sync_ready', {

@@ -25,6 +25,24 @@ describe('catalogue synchronization contracts', () => {
     };
     expect(catalogueSyncCandidate(item)).toBe(true);
     expect(catalogueSyncCandidate({ ...item, status: 'draft' })).toBe(false);
+    expect(catalogueSyncCandidate({ ...item, fingerprint: null })).toBe(false);
+    expect(
+      catalogueSyncPage({
+        items: [
+          item,
+          {
+            ...item,
+            kind: 'flashcard',
+            catalogId: flashcard,
+            sortKey: `flashcard:${flashcard}`,
+            status: 'blocked',
+            fingerprint: null,
+          },
+        ],
+        limit: 100,
+        next: null,
+      })?.items,
+    ).toHaveLength(2);
     expect(
       catalogueSyncPage({ items: [item], limit: 100, next: null })?.items,
     ).toHaveLength(1);

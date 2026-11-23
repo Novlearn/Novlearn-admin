@@ -1,5 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { STAGING_PROJECT_REF } from '@/lib/auth/config';
+import { readCatalogueSyncConfiguration } from '@/lib/catalogue-sync-config';
+import { PRODUCTION_PROJECT_REF } from '@/lib/production-api-config';
 vi.mock('server-only', () => ({}));
 const fake = vi.hoisted(() => ({
   make: vi.fn(),
@@ -49,6 +51,63 @@ const env = () => ({
   ADMIN_PUBLICATION_TARGET_PROJECT_REF: target,
   ADMIN_PUBLICATION_SOURCE_PG_URL: sourceUrl,
   ADMIN_PUBLICATION_TARGET_PG_URL: targetUrl,
+});
+
+const vercelEnv = () => ({
+  NEXT_PUBLIC_SUPABASE_URL: `https://${STAGING_PROJECT_REF}.supabase.co`,
+  NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: 'sb_publishable_synthetic_test',
+  APP_BASE_URL: 'https://novlearn-admin.vercel.app',
+  VERCEL: '1',
+  VERCEL_ENV: 'production',
+  ADMIN_CATALOGUE_SYNC_SOURCE_PG_URL: `postgresql://${sourceLogin}.${STAGING_PROJECT_REF}:synthetic-source-password@aws-0-eu-west-3.pooler.supabase.com:5432/postgres`,
+  ADMIN_CATALOGUE_SYNC_TARGET_PG_URL: `postgresql://${targetLogin}.${PRODUCTION_PROJECT_REF}:synthetic-target-password@aws-0-eu-west-3.pooler.supabase.com:5432/postgres`,
+});
+
+describe('catalogue sync on Vercel', () => {
+  it('uses explicit project identities without enabling standalone publication', () => {
+    expect(readCatalogueSyncConfiguration(vercelEnv())).toMatchObject({
+      source: { sessionPoolerProjectRef: STAGING_PROJECT_REF },
+      target: { sessionPoolerProjectRef: PRODUCTION_PROJECT_REF },
+      targetKey: `production-${PRODUCTION_PROJECT_REF}`,
+    });
+    expect(
+      readPublicationPgConfiguration({ ...env(), ...vercelEnv() }),
+    ).toBeNull();
+  });
+
+  it('limits the hosted transport to Production and requires both secrets', () => {
+    for (const patch of [
+      { VERCEL_ENV: 'preview' },
+      { VERCEL_ENV: undefined },
+      { ADMIN_LOCAL_PUBLICATION_FIXTURE_ENABLED: 'true' },
+      { ADMIN_CATALOGUE_SYNC_SOURCE_PG_URL: undefined },
+      { ADMIN_CATALOGUE_SYNC_TARGET_PG_URL: undefined },
+    ]) {
+      expect(
+        readCatalogueSyncConfiguration({ ...vercelEnv(), ...patch }),
+      ).toBeNull();
+    }
+  });
+
+  it('rejects wrong tenants, powerful logins, shared passwords and non-session endpoints', () => {
+    const hosted = vercelEnv();
+    const url = hosted.ADMIN_CATALOGUE_SYNC_TARGET_PG_URL;
+    for (const invalid of [
+      url.replace(PRODUCTION_PROJECT_REF, STAGING_PROJECT_REF),
+      url.replace(targetLogin, 'postgres'),
+      url.replace(':5432', ':6543'),
+      url.replace('.supabase.com', '.example.com'),
+      url.replace('synthetic-target-password', 'synthetic-source-password'),
+      `${url}?sslmode=disable`,
+    ]) {
+      expect(
+        readCatalogueSyncConfiguration({
+          ...hosted,
+          ADMIN_CATALOGUE_SYNC_TARGET_PG_URL: invalid,
+        }),
+      ).toBeNull();
+    }
+  });
 });
 const config = (): PublicationPgConfiguration => ({
   source: { url: sourceUrl },

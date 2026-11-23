@@ -17,6 +17,7 @@ import {
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
+export const maxDuration = 60;
 type RequestBody =
   | { action: 'prepare'; batchId: string; items: CatalogueSyncCandidate[] }
   | { action: 'confirm' | 'recover'; batchId: string; payloadDigest: string };

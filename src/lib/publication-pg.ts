@@ -7,10 +7,16 @@ const sourceRole = 'novlearn_publication_journal_executor';
 const targetRole = 'novlearn_publication_executor';
 const sourceLogin = 'novlearn_admin_journal_service';
 const targetLogin = 'novlearn_admin_publication_service';
-export type PublicationPgEndpoint = { url: string; ca?: string };
-export type PublicationPgConfiguration = {
+export type PublicationPgEndpoint = {
+  url: string;
+  ca?: string;
+  sessionPoolerProjectRef?: string;
+};
+export type PublicationPgConnections = {
   source: PublicationPgEndpoint;
   target: PublicationPgEndpoint;
+};
+export type PublicationPgConfiguration = PublicationPgConnections & {
   targetKey: `production-${string}` | 'local-http-fixture';
   review: string;
   localFixture?: true;
@@ -21,13 +27,17 @@ function endpoint(
   login: string,
   ca: unknown,
   fixturePort?: '55433' | '55434',
+  sessionPoolerProjectRef?: string,
 ): PublicationPgEndpoint | null {
   if (typeof value !== 'string' || value.length > 4096) return null;
   try {
     const url = new URL(value);
     if (
       !['postgres:', 'postgresql:'].includes(url.protocol) ||
-      decodeURIComponent(url.username) !== login ||
+      decodeURIComponent(url.username) !==
+        (sessionPoolerProjectRef
+          ? `${login}.${sessionPoolerProjectRef}`
+          : login) ||
       decodeURIComponent(url.password).length < 16 ||
       decodeURIComponent(url.password).length > 512 ||
       url.search ||
@@ -38,6 +48,12 @@ function endpoint(
         : url.port && url.port !== '5432')
     )
       return null;
+    if (
+      sessionPoolerProjectRef &&
+      (!/^aws-[0-9]+-[a-z0-9-]+\.pooler\.supabase\.com$/.test(url.hostname) ||
+        url.port !== '5432')
+    )
+      return null;
     if (fixturePort && (typeof ca !== 'string' || !ca.trim())) return null;
     if (
       ca !== undefined &&
@@ -46,10 +62,41 @@ function endpoint(
         !ca.includes('-----BEGIN CERTIFICATE-----'))
     )
       return null;
-    return { url: value, ...(typeof ca === 'string' ? { ca } : {}) };
+    return {
+      url: value,
+      ...(typeof ca === 'string' ? { ca } : {}),
+      ...(sessionPoolerProjectRef ? { sessionPoolerProjectRef } : {}),
+    };
   } catch {
     return null;
   }
+}
+
+export function readCatalogueSyncSessionConnections(
+  env: Record<string, string | undefined>,
+  targetProjectRef: string,
+): PublicationPgConnections | null {
+  const source = endpoint(
+    env.ADMIN_CATALOGUE_SYNC_SOURCE_PG_URL,
+    sourceLogin,
+    env.ADMIN_CATALOGUE_SYNC_SOURCE_PG_CA,
+    undefined,
+    STAGING_PROJECT_REF,
+  );
+  const target = endpoint(
+    env.ADMIN_CATALOGUE_SYNC_TARGET_PG_URL,
+    targetLogin,
+    env.ADMIN_CATALOGUE_SYNC_TARGET_PG_CA,
+    undefined,
+    targetProjectRef,
+  );
+  if (!source || !target) return null;
+  if (
+    decodeURIComponent(new URL(source.url).password) ===
+    decodeURIComponent(new URL(target.url).password)
+  )
+    return null;
+  return { source, target };
 }
 /** This reads configuration only. No connection or activation is inferred from keys. */
 export function readPublicationPgConfiguration(
@@ -149,7 +196,7 @@ export class PublicationPgError extends Error {
 }
 /** Source and target pools have separate credentials and checked SQL identities.
  * Construction performs no network I/O. Call only with trusted operator config. */
-export function createPublicationPgPools(config: PublicationPgConfiguration) {
+export function createPublicationPgPools(config: PublicationPgConnections) {
   const make = (
     connection: PublicationPgEndpoint,
     login: string,
@@ -165,16 +212,19 @@ export function createPublicationPgPools(config: PublicationPgConfiguration) {
     } catch {
       throw new PublicationPgError();
     }
-    // A trusted local fixture may use another TCP port; production config above
-    // accepts direct PostgreSQL only. URL SSL overrides are never accepted.
+    // Supavisor authenticates with login.projectRef. PostgreSQL still sees the
+    // bare login, which is checked independently on every checkout below.
+    const projectRef = connection.sessionPoolerProjectRef;
     if (
       !['postgres:', 'postgresql:'].includes(url.protocol) ||
       url.search ||
       url.hash ||
-      username !== login ||
+      username !== (projectRef ? `${login}.${projectRef}` : login) ||
       !url.password ||
       !url.hostname ||
-      !/^\/[a-zA-Z0-9_]+$/.test(url.pathname)
+      !/^\/[a-zA-Z0-9_]+$/.test(url.pathname) ||
+      (projectRef &&
+        !endpoint(connection.url, login, connection.ca, undefined, projectRef))
     )
       throw new PublicationPgError();
     const pool = new Pool({
@@ -183,7 +233,7 @@ export function createPublicationPgPools(config: PublicationPgConfiguration) {
         rejectUnauthorized: true,
         ...(connection.ca ? { ca: connection.ca } : {}),
       },
-      max,
+      max: projectRef ? 1 : max,
       connectionTimeoutMillis: 3000,
       idleTimeoutMillis: 10000,
       query_timeout: 12000,

@@ -12,7 +12,7 @@ export type CatalogueSyncCandidate = {
   kind: CatalogueSyncKind;
   catalogId: string;
   status: string;
-  fingerprint: string;
+  fingerprint: string | null;
   id?: string;
   versionId?: string | null;
   revision?: number | null;
@@ -59,7 +59,8 @@ export function catalogueSyncCandidate(
     isUuid(value.catalogId) &&
     typeof value.status === 'string' &&
     ['ready', 'published', 'archived', 'blocked'].includes(value.status) &&
-    isFingerprint(value.fingerprint) &&
+    (isFingerprint(value.fingerprint) ||
+      (value.status === 'blocked' && value.fingerprint === null)) &&
     (value.id === undefined || typeof value.id === 'string') &&
     (value.versionId === undefined ||
       value.versionId === null ||

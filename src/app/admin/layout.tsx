@@ -46,7 +46,11 @@ export default async function AdminLayout({
               !!authConfig?.localPublicationFixture ||
               process.env.ADMIN_PUBLICATION_ENABLED === 'true'
             }
-            catalogueSyncEnabled={!!readCatalogueSyncConfiguration(process.env)}
+            catalogueSyncEnabled={
+              (process.env.VERCEL === '1' &&
+                process.env.VERCEL_ENV === 'production') ||
+              !!readCatalogueSyncConfiguration(process.env)
+            }
             statisticsEnabled={!!readActivityConfiguration(process.env)}
             usersEnabled={!!readUsersConfiguration(process.env)}
             feedbackEnabled={!!readProductionApiConfiguration(process.env)}

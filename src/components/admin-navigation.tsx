@@ -70,6 +70,9 @@ export function AdminNavigation({
                 <Link
                   key={href}
                   href={href}
+                  prefetch={
+                    href === '/admin/catalogue-sync' ? false : undefined
+                  }
                   aria-current={active ? 'page' : undefined}
                   className={`block whitespace-nowrap rounded-lg px-3 py-2.5 text-sm font-semibold transition-colors lg:px-4 ${active ? 'bg-sky-100 text-blue-900 ring-1 ring-sky-200' : 'text-slate-600 hover:bg-white/80 hover:text-blue-700'}`}
                 >

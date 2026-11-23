@@ -66,8 +66,9 @@ réouverture n'ont pas été testées à distance pendant cette intervention.
 3. Le profil préparé conserve à `false` les quatre portes Engine, transport
    Engine local Staging, relecture et publication. Leur absence conserve aussi
    ces capacités désactivées ; inutile de multiplier les valeurs `false`.
-   Ne pas importer les variables `ADMIN_LOCAL_*`, clés privées, URL PostgreSQL,
-   `.env`, dossiers `.local/` ou sauvegardes.
+   Garder les variables `ADMIN_LOCAL_*`, le `.env`, les dossiers `.local/` et
+   les sauvegardes hors Vercel. Les seules connexions PostgreSQL prévues par ce
+   profil sont les deux secrets dédiés à la synchronisation ci-dessous.
 4. Exécuter les contrôles locaux, déployer le code autorisé, puis vérifier le
    formulaire et les refus d'accès sur le domaine réel. Ce déploiement rend le
    socle éditorial accessible ; il ne vaut pas réception du parcours Engine.
@@ -75,6 +76,42 @@ réouverture n'ont pas été testées à distance pendant cette intervention.
 Une origine Preview différente de `APP_BASE_URL` est refusée pour les mutations.
 Utiliser une origine exacte propre à chaque environnement, sans joker. Une
 modification des variables d’un déploiement demande un nouveau déploiement.
+
+## Synchronisation du catalogue en Production Vercel
+
+La page **Suivi → Synchronisation** est réservée aux comptes Admin de Supabase
+Staging. Les routes vérifient à nouveau la session et le rôle, ainsi que
+l’origine pour les mutations. Le transport PostgreSQL est réservé à
+`VERCEL_ENV=production`. Vercel doit exposer ses variables système au runtime.
+
+Dans les paramètres du projet Vercel, ajouter les deux URL comme variables
+**Secret**, dans l’environnement **Production** uniquement. Prendre l’hôte
+du **Session pooler** de chaque projet dans Supabase → **Connect**. Les
+comptes SQL et leurs mots de passe sont distincts.
+
+| Variable                             | Connexion                                                                                                       |
+| ------------------------------------ | --------------------------------------------------------------------------------------------------------------- |
+| `ADMIN_CATALOGUE_SYNC_SOURCE_PG_URL` | Staging, login du pooler `novlearn_admin_journal_service.<réf-staging>`, port `5432`, base `postgres`           |
+| `ADMIN_CATALOGUE_SYNC_TARGET_PG_URL` | Production, login du pooler `novlearn_admin_publication_service.<réf-production>`, port `5432`, base `postgres` |
+
+Format d’une URL `postgresql://<login-du-pooler>:<mot-de-passe-encodé>@<hôte-du-pooler>:5432/postgres`.
+Encoder les caractères réservés du mot de passe. Si la chaîne TLS du pooler
+nécessite une CA explicite, fournir le PEM dans `ADMIN_CATALOGUE_SYNC_SOURCE_PG_CA`
+ou `ADMIN_CATALOGUE_SYNC_TARGET_PG_CA`. La vérification TLS est obligatoire.
+Le mode Session conserve le rôle SQL et les verrous le temps de l’opération.
+
+Le compte source doit avoir pour seule appartenance `novlearn_publication_journal_executor`
+et le compte cible `novlearn_publication_executor`, avec `SET TRUE`, `INHERIT FALSE`
+et `ADMIN FALSE`. Ces comptes sont des logins techniques sans privilèges élevés.
+Les fonctions source de PR #25 et le contrat cible `atomic-catalogue-target-v1`
+doivent être installés dans leurs projets respectifs. L’alignement des tables
+seul ne fournit ni les fonctions, ni le journal, ni les permissions. Voir le
+[contrat NovLearn](https://github.com/Novlearn/Novlearn/blob/develop/docs/content-catalog-sync.md).
+
+Après installation des fonctions et renseignement des secrets, redéployer
+`main` en Production et ouvrir la page avec le compte Admin. L’apparition de
+la liste vérifie la session, le marqueur cible et la lecture source. Préparer
+ensuite un lot voulu, vérifier l’aperçu, et le confirmer pour obtenir son reçu.
 
 ## Réception sur le domaine réel
 
