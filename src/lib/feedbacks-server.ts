@@ -6,6 +6,7 @@ import {
   decodeFeedbackPage,
   FEEDBACK_PAGE_SIZE,
   readFeedbackQuery,
+  type DifficultyExerciseSummary,
   type FeedbackQuery,
 } from './feedbacks';
 
@@ -43,7 +44,8 @@ export async function loadProductionFeedbacks(query: FeedbackQuery) {
     const statusQuery = (status: string) => {
       const q = client
         .from('feedbacks')
-        .select('id', { count: 'exact', head: true });
+        .select('id', { count: 'exact', head: true })
+        .in('category', validated.categories);
       return status === 'pending'
         ? q.or('status.eq.pending,status.is.null')
         : q.eq('status', status);
@@ -93,6 +95,7 @@ export async function loadProductionFeedbacks(query: FeedbackQuery) {
       client
         .from('feedbacks')
         .select('id', { count: 'exact', head: true })
+        .in('category', validated.categories)
         .abortSignal(AbortSignal.timeout(12000)),
     ]);
     if (
@@ -129,6 +132,91 @@ export async function loadProductionFeedbacks(query: FeedbackQuery) {
     const result = decodeFeedbackPage(value, validated);
     if (!result) throw new FeedbacksUnavailableError();
     return result;
+  } catch {
+    throw new FeedbacksUnavailableError();
+  }
+}
+
+export async function loadProductionDifficultySummary(): Promise<
+  DifficultyExerciseSummary[]
+> {
+  try {
+    const config = productionAuthConfiguration(process.env);
+    if (!config) throw new FeedbacksUnavailableError();
+    const client = await createPageClient(config);
+    if (!client || !(await authorizeAdmin(asAuthGateway(client))).allowed)
+      throw new FeedbacksUnavailableError();
+
+    const pageSize = 500;
+    const countResult = await client
+      .from('feedbacks')
+      .select('id', { count: 'exact', head: true })
+      .eq('category', 'difficulty')
+      .abortSignal(AbortSignal.timeout(12000));
+    if (countResult.error || countResult.count === null)
+      throw new FeedbacksUnavailableError();
+
+    const rows: {
+      id: string;
+      created_at: string;
+      message: string;
+      difficulty_rating: number | null;
+      exercise_id: number | null;
+    }[] = [];
+    for (let offset = 0; offset < countResult.count; offset += pageSize) {
+      const { data, error } = await client
+        .from('feedbacks')
+        .select('id,created_at,message,difficulty_rating,exercise_id')
+        .eq('category', 'difficulty')
+        .order('exercise_id', { ascending: true, nullsFirst: false })
+        .order('created_at', { ascending: false })
+        .order('id')
+        .range(offset, Math.min(offset + pageSize - 1, countResult.count - 1))
+        .abortSignal(AbortSignal.timeout(12000));
+      if (error || !data) throw new FeedbacksUnavailableError();
+      rows.push(...data);
+    }
+
+    const groups = new Map<
+      number | null,
+      {
+        exerciseId: number | null;
+        ratingTotal: number;
+        ratingCount: number;
+        details: DifficultyExerciseSummary['details'];
+      }
+    >();
+    for (const row of rows) {
+      let group = groups.get(row.exercise_id);
+      if (!group) {
+        group = {
+          exerciseId: row.exercise_id,
+          ratingTotal: 0,
+          ratingCount: 0,
+          details: [],
+        };
+        groups.set(row.exercise_id, group);
+      }
+      if (row.difficulty_rating !== null) {
+        group.ratingTotal += row.difficulty_rating;
+        group.ratingCount += 1;
+      }
+      group.details.push({
+        id: row.id,
+        createdAt: row.created_at,
+        message: row.message,
+        difficultyRating: row.difficulty_rating,
+      });
+    }
+
+    return [...groups.values()].map((group) => ({
+      exerciseId: group.exerciseId,
+      averageRating:
+        group.ratingCount === 0 ? null : group.ratingTotal / group.ratingCount,
+      ratingCount: group.ratingCount,
+      feedbackCount: group.details.length,
+      details: group.details,
+    }));
   } catch {
     throw new FeedbacksUnavailableError();
   }

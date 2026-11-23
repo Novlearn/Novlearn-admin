@@ -16,6 +16,19 @@ export type FeedbackItem = {
   difficultyRating: number | null;
   exerciseId: number | null;
 };
+export type DifficultyFeedbackDetail = {
+  id: string;
+  createdAt: string;
+  message: string;
+  difficultyRating: number | null;
+};
+export type DifficultyExerciseSummary = {
+  exerciseId: number | null;
+  averageRating: number | null;
+  ratingCount: number;
+  feedbackCount: number;
+  details: DifficultyFeedbackDetail[];
+};
 export type FeedbackQuery = {
   categories: string[];
   status: 'all' | FeedbackStatus;
@@ -41,14 +54,26 @@ export const FEEDBACK_MAX_OFFSET = 10000;
 export function readFeedbackQuery(
   params: URLSearchParams,
 ): FeedbackQuery | null {
-  const categories = [...new Set(params.getAll('category').filter(Boolean))];
+  const requestedCategories = [
+    ...new Set(params.getAll('category').filter(Boolean)),
+  ];
+  const categories = requestedCategories.length
+    ? requestedCategories
+    : Object.keys(FEEDBACK_CATEGORIES).filter(
+        (category) => category !== 'difficulty',
+      );
   const status = params.get('status') ?? 'all';
   const sort = params.get('sort') ?? 'newest';
   const rawExerciseId = params.get('exerciseId') ?? '';
   const rawPage = params.get('page') ?? '1';
   if (
-    categories.length > Object.keys(FEEDBACK_CATEGORIES).length ||
-    categories.some((category) => category.length > 80) ||
+    categories.length > Object.keys(FEEDBACK_CATEGORIES).length - 1 ||
+    categories.some(
+      (category) =>
+        category.length > 80 ||
+        !Object.hasOwn(FEEDBACK_CATEGORIES, category) ||
+        category === 'difficulty',
+    ) ||
     !['all', 'pending', 'approved', 'rejected'].includes(status) ||
     !['newest', 'oldest', 'category'].includes(sort) ||
     (rawExerciseId !== '' && !/^[1-9]\d{0,9}$/.test(rawExerciseId)) ||

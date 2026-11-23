@@ -10,7 +10,7 @@ import { FeedbacksManager } from '@/components/feedbacks-manager';
 
 const id = 'a8100000-0000-4000-8000-000000000001';
 const query = {
-  categories: [],
+  categories: ['content_error', 'suggestion', 'other'],
   status: 'all' as const,
   sort: 'newest' as const,
   exerciseId: null,
@@ -39,24 +39,28 @@ beforeEach(() => vi.clearAllMocks());
 it('valide et borne les filtres, le tri et la pagination', () => {
   expect(
     readFeedbackQuery(
-      new URLSearchParams(
-        'category=difficulty&category=other&status=pending&sort=oldest&page=2',
-      ),
+      new URLSearchParams('category=other&status=pending&sort=oldest&page=2'),
     ),
   ).toEqual({
-    categories: ['difficulty', 'other'],
+    categories: ['other'],
     status: 'pending',
     sort: 'oldest',
     exerciseId: null,
     page: 2,
   });
+  expect(readFeedbackQuery(new URLSearchParams())?.categories).toEqual([
+    'content_error',
+    'suggestion',
+    'other',
+  ]);
   for (const invalid of [
     'status=admin',
     'sort=message',
     'page=0',
     'page=50000',
     `category=${'x'.repeat(81)}`,
-    'category=difficulty&category=content_error&category=suggestion&category=other&category=unknown',
+    'category=difficulty',
+    'category=content_error&category=suggestion&category=other&category=unknown',
   ])
     expect(readFeedbackQuery(new URLSearchParams(invalid))).toBeNull();
 });
@@ -77,7 +81,7 @@ it('décode les seules colonnes prévues et refuse une projection élargie', () 
 it('affiche la source Production, les catégories, les statuts et échappe les messages', () => {
   const selectedQuery = {
     ...query,
-    categories: ['content_error', 'difficulty'],
+    categories: ['content_error', 'suggestion'],
   };
   const data = decodeFeedbackPage(page, selectedQuery);
   if (!data) throw new Error('Fixture invalide');
@@ -94,7 +98,7 @@ it('affiche la source Production, les catégories, les statuts et échappe les m
   expect(html).toContain('Valider');
   expect(html).toContain('Exercice Production');
   expect(html).toContain('name="category" checked="" value="content_error"');
-  expect(html).toContain('name="category" checked="" value="difficulty"');
+  expect(html).not.toContain('name="category" value="difficulty"');
 });
 
 it('distingue une lecture Production indisponible d’une liste vide', () => {

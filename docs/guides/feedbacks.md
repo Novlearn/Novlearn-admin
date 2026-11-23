@@ -13,6 +13,12 @@ présentés comme « À traiter ». Les résultats sont paginés par 25 ; le fil
 de statut, la sélection multiple de catégories et le tri par catégorie et date
 sont appliqués dans Production.
 
+Par défaut, la page liste `content_error`, `suggestion` et `other`. L’onglet
+**Difficulté** regroupe les feedbacks par exercice, calcule la moyenne des notes
+renseignées sans filtrer sur le statut, puis permet de déplier les notes,
+commentaires et dates associés. Les retours de difficulté ne sont pas
+décidables dans l’Admin ; l’API de décision les refuse également.
+
 ## Décision des feedbacks
 
 **État au 23 novembre 2026 :** le responsable confirme que le script a été

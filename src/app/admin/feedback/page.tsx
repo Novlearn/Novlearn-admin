@@ -1,5 +1,8 @@
 import { requireAdminPage } from '@/lib/auth/require-admin';
-import { loadProductionFeedbacks } from '@/lib/feedbacks-server';
+import {
+  loadProductionDifficultySummary,
+  loadProductionFeedbacks,
+} from '@/lib/feedbacks-server';
 import { readFeedbackQuery } from '@/lib/feedbacks';
 import { FeedbacksManager } from '@/components/feedbacks-manager';
 import { productionAuthConfiguration } from '@/lib/production-api-config';
@@ -22,19 +25,23 @@ export default async function FeedbackPage({
         : [value])
       params.append(key, item);
   const query = readFeedbackQuery(params) ?? {
-    categories: [],
+    categories: ['content_error', 'suggestion', 'other'],
     status: 'all' as const,
     sort: 'newest' as const,
     exerciseId: null,
     page: 1,
   };
+  const view = params.get('view') === 'difficulty' ? 'difficulty' : 'general';
   let data = null;
+  let difficultySummary = null;
   let error: string | undefined;
   if (!productionAuthConfiguration(process.env)) {
     error = 'La lecture Production des feedbacks n’est pas configurée.';
   } else {
     try {
-      data = await loadProductionFeedbacks(query);
+      if (view === 'difficulty')
+        difficultySummary = await loadProductionDifficultySummary();
+      else data = await loadProductionFeedbacks(query);
     } catch {
       error =
         'Impossible de charger les feedbacks Production. Vérifiez votre accès Production.';
@@ -44,6 +51,8 @@ export default async function FeedbackPage({
     <FeedbacksManager
       data={data}
       query={query}
+      view={view}
+      difficultySummary={difficultySummary}
       error={error}
     />
   );

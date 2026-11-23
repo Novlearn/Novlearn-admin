@@ -8,6 +8,11 @@ de ce parcours reste à effectuer. La porte d’activation par variable a été
 retirée du code ; les contrôles de session, d’origine et de rôle Admin restent
 en place. Voir le [guide Feedbacks](guides/feedbacks.md).
 
+**Décision complémentaire du 23 novembre 2026 :** les feedbacks `difficulty`
+sortent de la liste de traitement et s’affichent dans un onglet par exercice,
+avec la moyenne des notes et les détails dépliables. Ils ne sont pas validables
+ou refusables depuis l’Admin. Voir le [CDC, section 15.4](../CDC_reference.md#154-feedbacks-production).
+
 **Décision fonctionnelle explicite du responsable — 8 novembre 2026 :** ajouter
 une page Feedbacks à l’Admin, alimentée exclusivement par les feedbacks de
 Production. La page filtre et trie les catégories et statuts et permet à un

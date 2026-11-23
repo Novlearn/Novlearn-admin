@@ -1,7 +1,12 @@
 import { beforeEach, expect, it, vi } from 'vitest';
 import { NextRequest, NextResponse } from 'next/server';
 
-const fake = vi.hoisted(() => ({ access: vi.fn(), rpc: vi.fn() }));
+const fake = vi.hoisted(() => ({
+  access: vi.fn(),
+  rpc: vi.fn(),
+  from: vi.fn(),
+  lookup: vi.fn(),
+}));
 vi.mock('@/lib/feedback-route-auth', () => ({
   authorizeFeedbackRoute: fake.access,
 }));
@@ -29,9 +34,22 @@ beforeEach(() => {
     data: { feedbackId: id, status: 'approved' },
     error: null,
   });
+  fake.lookup.mockResolvedValue({
+    data: { category: 'suggestion' },
+    error: null,
+  });
+  fake.from.mockImplementation(() => ({
+    select: () => ({
+      eq: () => ({
+        abortSignal: () => ({
+          maybeSingle: () => fake.lookup(),
+        }),
+      }),
+    }),
+  }));
   fake.access.mockResolvedValue({
     ok: true,
-    client: { rpc: fake.rpc },
+    client: { from: fake.from, rpc: fake.rpc },
     stagingConfig: {
       appOrigin: 'http://localhost:3000',
       supabaseUrl: 'https://tksvbkvfusrnxulpahky.supabase.co',

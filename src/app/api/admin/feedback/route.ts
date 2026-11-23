@@ -41,21 +41,25 @@ export async function GET(request: NextRequest) {
       access.client
         .from('feedbacks')
         .select('id', { count: 'exact', head: true })
+        .in('category', query.categories)
         .or('status.eq.pending,status.is.null')
         .abortSignal(AbortSignal.timeout(12000)),
       access.client
         .from('feedbacks')
         .select('id', { count: 'exact', head: true })
+        .in('category', query.categories)
         .eq('status', 'approved')
         .abortSignal(AbortSignal.timeout(12000)),
       access.client
         .from('feedbacks')
         .select('id', { count: 'exact', head: true })
+        .in('category', query.categories)
         .eq('status', 'rejected')
         .abortSignal(AbortSignal.timeout(12000)),
       access.client
         .from('feedbacks')
         .select('id', { count: 'exact', head: true })
+        .in('category', query.categories)
         .abortSignal(AbortSignal.timeout(12000)),
     ]);
     const results = [page, pending, approved, rejected, total];
@@ -129,6 +133,21 @@ export async function POST(request: NextRequest) {
   )
     return access.finish({ error: 'Action invalide.' }, 400);
   try {
+    const { data: feedback, error: lookupError } = await access.client
+      .from('feedbacks')
+      .select('category')
+      .eq('id', input.feedbackId)
+      .abortSignal(AbortSignal.timeout(12000))
+      .maybeSingle();
+    if (lookupError)
+      return access.finish({ error: 'Validation indisponible.' }, 503);
+    if (!feedback)
+      return access.finish({ error: 'Feedback introuvable.' }, 404);
+    if (feedback.category === 'difficulty')
+      return access.finish(
+        { error: 'Les feedbacks de difficulté ne sont pas à valider ici.' },
+        403,
+      );
     const { data, error } = await access.client.rpc('admin_review_feedback', {
       p_feedback_id: input.feedbackId,
       p_action: input.action,

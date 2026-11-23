@@ -918,6 +918,14 @@ de Staging, et les permissions RLS Production. La capacité de décision est
 installée séparément et strictement limitée à cette transition ; aucun secret
 privilégié n’est exposé à l’application.
 
+**Décision complémentaire du responsable — 23 novembre 2026 :** la page
+Feedbacks affiche par défaut les catégories autres que `difficulty`. Les
+feedbacks de difficulté disposent d’un onglet dédié, regroupé par exercice,
+avec la moyenne de toutes les notes renseignées et le détail dépliable des
+retours. Les notes absentes ne participent pas à la moyenne. Un feedback de
+difficulté ne peut pas être validé ou refusé depuis l’Admin ; les autres
+catégories conservent leur traitement existant.
+
 ---
 
 # 16. Sécurité et exigences transversales
