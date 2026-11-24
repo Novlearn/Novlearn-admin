@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import Link from 'next/link';
 import {
   FEEDBACK_CATEGORIES,
@@ -56,8 +56,14 @@ export function FeedbacksManager({
   const router = useRouter();
   const [busy, setBusy] = useState<string | null>(null);
   const [notice, setNotice] = useState('');
+  const inFlight = useRef(new Set<string>());
+  const [resolvedStatuses, setResolvedStatuses] = useState<
+    Record<string, FeedbackStatus>
+  >({});
 
   async function decide(feedbackId: string, action: 'approve' | 'reject') {
+    if (inFlight.current.has(feedbackId)) return;
+    inFlight.current.add(feedbackId);
     setBusy(feedbackId);
     setNotice('');
     try {
@@ -66,8 +72,24 @@ export function FeedbacksManager({
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({ feedbackId, action }),
       });
-      const result = (await response.json()) as { error?: string };
-      if (!response.ok) throw new Error(result.error ?? 'Action indisponible.');
+      const result = (await response.json()) as {
+        error?: string;
+        status?: FeedbackStatus;
+      };
+      if (!response.ok) {
+        const currentStatus = result.status;
+        if (
+          response.status === 409 &&
+          (currentStatus === 'approved' || currentStatus === 'rejected')
+        ) {
+          setResolvedStatuses((current) => ({
+            ...current,
+            [feedbackId]: currentStatus,
+          }));
+          router.refresh();
+        }
+        throw new Error(result.error ?? 'Action indisponible.');
+      }
       setNotice(action === 'approve' ? 'Feedback validé.' : 'Feedback refusé.');
       router.refresh();
     } catch (reason) {
@@ -75,6 +97,7 @@ export function FeedbacksManager({
         reason instanceof Error ? reason.message : 'Action indisponible.',
       );
     } finally {
+      inFlight.current.delete(feedbackId);
       setBusy(null);
     }
   }
@@ -353,7 +376,8 @@ export function FeedbacksManager({
               FEEDBACK_CATEGORIES[
                 item.category as keyof typeof FEEDBACK_CATEGORIES
               ] ?? item.category;
-            const status = item.status ?? 'pending';
+            const status =
+              resolvedStatuses[item.id] ?? item.status ?? 'pending';
             return (
               <article
                 key={item.id}
