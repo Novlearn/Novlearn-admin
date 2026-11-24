@@ -34,7 +34,6 @@ export function UsersListView({
         <h1 className="mt-4 text-3xl font-semibold tracking-tight">
           Utilisateurs
         </h1>
-        <p className="mt-2 text-sm text-slate-600">Nom et e-mail</p>
       </header>
       <form
         method="get"

@@ -168,6 +168,24 @@ describe('API catalogue : permission avant toute opération', () => {
       p_expected_fingerprint: body.fingerprint,
     });
   });
+  it('crée une révision pour le même exercice sans modifier la version source', async () => {
+    const exerciseId = '9007199254740993';
+    expect((await POST(post({ ...save, exerciseId }))).status).toBe(200);
+    expect(fake.rpc).toHaveBeenCalledWith('admin_save_exercise_draft', {
+      p_exercise_id: exerciseId,
+      p_version_id: null,
+      p_expected_fingerprint: null,
+      p_definition: save.definition,
+    });
+  });
+  it.each([
+    { exerciseId: '1', versionId: uuid, fingerprint: null },
+    { exerciseId: '1', versionId: null, fingerprint: 'a'.repeat(64) },
+    { exerciseId: null, versionId: uuid, fingerprint: 'a'.repeat(64) },
+  ])('refuse des préconditions de sauvegarde incohérentes %#', async (ids) => {
+    expect((await POST(post({ ...save, ...ids }))).status).toBe(400);
+    expect(fake.rpc).not.toHaveBeenCalled();
+  });
   it('duplique une révision précise et archive sans delete', async () => {
     expect(
       (await POST(post({ action: 'duplicate', versionId: uuid }))).status,

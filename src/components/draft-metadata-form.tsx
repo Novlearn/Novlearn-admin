@@ -41,6 +41,7 @@ export function DraftMetadataForm(props: Props) {
   const dirtyRef = useRef(dirty);
   dirtyRef.current = dirty;
   const [busy, setBusy] = useState(false);
+  const saving = useRef(false);
   const [message, setMessage] = useState('');
   const [recoveredAsNewRevision, setRecoveredAsNewRevision] = useState(false);
   const newRevision = props.newRevision || recoveredAsNewRevision;
@@ -70,26 +71,17 @@ export function DraftMetadataForm(props: Props) {
       setDirty(true);
     },
   });
-  const clean = (
-    value: ExerciseDefinition,
-    skillList: string,
-  ): ExerciseDefinition => {
-    const result = {
-      ...value,
-      catalogue: {
-        ...value.catalogue,
-        appTitle: value.title,
-        skills: skillList
-          .split(',')
-          .map((skill) => skill.trim())
-          .filter(Boolean),
-      },
-    };
-    if (!result.catalogue.chapter) delete result.catalogue.chapter;
-    return result;
-  };
-  useEffect(() => bindEditorNavigation(() => dirtyRef.current), []);
   const catalogue = definition.catalogue ?? {};
+  const skillIds = skills
+    .split(',')
+    .map((skill) => skill.trim())
+    .filter(Boolean);
+  const prepared = {
+    ...definition,
+    catalogue: { ...catalogue, skills: skillIds },
+  };
+  if (!prepared.catalogue.chapter) delete prepared.catalogue.chapter;
+  useEffect(() => bindEditorNavigation(() => dirtyRef.current), []);
   const patch = (
     fields: Partial<NonNullable<ExerciseDefinition['catalogue']>>,
   ) => {
@@ -98,22 +90,15 @@ export function DraftMetadataForm(props: Props) {
   };
   async function save(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (busy || recovery.awaitingChoice) return;
+    if (saving.current || recovery.awaitingChoice) return;
+    if (!prepared.title.trim()) {
+      setMessage('Renseignez le titre de l’exercice.');
+      return;
+    }
+    saving.current = true;
     setBusy(true);
     setMessage('');
     try {
-      const cleaned: ExerciseDefinition = {
-        ...definition,
-        catalogue: {
-          ...definition.catalogue,
-          appTitle: definition.title,
-          skills: skills
-            .split(',')
-            .map((skill) => skill.trim())
-            .filter(Boolean),
-        },
-      };
-      if (!cleaned.catalogue?.chapter) delete cleaned.catalogue?.chapter;
       const response = await fetch('/api/admin/exercises', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
@@ -122,7 +107,7 @@ export function DraftMetadataForm(props: Props) {
           exerciseId: props.exerciseId ?? null,
           versionId: newRevision ? null : (props.versionId ?? null),
           fingerprint: newRevision ? null : (props.fingerprint ?? null),
-          definition: cleaned,
+          definition: prepared,
         }),
       });
       const data = await response.json();
@@ -153,9 +138,10 @@ export function DraftMetadataForm(props: Props) {
       router.refresh();
     } catch {
       setMessage(
-        'Connexion interrompue. Votre brouillon reste dans ce formulaire.',
+        'La réponse a été interrompue. Votre saisie est conservée dans ce formulaire. Vérifiez le catalogue avant de réessayer.',
       );
     } finally {
+      saving.current = false;
       setBusy(false);
     }
   }
@@ -174,7 +160,7 @@ export function DraftMetadataForm(props: Props) {
       >
         <div>
           <h2 id="metadata-heading" className="text-xl font-semibold">
-            📋 Informations générales
+            Informations générales
           </h2>
         </div>
         <fieldset
@@ -182,15 +168,18 @@ export function DraftMetadataForm(props: Props) {
           className="space-y-5"
         >
           <label className="label rounded-xl border border-slate-200 bg-slate-50 p-4 md:max-w-2xl">
-            NOM DE L’EXERCICE
+            Titre affiché aux élèves
             <input
               className="field"
-              placeholder="Ex. : Logarithme_Bac"
+              placeholder="Ex. Calculer une dérivée"
               required
               maxLength={160}
-              value={definition.title}
+              value={(catalogue.appTitle || definition.title).replace(
+                /_+/g,
+                ' ',
+              )}
               onChange={(event) => {
-                const title = event.target.value;
+                const title = event.target.value.replace(/_+/g, ' ');
                 setDefinition({
                   ...definition,
                   title,
@@ -199,9 +188,6 @@ export function DraftMetadataForm(props: Props) {
                 setDirty(true);
               }}
             />
-            <span className="text-xs font-normal text-slate-500">
-              Ce titre sert aussi de nom dans l’application.
-            </span>
           </label>
           <div className="flex flex-wrap gap-3">
             <label
@@ -218,7 +204,7 @@ export function DraftMetadataForm(props: Props) {
                 }
               />
               <span className="rounded-md peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-blue-600">
-                <span aria-hidden="true">⚡</span> Flash Exos
+                <span aria-hidden="true">⚡</span> Exercice flash
                 {catalogue.exerciseType === 'flash' && (
                   <span className="ml-2" aria-hidden="true">
                     ✓
@@ -251,10 +237,7 @@ export function DraftMetadataForm(props: Props) {
             disabled={busy || recovery.awaitingChoice}
             chapter={catalogue.chapter ?? ''}
             difficulty={catalogue.difficulty}
-            skills={skills
-              .split(',')
-              .map((skill) => skill.trim())
-              .filter(Boolean)}
+            skills={skillIds}
             onChapter={(chapter) => patch({ chapter })}
             onDifficulty={(difficulty) => patch({ difficulty })}
             onSkills={(ids) => {
@@ -277,7 +260,7 @@ export function DraftMetadataForm(props: Props) {
       <ExercisePreview
         engineEnabled={props.engineEnabled}
         canRecordTests={props.canRecordTests}
-        definition={clean(definition, skills)}
+        definition={prepared}
         disabled={busy || recovery.awaitingChoice}
         saved={
           !dirty &&
@@ -302,12 +285,14 @@ export function DraftMetadataForm(props: Props) {
           {busy
             ? 'Enregistrement…'
             : newRevision
-              ? 'Créer une nouvelle révision'
+              ? 'Enregistrer comme nouvelle révision'
               : 'Enregistrer le brouillon'}
         </button>
-        <span className="text-sm text-slate-500">
-          {dirty ? 'Modifications non enregistrées' : 'Brouillon Préproduction'}
-        </span>
+        {dirty && (
+          <span className="text-sm text-slate-500">
+            Modifications non enregistrées
+          </span>
+        )}
       </div>
       {message && (
         <p

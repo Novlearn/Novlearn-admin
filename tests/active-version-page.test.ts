@@ -21,12 +21,13 @@ vi.mock('next/navigation', () => ({
   useRouter: () => ({ refresh: vi.fn() }),
 }));
 import Page from '@/app/admin/exercises/[id]/page';
+import { newDraft } from '@/lib/catalogue';
 import { localActiveVersionEnvironment } from './fixtures/local-active-version-env';
 const catalogId = 'ad100000-0000-4000-8000-000000000001';
-const page = () =>
+const page = (searchParams: Record<string, string> = {}) =>
   Page({
     params: Promise.resolve({ id: '123' }),
-    searchParams: Promise.resolve({}),
+    searchParams: Promise.resolve(searchParams),
   });
 beforeEach(() => {
   vi.resetAllMocks();
@@ -101,9 +102,94 @@ it('renders unavailable without blocking source consultation or exposing connect
   expect(html).not.toContain('private PostgreSQL');
   expect(html).not.toContain('absent de la cible');
 });
-it('does not activate a target reader implicitly', async () => {
+it('hides the local target card when its reader is disabled', async () => {
   vi.stubEnv('ADMIN_LOCAL_ACTIVE_VERSION_ENABLED', 'false');
   const html = renderToStaticMarkup(await page());
   expect(fake.read).not.toHaveBeenCalled();
-  expect(html).toContain('pas encore activée');
+  expect(html).not.toContain('Version active sur la copie locale');
+});
+
+const versionId = 'ad100000-0000-4000-8000-000000000002';
+function withRevision(status: string, archived = false) {
+  const version = {
+    id: versionId,
+    revision: 26,
+    editorial_status: status,
+    definition: {
+      ...newDraft('nom_interne_exercice'),
+      catalogue: { appTitle: 'Calculer une dérivée' },
+    },
+    approval_fingerprint_sha256: 'a'.repeat(64),
+    test_epoch: 0,
+  };
+  const filtered = vi.fn().mockReturnThis();
+  const latest = vi
+    .fn()
+    .mockResolvedValue({ data: { id: versionId }, error: null });
+  fake.from.mockImplementation((table: string) => ({
+    select: vi.fn().mockImplementation((columns: string) => ({
+      eq: filtered,
+      order: vi.fn().mockReturnThis(),
+      maybeSingle: async () => ({
+        data:
+          table === 'exercises'
+            ? {
+                catalog_id: catalogId,
+                admin_archived_at: archived ? '2026-11-24' : null,
+              }
+            : version,
+        error: null,
+      }),
+      limit: (limit: number) =>
+        table === 'exercise_versions' && columns === 'id' && limit === 1
+          ? { maybeSingle: latest }
+          : Promise.resolve({ data: [], error: null }),
+      range: async (start: number) => ({
+        data: start === 0 ? [version] : [],
+        count: 26,
+        error: null,
+      }),
+    })),
+  }));
+  return latest;
+}
+
+it.each(['ready', 'published'])(
+  'opens a new draft from the selected %s version on a dedicated view',
+  async (status) => {
+    withRevision(status);
+    const details = renderToStaticMarkup(await page({ version: versionId }));
+    expect(details).toContain('Créer une nouvelle révision');
+    expect(details).not.toContain('Enregistrer comme nouvelle révision');
+    const edit = renderToStaticMarkup(
+      await page({ version: versionId, edit: 'revision' }),
+    );
+    expect(edit).toContain('Brouillon à partir de la version 26');
+    expect(edit).toContain('value="Calculer une dérivée"');
+    expect(edit).toContain('Enregistrer comme nouvelle révision');
+    expect(edit).not.toContain('Historique des versions');
+  },
+);
+
+it('keeps the usual save action for a draft and blocks editing an archived exercise', async () => {
+  withRevision('draft');
+  const draft = renderToStaticMarkup(await page());
+  expect(draft).toContain('Enregistrer le brouillon');
+  expect(draft).not.toContain('Créer une nouvelle révision');
+  withRevision('ready', true);
+  const archived = renderToStaticMarkup(
+    await page({ version: versionId, edit: 'revision' }),
+  );
+  expect(archived).toContain('Restaurez l’exercice pour reprendre son édition');
+  expect(archived).not.toContain('Enregistrer comme nouvelle révision');
+});
+
+it('keeps the selected revision when browsing older pages of the history', async () => {
+  const latest = withRevision('draft');
+  const first = renderToStaticMarkup(await page());
+  expect(first).toContain(`history=2&amp;version=${versionId}`);
+  const second = renderToStaticMarkup(await page({ history: '2' }));
+  expect(latest).toHaveBeenCalledOnce();
+  expect(second).toContain('Calculer une dérivée');
+  expect(second).toContain('version 26');
 });

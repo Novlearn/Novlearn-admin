@@ -4,14 +4,14 @@ export const editorialLabels = {
   draft: 'Brouillon',
   in_review: 'À relire',
   approved: 'Approuvé',
-  published: 'Publié en préproduction',
+  ready: 'Approuvé',
+  published: 'Publication à vérifier',
   legacy: 'Historique',
   archived: 'Archivé',
 } as const;
 export const catalogueStatusOptions = [
   { value: 'draft', label: 'Brouillon' },
-  { value: 'approved', label: 'Approuvé' },
-  { value: 'published', label: 'Publié' },
+  { value: 'published', label: editorialLabels.published },
   { value: 'archived', label: 'Archivé' },
 ] as const;
 export type EditorialStatus = keyof typeof editorialLabels;
@@ -35,20 +35,27 @@ export type CatalogueItem = {
 export type CataloguePage = { items: CatalogueItem[]; total: number };
 export type CatalogueFilter = {
   query: string;
-  status: EditorialStatus | 'all';
+  status: Exclude<EditorialStatus, 'ready'> | 'all';
   sort: 'recent' | 'title';
   page: number;
 };
 export const PAGE_SIZE = 25;
+
+export function exerciseDisplayTitle(title: string, appTitle?: string | null) {
+  const readable = (value: string) =>
+    value.replace(/_+/g, ' ').replace(/\s+/g, ' ').trim();
+  return readable(appTitle ?? '') || readable(title) || 'Exercice sans titre';
+}
 
 export function catalogueFilter(params: URLSearchParams): CatalogueFilter {
   const status = params.get('status') ?? 'all';
   const page = Number(params.get('page') ?? '1');
   return {
     query: (params.get('q') ?? '').trim().slice(0, 120),
-    status: Object.hasOwn(editorialLabels, status)
-      ? (status as EditorialStatus)
-      : 'all',
+    status:
+      status !== 'ready' && Object.hasOwn(editorialLabels, status)
+        ? (status as Exclude<EditorialStatus, 'ready'>)
+        : 'all',
     sort: params.get('sort') === 'title' ? 'title' : 'recent',
     page: Number.isSafeInteger(page) && page > 0 && page <= 10000 ? page : 1,
   };

@@ -32,7 +32,7 @@ export function ActiveVersionCard({
             Cible de publication · copie locale
           </p>
           <h2 id="active-target-title" className="mt-1 text-xl font-semibold">
-            Version actuellement publiée
+            Version active sur la copie locale
           </h2>
         </div>
         <form action={`/admin/exercises/${exerciseId}`} method="get">

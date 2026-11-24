@@ -6,6 +6,7 @@ import { difficultyLabel } from '@/lib/exercise-metadata';
 import {
   catalogueStatusOptions,
   editorialLabels,
+  exerciseDisplayTitle,
   PAGE_SIZE,
   type CatalogueFilter,
   type CataloguePage,
@@ -18,15 +19,17 @@ export function EditorialBadge({
 }) {
   const color =
     status === 'published'
-      ? 'bg-green-50 text-green-700'
-      : status === 'approved'
+      ? 'bg-amber-50 text-amber-800'
+      : status === 'approved' || status === 'ready'
         ? 'bg-indigo-50 text-indigo-700'
-        : status === 'in_review'
-          ? 'bg-amber-50 text-amber-800'
-          : status === 'legacy' || status === 'archived'
-            ? 'bg-slate-100 text-slate-600'
-            : 'bg-blue-50 text-blue-700';
-  return <span className={`badge ${color}`}>{editorialLabels[status]}</span>;
+        : status === 'legacy' || status === 'archived'
+          ? 'bg-slate-100 text-slate-600'
+          : 'bg-blue-50 text-blue-700';
+  return (
+    <span className={`badge ${color}`}>
+      {editorialLabels[status === 'in_review' ? 'draft' : status]}
+    </span>
+  );
 }
 export function CatalogueList({
   data,
@@ -58,16 +61,21 @@ export function CatalogueList({
           <h1 className="mt-2 text-3xl font-semibold tracking-tight">
             Exercices
           </h1>
-          <p className="mt-3 text-slate-600">
-            Votre catalogue, ses brouillons et ses versions.
-          </p>
         </div>
-        <Link
-          href="/admin/exercises/new"
-          className="button inline-flex items-center gap-2"
-        >
-          <span aria-hidden="true">＋</span> Nouvel exercice
-        </Link>
+        <div className="flex flex-wrap items-center gap-4">
+          <Link
+            href="/admin/catalogue-sync"
+            className="text-sm font-semibold text-blue-700 hover:underline"
+          >
+            Synchroniser le catalogue
+          </Link>
+          <Link
+            href="/admin/exercises/new"
+            className="button inline-flex items-center gap-2"
+          >
+            <span aria-hidden="true">＋</span> Nouvel exercice
+          </Link>
+        </div>
       </div>
       <form
         action="/admin/exercises"
@@ -88,6 +96,9 @@ export function CatalogueList({
           Statut
           <select name="status" defaultValue={filter.status} className="field">
             <option value="all">Tous les statuts</option>
+            {filter.status === 'approved' && (
+              <option value="approved">Approuvé (ancien statut)</option>
+            )}
             {catalogueStatusOptions.map(({ value, label }) => (
               <option key={value} value={value}>
                 {label}
@@ -130,7 +141,7 @@ export function CatalogueList({
                 <p className="text-sm text-slate-600">
                   {selected.length} sélectionné{selected.length > 1 ? 's' : ''}{' '}
                   · {MAX_PUBLICATION_BATCH} maximum sur cette page. Sélectionnez
-                  des révisions approuvées ou publiées.
+                  les révisions éligibles au lot de publication.
                 </p>
                 <button
                   type="submit"
@@ -164,9 +175,11 @@ export function CatalogueList({
                   </caption>
                   <thead className="bg-slate-50 text-xs text-slate-500">
                     <tr>
-                      <th scope="col" className="px-4 py-3 font-semibold">
-                        <span className="sr-only">Sélection</span>
-                      </th>
+                      {publicationEnabled && (
+                        <th scope="col" className="px-4 py-3 font-semibold">
+                          <span className="sr-only">Sélection</span>
+                        </th>
+                      )}
                       {[
                         'Exercice',
                         'Chapitre · niveau',
@@ -186,117 +199,112 @@ export function CatalogueList({
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100">
-                    {data.items.map((item) => (
-                      <tr key={item.id} className="hover:bg-slate-50/70">
-                        <td className="px-4 py-5">
+                    {data.items.map((item) => {
+                      const title = exerciseDisplayTitle(
+                        item.title,
+                        item.appTitle,
+                      );
+                      return (
+                        <tr key={item.id} className="hover:bg-slate-50/70">
                           {publicationEnabled && (
-                            <input
-                              type="checkbox"
-                              name="version"
-                              value={item.versionId ?? ''}
-                              aria-label={`Sélectionner ${item.title}`}
-                              checked={
-                                !!item.versionId &&
-                                selected.includes(item.versionId)
-                              }
-                              disabled={
-                                !item.versionId ||
-                                item.archived ||
-                                !['approved', 'published'].includes(
-                                  item.status,
-                                ) ||
-                                (selected.length >= MAX_PUBLICATION_BATCH &&
-                                  !selected.includes(item.versionId))
-                              }
-                              onChange={(event) => {
-                                const versionId = item.versionId;
-                                const checked = event.target.checked;
-                                if (!versionId) return;
-                                setSelected((values) =>
-                                  checked
-                                    ? [
-                                        ...new Set([
-                                          ...values.filter((id) =>
+                            <td className="px-4 py-5">
+                              <input
+                                type="checkbox"
+                                name="version"
+                                value={item.versionId ?? ''}
+                                aria-label={`Sélectionner ${title}`}
+                                checked={
+                                  !!item.versionId &&
+                                  selected.includes(item.versionId)
+                                }
+                                disabled={
+                                  !item.versionId ||
+                                  item.archived ||
+                                  !['approved', 'published'].includes(
+                                    item.status,
+                                  ) ||
+                                  (selected.length >= MAX_PUBLICATION_BATCH &&
+                                    !selected.includes(item.versionId))
+                                }
+                                onChange={(event) => {
+                                  const versionId = item.versionId;
+                                  const checked = event.target.checked;
+                                  if (!versionId) return;
+                                  setSelected((values) =>
+                                    checked
+                                      ? [
+                                          ...new Set([
+                                            ...values.filter((id) =>
+                                              admissible.has(id),
+                                            ),
+                                            versionId,
+                                          ]),
+                                        ].slice(0, MAX_PUBLICATION_BATCH)
+                                      : values.filter(
+                                          (id) =>
+                                            id !== versionId &&
                                             admissible.has(id),
-                                          ),
-                                          versionId,
-                                        ]),
-                                      ].slice(0, MAX_PUBLICATION_BATCH)
-                                    : values.filter(
-                                        (id) =>
-                                          id !== versionId &&
-                                          admissible.has(id),
-                                      ),
-                                );
-                              }}
-                            />
+                                        ),
+                                  );
+                                }}
+                              />
+                            </td>
                           )}
-                        </td>
-                        <td className="min-w-64 px-6 py-5">
-                          <Link
-                            href={`/admin/exercises/${item.id}`}
-                            className="font-semibold text-slate-900 hover:text-blue-700"
-                          >
-                            {item.title}
-                          </Link>
-                          <p className="mt-1 text-xs text-slate-500">
-                            #{item.id} · {item.appTitle}
-                          </p>
-                          {item.skills.length > 0 && (
-                            <p className="mt-2 text-xs text-slate-500">
-                              {item.skills.join(' · ')}
+                          <td className="min-w-64 px-6 py-5">
+                            <Link
+                              href={`/admin/exercises/${item.id}`}
+                              className="font-semibold text-slate-900 hover:text-blue-700"
+                            >
+                              {title}
+                            </Link>
+                            <p className="mt-1 text-xs text-slate-500">
+                              #{item.id}
                             </p>
-                          )}
-                        </td>
-                        <td className="px-6 py-5">
-                          {item.chapter || 'À préciser'}
-                          <p className="mt-1 text-xs text-slate-500">
-                            {difficultyLabel(
-                              item.versionId && /^\d+$/.test(item.difficulty)
-                                ? Number(item.difficulty)
-                                : item.difficulty,
+                            {item.skills.length > 0 && (
+                              <p className="mt-2 text-xs text-slate-500">
+                                {item.skills.join(' · ')}
+                              </p>
                             )}
-                          </p>
-                        </td>
-                        <td className="px-6 py-5">
-                          {item.exerciseType === 'flash'
-                            ? 'Flash'
-                            : 'Classique'}
-                          <p className="mt-1 text-xs text-slate-500">
-                            {item.needsCalculator
-                              ? 'Avec calculatrice'
-                              : 'Sans calculatrice'}
-                          </p>
-                        </td>
-                        <td className="px-6 py-5">
-                          <EditorialBadge status={item.status} />
-                          <p className="mt-1 text-xs text-slate-500">
-                            {item.versionId
-                              ? 'Format canonique'
-                              : 'Ancien format · à convertir'}
-                          </p>
-                        </td>
-                        <td className="px-6 py-5">
-                          {item.revision ? `v${item.revision}` : 'Historique'}
-                          <p className="mt-1 text-xs text-slate-500">
-                            {item.versionId &&
-                            item.activeVersionId === item.versionId
-                              ? 'Version active en préproduction'
-                              : item.activeVersionId
-                                ? 'Une autre version est active en préproduction'
-                                : 'Aucun pointeur actif en préproduction'}
-                          </p>
-                        </td>
-                        <td className="whitespace-nowrap px-6 py-5 text-xs text-slate-500">
-                          {item.updatedAt
-                            ? new Intl.DateTimeFormat('fr-FR', {
-                                dateStyle: 'medium',
-                                timeZone: 'Europe/Paris',
-                              }).format(new Date(item.updatedAt))
-                            : 'Date inconnue'}
-                        </td>
-                      </tr>
-                    ))}
+                          </td>
+                          <td className="px-6 py-5">
+                            {item.chapter || 'À préciser'}
+                            <p className="mt-1 text-xs text-slate-500">
+                              {difficultyLabel(
+                                item.versionId && /^\d+$/.test(item.difficulty)
+                                  ? Number(item.difficulty)
+                                  : item.difficulty,
+                              )}
+                            </p>
+                          </td>
+                          <td className="px-6 py-5">
+                            {item.exerciseType === 'flash'
+                              ? 'Flash'
+                              : 'Classique'}
+                            <p className="mt-1 text-xs text-slate-500">
+                              {item.needsCalculator
+                                ? 'Avec calculatrice'
+                                : 'Sans calculatrice'}
+                            </p>
+                          </td>
+                          <td className="px-6 py-5">
+                            <EditorialBadge
+                              status={item.archived ? 'archived' : item.status}
+                            />
+                          </td>
+                          <td className="px-6 py-5">
+                            {item.revision ? `v${item.revision}` : '—'}
+                          </td>
+                          <td className="whitespace-nowrap px-6 py-5 text-xs text-slate-500">
+                            {item.updatedAt
+                              ? new Intl.DateTimeFormat('fr-FR', {
+                                  dateStyle: 'medium',
+                                  timeZone: 'Europe/Paris',
+                                }).format(new Date(item.updatedAt))
+                              : 'Date inconnue'}
+                          </td>
+                        </tr>
+                      );
+                    })}
                   </tbody>
                 </table>
               </div>

@@ -13,6 +13,7 @@ import { readPublicationConfirmationKey } from '@/lib/publication-service';
 import { EditorialBadge } from '@/components/catalogue-list';
 import {
   draftEnvelope,
+  exerciseDisplayTitle,
   isExerciseId,
   isUuid,
   revisionDiff,
@@ -48,7 +49,7 @@ export default async function ExercisePage({
   if (!isExerciseId(id)) notFound();
   const { data: parent, error: parentError } = await client
     .from('exercises')
-    .select('id,catalog_id,title,active_version_id,admin_archived_at')
+    .select('id,catalog_id,title,app_title,active_version_id,admin_archived_at')
     .eq('id', id)
     .maybeSingle();
   if (parentError) throw new Error('Catalogue unavailable');
@@ -68,8 +69,23 @@ export default async function ExercisePage({
     .order('revision', { ascending: false })
     .range((versionPage - 1) * 25, versionPage * 25 - 1);
   if (historyError) throw new Error('Versions unavailable');
+  const latest =
+    typeof query.version !== 'string' && versionPage > 1
+      ? await client
+          .from('exercise_versions')
+          .select('id')
+          .eq('exercise_id', id)
+          .order('revision', { ascending: false })
+          .limit(1)
+          .maybeSingle()
+      : null;
+  if (latest?.error) throw new Error('Latest version unavailable');
   const versionId =
-    typeof query.version === 'string' ? query.version : history?.[0]?.id;
+    typeof query.version === 'string'
+      ? query.version
+      : latest
+        ? latest.data?.id
+        : history?.[0]?.id;
   if (versionId && !isUuid(versionId)) notFound();
   const versionResult = versionId
     ? await client
@@ -82,6 +98,50 @@ export default async function ExercisePage({
   if (versionResult?.error) throw new Error('Version unavailable');
   if (versionId && !versionResult?.data) notFound();
   const version = versionResult?.data;
+  const editable =
+    version?.editorial_status === 'draft' && !parent.admin_archived_at;
+  const canonical = version && draftEnvelope(version.definition);
+  const title = canonical
+    ? exerciseDisplayTitle(
+        version.definition.title,
+        version.definition.catalogue?.appTitle,
+      )
+    : exerciseDisplayTitle(parent.title ?? '', parent.app_title);
+  if (
+    query.edit === 'revision' &&
+    version &&
+    canonical &&
+    !editable &&
+    !parent.admin_archived_at
+  ) {
+    return (
+      <div className="max-w-4xl">
+        <Link
+          href={`/admin/exercises/${id}?version=${version.id}&history=${versionPage}`}
+          className="text-sm font-medium text-blue-700"
+        >
+          ← Revenir à la version {version.revision}
+        </Link>
+        <h1 className="mt-7 text-3xl font-semibold tracking-tight">
+          Nouvelle révision
+        </h1>
+        <p className="mb-8 mt-2 text-slate-600">
+          {title} · Brouillon à partir de la version {version.revision}
+        </p>
+        <DraftMetadataForm
+          key={`new-${version.id}:${version.approval_fingerprint_sha256}:${version.test_epoch}`}
+          engineEnabled={engineEnabled}
+          canRecordTests={canRecordTests}
+          exerciseId={id}
+          versionId={version.id}
+          fingerprint={version.approval_fingerprint_sha256}
+          testEpoch={version.test_epoch}
+          definition={version.definition}
+          newRevision
+        />
+      </div>
+    );
+  }
   let targetObservation: ActiveVersionObservation = { kind: 'disabled' };
   if (readLocalActiveVersionConfiguration(process.env)) {
     if (!activeCatalogId(parent.catalog_id))
@@ -106,9 +166,6 @@ export default async function ExercisePage({
         canonicalizationVersion: version.canonicalization_version,
       })
     : null;
-  const editable =
-    version?.editorial_status === 'draft' && !parent.admin_archived_at;
-  const canonical = version && draftEnvelope(version.definition);
   const testHistory = version
     ? await client
         .from('admin_exercise_test_runs')
@@ -149,9 +206,12 @@ export default async function ExercisePage({
     if (!other) notFound();
     comparison = revisionDiff(other.definition, version.definition);
   }
-  const title = canonical
-    ? version.definition.title
-    : parent.title || `Exercice #${id}`;
+  const historyLink = (page: number) => {
+    const params = new URLSearchParams({ history: String(page) });
+    if (versionId) params.set('version', versionId);
+    if (typeof query.compare === 'string') params.set('compare', query.compare);
+    return `/admin/exercises/${id}?${params}`;
+  };
   return (
     <div className="max-w-6xl">
       <Link
@@ -255,33 +315,15 @@ export default async function ExercisePage({
               <p className="mt-3 text-sm leading-6 text-slate-600">
                 {parent.admin_archived_at
                   ? 'Restaurez l’exercice pour reprendre son édition.'
-                  : 'Cette révision est en lecture seule. Créez une nouvelle révision pour la modifier.'}
+                  : 'La nouvelle révision commencera en brouillon à partir de cette version.'}
               </p>
               {!parent.admin_archived_at && (
-                <details className="mt-5">
-                  <summary className="cursor-pointer font-semibold text-blue-700">
-                    Préparer une nouvelle révision
-                  </summary>
-                  <div className="mt-5">
-                    <DraftMetadataForm
-                      engineEnabled={engineEnabled}
-                      canRecordTests={canRecordTests}
-                      key={
-                        'new-' +
-                        version.id +
-                        version.approval_fingerprint_sha256 +
-                        ':' +
-                        version.test_epoch
-                      }
-                      exerciseId={id}
-                      versionId={version.id}
-                      fingerprint={version.approval_fingerprint_sha256}
-                      testEpoch={version.test_epoch}
-                      definition={version.definition as ExerciseDefinition}
-                      newRevision
-                    />
-                  </div>
-                </details>
+                <Link
+                  className="button mt-5 inline-flex"
+                  href={`/admin/exercises/${id}?version=${version.id}&history=${versionPage}&edit=revision`}
+                >
+                  Créer une nouvelle révision
+                </Link>
               )}
             </section>
           )}
@@ -415,23 +457,21 @@ export default async function ExercisePage({
           )}
         </div>
         <aside className="space-y-5">
-          <ActiveVersionCard
-            observation={targetObservation}
-            selected={comparable}
-            exerciseId={id}
-            refreshQuery={{
-              version: versionId,
-              compare:
-                typeof query.compare === 'string' ? query.compare : undefined,
-              history: String(versionPage),
-            }}
-          />
+          {targetObservation.kind !== 'disabled' && (
+            <ActiveVersionCard
+              observation={targetObservation}
+              selected={comparable}
+              exerciseId={id}
+              refreshQuery={{
+                version: versionId,
+                compare:
+                  typeof query.compare === 'string' ? query.compare : undefined,
+                history: String(versionPage),
+              }}
+            />
+          )}
           <section className="card">
             <h2 className="text-lg font-semibold">Historique des versions</h2>
-            <p className="mt-2 text-xs leading-5 text-slate-500">
-              Version active Staging : {parent.active_version_id ?? 'aucune'}.
-              La publication en Production est une opération distincte.
-            </p>
             <ul className="mt-5 space-y-4">
               {history?.map((item) => (
                 <li key={item.id} className="border-t border-slate-100 pt-4">
@@ -445,6 +485,11 @@ export default async function ExercisePage({
                     <EditorialBadge
                       status={item.editorial_status as EditorialStatus}
                     />
+                    {item.id === parent.active_version_id && (
+                      <p className="mt-1 text-xs text-slate-500">
+                        Active en Staging
+                      </p>
+                    )}
                   </div>
                   {version && item.id !== versionId && (
                     <Link
@@ -467,20 +512,12 @@ export default async function ExercisePage({
               className="mt-5 flex justify-between text-xs text-blue-700"
             >
               {versionPage > 1 ? (
-                <Link
-                  href={`/admin/exercises/${id}?history=${versionPage - 1}`}
-                >
-                  ← Précédentes
-                </Link>
+                <Link href={historyLink(versionPage - 1)}>← Précédentes</Link>
               ) : (
                 <span />
               )}
               {versionPage * 25 < (count ?? 0) && (
-                <Link
-                  href={`/admin/exercises/${id}?history=${versionPage + 1}`}
-                >
-                  Suivantes →
-                </Link>
+                <Link href={historyLink(versionPage + 1)}>Suivantes →</Link>
               )}
             </nav>
           </section>

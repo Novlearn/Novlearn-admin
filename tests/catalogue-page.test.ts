@@ -1,3 +1,4 @@
+import { renderToStaticMarkup } from 'react-dom/server';
 import { beforeEach, expect, it, vi } from 'vitest';
 vi.mock('server-only', () => ({}));
 const fake = vi.hoisted(() => ({
@@ -66,4 +67,56 @@ it('requires server access before loading any catalogue data', async () => {
     'redirect:/login',
   );
   expect(fake.load).not.toHaveBeenCalled();
+});
+
+it('shows the readable title and keeps the Staging status distinct from confirmed publication', async () => {
+  const exercise = {
+    ...item(),
+    title: 'nom_interne_exercice',
+    appTitle: 'Calcul_dérivé',
+    status: 'published',
+    activeVersionId: item().versionId,
+  };
+  fake.load.mockResolvedValue({ total: 1, items: [exercise] });
+  const html = renderToStaticMarkup(
+    await Page({ searchParams: Promise.resolve({}) }),
+  );
+  expect(html).toContain('Calcul dérivé');
+  expect(html).toContain(`/admin/exercises/${exercise.id}`);
+  expect(html).toContain('Publication à vérifier');
+  expect(html).not.toContain('nom_interne_exercice');
+  expect(html).not.toContain('Publié en préproduction');
+  expect(html).not.toContain('Version active en préproduction');
+});
+
+it('shows a readable fallback title, a draft in review and an archived exercise', async () => {
+  fake.load.mockResolvedValue({
+    total: 3,
+    items: [
+      {
+        ...item(),
+        title: 'Équations__du_second_degré',
+        appTitle: ' ',
+        status: 'in_review',
+      },
+      { ...item(), id: '2', archived: true },
+      { ...item(), id: '3', status: 'ready' },
+    ],
+  });
+  const html = renderToStaticMarkup(
+    await Page({ searchParams: Promise.resolve({}) }),
+  );
+  expect(html).toContain('Équations du second degré');
+  expect(html).toContain('>Brouillon</span>');
+  expect(html).toContain('>Archivé</span>');
+  expect(html).toContain('>Approuvé</span>');
+  expect(html).toContain('href="/admin/catalogue-sync"');
+});
+
+it('does not send the unsupported ready filter to the Staging RPC', async () => {
+  await Page({ searchParams: Promise.resolve({ status: 'ready' }) });
+  expect(fake.load).toHaveBeenCalledWith(
+    expect.anything(),
+    expect.objectContaining({ status: 'all' }),
+  );
 });

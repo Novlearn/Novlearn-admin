@@ -72,6 +72,8 @@ async function handle(request: NextRequest, mutation: boolean) {
         (body.exerciseId !== null && !isExerciseId(body.exerciseId)) ||
         (body.versionId !== null && !isUuid(body.versionId)) ||
         (body.fingerprint !== null && !isFingerprint(body.fingerprint)) ||
+        (body.versionId === null) !== (body.fingerprint === null) ||
+        (body.versionId !== null && body.exerciseId === null) ||
         Object.keys(body).some(
           (key) =>
             ![

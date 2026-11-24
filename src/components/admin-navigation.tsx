@@ -30,15 +30,15 @@ export function AdminNavigation({
       links: [
         ['/admin/chapters', 'Chapitres'],
         ['/admin/competences', 'Compétences'],
+        ...(publicationEnabled ? [['/admin/publication', 'Publications']] : []),
+        ...(catalogueSyncEnabled
+          ? [['/admin/catalogue-sync', 'Synchronisation']]
+          : []),
       ],
     },
     {
       label: 'Suivi',
       links: [
-        ...(publicationEnabled ? [['/admin/publication', 'Publications']] : []),
-        ...(catalogueSyncEnabled
-          ? [['/admin/catalogue-sync', 'Synchronisation']]
-          : []),
         ...(statisticsEnabled ? [['/admin/statistics', 'Statistiques']] : []),
         ...(usersEnabled ? [['/admin/users', 'Utilisateurs']] : []),
         ...(feedbackEnabled ? [['/admin/feedback', 'Feedbacks']] : []),

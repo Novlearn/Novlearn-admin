@@ -72,6 +72,35 @@ Le parcours relie brouillon, tests, demande de relecture, approbation humaine et
 publication. Les statuts SQL effectifs sont portés par les contrats et RPC ; la
 formulation cible du CDC ne prouve pas l’activation de chaque étape.
 
+La liste et la fiche affichent en priorité le titre destiné à l’application.
+Les underscores sont remplacés par des espaces à l’affichage, y compris quand
+seul le titre interne est renseigné. Les identifiants et titres stockés restent
+utilisés par les contrats existants.
+
+L’éditeur présente le titre élève et conserve les deux titres d’une définition
+existante tant que ce champ n’est pas modifié. L’aperçu et la sauvegarde
+utilisent la même définition préparée. L’enregistrement d’un brouillon cible
+sa révision et son empreinte. Depuis une révision en lecture seule, l’action
+« Créer une nouvelle révision » ouvre l’éditeur sur une copie de sa définition
+et sauvegarde un nouveau brouillon sur l’identité d’exercice existante.
+La pagination de l’historique conserve la révision consultée.
+
+Dans le catalogue Admin, une révision en relecture s’affiche comme « Brouillon »
+et le statut `ready` du contrat de synchronisation comme « Approuvé ».
+Le filtre du catalogue Staging ne prend pas en charge `ready`. La page
+Synchroniser le catalogue liste les révisions prêtes et leurs dépendances.
+Le statut `published` remonté par Staging s’affiche comme « Publication à
+vérifier », y compris dans le filtre correspondant. Le pointeur actif de
+Staging est indiqué dans l’historique de la fiche. La confirmation Production
+d’un lot se consulte dans le reçu de synchronisation. Le catalogue des
+exercices ne lit pas encore la révision active en Production.
+
+En Staging, l’ancienne RPC de relecture s’appuie encore sur `in_review`,
+alors que les révisions acceptent `draft`, `ready` et `published`.
+La RPC qui marque une révision `ready` ne vérifie pas le rapport de tests.
+Le branchement de l’approbation vers la synchronisation doit intégrer les
+contrôles Engine et la validation humaine définis dans le CDC.
+
 La récupération Creator est facultative, désactivée par défaut, dans le
 `sessionStorage` de l’onglet : 30 minutes depuis la dernière écriture, 256 Kio,
 choix explicite de restaurer ou d’effacer. Elle contient les attendus privés et
