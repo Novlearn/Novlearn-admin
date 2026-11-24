@@ -1,10 +1,13 @@
 import { describe, expect, it, vi } from 'vitest';
 vi.mock('server-only', () => ({}));
-const fake = vi.hoisted(() => ({ create: vi.fn() }));
+const fake = vi.hoisted(() => ({ create: vi.fn(), remote: vi.fn() }));
 vi.mock('novlearn-exercise-engine/node-host', () => ({
   createNodeHost: fake.create,
 }));
-import { isEngineEnabled } from '@/lib/engine-identity';
+vi.mock('@/lib/engine-remote-transport', () => ({
+  runRemoteEngine: fake.remote,
+}));
+import { isEngineEnabled, usesRemoteEngine } from '@/lib/engine-identity';
 import {
   engineFailure,
   EngineRuntimeError,
@@ -46,12 +49,42 @@ describe('profil Engine explicite', () => {
         ENGINE_URL: 'http://127.0.0.1:3151/run',
       }),
     ).toBe(false);
-    expect(
-      isEngineEnabled({ ...remote, ENGINE_ARTIFACT_SHA256: '' }),
-    ).toBe(false);
-    expect(isEngineEnabled({ ...remote, ENGINE_TOKEN: 'short' })).toBe(
+    expect(isEngineEnabled({ ...remote, ENGINE_ARTIFACT_SHA256: '' })).toBe(
       false,
     );
+    expect(isEngineEnabled({ ...remote, ENGINE_TOKEN: 'short' })).toBe(false);
+  });
+  it('utilise le host HTTPS Staging en développement sans initialiser le moteur local', async () => {
+    vi.stubEnv('VERCEL', '');
+    vi.stubEnv('NODE_ENV', 'development');
+    vi.stubEnv('ADMIN_ENGINE_ENABLED', 'true');
+    vi.stubEnv('ENGINE_URL', 'https://staging.novlearn.fr/run');
+    vi.stubEnv('ENGINE_ARTIFACT_SHA256', 'a'.repeat(64));
+    vi.stubEnv('ENGINE_TOKEN', '');
+    try {
+      expect(isEngineEnabled(process.env)).toBe(false);
+      await expect(runEngine('validateDefinition', {})).rejects.toMatchObject({
+        reason: 'runtime-profile',
+      });
+      expect(fake.remote).not.toHaveBeenCalled();
+      vi.stubEnv('ENGINE_TOKEN', 'synthetic-staging-token-at-least-32-bytes');
+      fake.remote.mockResolvedValueOnce({ ok: true, value: { ok: true } });
+      expect(isEngineEnabled(process.env)).toBe(true);
+      await expect(runEngine('validateDefinition', {})).resolves.toEqual({
+        ok: true,
+      });
+      expect(fake.remote).toHaveBeenCalledWith(
+        'validateDefinition',
+        {},
+        undefined,
+      );
+      expect(fake.create).not.toHaveBeenCalled();
+      expect(usesRemoteEngine({ ...process.env, NODE_ENV: 'production' })).toBe(
+        false,
+      );
+    } finally {
+      vi.unstubAllEnvs();
+    }
   });
   it('distingue surcharge, contrat distant et erreur interne', () => {
     expect(engineFailure(new EngineRuntimeError('busy'))).toMatchObject({
@@ -66,5 +99,14 @@ describe('profil Engine explicite', () => {
       code: 'engine_internal',
       message: 'Erreur interne pendant le traitement Engine.',
     });
+  });
+  it('laisse le lanceur local neutraliser une URL distante au niveau du processus', () => {
+    const env = {
+      NODE_ENV: 'development',
+      ADMIN_ENGINE_ENABLED: 'true',
+      ENGINE_URL: '',
+    };
+    expect(usesRemoteEngine(env)).toBe(false);
+    expect(isEngineEnabled(env)).toBe(true);
   });
 });

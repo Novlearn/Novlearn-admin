@@ -13,6 +13,8 @@
     "test:smoke": "node scripts/smoke-auth.mjs",
     "dev": "next dev",
     "predev": "node scripts/prepare-mathlive.mjs",
+    "dev:engine": "node scripts/run-admin-local-engine.mjs",
+    "predev:engine": "node scripts/prepare-mathlive.mjs",
     "build": "next build",
     "prebuild": "node scripts/prepare-mathlive.mjs",
     "test:math-input:browser": "node scripts/math-input-browser.mjs",

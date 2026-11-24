@@ -1,5 +1,5 @@
 import 'server-only';
-import { isEngineEnabled } from './engine-identity';
+import { isEngineEnabled, usesRemoteEngine } from './engine-identity';
 import { RemoteEngineError, runRemoteEngine } from './engine-remote-transport';
 import { randomUUID } from 'node:crypto';
 import {
@@ -30,7 +30,7 @@ export async function runEngine(
   payload: JsonObject,
   signal?: AbortSignal,
 ): Promise<JsonValue> {
-  if (process.env.VERCEL === '1') {
+  if (usesRemoteEngine(process.env)) {
     if (!isEngineEnabled(process.env))
       throw new EngineRuntimeError('runtime-profile');
     try {

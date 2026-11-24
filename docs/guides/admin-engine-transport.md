@@ -79,8 +79,27 @@ actuelles demeurent distinctes. Ne jamais configurer `127.0.0.1` comme URL Verce
 
 Le runtime Vercel sélectionne obligatoirement ce transport HTTPS. Si la
 configuration est absente ou invalide, les routes d’édition restent fermées.
-Hors Vercel, les transports locaux précédents sont conservés. La configuration
+En développement avec `npm run dev`, les mêmes quatre variables serveur
+dans `.env.development.local` permettent d’utiliser le host Engine Staging,
+y compris depuis Windows. Quand `ENGINE_URL` est définie en développement,
+le transport vérifie la configuration HTTPS complète avant tout appel.
+Sans `ENGINE_URL`, le runtime conserve son transport local. La configuration
 du navigateur ne contient que les routes Admin.
+
+### Archive locale sous Windows
+
+`npm run dev:engine` démarre Admin sur `http://127.0.0.1:3150/login` et
+l’Engine installé dans un conteneur Linux sans réseau. Docker Desktop doit
+avoir démarré son moteur Linux. Le lanceur vérifie l’empreinte de l’archive
+et effectue une prévisualisation synthétique avant d’ouvrir Admin. Il
+génère une capacité temporaire pour le transport local sur la boucle locale.
+La connexion et le catalogue utilisent toujours la configuration Supabase
+Staging existante.
+
+`npm run dev:engine -- --check` exécute la vérification sans lancer Admin.
+Si l’image de base manque au cache Docker, le lanceur télécharge sa référence
+épinglée au premier démarrage. Les calculs eux-mêmes utilisent uniquement le
+conteneur local et les dépendances déjà installées dans le dépôt.
 
 ## Erreurs montrées dans l’interface
 

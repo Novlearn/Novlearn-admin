@@ -10,7 +10,7 @@ export const certifiedEngineIdentity = Object.freeze({
     '3068549e521d1f643ced8564e94ad645dbccace22a9ec173c912530af3766028',
 });
 
-/** Vercel can use only the explicitly configured HTTPS Engine transport. */
+/** The HTTPS transport is pinned to the authenticated Staging host. */
 export function hasRemoteEngineConfiguration(
   env: Record<string, string | undefined>,
 ) {
@@ -36,9 +36,15 @@ export function hasRemoteEngineConfiguration(
   }
 }
 
+export function usesRemoteEngine(env: Record<string, string | undefined>) {
+  return (
+    env.VERCEL === '1' || (env.NODE_ENV === 'development' && !!env.ENGINE_URL)
+  );
+}
+
 export function isEngineEnabled(env: Record<string, string | undefined>) {
   return (
     env.ADMIN_ENGINE_ENABLED === 'true' &&
-    (env.VERCEL !== '1' || hasRemoteEngineConfiguration(env))
+    (!usesRemoteEngine(env) || hasRemoteEngineConfiguration(env))
   );
 }
