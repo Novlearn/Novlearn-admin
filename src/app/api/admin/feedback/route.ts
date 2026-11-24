@@ -161,14 +161,19 @@ export async function POST(request: NextRequest) {
     // A replay of the same decision is a successful no-op. Avoid invoking the
     // privileged RPC again for a feedback that is already in a terminal state.
     if (feedback.status === requestedStatus) return success(requestedStatus);
-    if (feedback.status !== 'pending' && feedback.status !== null)
+    if (feedback.status !== 'pending' && feedback.status !== null) {
+      const terminalStatus: FeedbackStatus | null =
+        feedback.status === 'approved' || feedback.status === 'rejected'
+          ? feedback.status
+          : null;
       return access.finish(
         {
           error: 'Ce feedback a déjà reçu une décision différente.',
-          status: feedback.status,
+          ...(terminalStatus ? { status: terminalStatus } : {}),
         },
         409,
       );
+    }
 
     const { data, error } = await access.client.rpc('admin_review_feedback', {
       p_feedback_id: input.feedbackId,
