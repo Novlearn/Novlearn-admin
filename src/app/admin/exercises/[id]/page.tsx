@@ -4,9 +4,6 @@ import type { ExerciseDefinition } from 'novlearn-exercise-engine';
 import { CatalogueAction } from '@/components/catalogue-action';
 import { DraftMetadataForm } from '@/components/draft-metadata-form';
 import { ExercisePreview } from '@/components/exercise-preview';
-import { TestHistory } from '@/components/test-history';
-import { EditorialReview } from '@/components/editorial-review';
-import { ReviewHistory } from '@/components/review-history';
 import { PublicationPanel } from '@/components/publication-panel';
 import { readPublicationPgConfiguration } from '@/lib/publication-pg';
 import { readPublicationConfirmationKey } from '@/lib/publication-service';
@@ -16,11 +13,9 @@ import {
   exerciseDisplayTitle,
   isExerciseId,
   isUuid,
-  revisionDiff,
   type EditorialStatus,
 } from '@/lib/catalogue';
 import { requireCatalogueClient, versionColumns } from '@/lib/catalogue-server';
-import { isCurrentTestReceipt } from '@/lib/test-receipt-state';
 import { readTestSigningConfiguration } from '@/lib/test-receipt';
 import { isEngineEnabled } from '@/lib/engine-identity';
 import {
@@ -30,6 +25,7 @@ import {
 import { activeCatalogId, comparableVersion } from '@/lib/active-version';
 import { readLocalActiveVersionConfiguration } from '@/lib/active-version-config';
 import { loadLocalActiveVersion } from '@/lib/active-version-server';
+import NewExercisePage from '../new/page';
 
 export const dynamic = 'force-dynamic';
 
@@ -40,11 +36,20 @@ export default async function ExercisePage({
   params: Promise<{ id: string }>;
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
+  const { id } = await params;
+  // The local dev router can resolve the literal creation slug through this route.
+  if (id === 'new') return NewExercisePage();
   const client = await requireCatalogueClient();
   const canRecordTests = !!readTestSigningConfiguration(process.env);
   const engineEnabled = isEngineEnabled(process.env);
   const publicationConfig = readPublicationPgConfiguration(process.env);
-  const { id } = await params;
+  const publicationEnabled =
+    !!publicationConfig &&
+    !!readPublicationConfirmationKey(
+      process.env,
+      publicationConfig.localFixture,
+    ) &&
+    engineEnabled;
   const query = await searchParams;
   if (!isExerciseId(id)) notFound();
   const { data: parent, error: parentError } = await client
@@ -166,50 +171,9 @@ export default async function ExercisePage({
         canonicalizationVersion: version.canonicalization_version,
       })
     : null;
-  const testHistory = version
-    ? await client
-        .from('admin_exercise_test_runs')
-        .select('id,recorded_at,fingerprint,test_epoch,passed,payload')
-        .eq('version_id', version.id)
-        .order('recorded_at', { ascending: false })
-        .order('id', { ascending: false })
-        .limit(10)
-    : null;
-  const currentReceipt = version
-    ? testHistory?.data?.find(
-        (run) =>
-          run.fingerprint === version.approval_fingerprint_sha256 &&
-          run.test_epoch === version.test_epoch,
-      )
-    : undefined;
-  const reviewHistory = version
-    ? await client
-        .from('admin_exercise_reviews')
-        .select(
-          'id,actor_id,recorded_at,action,comment,fingerprint,test_epoch,receipt_id,checklist',
-        )
-        .eq('version_id', version.id)
-        .order('recorded_at', { ascending: false })
-        .order('id', { ascending: false })
-        .limit(10)
-    : null;
-  let comparison: ReturnType<typeof revisionDiff> | null = null;
-  if (typeof query.compare === 'string') {
-    if (!isUuid(query.compare) || !version) notFound();
-    const { data: other, error } = await client
-      .from('exercise_versions')
-      .select('definition')
-      .eq('id', query.compare)
-      .eq('exercise_id', id)
-      .maybeSingle();
-    if (error) throw new Error('Comparison unavailable');
-    if (!other) notFound();
-    comparison = revisionDiff(other.definition, version.definition);
-  }
   const historyLink = (page: number) => {
     const params = new URLSearchParams({ history: String(page) });
     if (versionId) params.set('version', versionId);
-    if (typeof query.compare === 'string') params.set('compare', query.compare);
     return `/admin/exercises/${id}?${params}`;
   };
   return (
@@ -223,7 +187,7 @@ export default async function ExercisePage({
       <div className="mb-8 mt-7 flex flex-wrap items-start justify-between gap-5">
         <div>
           <p className="text-sm text-slate-500">
-            Staging · #{id}
+            #{id}
             {version ? ` · version ${version.revision}` : ''}
           </p>
           <h1 className="mt-2 text-3xl font-semibold tracking-tight">
@@ -240,26 +204,19 @@ export default async function ExercisePage({
           </div>
         </div>
         <div className="flex flex-wrap gap-3">
+          {version && canonical && !editable && !parent.admin_archived_at && (
+            <Link
+              className="button inline-flex items-center"
+              href={`/admin/exercises/${id}?version=${version.id}&history=${versionPage}&edit=revision`}
+            >
+              Créer une nouvelle révision
+            </Link>
+          )}
           {version && (
             <CatalogueAction
               action="duplicate"
               exerciseId={id}
               versionId={version.id}
-            />
-          )}
-          {version && canonical && !editable && (
-            <ExercisePreview
-              engineEnabled={engineEnabled}
-              canRecordTests={canRecordTests}
-              key={
-                'preview-' + version.id + version.approval_fingerprint_sha256
-              }
-              definition={version.definition as ExerciseDefinition}
-              saved={{
-                id: version.id,
-                fingerprint: version.approval_fingerprint_sha256,
-                epoch: version.test_epoch,
-              }}
             />
           )}
           <CatalogueAction
@@ -277,21 +234,25 @@ export default async function ExercisePage({
           Brouillon enregistré dans Staging.
         </p>
       )}
+      {query.saved === 'approved' && version?.editorial_status === 'ready' && (
+        <p
+          role="status"
+          className="mb-6 rounded-xl border border-green-200 bg-green-50 p-4 text-sm text-green-800"
+        >
+          Révision approuvée dans Staging. Elle peut être synchronisée plus
+          tard.
+        </p>
+      )}
       <div className="grid items-start gap-6 xl:grid-cols-[1fr_280px]">
         <div className="space-y-6">
           {!version ? (
-            <section className="notice">
-              <h2 className="font-semibold">Contenu historique</h2>
-              <p>
-                Cet exercice n’a pas encore de définition canonique. Son contenu
-                reste conservé ; une migration explicite est nécessaire avant
-                son édition.
-              </p>
-            </section>
+            <p className="notice">
+              Exercice historique. Une migration est nécessaire pour le
+              modifier.
+            </p>
           ) : !canonical ? (
             <section className="notice">
-              Cette définition ne possède pas une enveloppe canonique
-              compatible. Elle est conservée en lecture seule.
+              Cette version est disponible en lecture seule.
             </section>
           ) : editable ? (
             <DraftMetadataForm
@@ -309,84 +270,26 @@ export default async function ExercisePage({
               testEpoch={version.test_epoch}
               definition={version.definition as ExerciseDefinition}
             />
-          ) : (
-            <section className="card">
-              <h2 className="text-xl font-semibold">Version conservée</h2>
-              <p className="mt-3 text-sm leading-6 text-slate-600">
-                {parent.admin_archived_at
-                  ? 'Restaurez l’exercice pour reprendre son édition.'
-                  : 'La nouvelle révision commencera en brouillon à partir de cette version.'}
-              </p>
-              {!parent.admin_archived_at && (
-                <Link
-                  className="button mt-5 inline-flex"
-                  href={`/admin/exercises/${id}?version=${version.id}&history=${versionPage}&edit=revision`}
-                >
-                  Créer une nouvelle révision
-                </Link>
-              )}
-            </section>
-          )}
-          {version && (
-            <section className="card">
-              <h2 className="text-lg font-semibold">
-                Définition de la révision
-              </h2>
-              <p className="mt-2 text-sm text-slate-500">
-                {version.engine_contract} · {version.generation_version}
-              </p>
-              <details className="mt-4">
-                <summary className="cursor-pointer text-sm font-semibold text-blue-700">
-                  Consulter le format canonique
-                </summary>
-                <pre className="mt-4 max-h-96 overflow-auto rounded-lg bg-slate-50 p-4 text-xs leading-6">
-                  {JSON.stringify(version.definition, null, 2)}
-                </pre>
-              </details>
-              <p className="mt-4 text-xs text-slate-500">
-                Cette définition privée peut contenir les réponses attendues.
-                Elle est réservée aux administrateurs.
-              </p>
-            </section>
-          )}
-          {version && (
-            <TestHistory
-              runs={testHistory?.data ?? []}
-              fingerprint={version.approval_fingerprint_sha256}
-              epoch={version.test_epoch}
-              unavailable={!!testHistory?.error}
+          ) : parent.admin_archived_at ? (
+            <p className="notice">
+              Restaurez l’exercice pour reprendre son édition.
+            </p>
+          ) : null}
+          {version && canonical && !editable && (
+            <ExercisePreview
+              engineEnabled={engineEnabled}
+              canRecordTests={canRecordTests}
+              key={version.id + version.approval_fingerprint_sha256}
+              definition={version.definition}
+              saved={{
+                id: version.id,
+                fingerprint: version.approval_fingerprint_sha256,
+                epoch: version.test_epoch,
+              }}
             />
           )}
-          {version && canonical && (
-            <EditorialReview
-              key={'review-' + version.id + '-' + version.updated_at}
-              versionId={version.id}
-              fingerprint={version.approval_fingerprint_sha256}
-              epoch={version.test_epoch}
-              status={version.editorial_status}
-              receiptId={
-                currentReceipt?.passed &&
-                isCurrentTestReceipt(
-                  currentReceipt,
-                  version.approval_fingerprint_sha256,
-                  version.test_epoch,
-                )
-                  ? currentReceipt.id
-                  : null
-              }
-              enabled={process.env.ADMIN_EDITORIAL_REVIEW_ENABLED === 'true'}
-              archived={!!parent.admin_archived_at}
-            />
-          )}
-          {version && (
-            <ReviewHistory
-              reviews={reviewHistory?.data ?? []}
-              fingerprint={version.approval_fingerprint_sha256}
-              epoch={version.test_epoch}
-              unavailable={!!reviewHistory?.error}
-            />
-          )}
-          {version &&
+          {publicationEnabled &&
+            version &&
             canonical &&
             Number.isSafeInteger(version.test_epoch) &&
             version.test_epoch >= 0 && (
@@ -408,53 +311,9 @@ export default async function ExercisePage({
                 localFixture={
                   process.env.ADMIN_LOCAL_PUBLICATION_FIXTURE_ENABLED === 'true'
                 }
-                enabled={
-                  !!publicationConfig &&
-                  !!readPublicationConfirmationKey(
-                    process.env,
-                    publicationConfig?.localFixture,
-                  ) &&
-                  process.env.ADMIN_ENGINE_ENABLED === 'true'
-                }
+                enabled
               />
             )}
-          {comparison && (
-            <section className="card">
-              <h2 className="text-xl font-semibold">
-                Comparaison des révisions
-              </h2>
-              <p className="mt-2 text-sm text-slate-500">
-                {comparison.length} champ{comparison.length > 1 ? 's' : ''}{' '}
-                modifié{comparison.length > 1 ? 's' : ''}
-              </p>
-              <div className="mt-4 space-y-4">
-                {comparison.slice(0, 50).map((change) => (
-                  <div
-                    key={change.path}
-                    className="rounded-lg border border-slate-200 p-4"
-                  >
-                    <p className="break-all font-mono text-xs text-slate-500">
-                      {change.path}
-                    </p>
-                    <div className="mt-3 grid gap-3 md:grid-cols-2">
-                      <pre className="max-h-64 overflow-auto whitespace-pre-wrap break-all rounded bg-red-50 p-3 text-xs">
-                        {JSON.stringify(change.before, null, 2) ?? 'Absent'}
-                      </pre>
-                      <pre className="max-h-64 overflow-auto whitespace-pre-wrap break-all rounded bg-green-50 p-3 text-xs">
-                        {JSON.stringify(change.after, null, 2) ?? 'Absent'}
-                      </pre>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              {comparison.length > 50 && (
-                <p className="mt-4 text-sm text-slate-500">
-                  Les 50 premiers changements sont affichés. Les définitions
-                  complètes restent consultables.
-                </p>
-              )}
-            </section>
-          )}
         </div>
         <aside className="space-y-5">
           {targetObservation.kind !== 'disabled' && (
@@ -464,8 +323,6 @@ export default async function ExercisePage({
               exerciseId={id}
               refreshQuery={{
                 version: versionId,
-                compare:
-                  typeof query.compare === 'string' ? query.compare : undefined,
                 history: String(versionPage),
               }}
             />
@@ -477,6 +334,7 @@ export default async function ExercisePage({
                 <li key={item.id} className="border-t border-slate-100 pt-4">
                   <Link
                     href={`/admin/exercises/${id}?version=${item.id}&history=${versionPage}`}
+                    aria-current={item.id === versionId ? 'page' : undefined}
                     className={`text-sm font-semibold ${item.id === versionId ? 'text-blue-700' : 'text-slate-700'}`}
                   >
                     Version {item.revision}
@@ -491,21 +349,11 @@ export default async function ExercisePage({
                       </p>
                     )}
                   </div>
-                  {version && item.id !== versionId && (
-                    <Link
-                      href={`/admin/exercises/${id}?version=${versionId}&compare=${item.id}&history=${versionPage}`}
-                      className="mt-2 block text-xs text-blue-700"
-                    >
-                      Comparer à cette version
-                    </Link>
-                  )}
                 </li>
               ))}
             </ul>
             {!history?.length && (
-              <p className="mt-4 text-sm text-slate-500">
-                Aucune révision canonique.
-              </p>
+              <p className="mt-4 text-sm text-slate-500">Aucune version.</p>
             )}
             <nav
               aria-label="Pagination des versions"

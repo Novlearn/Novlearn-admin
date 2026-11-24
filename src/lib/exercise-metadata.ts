@@ -17,7 +17,7 @@ export type SkillReference = { id: string; chapter_id: string };
 
 export function resolveChapter(value: string, chapters: ChapterReference[]) {
   const matches = chapters.filter(
-    (c) => c.name === value || c.aliases.includes(value),
+    (c) => c.id === value || c.name === value || c.aliases.includes(value),
   );
   return matches.length === 1 ? matches[0] : null;
 }

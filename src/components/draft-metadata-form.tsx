@@ -91,6 +91,9 @@ export function DraftMetadataForm(props: Props) {
   async function save(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (saving.current || recovery.awaitingChoice) return;
+    const approve =
+      (event.nativeEvent as SubmitEvent).submitter?.getAttribute('value') ===
+      'approve';
     if (!prepared.title.trim()) {
       setMessage('Renseignez le titre de l’exercice.');
       return;
@@ -103,7 +106,7 @@ export function DraftMetadataForm(props: Props) {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({
-          action: 'save',
+          action: approve ? 'save_and_approve' : 'save',
           exerciseId: props.exerciseId ?? null,
           versionId: newRevision ? null : (props.versionId ?? null),
           fingerprint: newRevision ? null : (props.fingerprint ?? null),
@@ -120,7 +123,7 @@ export function DraftMetadataForm(props: Props) {
         versionId: props.versionId,
         newRevision: !!newRevision,
       });
-      if (!confirmed) {
+      if (!confirmed || (approve && data.result?.status !== 'ready')) {
         setMessage(
           'L’enregistrement n’a pas pu être confirmé. Votre saisie et sa copie de récupération restent conservées ; vérifiez le catalogue avant de réessayer.',
         );
@@ -129,11 +132,12 @@ export function DraftMetadataForm(props: Props) {
       dirtyRef.current = false;
       if (!recovery.saved())
         window.alert(
-          'Le brouillon est enregistré, mais sa copie de récupération n’a pas pu être effacée. Fermez cet onglet après vos vérifications.',
+          'La révision est enregistrée, mais sa copie de récupération n’a pas pu être effacée. Fermez cet onglet après vos vérifications.',
         );
       setDirty(false);
+      const saved = approve ? 'approved' : '1';
       router.push(
-        `/admin/exercises/${confirmed.exerciseId}?version=${confirmed.versionId}&saved=1`,
+        `/admin/exercises/${confirmed.exerciseId}?version=${confirmed.versionId}&saved=${saved}`,
       );
       router.refresh();
     } catch {
@@ -278,20 +282,30 @@ export function DraftMetadataForm(props: Props) {
       />
       <div className="editor-save flex flex-wrap items-center gap-4">
         <button
-          className="button"
+          className="button button-secondary"
           type="submit"
           disabled={busy || recovery.awaitingChoice}
         >
-          {busy
-            ? 'Enregistrement…'
-            : newRevision
-              ? 'Enregistrer comme nouvelle révision'
-              : 'Enregistrer le brouillon'}
+          Enregistrer en brouillon
         </button>
-        {dirty && (
-          <span className="text-sm text-slate-500">
-            Modifications non enregistrées
+        <button
+          type="submit"
+          value="approve"
+          className="button"
+          disabled={busy || recovery.awaitingChoice}
+        >
+          Enregistrer et approuver
+        </button>
+        {busy ? (
+          <span role="status" className="text-sm text-slate-500">
+            Enregistrement en cours…
           </span>
+        ) : (
+          dirty && (
+            <span className="text-sm text-slate-500">
+              Modifications non enregistrées
+            </span>
+          )
         )}
       </div>
       {message && (

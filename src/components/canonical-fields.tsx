@@ -119,7 +119,7 @@ const choices: Record<string, readonly string[]> = {
   display: ['inline', 'block'],
   anyOf: atomicForms,
 };
-const choiceLabels: Record<string, string> = {
+export const choiceLabels: Record<string, string> = {
   decimal: 'Décimal',
   tuple: 'Tuple',
   computed: 'Variable calculée',
@@ -367,10 +367,14 @@ function optionalFields(
       entries.push(['label', '']);
   }
   if (fieldName(path) === 'response') entries.push(['variable', 'x']);
-  if (fieldName(path) === 'policy')
-    entries.push(
-      ['comparison', { mode: 'exact' }],
-      [
+  if (fieldName(path) === 'policy') {
+    if (
+      'comparison' in value ||
+      ['rational', 'real', 'extended-real'].includes(String(value.domain))
+    )
+      entries.push(['comparison', { mode: 'exact' }]);
+    if ('normalization' in value || value.domain === 'text')
+      entries.push([
         'normalization',
         {
           trim: true,
@@ -378,9 +382,23 @@ function optionalFields(
           ignoreCase: false,
           unicodeNFC: true,
         },
-      ],
-      ['comparisonDomain', { variable: 'x', excludedLatex: [''] }],
-    );
+      ]);
+    if (
+      'comparisonDomain' in value ||
+      [
+        'polynomial',
+        'rational-function',
+        'geometric-expression',
+        'elementary-positive',
+        'equation',
+        'inequality',
+      ].includes(String(value.domain))
+    )
+      entries.push([
+        'comparisonDomain',
+        { variable: 'x', excludedLatex: [''] },
+      ]);
+  }
   if (value.kind === 'computed')
     entries.push(['restrictions', { domain: 'rational' }]);
   if (fieldName(path) === 'restrictions')
@@ -505,6 +523,10 @@ function itemTemplate(
   return '';
 }
 
+function isLegacyImportField(name: string) {
+  return name === 'legacy' || name === 'legacyPath';
+}
+
 export function CanonicalFields({
   value,
   onChange,
@@ -545,6 +567,22 @@ export function CanonicalFields({
         : isEditorObject(value)
           ? String(value.kind)
           : 'value-only';
+    const domain = parent?.domain;
+    const families =
+      domain === 'real'
+        ? ['irreducible-fraction', 'power-of-e']
+        : domain === 'rational'
+          ? ['irreducible-fraction']
+          : domain === 'polynomial'
+            ? ['expanded', 'reduced', 'factorized']
+            : [];
+    const options = [
+      'value-only',
+      ...families,
+      ...(families.length > 1 ? ['accepted-forms'] : []),
+      ...(families.length ? ['accepted-latex'] : []),
+    ];
+    if (options.length === 1 && selected === 'value-only') return null;
     return (
       <div className="space-y-3">
         <label className="label">
@@ -555,20 +593,19 @@ export function CanonicalFields({
             onChange={(event) =>
               onChange(
                 event.target.value === 'accepted-forms'
-                  ? { kind: 'accepted-forms', anyOf: ['expanded'] }
+                  ? { kind: 'accepted-forms', anyOf: [families[0]] }
                   : event.target.value === 'accepted-latex'
                     ? { kind: 'accepted-latex', latex: [''] }
                     : event.target.value,
               )
             }
           >
-            {[
-              'value-only',
-              ...atomicForms,
-              'accepted-forms',
-              'accepted-latex',
-            ].map((option) => (
-              <option key={option} value={option}>
+            {[...new Set([...options, selected])].map((option) => (
+              <option
+                key={option}
+                value={option}
+                disabled={!options.includes(option)}
+              >
                 {choiceLabels[option] ?? option}
               </option>
             ))}
@@ -680,12 +717,19 @@ export function CanonicalFields({
     const optional = optionalFields(value, path);
     const operand = key === 'left' || key === 'right';
     const displayed = Object.entries(value).filter(
-      ([name]) =>
+      ([name, data]) =>
         name !== 'schemaVersion' &&
         name !== 'id' &&
         name !== 'type' &&
+        !(key === 'extensions' && isLegacyImportField(name)) &&
+        !(
+          name === 'extensions' &&
+          isEditorObject(data) &&
+          Object.keys(data).every(isLegacyImportField)
+        ) &&
         (operand || name !== discriminant?.key) &&
         name !== 'expectedOptionIds' &&
+        !(key === 'policy' && name === 'domain') &&
         !(name === 'kind' && value.kind === 'comparison') &&
         !(value.kind === 'tuple' && name === 'mode'),
     );

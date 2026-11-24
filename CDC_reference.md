@@ -539,8 +539,8 @@ Les résultats doivent présenter les seeds, questions et erreurs concernées.
 Une vérification automatique ne remplace pas systématiquement la validation mathématique humaine.
 
 La mission du 30 octobre regroupe les contrôles derrière une action, avec seeds
-reproductibles 0, 1 et 42 par défaut et détails avancés accessibles. Les bornes,
-la couverture et l'approbation humaine d'une révision précise restent requises.
+reproductibles 0, 1 et 42 par défaut et détails avancés accessibles. Ces tests
+sont facultatifs pour l'approbation éditoriale dans le Creator.
 
 ## 9.4 Tests manuels
 
@@ -562,16 +562,14 @@ Les statuts visibles du catalogue sont :
 `Archivé` est un état terminal de classement qui peut s'appliquer à un exercice
 quel que soit son statut antérieur.
 
-Un nouvel exercice commence en brouillon. Il devient approuvé après validation
-éditoriale de sa révision. Il devient publié uniquement après confirmation de sa
-publication en Production. Un pointeur actif en Préproduction ou dans une copie
-locale ne suffit pas à établir le statut publié. La validation Engine et les
-rapports de test restent des contrôles requis, mais ne sont pas des statuts.
+À la création d'un exercice ou d'une révision, l'administrateur peut enregistrer
+en brouillon ou enregistrer et approuver dans Staging. L'approbation s'applique à
+la révision enregistrée et ne lance aucun transfert. Il devient publié uniquement
+après confirmation de sa publication en Production. Un pointeur actif en
+Préproduction ou dans une copie locale ne suffit pas à établir le statut publié.
 
-Une demande de relecture est une étape de travail, pas un statut visible distinct
-du brouillon. L'historique de relecture et l'approbation humaine restent
-attachés à une version précise. Une modification d'une version approuvée doit
-invalider son approbation ou créer une nouvelle révision.
+L'approbation humaine est attachée à une version précise. Une modification d'une
+version approuvée doit invalider son approbation ou créer une nouvelle révision.
 
 L'archivage dans l'Admin classe l'exercice comme archivé et ne déclenche aucune
 écriture ni suppression en Production.
@@ -1158,6 +1156,12 @@ la demande de relecture ; l'approbation porte sur une révision précise. Publi�
 signifie que la publication de cette révision en Production a été confirmée,
 jamais seulement qu'un pointeur est actif en Préproduction ou dans une copie
 locale. Archivé est un classement Admin qui n'écrit pas en Production.
+
+**Décision fonctionnelle explicite du responsable - 24 novembre 2026.** Dans le
+Creator, le clic de l'administrateur sur « Enregistrer et approuver » tient lieu
+de validation éditoriale. L'aperçu et les tests peuvent être lancés à la demande.
+L'approbation ne requiert ni rapport Engine ni demande de relecture préalable.
+La synchronisation vers Production fait l'objet d'une action distincte.
 
 **Décision fonctionnelle explicite du responsable — 23 novembre 2026 :** ajouter
 un parcours de synchronisation atomique Staging → Production pour les chapitres,

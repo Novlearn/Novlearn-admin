@@ -3,17 +3,18 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 import type { ExerciseDefinition } from 'novlearn-exercise-engine';
 import {
   referenceIssue,
+  resolveChapter,
   type ChapterReference,
   type SkillReference,
 } from './exercise-metadata';
 
 /** Uses the caller's verified session/RLS, never a privileged key. SQL remains authoritative. */
-export async function checkExerciseReferences(
+export async function prepareExerciseReferences(
   client: SupabaseClient,
   definition: ExerciseDefinition,
 ) {
   const { chapter, skills = [] } = definition.catalogue ?? {};
-  if (!chapter && !skills.length) return null;
+  if (!chapter && !skills.length) return { issue: null, definition };
   const chapters = await client
     .from('chapters')
     .select('id,name,aliases')
@@ -35,10 +36,18 @@ export async function checkExerciseReferences(
       throw new Error('Reference catalogue unavailable');
     references = result.data as SkillReference[];
   }
-  return referenceIssue(
-    chapter,
-    skills,
-    chapters.data as ChapterReference[],
-    references,
-  );
+  const chapterReferences = chapters.data as ChapterReference[];
+  const issue = referenceIssue(chapter, skills, chapterReferences, references);
+  const selected =
+    !issue && chapter ? resolveChapter(chapter, chapterReferences) : null;
+  return {
+    issue,
+    definition:
+      selected && selected.id === chapter && selected.name !== chapter
+        ? {
+            ...definition,
+            catalogue: { ...definition.catalogue, chapter: selected.name },
+          }
+        : definition,
+  };
 }

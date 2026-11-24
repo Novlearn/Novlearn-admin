@@ -155,6 +155,65 @@ describe('API catalogue : permission avant toute opération', () => {
       result: { exerciseId: '9007199254740993' },
     });
   });
+  it.each([null, '120'])(
+    'approuve la révision enregistrée en Staging pour %s',
+    async (exerciseId) => {
+      const fingerprint = 'b'.repeat(64);
+      const result = {
+        exerciseId: exerciseId ?? '121',
+        versionId: uuid,
+        fingerprint,
+        status: 'ready',
+      };
+      fake.rpc.mockResolvedValueOnce({ data: result, error: null });
+      const response = await POST(
+        post({ ...save, action: 'save_and_approve', exerciseId }),
+      );
+      expect(response.status).toBe(200);
+      expect(await response.json()).toEqual({
+        environment: 'staging',
+        result,
+      });
+      expect(fake.rpc).toHaveBeenCalledWith('admin_save_and_approve_exercise', {
+        p_exercise_id: exerciseId,
+        p_version_id: null,
+        p_expected_fingerprint: null,
+        p_definition: save.definition,
+      });
+      expect(fake.rpc).toHaveBeenCalledTimes(1);
+    },
+  );
+  it('signale l’absence du contrat atomique sans appeler de sauvegarde de repli', async () => {
+    const fingerprint = 'a'.repeat(64);
+    fake.rpc.mockResolvedValueOnce({ data: null, error: { code: 'PGRST202' } });
+    const response = await POST(
+      post({
+        ...save,
+        action: 'save_and_approve',
+        exerciseId: '120',
+        versionId: uuid,
+        fingerprint,
+      }),
+    );
+    expect(response.status).toBe(503);
+    expect((await response.json()).error).toContain('Staging');
+    expect(fake.rpc).toHaveBeenCalledWith('admin_save_and_approve_exercise', {
+      p_exercise_id: '120',
+      p_version_id: uuid,
+      p_expected_fingerprint: fingerprint,
+      p_definition: save.definition,
+    });
+    expect(fake.rpc).toHaveBeenCalledTimes(1);
+  });
+  it('refuse le parcours d’approbation sans rôle Admin ou si la sauvegarde échoue', async () => {
+    const request = { ...save, action: 'save_and_approve' };
+    fake.auth.getProfileRole.mockResolvedValueOnce('user');
+    expect((await POST(post(request))).status).toBe(403);
+    expect(fake.rpc).not.toHaveBeenCalled();
+    fake.rpc.mockResolvedValueOnce({ data: null, error: { code: '40001' } });
+    expect((await POST(post(request))).status).toBe(409);
+    expect(fake.rpc).toHaveBeenCalledTimes(1);
+  });
   it('conserve le bigint et l’empreinte de concurrence à la sauvegarde', async () => {
     const body = {
       ...save,
@@ -177,6 +236,40 @@ describe('API catalogue : permission avant toute opération', () => {
       p_expected_fingerprint: null,
       p_definition: save.definition,
     });
+  });
+  it('rapproche un UUID de chapitre via Staging après vérification du rôle', async () => {
+    const from = vi.fn(() => ({
+      select: () => ({
+        limit: async () => ({
+          data: [{ id: uuid, name: 'Logarithme', aliases: [] }],
+        }),
+      }),
+    }));
+    fake.create.mockReturnValue({
+      gateway: fake.auth,
+      response: NextResponse.next(),
+      client: { rpc: fake.rpc, from },
+    });
+    const body = {
+      ...save,
+      definition: { ...save.definition, catalogue: { chapter: uuid } },
+    };
+    fake.auth.getProfileRole.mockResolvedValueOnce('user');
+    expect((await POST(post(body))).status).toBe(403);
+    expect(from).not.toHaveBeenCalled();
+    expect((await POST(post(body))).status).toBe(200);
+    expect(fake.rpc).toHaveBeenCalledWith('admin_save_exercise_draft', {
+      p_exercise_id: null,
+      p_version_id: null,
+      p_expected_fingerprint: null,
+      p_definition: {
+        ...body.definition,
+        catalogue: { chapter: 'Logarithme' },
+      },
+    });
+    body.definition.catalogue.chapter = '90000000-0000-0000-0000-000000000002';
+    expect((await POST(post(body))).status).toBe(400);
+    expect(fake.rpc).toHaveBeenCalledTimes(1);
   });
   it.each([
     { exerciseId: '1', versionId: uuid, fingerprint: null },

@@ -4,7 +4,7 @@ import { readAuthConfiguration } from '@/lib/auth/config';
 import { isTrustedMutation, privateHeaders } from '@/lib/auth/http';
 import { readBoundedJson } from '@/lib/auth/json';
 import { createRouteAuth, transferAuthCookies } from '@/lib/auth/supabase';
-import { checkExerciseReferences } from '@/lib/exercise-references';
+import { prepareExerciseReferences } from '@/lib/exercise-references';
 import {
   catalogueFilter,
   draftEnvelope,
@@ -66,7 +66,7 @@ async function handle(request: NextRequest, mutation: boolean) {
     const body = payload as Record<string, unknown>;
     let name: string;
     let args: Record<string, unknown>;
-    if (body.action === 'save') {
+    if (body.action === 'save' || body.action === 'save_and_approve') {
       if (
         !draftEnvelope(body.definition) ||
         (body.exerciseId !== null && !isExerciseId(body.exerciseId)) ||
@@ -86,14 +86,20 @@ async function handle(request: NextRequest, mutation: boolean) {
         )
       )
         return finish({ error: 'Brouillon invalide.' }, 400);
-      const issue = await checkExerciseReferences(client, body.definition);
+      const { issue, definition } = await prepareExerciseReferences(
+        client,
+        body.definition,
+      );
       if (issue) return finish({ error: issue }, 400);
-      name = 'admin_save_exercise_draft';
+      name =
+        body.action === 'save_and_approve'
+          ? 'admin_save_and_approve_exercise'
+          : 'admin_save_exercise_draft';
       args = {
         p_exercise_id: body.exerciseId,
         p_version_id: body.versionId,
         p_expected_fingerprint: body.fingerprint,
-        p_definition: body.definition,
+        p_definition: definition,
       };
     } else if (
       body.action === 'duplicate' &&
@@ -120,6 +126,14 @@ async function handle(request: NextRequest, mutation: boolean) {
     } else return finish({ error: 'Action invalide.' }, 400);
     const { data, error } = await client.rpc(name, args);
     if (error) {
+      if (body.action === 'save_and_approve' && error.code === 'PGRST202')
+        return finish(
+          {
+            error:
+              'L’approbation directe n’est pas encore disponible en Staging. Vous pouvez enregistrer en brouillon.',
+          },
+          503,
+        );
       const status =
         error.code === '40001' || error.code === 'PT409'
           ? 409

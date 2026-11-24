@@ -6,13 +6,17 @@ import type {
   TaxonomyData,
   TaxonomyItem,
 } from '@/lib/taxonomy';
-import { difficultyChoices } from '@/lib/exercise-metadata';
+import {
+  difficultyChoices,
+  resolveChapter,
+  type ChapterReference,
+} from '@/lib/exercise-metadata';
 
 const PAGE_SIZE = 25;
 const LEGACY_CHAPTER = '__legacy_chapter__';
 
 type ExerciseReferences = {
-  chapters: { id: string; name: string }[];
+  chapters: ChapterReference[];
   competences: { id: string; name: string; chapterId: string }[];
 };
 
@@ -126,6 +130,7 @@ export function ExerciseReferenceFields({
           chapters: chapterItems.map((item) => ({
             id: item.id,
             name: (item.value as ChapterValue).name,
+            aliases: (item.value as ChapterValue).aliases ?? [],
           })),
           competences: competenceItems.map((item) => {
             const value = item.value as CompetenceValue;
@@ -144,10 +149,11 @@ export function ExerciseReferenceFields({
     return () => controller.abort();
   }, [retry]);
 
-  const selectedChapters =
-    references?.chapters.filter((item) => item.name === chapter) ?? [];
-  const selectedChapterId =
-    selectedChapters.length === 1 ? selectedChapters[0].id : null;
+  const selectedChapterId = references
+    ? resolveChapter(chapter, references.chapters)?.id
+    : undefined;
+  const unresolvedChapter =
+    loadState === 'ready' && chapter && !selectedChapterId;
   const groups = (references?.chapters ?? []).map((item) => ({
     ...item,
     items: (references?.competences ?? []).filter(
@@ -193,7 +199,7 @@ export function ExerciseReferenceFields({
         Chapitre
         <select
           className="field"
-          value={selectedChapterId ?? (chapter ? LEGACY_CHAPTER : '')}
+          value={selectedChapterId ?? (unresolvedChapter ? LEGACY_CHAPTER : '')}
           disabled={disabled || loadState !== 'ready'}
           onChange={(event) => {
             const selected = references?.chapters.find(
@@ -204,7 +210,7 @@ export function ExerciseReferenceFields({
           }}
         >
           <option value="">Choisir un chapitre</option>
-          {chapter && !selectedChapterId && (
+          {unresolvedChapter && (
             <option value={LEGACY_CHAPTER} disabled>
               {chapter} · référence à rapprocher
             </option>
@@ -215,7 +221,7 @@ export function ExerciseReferenceFields({
             </option>
           ))}
         </select>
-        {chapter && !selectedChapterId && (
+        {unresolvedChapter && (
           <span className="text-xs font-normal text-amber-800">
             Cette référence historique est conservée jusqu’à son rapprochement.
           </span>

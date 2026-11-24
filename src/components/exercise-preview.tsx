@@ -7,30 +7,23 @@ import type {
 } from 'novlearn-exercise-engine';
 import type {
   PreviewCase,
-  PreviewDetails,
   PreviewDiagnostic,
   PreviewResult,
   PreviewTestReport,
 } from '@/lib/preview';
-import { correctionLabels } from '@/lib/preview';
 import { PublicExercise, MathDisplay } from './public-exercise';
 import { MathInput } from './math-input';
 
-function Diagnostics({ items }: { items: PreviewDiagnostic[] }) {
-  return (
-    <ul className="space-y-2 text-sm text-red-800">
-      {items.map((d, i) => (
-        <li key={i}>
-          <p className="font-mono text-xs text-slate-500">
-            {d.path || 'Définition'} · {d.stage} {d.questionId || d.elementId} ·{' '}
-            {d.code}
-          </p>
-          <p>{d.message}</p>
-        </li>
-      ))}
-    </ul>
-  );
-}
+const testSeeds = [0, 1, 42];
+type PreviewPost = <Result>(
+  url: string,
+  body: unknown,
+) => Promise<{
+  result: Result;
+  valid?: boolean;
+  diagnostics?: PreviewDiagnostic[];
+}>;
+
 export function ExercisePreview({
   definition,
   disabled = false,
@@ -44,709 +37,381 @@ export function ExercisePreview({
   canRecordTests?: boolean;
   engineEnabled?: boolean;
 }) {
-  const source = JSON.stringify(definition),
-    latest = useRef(source);
+  const source = JSON.stringify(definition);
+  const latest = useRef(source);
   latest.current = source;
-  const [seed, setSeed] = useState('42'),
-    [seeds, setSeeds] = useState('0, 1, 42');
-  const [preview, setPreview] = useState<PreviewResult | null>(null),
-    [details, setDetails] = useState<PreviewDetails | null>(null),
-    [report, setReport] = useState<PreviewTestReport | null>(null);
-  const [busy, setBusy] = useState(false),
-    [error, setError] = useState(''),
-    [diagnostics, setDiagnostics] = useState<PreviewDiagnostic[]>([]),
-    [cases, setCases] = useState<PreviewCase[]>([]);
   const controller = useRef<AbortController | null>(null);
-  const [receiptId, setReceiptId] = useState<string | null>(null);
-  const [verifying, setVerifying] = useState(false);
-  const [engineValidation, setEngineValidation] = useState<{
-    valid: boolean;
-    diagnostics: { path: string; code: string; message: string }[];
-  } | null>(null);
-  const [validating, setValidating] = useState(false);
-  const verification = useRef(false);
-  useEffect(() => {
-    setReceiptId(null);
-    setReport(null);
-  }, [seeds, cases]);
+  const [busy, setBusy] = useState(false);
+  const [preview, setPreview] = useState<PreviewResult | null>(null);
+  const [report, setReport] = useState<PreviewTestReport | null>(null);
+  const [error, setError] = useState('');
+  const [diagnostics, setDiagnostics] = useState<PreviewDiagnostic[]>([]);
+  const [showCases, setShowCases] = useState(false);
+  const [answers, setAnswers] = useState<Record<string, PreviewCase['answer']>>(
+    {},
+  );
+  const questions = definition.elements.filter(
+    (item) => item.type === 'question' || item.type === 'mcq',
+  );
+
   useEffect(() => {
     controller.current?.abort();
     setPreview(null);
-    setDetails(null);
     setReport(null);
-    setReceiptId(null);
     setError('');
     setDiagnostics([]);
-    setEngineValidation(null);
+    return () => controller.current?.abort();
   }, [source]);
-  useEffect(() => () => controller.current?.abort(), []);
-  const numericSeed = (text: string) =>
-    /^\d+$/.test(text.trim()) && Number(text) <= 0xffffffff
-      ? Number(text)
-      : null;
-  const request = async (body: unknown) => {
-    const started = latest.current;
+
+  async function request<T>(
+    run: (post: PreviewPost) => Promise<T>,
+  ): Promise<T> {
+    if (controller.current) throw Error('busy');
     const cancel = new AbortController();
     controller.current = cancel;
     setBusy(true);
     setError('');
     setDiagnostics([]);
-    try {
-      const response = await fetch('/api/admin/preview', {
+    const post: PreviewPost = async (url, body) => {
+      const response = await fetch(url, {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify(body),
         signal: cancel.signal,
       });
       const data = await response.json();
-      if (started !== latest.current) throw new Error('stale');
+      if (source !== latest.current || cancel.signal.aborted)
+        throw Error('stale');
       if (!response.ok) {
         setError(data.error ?? 'Calcul indisponible.');
         setDiagnostics(data.diagnostics ?? []);
-        throw new Error('request');
+        throw Error('request');
       }
-      return data.result;
-    } catch (e) {
+      return data;
+    };
+    try {
+      return await run(post);
+    } catch (failure) {
       if (
-        started === latest.current &&
         !cancel.signal.aborted &&
-        (!(e instanceof Error) || e.message !== 'request')
+        source === latest.current &&
+        (!(failure instanceof Error) || failure.message !== 'request')
       )
-        setError('Calcul indisponible. Votre définition reste conservée.');
-      throw e;
+        setError('Calcul indisponible. Réessayez.');
+      throw failure;
     } finally {
-      if (controller.current === cancel) {
-        controller.current = null;
-        setBusy(false);
-      }
+      controller.current = null;
+      setBusy(false);
     }
-  };
-  const generate = async (preserveReport = false) => {
-    const value = numericSeed(seed);
-    if (value === null) {
-      setError('La seed doit être un entier entre 0 et 4294967295.');
-      return;
-    }
-    setDetails(null);
-    if (!preserveReport) setReport(null);
-    setPreview(null);
-    try {
-      setPreview(
-        await request({ action: 'generate', definition, seed: value }),
-      );
-    } catch {}
-  };
-  const inspect = async () => {
-    if (details) {
-      setDetails(null);
-      return;
-    }
-    if (!preview) return;
-    try {
-      setDetails(
-        await request({ action: 'inspect', previewId: preview.previewId }),
-      );
-    } catch {}
-  };
-  const test = async (persist = false) => {
-    const list = seeds.split(',').map(numericSeed);
-    if (
-      !list.length ||
-      list.length > 5 ||
-      list.some((v) => v === null) ||
-      new Set(list).size !== list.length
-    ) {
-      setError(
-        'Saisissez une à cinq seeds distinctes, séparées par des virgules.',
-      );
+  }
+
+  async function verify() {
+    if (disabled || controller.current) return;
+    const cases = questions.flatMap((question): PreviewCase[] => {
+      const answer = answers[question.id];
+      const format =
+        question.type === 'mcq' ? 'selection' : question.response.format;
+      if (!answer || answer.format !== format) return [];
+      if (
+        answer.format === 'selection'
+          ? !answer.optionIds.length
+          : !answer.source.trim()
+      )
+        return [];
+      return [{ questionId: question.id, expectedState: 'incorrect', answer }];
+    });
+    if (cases.length > 16) {
+      setError('Testez au maximum 16 réponses incorrectes à la fois.');
       return;
     }
     setReport(null);
     try {
-      setReceiptId(null);
-      if (persist && saved) {
-        const result = await request({
-          action: 'test_saved',
-          versionId: saved.id,
-          fingerprint: saved.fingerprint,
-          epoch: saved.epoch,
-          seeds: list,
-          cases,
-        });
-        setReport(result.report);
-        setReceiptId(result.receiptId);
-        return true;
-      } else {
-        setReport(
-          await request({ action: 'test', definition, seeds: list, cases }),
-        );
-        return true;
-      }
-    } catch {
-      return false;
-    }
-  };
-  const verify = async () => {
-    if (verification.current || disabled || busy) return;
-    verification.current = true;
-    setVerifying(true);
-    setReport(null);
-    setReceiptId(null);
-    try {
-      setEngineValidation(null);
-      setValidating(true);
-      const response = await fetch('/api/admin/engine', {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ definition }),
+      await request(async (post) => {
+        const validation = await post('/api/admin/engine', { definition });
+        if (validation.valid !== true) {
+          setError('Corrigez la définition avant de vérifier l’exercice.');
+          setDiagnostics(validation.diagnostics ?? []);
+          return;
+        }
+        const persist = saved && canRecordTests;
+        const next = persist
+          ? (
+              await post<{ report: PreviewTestReport }>('/api/admin/preview', {
+                action: 'test_saved',
+                versionId: saved.id,
+                fingerprint: saved.fingerprint,
+                epoch: saved.epoch,
+                seeds: testSeeds,
+                cases,
+              })
+            ).result.report
+          : (
+              await post<PreviewTestReport>('/api/admin/preview', {
+                action: 'test',
+                definition,
+                seeds: testSeeds,
+                cases,
+              })
+            ).result;
+        setReport(next);
+        if (
+          next.seeds.some((item) =>
+            item.diagnostics.some(
+              (issue) => issue.code === 'negative-case-required',
+            ),
+          )
+        )
+          setShowCases(true);
       });
-      const result = await response.json();
-      if (source !== latest.current) return;
-      if (!response.ok) {
-        setError(result.error ?? 'Validation Engine indisponible.');
-        return;
-      }
-      const validation = {
-        valid: result.valid === true,
-        diagnostics: Array.isArray(result.diagnostics)
-          ? result.diagnostics
-          : [],
-      };
-      setEngineValidation(validation);
-      if (validation.valid) await test(!!saved && canRecordTests);
-    } catch {
-      setError('Validation indisponible. Le brouillon reste conservé.');
-    } finally {
-      setValidating(false);
-      verification.current = false;
-      setVerifying(false);
-    }
-  };
-  const submit = async (
+    } catch {}
+  }
+
+  async function generate() {
+    if (disabled || controller.current) return;
+    const seed = preview ? crypto.getRandomValues(new Uint32Array(1))[0] : 42;
+    try {
+      const result = await request((post) =>
+        post<PreviewResult>('/api/admin/preview', {
+          action: 'generate',
+          definition,
+          seed,
+        }),
+      );
+      setPreview(result.result);
+    } catch {}
+  }
+
+  async function submit(
     questionId: string,
     answer: AnswerSubmission['answer'],
-  ): Promise<CorrectionResult> => {
-    if (!preview) throw Error('No preview');
-    return request({
-      action: 'grade',
-      previewId: preview.previewId,
-      questionId,
-      answer,
-    });
-  };
-  const questions = definition.elements.filter(
-    (e) => e.type === 'question' || e.type === 'mcq',
-  );
-  const [questionId, setQuestionId] = useState('');
-  const addCase = () => {
-    const q = questions.find((q) => q.id === questionId) ?? questions[0];
-    if (!q || cases.length >= 16) return;
-    setCases([
-      ...cases,
-      {
-        questionId: q.id,
-        expectedState: 'incorrect',
-        answer:
-          q.type === 'mcq'
-            ? { format: 'selection', optionIds: [] }
-            : { format: q.response.format, source: '' },
-      },
-    ]);
+  ): Promise<CorrectionResult> {
+    if (!preview) throw Error('Aperçu indisponible');
+    const result = await request((post) =>
+      post<CorrectionResult>('/api/admin/preview', {
+        action: 'grade',
+        previewId: preview.previewId,
+        questionId,
+        answer,
+      }),
+    );
+    return result.result;
+  }
+
+  function updateAnswer(id: string, answer: PreviewCase['answer']) {
+    setAnswers((current) => ({ ...current, [id]: answer }));
     setReport(null);
-  };
-  const patchCase = (index: number, fields: Partial<PreviewCase>) => {
-    setCases(cases.map((c, i) => (i === index ? { ...c, ...fields } : c)));
-    setReport(null);
-  };
+  }
+
   if (!engineEnabled)
     return (
-      <p className="notice">
-        Les aperçus et tests ne sont pas disponibles dans cette version.
-      </p>
+      <p className="notice">Les aperçus et tests ne sont pas disponibles.</p>
     );
+
+  const reportIssues = report?.seeds.flatMap((item) => item.diagnostics) ?? [];
+  const missingCase = reportIssues.some(
+    (item) => item.code === 'negative-case-required',
+  );
+  const failedChecks =
+    report?.seeds.flatMap((item) =>
+      item.checks
+        .filter((check) => !check.passed)
+        .map((check) => {
+          const position = questions.findIndex(
+            (question) => question.id === check.questionId,
+          );
+          const label =
+            check.label === 'Cas administrateur'
+              ? 'La réponse de test n’a pas été reconnue comme incorrecte.'
+              : check.label === 'Attendu officiel'
+                ? 'La réponse attendue n’a pas été reconnue comme correcte.'
+                : 'Le format invalide n’a pas été reconnu.';
+          return position < 0 ? label : `Question ${position + 1} · ${label}`;
+        }),
+    ) ?? [];
+  const messages = [
+    ...new Set([
+      ...diagnostics.map((item) => item.message),
+      ...reportIssues
+        .filter((item) => item.code !== 'negative-case-required')
+        .map((item) => item.message),
+      ...failedChecks,
+    ]),
+  ];
+
   return (
     <section
-      className="space-y-6 rounded-xl border border-slate-200 bg-slate-50 p-5"
-      aria-labelledby="preview-heading"
+      className="space-y-4 rounded-xl border border-slate-200 bg-slate-50 p-5"
+      aria-label="Aperçu et vérification"
     >
-      <div>
-        <h2 id="preview-heading" className="text-lg font-semibold">
-          Vérifier et prévisualiser
-        </h2>
-        <p className="mt-2 text-sm leading-6 text-slate-500">
-          Vérifiez le format canonique et les réponses. L’aperçu élève se lance
-          séparément. Modifier la définition efface les résultats précédents.
-          Ces contrôles n’approuvent ni ne publient le brouillon.
-        </p>
-      </div>
-      <div className="space-y-3">
+      <div className="flex flex-wrap items-center gap-3">
         <button
           type="button"
           className="button"
-          disabled={disabled || busy || verifying}
+          disabled={disabled || busy}
           onClick={() => void verify()}
         >
-          {verifying ? 'Vérification…' : 'Vérifier l’exercice'}
+          Vérifier l’exercice
         </button>
-        {verifying && (
+        <button
+          type="button"
+          className="button button-secondary"
+          disabled={disabled || busy}
+          onClick={() => void generate()}
+        >
+          {preview ? 'Générer un autre aperçu' : 'Prévisualiser'}
+        </button>
+        {busy && (
           <button
             type="button"
-            className="ml-3 underline"
+            className="text-sm underline"
             onClick={() => controller.current?.abort()}
           >
-            Annuler le calcul
+            Annuler
           </button>
         )}
-        <p className="text-sm text-slate-500">
-          Génération, rejeu, projection et réponses sur les seeds 0, 1 et 42 par
-          défaut. Les cas incorrects à compléter restent indiqués dans le bilan
-          ; aucune approbation automatique.
-        </p>
-        {report && (
-          <p
-            role="status"
-            className={
-              report.passed && report.complete
-                ? 'text-green-700'
-                : 'text-amber-800'
-            }
-          >
-            {report.passed && report.complete
-              ? 'Contrôles réussis. Relecture humaine nécessaire.'
-              : 'Contrôles en échec ou couverture à compléter dans les détails avancés.'}
-          </p>
-        )}
       </div>
-      {engineValidation && (
-        <div
+      {busy && (
+        <p role="status" className="text-sm text-slate-600">
+          Calcul en cours…
+        </p>
+      )}
+      {report && (
+        <p
           role="status"
           className={
-            engineValidation.valid
-              ? 'notice border-green-200 bg-green-50 text-green-900'
-              : 'notice'
+            report.passed && report.complete
+              ? 'text-green-700'
+              : 'text-amber-800'
           }
         >
-          <p className="font-semibold">
-            {engineValidation.valid
-              ? 'Format accepté par l’Engine.'
-              : 'Corrigez les erreurs de format avant les tests.'}
-          </p>
-          {!!engineValidation.diagnostics.length && (
-            <ul className="mt-3 space-y-2">
-              {engineValidation.diagnostics.map((item, index) => (
-                <li key={`${item.path}-${item.code}-${index}`}>
-                  <span className="font-mono text-xs">
-                    {item.path || 'Définition'} · {item.code}
-                  </span>
-                  <p>{item.message}</p>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-      )}
-      <button
-        type="button"
-        className="button button-secondary"
-        disabled={disabled || busy || verifying}
-        onClick={() => void generate()}
-      >
-        {preview ? 'Régénérer l’aperçu élève' : 'Aperçu comme un élève'}
-      </button>
-      {validating && (
-        <p role="status" className="text-sm text-slate-500">
-          Validation du format…
+          {report.passed && report.complete
+            ? 'Vérification réussie.'
+            : missingCase && !messages.length
+              ? 'Ajoutez une réponse incorrecte pour chaque question, puis relancez la vérification.'
+              : 'Certains contrôles sont à corriger.'}
         </p>
       )}
-      <fieldset disabled={disabled || verifying} className="space-y-6">
-        <details>
-          <summary className="cursor-pointer text-sm font-medium">
-            Paramètres avancés de l’aperçu
-          </summary>
-          <div className="flex flex-wrap items-end gap-3">
-            <label className="label">
-              Seed
-              <input
-                className="field max-w-48"
-                inputMode="numeric"
-                value={seed}
-                disabled={disabled || busy}
-                onChange={(e) => setSeed(e.target.value)}
-              />
-            </label>
-            <button
-              type="button"
-              className="button"
-              disabled={disabled || busy}
-              onClick={() => void generate()}
-            >
-              Générer l’aperçu
-            </button>
-            {busy && (
-              <button
-                type="button"
-                className="rounded-lg border border-slate-300 px-4 py-3 text-sm"
-                onClick={() => {
-                  controller.current?.abort();
-                  setError(
-                    'Annulation demandée. Un rapport déjà enregistré reste conservé.',
-                  );
-                }}
-              >
-                Annuler le calcul
-              </button>
-            )}
-          </div>
-        </details>
-        {busy && (
-          <p role="status" className="text-sm text-brand-700">
-            Calcul officiel en cours…
-          </p>
-        )}
-        {error && (
-          <p
-            role="alert"
-            className="rounded-lg bg-red-50 p-4 text-sm text-red-800"
+      {error && (
+        <p role="alert" className="text-sm text-red-800">
+          {error}
+        </p>
+      )}
+      {!!messages.length && (
+        <ul className="list-disc space-y-1 pl-5 text-sm text-red-800">
+          {messages.map((message) => (
+            <li key={message}>{message}</li>
+          ))}
+        </ul>
+      )}
+      {questions.length > 0 && (
+        <>
+          <button
+            type="button"
+            aria-expanded={showCases}
+            className="text-sm font-medium text-blue-700"
+            onClick={() => setShowCases(!showCases)}
           >
-            {error}
-          </p>
-        )}
-        {!!diagnostics.length && <Diagnostics items={diagnostics} />}
-        {preview && (
-          <div className="space-y-5">
-            <div className="flex flex-wrap items-center justify-between gap-3">
-              <div>
-                <span className="badge">Vue élève · seed {preview.seed}</span>
-                <p className="mt-2 text-xs text-slate-500">
-                  Engine {preview.engineVersion} · aperçu temporaire, valable
-                  dix minutes
-                </p>
-              </div>
-              <button
-                type="button"
-                className="rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm font-semibold"
-                disabled={disabled || busy}
-                onClick={inspect}
-              >
-                {details
-                  ? 'Masquer les attendus privés'
-                  : 'Afficher les attendus privés Admin'}
-              </button>
-            </div>
-            <div className="rounded-xl border border-slate-200 bg-white p-5">
-              <PublicExercise
-                key={preview.instance.instanceId}
-                instance={preview.instance}
-                submit={submit}
-                disabled={disabled || busy}
-              />
-            </div>
-            {details && (
-              <aside
-                className="space-y-4 rounded-xl border border-amber-200 bg-amber-50 p-5"
-                aria-label="Données privées Admin"
-              >
-                <h3 className="font-semibold text-amber-950">
-                  Données privées · Admin
-                </h3>
-                <p className="text-sm text-amber-900">
-                  {details.attempts} essais de génération · {details.draws}{' '}
-                  tirages. Ces données sont absentes de la projection élève.
-                </p>
-                <dl className="grid gap-4 sm:grid-cols-2">
-                  {Object.entries(details.values).map(([name, v]) => (
-                    <div key={name}>
-                      <dt className="text-sm font-semibold">{name}</dt>
-                      <dd>
-                        <MathDisplay
-                          latex={
-                            v.kind === 'rational'
-                              ? `\\frac{${v.numerator}}{${v.denominator}}`
-                              : v.kind === 'decimal'
-                                ? `\\frac{${v.coefficient}}{${10 ** v.precision}}`
-                                : String(v.value)
-                          }
-                        />
-                      </dd>
-                    </div>
-                  ))}
-                </dl>
-                {details.expected.map((q) => (
-                  <div key={q.questionId}>
-                    <p className="mb-2 font-mono text-xs text-amber-900">
-                      Question {q.questionId}
-                    </p>
-                    {q.answer.format === 'latex' ? (
-                      <MathDisplay latex={q.answer.source} />
-                    ) : (
-                      <p>
-                        {q.answer.format === 'selection'
-                          ? q.answer.optionIds.join(', ')
-                          : (q.variants ?? [q.answer.source]).join(' · ')}
-                      </p>
-                    )}
-                  </div>
-                ))}
-              </aside>
-            )}
-          </div>
-        )}
-        <details className="rounded-xl border border-slate-200 bg-white p-5">
-          <summary className="cursor-pointer font-semibold">
-            Détails avancés : seeds, cas et rapports
-          </summary>
-          <div className="mt-5 space-y-5">
-            <p className="text-sm leading-6 text-slate-500">
-              Le serveur vérifie la génération, le rejeu, la projection élève,
-              l’attendu officiel et un format volontairement invalide. Ajoutez
-              au moins un cas incorrect par question pour couvrir les réponses
-              fausses. Aucun verdict indéterminé n’est accepté comme réussite.
-            </p>
-            <label className="label">
-              Seeds de test
-              <input
-                className="field"
-                value={seeds}
-                disabled={disabled || busy}
-                maxLength={100}
-                onChange={(e) => {
-                  setSeeds(e.target.value);
-                  setReport(null);
-                }}
-              />
-            </label>
-            <div className="flex flex-wrap items-end gap-3">
-              <label className="label">
-                Question du nouveau cas
-                <select
-                  className="field"
-                  value={questionId || questions[0]?.id || ''}
-                  disabled={disabled || busy}
-                  onChange={(e) => setQuestionId(e.target.value)}
-                >
-                  {questions.map((q) => (
-                    <option key={q.id} value={q.id}>
-                      {q.text || q.id}
-                    </option>
-                  ))}
-                </select>
-              </label>
-              <button
-                type="button"
-                className="rounded-lg border border-slate-300 px-4 py-3 text-sm font-semibold"
-                disabled={
-                  disabled || busy || !questions.length || cases.length >= 16
-                }
-                onClick={addCase}
-              >
-                Ajouter un cas de réponse
-              </button>
-            </div>
-            {cases.map((c, i) => {
-              const q = questions.find((q) => q.id === c.questionId);
-              return (
-                <fieldset
-                  key={i}
-                  disabled={disabled || busy}
-                  className="space-y-3 rounded-lg border border-slate-200 p-4"
-                >
-                  <legend className="px-2 text-sm font-semibold">
-                    Cas {i + 1} · {q?.text || c.questionId}
-                  </legend>
-                  <label className="label">
-                    Résultat attendu
-                    <select
-                      className="field"
-                      value={c.expectedState}
-                      onChange={(e) =>
-                        patchCase(i, {
-                          expectedState: e.target
-                            .value as PreviewCase['expectedState'],
-                        })
-                      }
+            Réponses incorrectes à tester
+          </button>
+          {showCases && (
+            <fieldset disabled={disabled || busy} className="space-y-3">
+              {questions.map((question, index) => {
+                const label = `Réponse incorrecte · question ${index + 1}`;
+                const answer = answers[question.id];
+                if (question.type === 'mcq')
+                  return (
+                    <fieldset
+                      key={question.id}
+                      className="space-y-2 rounded-lg border border-slate-200 p-3"
                     >
-                      <option value="incorrect">Incorrecte</option>
-                      <option value="correct">Correcte</option>
-                      <option value="invalid">Format invalide</option>
-                    </select>
-                  </label>
-                  {c.answer.format === 'selection' ? (
-                    q?.type === 'mcq' ? (
-                      <div className="space-y-2">
-                        {q.options.map((o) => (
-                          <label key={o.id} className="flex items-center gap-3">
+                      <legend className="px-1 text-sm font-medium">
+                        {label}
+                      </legend>
+                      {question.options.map((option) => {
+                        const selected =
+                          answer?.format === 'selection'
+                            ? answer.optionIds
+                            : [];
+                        return (
+                          <label
+                            key={option.id}
+                            className="flex items-center gap-2 text-sm"
+                          >
                             <input
-                              type="checkbox"
-                              checked={
-                                c.answer.format === 'selection' &&
-                                c.answer.optionIds.includes(o.id)
+                              type={
+                                question.mode === 'single'
+                                  ? 'radio'
+                                  : 'checkbox'
                               }
-                              onChange={(e) => {
-                                if (c.answer.format === 'selection')
-                                  patchCase(i, {
-                                    answer: {
-                                      format: 'selection',
-                                      optionIds: e.target.checked
-                                        ? [...c.answer.optionIds, o.id]
-                                        : c.answer.optionIds.filter(
-                                            (id) => id !== o.id,
-                                          ),
-                                    },
-                                  });
-                              }}
+                              name={`test-${question.id}`}
+                              checked={selected.includes(option.id)}
+                              onChange={(event) =>
+                                updateAnswer(question.id, {
+                                  format: 'selection',
+                                  optionIds: event.target.checked
+                                    ? question.mode === 'single'
+                                      ? [option.id]
+                                      : [...selected, option.id]
+                                    : selected.filter((id) => id !== option.id),
+                                })
+                              }
                             />
-                            {o.content.format === 'text' ? (
-                              o.content.text
+                            {option.content.format === 'text' ? (
+                              option.content.text
                             ) : (
-                              <MathDisplay latex={o.content.latex} />
+                              <MathDisplay latex={option.content.latex} />
                             )}
                           </label>
-                        ))}
-                      </div>
-                    ) : (
-                      <p className="text-sm text-red-700">
-                        Cette question n’existe plus. Retirez ce cas.
-                      </p>
-                    )
-                  ) : c.answer.format === 'latex' ? (
-                    <MathInput
-                      label="Réponse du cas"
-                      value={c.answer.source}
-                      disabled={disabled || busy}
-                      onChange={(source) =>
-                        patchCase(i, { answer: { format: 'latex', source } })
+                        );
+                      })}
+                    </fieldset>
+                  );
+                return question.response.format === 'text' ? (
+                  <label key={question.id} className="label">
+                    {label}
+                    <input
+                      className="field"
+                      value={answer?.format === 'text' ? answer.source : ''}
+                      onChange={(event) =>
+                        updateAnswer(question.id, {
+                          format: 'text',
+                          source: event.target.value,
+                        })
                       }
                     />
-                  ) : (
-                    <label className="label">
-                      Réponse du cas
-                      <input
-                        className="field"
-                        value={c.answer.source}
-                        maxLength={8192}
-                        onChange={(e) =>
-                          patchCase(i, {
-                            answer: { format: 'text', source: e.target.value },
-                          })
-                        }
-                      />
-                    </label>
-                  )}
-                  <button
-                    type="button"
-                    className="text-sm font-medium text-red-700"
-                    onClick={() => {
-                      setCases(cases.filter((_, index) => index !== i));
-                      setReport(null);
-                    }}
-                  >
-                    Retirer ce cas
-                  </button>
-                </fieldset>
-              );
-            })}
-            <button
-              type="button"
-              className="button"
-              disabled={disabled || busy}
-              onClick={() => void test(false)}
-            >
-              Lancer les tests Engine
-            </button>
-            {saved && canRecordTests && (
-              <div className="space-y-3 rounded-lg border border-blue-200 bg-blue-50 p-4">
-                <p className="text-sm leading-6 text-blue-900">
-                  Consigner les tests de la révision enregistrée. Enregistrez
-                  toute modification du formulaire pour l’inclure ; le serveur
-                  relit le contenu de cette révision avant de tester.
-                </p>
-                <button
-                  type="button"
-                  className="button"
-                  disabled={disabled || busy}
-                  onClick={() => void test(true)}
-                >
-                  Tester et consigner la révision enregistrée
-                </button>
-              </div>
-            )}
-            {report && (
-              <div className="space-y-4" role="status">
-                <p
-                  className={`font-semibold ${report.passed && report.complete ? 'text-green-700' : 'text-red-700'}`}
-                >
-                  {report.passed && report.complete
-                    ? 'Tests Engine réussis pour ces seeds et ces cas. La relecture reste nécessaire.'
-                    : 'Tests en échec ou couverture incomplète.'}
-                </p>
-                <p className="break-all font-mono text-xs text-slate-500">
-                  Empreinte de définition : {report.definitionDigest}
-                </p>
-                {receiptId && (
-                  <p className="break-all text-sm text-blue-800">
-                    Rapport enregistré : {receiptId}. La relecture humaine reste
-                    distincte.
-                  </p>
-                )}
-                {report.seeds.map((r) => (
-                  <section
-                    key={r.seed}
-                    className="space-y-3 rounded-lg border border-slate-200 p-4"
-                  >
-                    <h3 className="font-semibold">
-                      Seed {r.seed} · {r.passed ? 'Réussie' : 'À corriger'}
-                    </h3>
-                    <p className="text-sm">
-                      Rejeu : {r.reproducible ? 'identique' : 'non validé'} ·
-                      Projection élève :{' '}
-                      {r.publicProjectionSafe ? 'contrôlée' : 'non validée'}
-                    </p>
-                    <Diagnostics items={r.diagnostics} />
-                    <div className="overflow-x-auto">
-                      <table className="preview-table text-sm">
-                        <caption>Vérifications de correction</caption>
-                        <thead>
-                          <tr>
-                            <th>Question</th>
-                            <th>Cas</th>
-                            <th>Attendu</th>
-                            <th>Résultat Engine</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {r.checks.map((c, i) => (
-                            <tr key={i}>
-                              <td className="font-mono text-xs">
-                                {c.questionId}
-                              </td>
-                              <td>{c.label}</td>
-                              <td>
-                                {
-                                  correctionLabels[
-                                    c.expectedState as keyof typeof correctionLabels
-                                  ]
-                                }
-                              </td>
-                              <td
-                                className={
-                                  c.passed ? 'text-green-700' : 'text-red-700'
-                                }
-                              >
-                                {correctionLabels[c.result.state]}
-                                <p className="mt-1 text-xs">{c.result.code}</p>
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                  </section>
-                ))}
-              </div>
-            )}
-          </div>
-        </details>
-      </fieldset>
+                  </label>
+                ) : (
+                  <MathInput
+                    key={question.id}
+                    label={label}
+                    disabled={disabled || busy}
+                    value={answer?.format === 'latex' ? answer.source : ''}
+                    onChange={(value) =>
+                      updateAnswer(question.id, {
+                        format: 'latex',
+                        source: value,
+                      })
+                    }
+                  />
+                );
+              })}
+            </fieldset>
+          )}
+        </>
+      )}
+      {preview && (
+        <div
+          className="rounded-xl border border-slate-200 bg-white p-5"
+          aria-label="Vue élève"
+        >
+          <PublicExercise
+            key={preview.instance.instanceId}
+            instance={preview.instance}
+            submit={submit}
+            disabled={disabled || busy}
+          />
+        </div>
+      )}
     </section>
   );
 }

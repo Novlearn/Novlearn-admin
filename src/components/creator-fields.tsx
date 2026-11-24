@@ -5,17 +5,32 @@ import type {
   JsonValue,
   RichFragment,
 } from 'novlearn-exercise-engine';
-import { CanonicalFields, CreatorLockedContext } from './canonical-fields';
+import {
+  CanonicalFields,
+  choiceLabels,
+  CreatorLockedContext,
+} from './canonical-fields';
 import { GenerationEditor } from './generation-editor';
-import { MathInput } from './math-input';
+import { MathInput, MathParameters } from './math-input';
 import {
   asEditorObject,
   elementLabels,
   elementTemplate,
-  moveItem,
   duplicateElement,
   changeQuestionKind,
+  responseKinds,
 } from '@/lib/creator';
+
+type QuestionSupport = Extract<
+  ExerciseElement,
+  { type: 'hint' | 'explanation' }
+>;
+
+function isQuestionSupport(
+  element: ExerciseElement,
+): element is QuestionSupport {
+  return element.type === 'hint' || element.type === 'explanation';
+}
 
 function RichTextEditor({
   value,
@@ -32,10 +47,6 @@ function RichTextEditor({
     );
   return (
     <div className="space-y-3">
-      <p className="text-sm text-slate-600">
-        Assemblez du texte et des formules. Vous pouvez mettre un fragment de
-        texte en gras ou en italique.
-      </p>
       {value.map((fragment, index) => (
         <article
           key={index}
@@ -362,6 +373,17 @@ export function CreatorFields({
   onChange: (definition: ExerciseDefinition) => void;
   disabled?: boolean;
 }) {
+  const parameters = [
+    ...new Set(
+      definition.generation.definitions.flatMap((variable) =>
+        variable.kind === 'tuple'
+          ? (variable.components?.map((part) => part.name) ?? [])
+          : [variable.name],
+      ),
+    ),
+  ].filter(
+    (name) => typeof name === 'string' && /^[a-z][A-Za-z0-9]{0,31}$/.test(name),
+  );
   const fresh = () => `element-${crypto.randomUUID()}`;
   const addElement = (elementType: ExerciseElement['type']) =>
     updateElements([
@@ -373,27 +395,74 @@ export function CreatorFields({
   const updateGeneration = (generation: ExerciseDefinition['generation']) =>
     onChange({ ...definition, generation });
   const patchElement = (index: number, value: JsonValue) => {
-    let next = value as unknown as ExerciseElement;
-    const previous = definition.elements[index];
-    if (
-      previous.type === 'question' &&
-      next.type === 'question' &&
-      previous.response &&
-      next.response &&
-      next.response.kind !== previous.response.kind
-    )
-      next = changeQuestionKind(next, next.response.kind);
+    const next = value as unknown as ExerciseElement;
     updateElements(
       definition.elements.map((old, position) =>
         position === index ? next : old,
       ),
     );
   };
+  const questionIds = new Set(
+    definition.elements
+      .filter(
+        (element) => element.type === 'question' || element.type === 'mcq',
+      )
+      .map((element) => element.id),
+  );
+  const linkedSupport = new Map<
+    string,
+    { element: QuestionSupport; index: number }[]
+  >();
+  const visible = definition.elements.flatMap((element, index) => {
+    if (
+      isQuestionSupport(element) &&
+      element.questionId &&
+      questionIds.has(element.questionId) &&
+      Array.isArray(element.content) &&
+      element.content.every(
+        (fragment) =>
+          fragment && (fragment.type === 'text' || fragment.type === 'math'),
+      )
+    ) {
+      const linked = linkedSupport.get(element.questionId) ?? [];
+      linked.push({ element, index });
+      linkedSupport.set(element.questionId, linked);
+      return [];
+    }
+    return [{ element, index }];
+  });
+  function moveVisible(position: number, step: -1 | 1) {
+    const target = visible[position + step];
+    if (!target) return;
+    const current = visible[position];
+    const next = [...definition.elements];
+    next[current.index] = target.element;
+    next[target.index] = current.element;
+    updateElements(next);
+  }
+  function addQuestionSupport(
+    question: ExerciseElement,
+    type: QuestionSupport['type'],
+  ) {
+    const support: QuestionSupport = {
+      id: fresh(),
+      type,
+      questionId: question.id,
+      content: [{ type: 'text', text: '' }],
+    };
+    updateElements([...definition.elements, support]);
+  }
   return (
     <CreatorLockedContext.Provider value={disabled}>
       <div className="mt-8 flex flex-col gap-8 border-t border-slate-200 pt-8">
         <details
-          open
+          open={
+            !!(
+              parameters.length ||
+              definition.generation.constraints.length ||
+              definition.variables.length
+            )
+          }
           aria-labelledby="variables-heading"
           className="rounded-xl border border-slate-200 bg-slate-50/70 p-5"
         >
@@ -402,14 +471,14 @@ export function CreatorFields({
               className="block text-base font-semibold"
               id="variables-heading"
             >
-              Variables aléatoires et contraintes
+              Variables et contraintes
             </span>
             <span className="mt-1 block text-sm font-normal text-slate-500">
               {definition.generation.definitions.length ||
               definition.generation.constraints.length ||
               definition.variables.length
                 ? `${definition.generation.definitions.length} variable(s) · ${definition.generation.constraints.length} règle(s)`
-                : 'Créez des variables pour faire varier les valeurs de cet exercice.'}
+                : null}
             </span>
           </summary>
           <div className="mt-5 space-y-6">
@@ -422,10 +491,6 @@ export function CreatorFields({
               <summary className="cursor-pointer text-sm font-semibold text-slate-700">
                 Variables formelles et budgets
               </summary>
-              <p className="mt-3 text-sm leading-6 text-slate-500">
-                Les variables formelles, comme x, ne sont pas tirées au hasard.
-                Les budgets limitent les essais de génération.
-              </p>
               <div className="mt-4 space-y-4">
                 {definition.variables.map((variable, index) => (
                   <div key={index} className="rounded-lg bg-slate-50 p-4">
@@ -505,14 +570,13 @@ export function CreatorFields({
           <h2 id="elements-heading" className="text-xl font-semibold">
             Énoncé et questions
           </h2>
-          <p className="mt-2 text-sm leading-6 text-slate-500">
-            Ajoutez le texte de l’énoncé, les questions et leurs réponses
-            attendues. Les réponses restent privées.
-          </p>
-          <div className="mt-5 rounded-xl border border-blue-100 bg-blue-50/50 p-4">
-            <p className="mb-3 text-sm font-semibold text-slate-800">
-              Ajouter à l’exercice
+          {parameters.length > 0 && (
+            <p className="mt-2 text-sm text-slate-600">
+              Dans le texte, utilisez <code>@{parameters[0]}</code>. Dans une
+              formule, choisissez la variable sous le champ.
             </p>
+          )}
+          <div className="mt-5 rounded-xl border border-blue-100 bg-blue-50/50 p-4">
             <div className="flex flex-wrap gap-2">
               {(
                 [
@@ -532,18 +596,10 @@ export function CreatorFields({
                 </button>
               ))}
             </div>
-            <p className="mt-2 text-xs text-slate-600">
-              Dans ce bloc, vous pouvez mélanger texte, formules, gras et
-              italique.
-            </p>
             <details className="mt-3">
               <summary className="cursor-pointer text-sm font-medium text-blue-800">
-                Autres éléments pédagogiques
+                Autres éléments
               </summary>
-              <p className="mt-2 text-sm text-slate-600">
-                Les autres éléments ajoutent des tableaux, graphiques ou schémas
-                structurés.
-              </p>
               <div className="mt-3 flex flex-wrap gap-2">
                 {Object.entries(elementLabels)
                   .filter(
@@ -578,289 +634,498 @@ export function CreatorFields({
               Ajoutez votre premier élément pour composer l’exercice.
             </p>
           )}
-          <div className="mt-5 space-y-5">
-            {definition.elements.map((element, index) => (
-              <details
-                key={element.id}
-                open
-                className="rounded-xl border border-slate-200 bg-white p-5"
-              >
-                <summary className="cursor-pointer font-semibold">
-                  {index + 1}. {elementLabels[element.type]}
-                </summary>
-                <div className="mt-5">
-                  {element.type === 'text' || element.type === 'section' ? (
-                    <label className="label">
-                      {element.type === 'section'
-                        ? 'Titre de section'
-                        : 'Texte de l’énoncé'}
-                      <textarea
-                        className="field min-h-28"
-                        value={element.text}
-                        disabled={disabled}
-                        onChange={(event) =>
-                          patchElement(index, {
-                            ...element,
-                            text: event.target.value,
-                          })
-                        }
-                      />
-                    </label>
-                  ) : element.type === 'expression' ||
-                    element.type === 'equation' ? (
-                    <div className="space-y-4">
-                      {element.type === 'expression' && (
-                        <label className="label">
-                          Légende (facultative)
-                          <input
-                            className="field"
-                            value={element.label ?? ''}
-                            disabled={disabled}
-                            onChange={(event) =>
-                              patchElement(index, {
-                                ...element,
-                                label: event.target.value,
-                              } as unknown as JsonValue)
-                            }
-                          />
-                        </label>
-                      )}
-                      <MathInput
-                        label={
-                          element.type === 'equation' ? 'Équation' : 'Formule'
-                        }
-                        value={element.latex}
-                        disabled={disabled}
-                        onChange={(latex) =>
-                          patchElement(index, {
-                            ...element,
-                            latex,
-                          } as unknown as JsonValue)
-                        }
-                      />
-                    </div>
-                  ) : element.type === 'rich-text' ? (
-                    <RichTextEditor
-                      value={element.content}
-                      disabled={disabled}
-                      onChange={(content) =>
-                        patchElement(index, {
-                          ...element,
-                          content,
-                        } as unknown as JsonValue)
-                      }
-                    />
-                  ) : element.type === 'question' ? (
-                    <div className="space-y-5">
+          <MathParameters.Provider value={parameters}>
+            <div className="mt-5 space-y-5">
+              {visible.map(({ element, index }, position) => (
+                <details
+                  key={element.id}
+                  open
+                  className="rounded-xl border border-slate-200 bg-white p-5"
+                >
+                  <summary className="cursor-pointer font-semibold">
+                    {position + 1}. {elementLabels[element.type]}
+                  </summary>
+                  <div className="mt-5">
+                    {element.type === 'text' || element.type === 'section' ? (
                       <label className="label">
-                        Question
+                        {element.type === 'section'
+                          ? 'Titre de section'
+                          : 'Texte de l’énoncé'}
                         <textarea
-                          className="field min-h-24"
+                          className="field min-h-28"
                           value={element.text}
                           disabled={disabled}
                           onChange={(event) =>
                             patchElement(index, {
                               ...element,
                               text: event.target.value,
-                            } as unknown as JsonValue)
+                            })
                           }
                         />
                       </label>
-                      {element.expectedLatex !== undefined ? (
+                    ) : element.type === 'expression' ||
+                      element.type === 'equation' ? (
+                      <div className="space-y-4">
+                        {element.type === 'expression' && (
+                          <label className="label">
+                            Légende (facultative)
+                            <input
+                              className="field"
+                              value={element.label ?? ''}
+                              disabled={disabled}
+                              onChange={(event) =>
+                                patchElement(index, {
+                                  ...element,
+                                  label: event.target.value,
+                                } as unknown as JsonValue)
+                              }
+                            />
+                          </label>
+                        )}
                         <MathInput
-                          label="Réponse attendue"
-                          value={element.expectedLatex}
+                          label={
+                            element.type === 'equation' ? 'Équation' : 'Formule'
+                          }
+                          value={element.latex}
                           disabled={disabled}
-                          onChange={(expectedLatex) =>
+                          onChange={(latex) =>
                             patchElement(index, {
                               ...element,
-                              expectedLatex,
+                              latex,
                             } as unknown as JsonValue)
                           }
                         />
-                      ) : (
-                        <fieldset className="space-y-3">
-                          <legend className="label">
-                            Réponse(s) attendue(s)
-                          </legend>
-                          {(element.expectedTexts ?? ['']).map(
-                            (expectedText, answerIndex) => (
-                              <div
-                                key={answerIndex}
-                                className="flex items-center gap-2"
-                              >
-                                <input
-                                  className="field mt-0"
-                                  value={expectedText}
-                                  disabled={disabled}
-                                  aria-label={`Réponse textuelle attendue ${answerIndex + 1}`}
-                                  onChange={(event) =>
-                                    patchElement(index, {
-                                      ...element,
-                                      expectedTexts: element.expectedTexts.map(
-                                        (text, position) =>
-                                          position === answerIndex
-                                            ? event.target.value
-                                            : text,
-                                      ),
-                                    } as unknown as JsonValue)
-                                  }
-                                />
-                                {element.expectedTexts.length > 1 && (
-                                  <button
-                                    type="button"
-                                    disabled={disabled}
-                                    className="text-sm text-red-700"
-                                    aria-label={`Retirer la réponse ${answerIndex + 1}`}
-                                    onClick={() =>
-                                      patchElement(index, {
-                                        ...element,
-                                        expectedTexts:
-                                          element.expectedTexts.filter(
-                                            (_, position) =>
-                                              position !== answerIndex,
-                                          ),
-                                      } as unknown as JsonValue)
-                                    }
-                                  >
-                                    Retirer
-                                  </button>
-                                )}
-                              </div>
-                            ),
-                          )}
-                          <button
-                            type="button"
+                      </div>
+                    ) : element.type === 'rich-text' ? (
+                      <RichTextEditor
+                        value={element.content}
+                        disabled={disabled}
+                        onChange={(content) =>
+                          patchElement(index, {
+                            ...element,
+                            content,
+                          } as unknown as JsonValue)
+                        }
+                      />
+                    ) : element.type === 'question' ? (
+                      <div className="space-y-5">
+                        <label className="label">
+                          Question
+                          <textarea
+                            className="field min-h-24"
+                            value={element.text}
                             disabled={disabled}
-                            className="text-sm font-medium text-blue-700"
-                            onClick={() =>
+                            onChange={(event) =>
                               patchElement(index, {
                                 ...element,
-                                expectedTexts: [...element.expectedTexts, ''],
-                              } as unknown as JsonValue)
-                            }
-                          >
-                            ＋ Accepter une autre réponse
-                          </button>
-                        </fieldset>
-                      )}
-                      <label className="label max-w-40">
-                        Points
-                        <input
-                          className="field"
-                          type="number"
-                          min={0}
-                          step="any"
-                          value={element.points}
-                          disabled={disabled}
-                          onChange={(event) => {
-                            const points = event.currentTarget.valueAsNumber;
-                            if (Number.isFinite(points))
-                              patchElement(index, {
-                                ...element,
-                                points,
-                              } as unknown as JsonValue);
-                          }}
-                        />
-                      </label>
-                      <details className="rounded-lg border border-slate-200 p-4">
-                        <summary className="cursor-pointer text-sm font-semibold text-slate-700">
-                          Format de réponse et règles avancées
-                        </summary>
-                        <p className="mt-2 text-sm text-slate-500">
-                          Le format et les règles définissent comment la réponse
-                          sera vérifiée. La plupart des questions peuvent garder
-                          le réglage proposé.
-                        </p>
-                        <div className="mt-4">
-                          <CanonicalFields
-                            value={asEditorObject({
-                              response: element.response,
-                              policy: element.policy,
-                            })}
-                            path={`/elements/${index}`}
-                            onChange={(value) =>
-                              patchElement(index, {
-                                ...element,
-                                ...(value as unknown as Pick<
-                                  typeof element,
-                                  'response' | 'policy'
-                                >),
+                                text: event.target.value,
                               } as unknown as JsonValue)
                             }
                           />
+                        </label>
+                        <label className="label max-w-sm">
+                          Type de réponse
+                          <select
+                            className="field"
+                            value={element.response.kind}
+                            disabled={disabled}
+                            onChange={(event) => {
+                              const kind = event.target
+                                .value as (typeof responseKinds)[number];
+                              const switchesToOrFromText =
+                                kind === 'text' ||
+                                element.response.kind === 'text';
+                              const hasAnswer =
+                                element.expectedLatex?.trim() ||
+                                element.expectedTexts?.some((text) =>
+                                  text.trim(),
+                                );
+                              const hasRules =
+                                element.policy.form !== 'value-only' ||
+                                Object.keys(element.policy).length > 2 ||
+                                element.response.variable;
+                              if (
+                                (hasRules ||
+                                  (switchesToOrFromText && hasAnswer)) &&
+                                !window.confirm(
+                                  'Changer le type réinitialise les règles de correction et peut effacer une réponse incompatible. Continuer ?',
+                                )
+                              )
+                                return;
+                              patchElement(
+                                index,
+                                changeQuestionKind(
+                                  element,
+                                  kind,
+                                ) as unknown as JsonValue,
+                              );
+                            }}
+                          >
+                            {responseKinds.map((kind) => (
+                              <option key={kind} value={kind}>
+                                {kind === 'rational'
+                                  ? 'Nombre entier ou fraction'
+                                  : kind === 'real'
+                                    ? 'Nombre réel'
+                                    : (choiceLabels[kind] ?? kind)}
+                              </option>
+                            ))}
+                          </select>
+                        </label>
+                        {element.response.kind !== 'text' ? (
+                          <MathInput
+                            label="Réponse attendue"
+                            value={element.expectedLatex ?? ''}
+                            disabled={disabled}
+                            onChange={(expectedLatex) =>
+                              patchElement(index, {
+                                ...element,
+                                expectedLatex,
+                              } as unknown as JsonValue)
+                            }
+                          />
+                        ) : (
+                          <fieldset className="space-y-3">
+                            <legend className="label">
+                              Réponse(s) attendue(s)
+                            </legend>
+                            {(element.expectedTexts ?? ['']).map(
+                              (expectedText, answerIndex) => (
+                                <div
+                                  key={answerIndex}
+                                  className="flex items-center gap-2"
+                                >
+                                  <input
+                                    className="field mt-0"
+                                    value={expectedText}
+                                    disabled={disabled}
+                                    aria-label={`Réponse textuelle attendue ${answerIndex + 1}`}
+                                    onChange={(event) =>
+                                      patchElement(index, {
+                                        ...element,
+                                        expectedTexts: (
+                                          element.expectedTexts ?? ['']
+                                        ).map((text, position) =>
+                                          position === answerIndex
+                                            ? event.target.value
+                                            : text,
+                                        ),
+                                      } as unknown as JsonValue)
+                                    }
+                                  />
+                                  {(element.expectedTexts?.length ?? 0) > 1 && (
+                                    <button
+                                      type="button"
+                                      disabled={disabled}
+                                      className="text-sm text-red-700"
+                                      aria-label={`Retirer la réponse ${answerIndex + 1}`}
+                                      onClick={() =>
+                                        patchElement(index, {
+                                          ...element,
+                                          expectedTexts: (
+                                            element.expectedTexts ?? []
+                                          ).filter(
+                                            (_, position) =>
+                                              position !== answerIndex,
+                                          ),
+                                        } as unknown as JsonValue)
+                                      }
+                                    >
+                                      Retirer
+                                    </button>
+                                  )}
+                                </div>
+                              ),
+                            )}
+                            <button
+                              type="button"
+                              disabled={disabled}
+                              className="text-sm font-medium text-blue-700"
+                              onClick={() =>
+                                patchElement(index, {
+                                  ...element,
+                                  expectedTexts: [
+                                    ...(element.expectedTexts ?? ['']),
+                                    '',
+                                  ],
+                                } as unknown as JsonValue)
+                              }
+                            >
+                              ＋ Accepter une autre réponse
+                            </button>
+                          </fieldset>
+                        )}
+                        <label className="label max-w-40">
+                          Points
+                          <input
+                            className="field"
+                            type="number"
+                            min={0}
+                            step="any"
+                            value={element.points}
+                            disabled={disabled}
+                            onChange={(event) => {
+                              const points = event.currentTarget.valueAsNumber;
+                              if (Number.isFinite(points))
+                                patchElement(index, {
+                                  ...element,
+                                  points,
+                                } as unknown as JsonValue);
+                            }}
+                          />
+                        </label>
+                        <details className="rounded-lg border border-slate-200 p-4">
+                          <summary className="cursor-pointer text-sm font-semibold text-slate-700">
+                            Règles de correction
+                          </summary>
+                          <div className="mt-4 space-y-4">
+                            {[
+                              'expression',
+                              'rational-expression',
+                              'log-affine-positive',
+                              'geometric-expression',
+                              'elementary-positive',
+                              'equation',
+                              'inequality',
+                            ].includes(element.response.kind) && (
+                              <CanonicalFields
+                                value={asEditorObject(
+                                  element.response.variable === undefined
+                                    ? {}
+                                    : { variable: element.response.variable },
+                                )}
+                                path={`/elements/${index}/response`}
+                                onChange={(value) => {
+                                  const response = { ...element.response };
+                                  const { variable } = value as {
+                                    variable?: string;
+                                  };
+                                  if (variable === undefined)
+                                    delete response.variable;
+                                  else response.variable = variable;
+                                  patchElement(index, {
+                                    ...element,
+                                    response,
+                                  } as unknown as JsonValue);
+                                }}
+                              />
+                            )}
+                            <CanonicalFields
+                              value={asEditorObject(element.policy)}
+                              path={`/elements/${index}/policy`}
+                              onChange={(value) =>
+                                patchElement(index, {
+                                  ...element,
+                                  policy: value,
+                                } as unknown as JsonValue)
+                              }
+                            />
+                          </div>
+                        </details>
+                      </div>
+                    ) : element.type === 'mcq' ? (
+                      <MultipleChoiceEditor
+                        element={element}
+                        disabled={disabled}
+                        onChange={(next) =>
+                          patchElement(index, next as unknown as JsonValue)
+                        }
+                      />
+                    ) : (
+                      <div className="space-y-4">
+                        <CanonicalFields
+                          value={asEditorObject(element)}
+                          path={`/elements/${index}`}
+                          onChange={(value) => patchElement(index, value)}
+                        />
+                      </div>
+                    )}
+                    {questionIds.has(element.id) && (
+                      <details className="mt-5 rounded-lg border border-slate-200 p-4">
+                        <summary className="cursor-pointer text-sm font-semibold text-slate-700">
+                          Indications et correction expliquée
+                        </summary>
+                        <div className="mt-4 space-y-4">
+                          {linkedSupport
+                            .get(element.id)
+                            ?.map(
+                              ({ element: support, index: supportIndex }) => {
+                                const label =
+                                  support.type === 'hint'
+                                    ? 'Indication'
+                                    : 'Correction expliquée';
+                                const fragment = support.content[0];
+                                const setContent = (content: RichFragment[]) =>
+                                  patchElement(supportIndex, {
+                                    ...support,
+                                    content,
+                                  } as unknown as JsonValue);
+                                return (
+                                  <fieldset
+                                    key={support.id}
+                                    className="space-y-3 rounded-lg border border-slate-200 p-3"
+                                  >
+                                    <legend className="px-1 text-sm font-medium">
+                                      {label}
+                                    </legend>
+                                    {support.content.length === 1 &&
+                                    fragment?.type === 'text' &&
+                                    !fragment.emphasis ? (
+                                      <>
+                                        <textarea
+                                          aria-label={label}
+                                          className="field min-h-20"
+                                          value={fragment.text}
+                                          disabled={disabled}
+                                          onChange={(event) =>
+                                            setContent([
+                                              {
+                                                ...fragment,
+                                                text: event.target.value,
+                                              },
+                                            ])
+                                          }
+                                        />
+                                        <button
+                                          type="button"
+                                          className="text-sm text-blue-700"
+                                          disabled={disabled}
+                                          onClick={() =>
+                                            setContent([
+                                              fragment,
+                                              {
+                                                type: 'math',
+                                                latex: '',
+                                                display: 'inline',
+                                              },
+                                            ])
+                                          }
+                                        >
+                                          + Ajouter une formule
+                                        </button>
+                                      </>
+                                    ) : (
+                                      <RichTextEditor
+                                        value={support.content}
+                                        onChange={setContent}
+                                        disabled={disabled}
+                                      />
+                                    )}
+                                    <button
+                                      type="button"
+                                      className="block text-sm text-red-700"
+                                      disabled={disabled}
+                                      onClick={() =>
+                                        updateElements(
+                                          definition.elements.filter(
+                                            (_, i) => i !== supportIndex,
+                                          ),
+                                        )
+                                      }
+                                    >
+                                      Retirer cette {label.toLowerCase()}
+                                    </button>
+                                  </fieldset>
+                                );
+                              },
+                            )}
+                          <div className="flex flex-wrap gap-2">
+                            <button
+                              type="button"
+                              className="button button-secondary"
+                              disabled={disabled}
+                              onClick={() =>
+                                addQuestionSupport(element, 'hint')
+                              }
+                            >
+                              + Indication
+                            </button>
+                            <button
+                              type="button"
+                              className="button button-secondary"
+                              disabled={disabled}
+                              onClick={() =>
+                                addQuestionSupport(element, 'explanation')
+                              }
+                            >
+                              + Correction expliquée
+                            </button>
+                          </div>
                         </div>
                       </details>
+                    )}
+                    <div className="mt-5 flex flex-wrap gap-4 border-t border-slate-100 pt-4">
+                      <button
+                        type="button"
+                        className="text-sm font-medium text-blue-700"
+                        disabled={disabled || position === 0}
+                        onClick={() => moveVisible(position, -1)}
+                      >
+                        ↑ Monter
+                      </button>
+                      <button
+                        type="button"
+                        className="text-sm font-medium text-blue-700"
+                        disabled={disabled || position === visible.length - 1}
+                        onClick={() => moveVisible(position, 1)}
+                      >
+                        ↓ Descendre
+                      </button>
+                      <button
+                        type="button"
+                        className="text-sm font-medium text-blue-700"
+                        disabled={disabled}
+                        onClick={() => {
+                          const copy = duplicateElement(element, fresh());
+                          const supportCopies = (
+                            linkedSupport.get(element.id) ?? []
+                          ).map(({ element: support }) => ({
+                            ...structuredClone(support),
+                            id: fresh(),
+                            questionId: copy.id,
+                          }));
+                          updateElements([
+                            ...definition.elements.slice(0, index + 1),
+                            copy,
+                            ...supportCopies,
+                            ...definition.elements.slice(index + 1),
+                          ]);
+                        }}
+                      >
+                        Dupliquer
+                      </button>
+                      <button
+                        type="button"
+                        className="text-sm font-medium text-red-700"
+                        disabled={disabled}
+                        onClick={() => {
+                          const linked = linkedSupport.get(element.id) ?? [];
+                          if (
+                            linked.length &&
+                            !window.confirm(
+                              'Retirer cette question et ses indications et corrections associées ?',
+                            )
+                          )
+                            return;
+                          updateElements(
+                            definition.elements.filter(
+                              (_, position) =>
+                                position !== index &&
+                                !linked.some(
+                                  (support) => support.index === position,
+                                ),
+                            ),
+                          );
+                        }}
+                      >
+                        Retirer cet élément
+                      </button>
                     </div>
-                  ) : element.type === 'mcq' ? (
-                    <MultipleChoiceEditor
-                      element={element}
-                      disabled={disabled}
-                      onChange={(next) =>
-                        patchElement(index, next as unknown as JsonValue)
-                      }
-                    />
-                  ) : (
-                    <div className="space-y-4">
-                      <CanonicalFields
-                        value={asEditorObject(element)}
-                        path={`/elements/${index}`}
-                        onChange={(value) => patchElement(index, value)}
-                      />
-                    </div>
-                  )}
-                  <div className="mt-5 flex flex-wrap gap-4 border-t border-slate-100 pt-4">
-                    <button
-                      type="button"
-                      className="text-sm font-medium text-blue-700"
-                      disabled={index === 0}
-                      onClick={() =>
-                        updateElements(moveItem(definition.elements, index, -1))
-                      }
-                    >
-                      ↑ Monter
-                    </button>
-                    <button
-                      type="button"
-                      className="text-sm font-medium text-blue-700"
-                      disabled={index === definition.elements.length - 1}
-                      onClick={() =>
-                        updateElements(moveItem(definition.elements, index, 1))
-                      }
-                    >
-                      ↓ Descendre
-                    </button>
-                    <button
-                      type="button"
-                      className="text-sm font-medium text-blue-700"
-                      onClick={() =>
-                        updateElements([
-                          ...definition.elements.slice(0, index + 1),
-                          duplicateElement(element, fresh()),
-                          ...definition.elements.slice(index + 1),
-                        ])
-                      }
-                    >
-                      Dupliquer
-                    </button>
-                    <button
-                      type="button"
-                      className="text-sm font-medium text-red-700"
-                      onClick={() =>
-                        updateElements(
-                          definition.elements.filter(
-                            (_, position) => position !== index,
-                          ),
-                        )
-                      }
-                    >
-                      Retirer cet élément
-                    </button>
                   </div>
-                </div>
-              </details>
-            ))}
-          </div>
+                </details>
+              ))}
+            </div>
+          </MathParameters.Provider>
         </section>
       </div>
     </CreatorLockedContext.Provider>

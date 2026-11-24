@@ -8,7 +8,7 @@ import {
 } from '@/lib/exercise-metadata';
 import { newDraft } from '@/lib/catalogue';
 vi.mock('server-only', () => ({}));
-import { checkExerciseReferences } from '@/lib/exercise-references';
+import { prepareExerciseReferences } from '@/lib/exercise-references';
 const chapters = [
   { id: 'c1', name: 'Suites', aliases: ['Suites et limites'] },
   { id: 'c2', name: 'Dérivation', aliases: [] },
@@ -32,9 +32,10 @@ describe('métadonnées éditoriales et références', () => {
     expect(difficultyLabel(0)).toContain('À rapprocher');
     expect(difficultyLabel('easy')).toContain('À rapprocher');
   });
-  it('résout un alias unique sans remplacer la valeur dans le brouillon', () => {
+  it('résout un identifiant ou un alias unique et refuse les ambiguïtés', () => {
     expect(resolveChapter('Suites et limites', chapters)?.id).toBe('c1');
-    expect(resolveChapter('c1', chapters)).toBeNull();
+    expect(resolveChapter('c1', chapters)?.name).toBe('Suites');
+    expect(resolveChapter('absent', chapters)).toBeNull();
     expect(
       resolveChapter('Suites', [
         ...chapters,
@@ -63,8 +64,8 @@ describe('métadonnées éditoriales et références', () => {
     const from = vi.fn();
     const client = { from } as unknown as SupabaseClient;
     expect(
-      await checkExerciseReferences(client, newDraft('Incomplet')),
-    ).toBeNull();
+      await prepareExerciseReferences(client, newDraft('Incomplet')),
+    ).toMatchObject({ issue: null });
     expect(from).not.toHaveBeenCalled();
   });
   it('vérifie les références réelles et ferme sur une erreur de lecture', async () => {
@@ -85,12 +86,20 @@ describe('métadonnées éditoriales et références', () => {
       ...newDraft('Références'),
       catalogue: { chapter: 'Suites', skills: ['termes'] },
     };
-    expect(await checkExerciseReferences(client, draft)).toBeNull();
+    expect(await prepareExerciseReferences(client, draft)).toEqual({
+      issue: null,
+      definition: draft,
+    });
     expect(calls).toEqual(['chapters', 'competences']);
     draft.catalogue.skills = ['derivee'];
-    expect(await checkExerciseReferences(client, draft)).toBeNull();
+    draft.catalogue.chapter = 'c1';
+    expect(await prepareExerciseReferences(client, draft)).toMatchObject({
+      issue: null,
+      definition: { catalogue: { chapter: 'Suites', skills: ['derivee'] } },
+    });
+    expect(draft.catalogue.chapter).toBe('c1');
     fail = true;
-    await expect(checkExerciseReferences(client, draft)).rejects.toThrow(
+    await expect(prepareExerciseReferences(client, draft)).rejects.toThrow(
       'unavailable',
     );
   });

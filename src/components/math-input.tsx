@@ -1,6 +1,13 @@
 'use client';
 
-import { useEffect, useId, useRef, useState } from 'react';
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useId,
+  useRef,
+  useState,
+} from 'react';
 import type { MathfieldElement } from 'mathlive';
 import {
   bindMathInput,
@@ -18,6 +25,7 @@ type MathInputProps = {
   readOnly?: boolean;
   disabled?: boolean;
 };
+export const MathParameters = createContext<readonly string[]>([]);
 
 let library: Promise<typeof import('mathlive')> | undefined;
 let keyboardOwner: MathfieldElement | null = null;
@@ -37,6 +45,7 @@ function loadMathLive() {
 }
 
 export function MathInput(props: MathInputProps) {
+  const parameters = useContext(MathParameters);
   const generatedId = useId();
   const id = props.id ?? `${generatedId}-math`;
   const messageId = `${id}-message`;
@@ -44,6 +53,7 @@ export function MathInput(props: MathInputProps) {
   latest.current = props;
   const container = useRef<HTMLDivElement>(null);
   const field = useRef<MathfieldElement | null>(null);
+  const fallback = useRef<HTMLTextAreaElement>(null);
   const [state, setState] = useState<'loading' | 'ready' | 'failed'>('loading');
 
   useEffect(() => {
@@ -142,6 +152,32 @@ export function MathInput(props: MathInputProps) {
     window.mathVirtualKeyboard.show();
   }
 
+  function insertParameter(name: string) {
+    if (!parameters.includes(name) || props.disabled || props.readOnly) return;
+    const reference = `\\mathrm{${name}}`;
+    if (state === 'ready' && field.current) {
+      field.current.focus();
+      field.current.insert(reference, { format: 'latex' });
+      return;
+    }
+    const input = fallback.current;
+    if (!input) return;
+    const start = input.selectionStart;
+    props.onChange(
+      props.value.slice(0, start) +
+        reference +
+        props.value.slice(input.selectionEnd),
+    );
+    requestAnimationFrame(() => {
+      if (fallback.current !== input) return;
+      input.focus();
+      input.setSelectionRange(
+        start + reference.length,
+        start + reference.length,
+      );
+    });
+  }
+
   return (
     <div className="math-input space-y-2">
       <label className="label" htmlFor={id}>
@@ -150,6 +186,7 @@ export function MathInput(props: MathInputProps) {
       <div ref={container} />
       {state !== 'ready' && (
         <textarea
+          ref={fallback}
           id={id}
           className="field"
           value={props.value}
@@ -179,8 +216,24 @@ export function MathInput(props: MathInputProps) {
         onClick={openKeyboard}
         disabled={state !== 'ready' || props.disabled || props.readOnly}
       >
-        Afficher le clavier scientifique
+        Clavier scientifique
       </button>
+      {parameters.length > 0 && !props.readOnly && (
+        <select
+          className="ml-2 rounded-md border border-slate-200 px-2 py-1 text-sm"
+          aria-label={`Insérer une variable dans ${props.label}`}
+          value=""
+          disabled={props.disabled}
+          onChange={(event) => insertParameter(event.target.value)}
+        >
+          <option value="">Insérer une variable</option>
+          {parameters.map((name) => (
+            <option key={name} value={name}>
+              @{name}
+            </option>
+          ))}
+        </select>
+      )}
       {(props.error || props.description) && (
         <p
           id={messageId}

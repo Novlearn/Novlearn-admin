@@ -31,17 +31,6 @@ export function ContentOverview({ data }: { data: Overview | null }) {
         </div>
         {data ? (
           <>
-            <p className="mt-3 text-sm text-slate-500">
-              Relevé du{' '}
-              <time dateTime={data.asOf}>{overviewDate(data.asOf)}</time>.{' '}
-              <Link
-                href="/admin/exercises"
-                className="font-medium text-brand-700 underline"
-              >
-                {formatCount(data.catalogue.total)} exercices au total
-              </Link>
-              , archives comprises.
-            </p>
             <dl className="mt-5 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
               {dashboardStatuses.map((status) => (
                 <div className="card" key={status}>

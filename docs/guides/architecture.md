@@ -68,9 +68,9 @@ révision. Un rapport ou une approbation ne reste pas courant après modificatio
 changement d’époque ou d’archive Engine. Les anciens reçus restent lisibles et
 ne doivent pas être réétiquetés comme résultats du nouveau moteur.
 
-Le parcours relie brouillon, tests, demande de relecture, approbation humaine et
-publication. Les statuts SQL effectifs sont portés par les contrats et RPC ; la
-formulation cible du CDC ne prouve pas l’activation de chaque étape.
+Le Creator permet d'enregistrer en brouillon ou d'approuver la révision dans
+Staging au moment de la sauvegarde. Les tests restent disponibles à la demande.
+La synchronisation vers Production est une action distincte.
 
 La liste et la fiche affichent en priorité le titre destiné à l’application.
 Les underscores sont remplacés par des espaces à l’affichage, y compris quand
@@ -85,6 +85,31 @@ sa révision et son empreinte. Depuis une révision en lecture seule, l’action
 et sauvegarde un nouveau brouillon sur l’identité d’exercice existante.
 La pagination de l’historique conserve la révision consultée.
 
+Le 24 novembre 2026, le responsable a demandé une fiche de révision centrée
+sur l’édition, la prévisualisation, la vérification et l’historique des versions.
+Le JSON, les rapports enregistrés et la relecture humaine sont retirés de la
+fiche. La vérification utilise les mêmes tirages par défaut et conserve le
+contrôle des réponses incorrectes. Les signatures et les données de test
+existantes restent disponibles aux services qui les utilisent.
+
+Dans le texte, Engine interprète `@b` comme une référence à la valeur générée
+`b`. Dans un champ de formule du Creator, le menu affiche `@b` et insère
+`\mathrm{b}` dans le LaTeX canonique. Le choix « Type de réponse » maintient
+ensemble le format de saisie et le domaine de correction. Les règles
+complémentaires sont accessibles selon le type choisi.
+
+Le sélecteur de chapitre reconnaît le nom, les alias et les identifiants du
+référentiel Staging. Lors d'une sauvegarde, le serveur transforme un identifiant
+reconnu en nom de chapitre. Une référence absente ou ambiguë nécessite un choix
+explicite. Les compétences choisies sont indépendantes du chapitre principal.
+
+Le Creator édite les indications et corrections expliquées dans les paramètres
+des questions et des QCM. Le contrat Engine conserve les éléments `hint` et
+`explanation`, reliés par `questionId`. Les éléments globaux existants restent
+éditables dans la liste. L'Engine exclut ces contenus de sa projection publique.
+`extensions.legacy` et `extensions.legacyPath` restent dans les données pour
+retracer l'import. Le Creator les masque dans le formulaire d'édition.
+
 Dans le catalogue Admin, une révision en relecture s’affiche comme « Brouillon »
 et le statut `ready` du contrat de synchronisation comme « Approuvé ».
 Le filtre du catalogue Staging ne prend pas en charge `ready`. La page
@@ -95,11 +120,12 @@ Staging est indiqué dans l’historique de la fiche. La confirmation Production
 d’un lot se consulte dans le reçu de synchronisation. Le catalogue des
 exercices ne lit pas encore la révision active en Production.
 
-En Staging, l’ancienne RPC de relecture s’appuie encore sur `in_review`,
-alors que les révisions acceptent `draft`, `ready` et `published`.
-La RPC qui marque une révision `ready` ne vérifie pas le rapport de tests.
-Le branchement de l’approbation vers la synchronisation doit intégrer les
-contrôles Engine et la validation humaine définis dans le CDC.
+L'action **Enregistrer et approuver** appelle `admin_save_and_approve_exercise`.
+La RPC Staging sauvegarde la révision et l'approuve dans la même transaction.
+Elle confirme que l'empreinte d'approbation rend la révision éligible à la
+synchronisation. La [proposition SQL](../proposals/admin-save-and-approve-exercise.sql)
+rétablit cette empreinte dans le déclencheur Staging et ajoute la RPC. Sa
+mise en service relève du dépôt canonique NovLearn.
 
 La récupération Creator est facultative, désactivée par défaut, dans le
 `sessionStorage` de l’onglet : 30 minutes depuis la dernière écriture, 256 Kio,

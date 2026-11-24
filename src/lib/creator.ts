@@ -354,6 +354,7 @@ export function changeQuestionKind(
   question: Extract<ExerciseElement, { type: 'question' }>,
   kind: (typeof responseKinds)[number],
 ): Extract<ExerciseElement, { type: 'question' }> {
+  if (kind === question.response.kind) return question;
   const copy: Omit<
     Extract<ExerciseElement, { type: 'question' }>,
     'expectedLatex' | 'expectedTexts'
@@ -377,7 +378,7 @@ export function changeQuestionKind(
         ...copy,
         response: { format: 'latex', kind },
         policy: { domain, form: 'value-only' },
-        expectedLatex: '',
+        expectedLatex: question.expectedLatex ?? '',
       };
 }
 

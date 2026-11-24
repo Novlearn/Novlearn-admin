@@ -6,6 +6,10 @@ const fake = vi.hoisted(() => ({
   read: vi.fn(),
   from: vi.fn(),
   parent: vi.fn(),
+  requirePage: vi.fn(),
+}));
+vi.mock('@/lib/auth/require-admin', () => ({
+  requireAdminPage: fake.requirePage,
 }));
 vi.mock('@/lib/catalogue-server', () => ({
   requireCatalogueClient: fake.require,
@@ -66,6 +70,20 @@ beforeEach(() => {
   });
 });
 afterEach(() => vi.unstubAllEnvs());
+it('renders the protected creation form if the dev router passes new as an id', async () => {
+  const createPage = () =>
+    Page({
+      params: Promise.resolve({ id: 'new' }),
+      searchParams: Promise.resolve({}),
+    });
+  fake.requirePage.mockRejectedValueOnce(Error('redirect:/login'));
+  await expect(createPage()).rejects.toThrow('redirect:/login');
+  const html = renderToStaticMarkup(await createPage());
+  expect(html).toContain('Créer un exercice');
+  expect(html).toContain('Enregistrer en brouillon');
+  expect(fake.require).not.toHaveBeenCalled();
+  expect(fake.from).not.toHaveBeenCalled();
+});
 it('authorizes the page before source or target reads', async () => {
   fake.require.mockRejectedValue(Error('redirect:/login'));
   await expect(page()).rejects.toThrow('redirect:/login');
@@ -160,13 +178,18 @@ it.each(['ready', 'published'])(
     withRevision(status);
     const details = renderToStaticMarkup(await page({ version: versionId }));
     expect(details).toContain('Créer une nouvelle révision');
-    expect(details).not.toContain('Enregistrer comme nouvelle révision');
+    expect(details).not.toContain('Enregistrer et approuver');
+    expect(details).not.toContain('Consulter le format canonique');
+    expect(details).not.toContain('Relecture humaine');
+    expect(fake.from).not.toHaveBeenCalledWith('admin_exercise_test_runs');
+    expect(fake.from).not.toHaveBeenCalledWith('admin_exercise_reviews');
     const edit = renderToStaticMarkup(
       await page({ version: versionId, edit: 'revision' }),
     );
     expect(edit).toContain('Brouillon à partir de la version 26');
     expect(edit).toContain('value="Calculer une dérivée"');
-    expect(edit).toContain('Enregistrer comme nouvelle révision');
+    expect(edit).toContain('Enregistrer en brouillon');
+    expect(edit).toContain('Enregistrer et approuver');
     expect(edit).not.toContain('Historique des versions');
   },
 );
@@ -174,14 +197,15 @@ it.each(['ready', 'published'])(
 it('keeps the usual save action for a draft and blocks editing an archived exercise', async () => {
   withRevision('draft');
   const draft = renderToStaticMarkup(await page());
-  expect(draft).toContain('Enregistrer le brouillon');
+  expect(draft).toContain('Enregistrer en brouillon');
+  expect(draft).toContain('Enregistrer et approuver');
   expect(draft).not.toContain('Créer une nouvelle révision');
   withRevision('ready', true);
   const archived = renderToStaticMarkup(
     await page({ version: versionId, edit: 'revision' }),
   );
   expect(archived).toContain('Restaurez l’exercice pour reprendre son édition');
-  expect(archived).not.toContain('Enregistrer comme nouvelle révision');
+  expect(archived).not.toContain('Enregistrer et approuver');
 });
 
 it('keeps the selected revision when browsing older pages of the history', async () => {
