@@ -8,6 +8,7 @@ import {
   type DifficultyExerciseSummary,
   type FeedbackPage,
   type FeedbackQuery,
+  type FeedbackStatus,
 } from '@/lib/feedbacks';
 
 function feedbackHref(query: FeedbackQuery, page: number) {
