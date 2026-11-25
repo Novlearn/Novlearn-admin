@@ -8,7 +8,6 @@ import definition from './fixtures/preview-definition.json';
 const props = {
   engineEnabled: true,
   definition: definition as unknown as ExerciseDefinition,
-  saved: { id: 'saved-version', fingerprint: 'a'.repeat(64), epoch: 0 },
 };
 
 it('keeps Engine tests available without offering report persistence by default', () => {
@@ -23,20 +22,9 @@ it('does not offer native previews or report persistence when Engine is disabled
     createElement(ExercisePreview, {
       ...props,
       engineEnabled: false,
-      canRecordTests: true,
     }),
   );
   expect(html).toContain('Les aperçus et tests ne sont pas disponibles');
   expect(html).not.toContain('Vérifier l’exercice');
   expect(html).not.toContain('Tester et consigner');
-});
-
-it('keeps signing capability behind the same concise verification action', () => {
-  const html = renderToStaticMarkup(
-    createElement(ExercisePreview, { ...props, canRecordTests: true }),
-  );
-  expect(html).toContain('Vérifier l’exercice');
-  expect(html).not.toContain('Tester et consigner');
-  expect(html).not.toContain('Seeds de test');
-  expect(html).not.toContain('Rapport enregistré');
 });

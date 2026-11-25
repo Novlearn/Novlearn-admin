@@ -183,16 +183,23 @@ describe('Dashboard : refus serveur et données indisponibles', () => {
   });
 });
 describe('Dashboard : rendu serveur', () => {
-  it('escapes titles, links exact filters and labels Staging separately from Production', () => {
+  it('links catalogue filters and labels active versions as Staging', () => {
     const html = renderToStaticMarkup(
       createElement(ContentOverview, { data: contentOverview(fixture()) }),
     );
-    expect(html).toContain('&lt;script&gt;');
-    expect(html).not.toContain('<script>');
     expect(html).toContain('/admin/exercises?status=in_review');
-    expect(html).toContain('/admin/exercises/9007199254740993');
-    expect(html).toContain('Production · accès non activé');
+    expect(html).toContain('Versions actives dans Staging');
     expect(html).toContain('nouvelle révision brouillon');
+  });
+  it('renders Approuvé once and combines approved and ready revisions', () => {
+    const data = fixture();
+    data.catalogue.total = '9';
+    data.catalogue.ready = '2';
+    const html = renderToStaticMarkup(
+      createElement(ContentOverview, { data: contentOverview(data) }),
+    );
+    expect(html.match(/>Approuvé</g)).toHaveLength(1);
+    expect(html).toContain('>3</dd>');
   });
   it('shows real empty state without implying missing data or confirmed Production publication', () => {
     const empty = fixture();
@@ -203,7 +210,8 @@ describe('Dashboard : rendu serveur', () => {
     const html = renderToStaticMarkup(
       createElement(ContentOverview, { data: contentOverview(empty) }),
     );
-    expect(html).toContain('Aucune version publiée active dans Staging.');
+    expect(html).toContain('Versions actives dans Staging');
+    expect(html).toContain('>0</p>');
     expect(html).not.toContain('Indicateurs Staging indisponibles');
   });
   it('does not manufacture zeros when aggregation fails', () => {

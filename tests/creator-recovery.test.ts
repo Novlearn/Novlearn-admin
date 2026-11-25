@@ -31,7 +31,7 @@ const now = 1800000000000;
 const copy = (): RecoveryCopy => ({
   schema: 1,
   resource,
-  base: { fingerprint: 'a'.repeat(64), epoch: 3 },
+  base: { fingerprint: 'a'.repeat(64) },
   createRevision: false,
   updatedAt: now,
   definition: newDraft('Saisie privée'),
@@ -105,7 +105,6 @@ it('expire à la limite exacte, sans effacer arbitrairement une copie lors de sa
 it('détecte une référence modifiée sans confondre le hash avec une attestation ou une autorisation', () => {
   const draft = copy();
   expect(recoveryBaseChanged(draft, draft.base)).toBe(false);
-  expect(recoveryBaseChanged(draft, { ...draft.base, epoch: 4 })).toBe(true);
   expect(
     recoveryBaseChanged(draft, { ...draft.base, fingerprint: 'b'.repeat(64) }),
   ).toBe(true);
@@ -113,7 +112,7 @@ it('détecte une référence modifiée sans confondre le hash avec une attestati
 it('conserve le choix nouvelle révision à travers plusieurs récupérations malgré une base actualisée', () => {
   const { storage } = store();
   const draft = copy();
-  const newBase = { fingerprint: 'b'.repeat(64), epoch: 4 };
+  const newBase = { fingerprint: 'b'.repeat(64) };
   expect(recoveryBaseChanged(draft, newBase)).toBe(true);
   const next = { ...draft, base: newBase, createRevision: true };
   expect(writeRecovery(storage, owner, next)).toBe(true);
@@ -128,8 +127,8 @@ it.each([
   JSON.stringify({ ...copy(), schema: 2 }),
   JSON.stringify({ ...copy(), resource: 'another version' }),
   JSON.stringify({ ...copy(), updatedAt: now + 1 }),
-  JSON.stringify({ ...copy(), base: { fingerprint: 'not-a-hash', epoch: 3 } }),
-  JSON.stringify({ ...copy(), base: { fingerprint: null, epoch: -1 } }),
+  JSON.stringify({ ...copy(), base: { fingerprint: 'not-a-hash' } }),
+  JSON.stringify({ ...copy(), base: {} }),
   JSON.stringify({
     ...copy(),
     definition: { ...newDraft('Draft'), elements: 'bad' },

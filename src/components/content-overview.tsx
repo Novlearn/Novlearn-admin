@@ -3,7 +3,6 @@ import { editorialLabels } from '@/lib/catalogue';
 import {
   dashboardStatuses,
   formatCount,
-  overviewDate,
   type ContentOverview as Overview,
 } from '@/lib/dashboard';
 
@@ -32,21 +31,30 @@ export function ContentOverview({ data }: { data: Overview | null }) {
         {data ? (
           <>
             <dl className="mt-5 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-              {dashboardStatuses.map((status) => (
-                <div className="card" key={status}>
-                  <dt>
-                    <Link
-                      className="font-medium text-slate-600 underline decoration-slate-300 underline-offset-4 hover:text-brand-700"
-                      href={`/admin/exercises?status=${status}`}
-                    >
-                      {editorialLabels[status]}
-                    </Link>
-                  </dt>
-                  <dd className="mt-3 text-3xl font-semibold tabular-nums">
-                    {formatCount(data.catalogue[status])}
-                  </dd>
-                </div>
-              ))}
+              {dashboardStatuses
+                .filter((status) => status !== 'ready')
+                .map((status) => (
+                  <div className="card" key={status}>
+                    <dt>
+                      <Link
+                        className="font-medium text-slate-600 underline decoration-slate-300 underline-offset-4 hover:text-brand-700"
+                        href={`/admin/exercises?status=${status}`}
+                      >
+                        {editorialLabels[status]}
+                      </Link>
+                    </dt>
+                    <dd className="mt-3 text-3xl font-semibold tabular-nums">
+                      {formatCount(
+                        status === 'approved'
+                          ? String(
+                              BigInt(data.catalogue.approved) +
+                                BigInt(data.catalogue.ready),
+                            )
+                          : data.catalogue[status],
+                      )}
+                    </dd>
+                  </div>
+                ))}
             </dl>
             <div className="mt-6">
               <section className="card" aria-labelledby="active-title">

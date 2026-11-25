@@ -6,7 +6,7 @@ import { AdminNavigation } from '@/components/admin-navigation';
 
 it('garde le contenu accessible et masque les services absents du principal local', () => {
   const html = renderToStaticMarkup(
-    createElement(AdminNavigation, { publicationEnabled: false }),
+    createElement(AdminNavigation, { catalogueSyncEnabled: false }),
   );
   for (const route of [
     '/admin/exercises',
@@ -16,7 +16,7 @@ it('garde le contenu accessible et masque les services absents du principal loca
   ])
     expect(html).toContain(`href="${route}"`);
   for (const route of [
-    '/admin/publication',
+    '/admin/catalogue-sync',
     '/admin/statistics',
     '/admin/users',
   ])
@@ -27,13 +27,13 @@ it('garde le contenu accessible et masque les services absents du principal loca
 it('conserve les entrées lorsqu’un environnement les active explicitement', () => {
   const html = renderToStaticMarkup(
     createElement(AdminNavigation, {
-      publicationEnabled: true,
+      catalogueSyncEnabled: true,
       statisticsEnabled: true,
       usersEnabled: true,
     }),
   );
   for (const route of [
-    '/admin/publication',
+    '/admin/catalogue-sync',
     '/admin/statistics',
     '/admin/users',
   ])

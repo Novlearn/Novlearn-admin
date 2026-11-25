@@ -292,14 +292,9 @@ export function GenerationEditor({
       </details>
 
       <section aria-labelledby="random-variables-heading" className="space-y-4">
-        <div>
-          <h3 id="random-variables-heading" className="font-semibold">
-            Valeurs qui changent d’un exercice à l’autre
-          </h3>
-          <p className="mt-1 text-sm text-slate-500">
-            Définissez le domaine possible de chaque valeur.
-          </p>
-        </div>
+        <h3 id="random-variables-heading" className="font-semibold">
+          Variables aléatoires
+        </h3>
         <AddVariable
           disabled={disabled}
           definition={definition}
