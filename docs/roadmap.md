@@ -32,8 +32,8 @@ limite de date dans le [CDC, section 15.2](../CDC_reference.md#152-consultation-
 - **Préparation des prompts IA :** page Admin ajoutée pour choisir un chapitre,
   des compétences, une répartition de difficultés, le format et la calculatrice.
   La couverture et des exemples sont lus depuis le catalogue Staging. Le prompt
-  exige un tirage Engine qui modifie les données à traiter dans chaque modèle,
-  avec des réponses cohérentes pour chaque variante. Le lot JSON
+  accepte les exercices statiques, privilégie les tirages utiles et le LaTeX
+  intégré au texte, et demande les UUID Staging des chapitres. Le lot JSON
   peut être collé ou téléversé dans cette même page ; l'import réutilise la
   session Admin existante, valide et instancie les définitions avec Engine, puis
   crée les brouillons avec la RPC transactionnelle Staging. Les réussites et

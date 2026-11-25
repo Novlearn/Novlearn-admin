@@ -135,18 +135,19 @@ export function ExercisePromptForm({
     return `Tu es un concepteur pédagogique de mathématiques pour des élèves de Terminale.
 
 Objectif
-Produis ${totalRequested} modèles d’exercices inédits répartis entre les chapitres sélectionnés. Chaque modèle doit donner des variantes pédagogiquement distinctes à partir de valeurs tirées par Engine à chaque nouvelle instanciation.
+Produis ${totalRequested} exercices inédits répartis entre les chapitres sélectionnés.
 
-Génération aléatoire obligatoire pour chaque exercice
-- Définis dans generation.definitions au moins une variable réellement tirée parmi plusieurs valeurs admissibles. Choisis des plages ou des ensembles assez larges et combine plusieurs paramètres indépendants lorsque le sujet s’y prête. Une définition vide, une plage réduite à une seule valeur ou un tirage qui ne change aucune question de l’élève sont à reprendre.
+Tirages et exercices statiques
+- Privilégie les variantes quand le tirage modifie une donnée utile à la résolution. Un exercice statique est accepté avec generation.definitions et generation.constraints vides.
+- Pour un exercice régénérable, déclare dans generation.definitions au moins une variable tirée parmi plusieurs valeurs admissibles. Combine plusieurs paramètres indépendants lorsque le sujet s'y prête.
 - Fais varier des données qui comptent pour la résolution, par exemple des coefficients, un point de calcul ou les bornes d’un intervalle. Réutilise les mêmes tirages dans les questions, les graphiques, les choix de QCM, les réponses attendues et les explications qui en dépendent. Une réponse peut rester constante si elle est mathématiquement juste pour toutes les variantes.
 - Dans le texte à afficher, écris @a pour insérer la valeur tirée de a. Dans les formules évaluées par Engine (expectedLatex, latex d’une variable computed, etc.), utilise \\mathrm{a}. Dans le JSON, échappe la barre oblique inverse en écrivant \\\\mathrm{a}. Une variable computed sert à dériver une valeur à partir des tirages.
-- Exemple de mécanique pour une dérivation : tire a avec {"name":"a","kind":"integer","min":-8,"max":12,"exclusions":[0]} et déclare le symbole libre x dans variables avec {"name":"x","domain":"real"}. Affiche la fonction dans un bloc expression, {"id":"formule","type":"expression","label":"Expression de f","latex":"x^{2}+(\\\\mathrm{a})x"}. Pose la question en prose (« Calcule la dérivée de f au point d’abscisse 2. ») et utilise "expectedLatex":"4+\\\\mathrm{a}". Les valeurs tirées de a modifient la fonction et le résultat numérique.
+- Exemple de mécanique pour une dérivation : tire a avec {"name":"a","kind":"integer","min":-8,"max":12,"exclusions":[0]} et déclare x dans variables avec {"name":"x","domain":"real"}. Intègre la formule au texte, {"id":"enonce","type":"rich-text","content":[{"type":"text","text":"Soit f la fonction définie par l’expression "},{"type":"math","display":"inline","latex":"x^{2}+(\\\\mathrm{a})x"}]}. Pose la question « Calcule la dérivée de f au point d'abscisse 2. » avec "expectedLatex":"4+\\\\mathrm{a}".
 - Choisis les domaines, exclusions et contraintes pour que les tirages conservent les hypothèses du sujet : dénominateurs non nuls, domaines valides, cas dégénérés écartés et choix de QCM distincts. Préfère des plages bien construites à des contraintes qui rejettent presque tous les tirages.
 
 Rendu LaTeX obligatoire
-- Écris chaque formule affichée dans un champ latex prévu par Engine. Utilise un bloc expression ou equation, ou un fragment math dans un bloc rich-text. Pour les choix mathématiques d’un QCM, utilise content.format="latex".
-- Les champs text sont affichés en texte brut dans le Creator. Garde-y la prose et place les formules dans des blocs mathématiques juste avant la question. Dans les champs latex et expectedLatex, écris le LaTeX brut, sans délimiteurs $ ou $$ ni Markdown. Par exemple, une fraction s’écrit "\\\\frac{1}{x^{2}}" dans le JSON.
+- Privilégie un fragment math en ligne dans un bloc rich-text pour intégrer la formule à la phrase. Les blocs expression et equation restent acceptés pour une formule séparée. Pour les choix mathématiques d'un QCM, utilise content.format="latex".
+- Les champs text ordinaires sont affichés en texte brut. Quand une question contient une formule, place-la dans un bloc rich-text ou un bloc mathématique juste avant la question. Écris le LaTeX dans les champs latex et expectedLatex sans délimiteurs $ ou $$. Par exemple, une fraction s'écrit "\\\\frac{1}{x^{2}}" dans le JSON.
 - Vérifie dans l’aperçu que les fractions, racines, puissances, indices et limites apparaissent sous leur forme mathématique et que les signes restent lisibles après substitution des valeurs tirées.
 
 Formats demandés
@@ -158,7 +159,7 @@ ${difficultyLabels.map((difficulty) => `- ${difficulty} : ${counts[difficulty] ?
 
 Répartition par chapitre
 ${chapterLines}
-Respecte exactement cette répartition. Pour chaque exercice, renseigne catalogue.chapter avec le nom du chapitre attribué et catalogue.skills avec les compétences pertinentes de ce chapitre.
+Respecte exactement cette répartition. Pour chaque exercice, renseigne catalogue.chapter avec l’identifiant UUID Staging du chapitre et catalogue.skills avec les identifiants des compétences pertinentes.
 
 Références pédagogiques
 - Chapitres canoniques et identifiants Staging :
@@ -181,11 +182,11 @@ Contrat technique obligatoire
 - Réponds avec un bloc de code \`\`\`json contenant exactement le lot {"schemaVersion":5,"batchId":"<nouvel UUID v4>","items":[{"sourceKey":"item-001","definition":{...}}]}. Garde le même batchId et les mêmes sourceKey lors des reprises. Crée un nouvel UUID uniquement pour un nouveau lot. N'écris aucun fichier local.
 - Avant de générer, consulte le contrat installé dans node_modules/novlearn-exercise-engine/README.md, node_modules/novlearn-exercise-engine/dist/contracts/types.d.ts (ExerciseDefinition, GenerationDefinition, éléments, questions et politiques de correction) et node_modules/novlearn-exercise-engine/dist/index.d.ts. Utilise uniquement les types et propriétés définis par ce package ; n'invente aucune propriété.
 - Consulte aussi docs/engine/engine-library.md et docs/guides/architecture.md pour comprendre les capacités et limites du moteur ainsi que la relation entre réponses attendues, génération et correction.
-- Une définition utilise kind="composed", un id stable tel que "item-001", revision="1", catalogue.chapter égal au chapitre attribué à l'exercice, catalogue.skills contenant uniquement des identifiants connus et pertinents${requestedSkills.length ? ` parmi ${requestedSkills.join(', ')}` : ''}, catalogue.difficulty entier 1, 2 ou 3, catalogue.exerciseType selon les quotas de format ci-dessus, et catalogue.needsCalculator selon la consigne calculatrice ci-dessus.
+- Une définition utilise kind="composed", un id stable tel que "item-001", revision="1", catalogue.chapter égal à l’UUID fourni, catalogue.skills contenant uniquement des identifiants connus et pertinents${requestedSkills.length ? ` parmi ${requestedSkills.join(', ')}` : ''}, catalogue.difficulty entier 1, 2 ou 3, catalogue.exerciseType selon les quotas de format ci-dessus, et catalogue.needsCalculator selon la consigne calculatrice ci-dessus.
 - Les paramètres de génération, éléments, questions, formats de réponse et politiques de correction doivent suivre les types Engine. Prends examples/engine-consumer/definition.json comme référence de structure pour generation.definitions, generation.constraints, maxAttempts et maxDraws.
 - Les identifiants des éléments et questions sont des chaînes stables uniques dans chaque exercice. Les références @nom doivent correspondre à des variables réellement définies.
 - Respecte la sémantique mathématique : domaine de définition, hypothèses, contraintes de génération, calcul des attendus et cohérence des explications. N'utilise que les familles de réponses et profils de correction définis par Engine. Ne présente pas le parseur ou validateDefinition comme une preuve générale qu'une proposition mathématique est vraie.
-- Si Engine est disponible, instancie chaque modèle avec plusieurs seeds avant de rendre le lot. Vérifie que les données visibles de la question varient et que chaque réponse correspond au tirage. Sinon, vérifie manuellement deux tirages admissibles distincts par modèle. L'import dans Admin exécute validateDefinition et instantiateExercise avec plusieurs seeds. Cette validation technique ne remplace pas la vérification mathématique et pédagogique humaine.
+- Si Engine est disponible, instancie chaque modèle avec plusieurs seeds avant de rendre le lot. Pour les exercices régénérables, vérifie que les données visibles de la question varient et que chaque réponse correspond au tirage. Si Engine est indisponible, vérifie manuellement deux tirages admissibles distincts par exercice régénérable. L'import dans Admin exécute validateDefinition et instantiateExercise avec plusieurs seeds. Cette validation technique ne remplace pas la vérification mathématique et pédagogique humaine.
 - N'utilise aucun exercice de la liste comme modèle à recopier. Crée des contextes, valeurs et raisonnements distincts. N'inclus aucune donnée personnelle.
 - Dans ta réponse, renvoie le lot JSON complet dans un unique bloc de code \`\`\`json, sans créer de fichier local ni ajouter de texte dans ce bloc. L'admin copiera le bloc et le collera dans la page Admin web, puis cliquera sur « Importer les brouillons dans Staging ». Pour corriger un élément refusé, conserve le batchId et les sourceKey afin de reprendre le même lot.`;
   }, [

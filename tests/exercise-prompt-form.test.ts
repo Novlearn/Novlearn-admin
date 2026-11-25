@@ -67,14 +67,15 @@ describe('ExercisePromptForm', () => {
       'node_modules/novlearn-exercise-engine/dist/contracts/types.d.ts',
     );
     expect(html).toContain('docs/engine/engine-library.md');
-    expect(html).toContain(
-      'Génération aléatoire obligatoire pour chaque exercice',
-    );
+    expect(html).toContain('Un exercice statique est accepté');
     expect(html).toContain('generation.definitions');
     expect(html).toContain('@a');
     expect(html).toContain(String.raw`4+\\mathrm{a}`);
     expect(html).toContain('Rendu LaTeX obligatoire');
-    expect(html).toContain('&quot;type&quot;:&quot;expression&quot;');
+    expect(html).toContain('&quot;type&quot;:&quot;rich-text&quot;');
+    expect(html).toContain('&quot;display&quot;:&quot;inline&quot;');
+    expect(html).toContain('Les blocs expression et equation restent acceptés');
+    expect(html).toContain('identifiant UUID Staging du chapitre');
     expect(html).toContain(String.raw`\\frac{1}{x^{2}}`);
     expect(html).toContain('les données visibles de la question varient');
     expect(html).toContain('validateDefinition');
