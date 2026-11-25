@@ -5,13 +5,13 @@ import { isTrustedMutation, privateHeaders } from '@/lib/auth/http';
 import { readBoundedJson } from '@/lib/auth/json';
 import { createRouteAuth, transferAuthCookies } from '@/lib/auth/supabase';
 import { prepareExerciseReferences } from '@/lib/exercise-references';
+import { loadCatalogue } from '@/lib/catalogue-server';
 import {
   catalogueFilter,
   draftEnvelope,
   isExerciseId,
   isFingerprint,
   isUuid,
-  PAGE_SIZE,
 } from '@/lib/catalogue';
 
 export const runtime = 'nodejs';
@@ -40,14 +40,8 @@ async function handle(request: NextRequest, mutation: boolean) {
   try {
     if (!mutation) {
       const filter = catalogueFilter(request.nextUrl.searchParams);
-      const { data, error } = await client.rpc('admin_list_exercises', {
-        p_query: filter.query,
-        p_status: filter.status,
-        p_sort: filter.sort,
-        p_offset: (filter.page - 1) * PAGE_SIZE,
-        p_limit: PAGE_SIZE,
-      });
-      if (error) return finish({ error: 'Catalogue indisponible.' }, 503);
+      const data = await loadCatalogue(client, filter);
+      if (!data) return finish({ error: 'Catalogue indisponible.' }, 503);
       return finish({ environment: 'staging', ...data });
     }
     if (

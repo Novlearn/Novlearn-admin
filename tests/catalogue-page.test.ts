@@ -83,7 +83,10 @@ it('shows the readable title and keeps the Staging status distinct from confirme
   );
   expect(html).toContain('Calcul dérivé');
   expect(html).toContain(`/admin/exercises/${exercise.id}`);
-  expect(html).toContain('Publication à vérifier');
+  expect(html).toContain('>Publié</span>');
+  expect(html).toContain('<option value="approved">Approuvé</option>');
+  expect(html).toContain('<option value="published">Publié</option>');
+  expect(html).not.toContain('Publication à vérifier');
   expect(html).not.toContain('nom_interne_exercice');
   expect(html).not.toContain('Publié en préproduction');
   expect(html).not.toContain('Version active en préproduction');
@@ -113,10 +116,15 @@ it('shows a readable fallback title, a draft in review and an archived exercise'
   expect(html).toContain('href="/admin/catalogue-sync"');
 });
 
-it('does not send the unsupported ready filter to the Staging RPC', async () => {
-  await Page({ searchParams: Promise.resolve({ status: 'ready' }) });
-  expect(fake.load).toHaveBeenCalledWith(
-    expect.anything(),
-    expect.objectContaining({ status: 'all' }),
-  );
-});
+it.each(['approved', 'ready', 'published'])(
+  'loads the %s filter',
+  async (status) => {
+    await Page({ searchParams: Promise.resolve({ status }) });
+    expect(fake.load).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.objectContaining({
+        status: status === 'ready' ? 'approved' : status,
+      }),
+    );
+  },
+);

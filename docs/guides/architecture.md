@@ -112,13 +112,16 @@ retracer l'import. Le Creator les masque dans le formulaire d'édition.
 
 Dans le catalogue Admin, une révision en relecture s’affiche comme « Brouillon »
 et le statut `ready` du contrat de synchronisation comme « Approuvé ».
-Le filtre du catalogue Staging ne prend pas en charge `ready`. La page
-Synchroniser le catalogue liste les révisions prêtes et leurs dépendances.
-Le statut `published` remonté par Staging s’affiche comme « Publication à
-vérifier », y compris dans le filtre correspondant. Le pointeur actif de
-Staging est indiqué dans l’historique de la fiche. La confirmation Production
-d’un lot se consulte dans le reçu de synchronisation. Le catalogue des
-exercices ne lit pas encore la révision active en Production.
+Le filtre « Approuvé » inclut les statuts `ready` et `approved`. L’Admin
+parcourt les pages de la RPC du catalogue pour appliquer ce filtre, tout en
+gardant la recherche et le tri choisis. La page Synchroniser le catalogue liste
+les révisions prêtes et leurs dépendances. Après réception du reçu de
+synchronisation Production, la finalisation enregistre `published` sur la
+révision source. Le filtre « Publié » lit ce statut dans Staging. Le reçu et
+la version active de Staging restent consultables dans leurs vues respectives.
+Les anciennes révisions transférées dans Staging peuvent aussi porter
+`published`. Les 111 exercices concernés ont désormais une révision locale
+plus récente au statut `ready`.
 
 L'action **Enregistrer et approuver** appelle `admin_save_and_approve_exercise`.
 La RPC Staging sauvegarde la révision et l'approuve dans la même transaction.

@@ -80,9 +80,6 @@ export function CatalogueList({
           Statut
           <select name="status" defaultValue={filter.status} className="field">
             <option value="all">Tous les statuts</option>
-            {filter.status === 'approved' && (
-              <option value="approved">Approuvé (ancien statut)</option>
-            )}
             {catalogueStatusOptions.map(({ value, label }) => (
               <option key={value} value={value}>
                 {label}

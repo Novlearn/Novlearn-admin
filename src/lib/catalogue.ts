@@ -5,12 +5,13 @@ export const editorialLabels = {
   in_review: 'À relire',
   approved: 'Approuvé',
   ready: 'Approuvé',
-  published: 'Publication à vérifier',
+  published: 'Publié',
   legacy: 'Historique',
   archived: 'Archivé',
 } as const;
 export const catalogueStatusOptions = [
   { value: 'draft', label: 'Brouillon' },
+  { value: 'approved', label: editorialLabels.approved },
   { value: 'published', label: editorialLabels.published },
   { value: 'archived', label: 'Archivé' },
 ] as const;
@@ -53,9 +54,11 @@ export function catalogueFilter(params: URLSearchParams): CatalogueFilter {
   return {
     query: (params.get('q') ?? '').trim().slice(0, 120),
     status:
-      status !== 'ready' && Object.hasOwn(editorialLabels, status)
-        ? (status as Exclude<EditorialStatus, 'ready'>)
-        : 'all',
+      status === 'ready'
+        ? 'approved'
+        : Object.hasOwn(editorialLabels, status)
+          ? (status as Exclude<EditorialStatus, 'ready'>)
+          : 'all',
     sort: params.get('sort') === 'title' ? 'title' : 'recent',
     page: Number.isSafeInteger(page) && page > 0 && page <= 10000 ? page : 1,
   };

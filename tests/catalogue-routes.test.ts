@@ -59,6 +59,58 @@ beforeEach(() => {
     client: { rpc: fake.rpc },
   });
 });
+
+it('paginates approved and ready exercises after filtering, preserving search and sort', async () => {
+  const items = Array.from({ length: 54 }, (_, index) => ({
+    id: String(index + 1),
+    status: index === 0 ? 'published' : index === 1 ? 'approved' : 'ready',
+    archived: index === 53,
+  }));
+  fake.rpc.mockImplementation(async (_name, args) => ({
+    error: null,
+    data: {
+      total: items.length,
+      items: items.slice(args.p_offset, args.p_offset + args.p_limit),
+    },
+  }));
+  const response = await GET(
+    new NextRequest(
+      'http://localhost:3000/api/admin/exercises?status=approved&page=2&sort=title&q=suite',
+    ),
+  );
+  expect(response.status).toBe(200);
+  expect(await response.json()).toEqual({
+    environment: 'staging',
+    total: 52,
+    items: items.slice(26, 51),
+  });
+  expect(fake.rpc.mock.calls).toEqual(
+    [0, 50].map((offset) => [
+      'admin_list_exercises',
+      {
+        p_query: 'suite',
+        p_status: 'all',
+        p_sort: 'title',
+        p_offset: offset,
+        p_limit: 50,
+      },
+    ]),
+  );
+});
+
+it('passes the published filter directly to the catalogue RPC', async () => {
+  fake.rpc.mockResolvedValue({ error: null, data: { total: 0, items: [] } });
+  const response = await GET(
+    new NextRequest(
+      'http://localhost:3000/api/admin/exercises?status=published',
+    ),
+  );
+  expect(response.status).toBe(200);
+  expect(fake.rpc).toHaveBeenCalledExactlyOnceWith(
+    'admin_list_exercises',
+    expect.objectContaining({ p_status: 'published', p_limit: 25 }),
+  );
+});
 describe('API catalogue : permission avant toute opération', () => {
   it.each(['save', 'duplicate', 'archive'])(
     'refuse %s sans activation',
