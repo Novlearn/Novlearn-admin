@@ -19,8 +19,10 @@ export function AdminNavigation({
       label: 'Espace de travail',
       links: [
         ['/admin', 'Vue d’ensemble'],
-        ['/admin/exercises', 'Exercices'],
-        ['/admin/flashcards', 'Flashcards'],
+        ...(catalogueSyncEnabled
+          ? [['/admin/catalogue-sync', 'Synchronisation']]
+          : []),
+        ['/admin/exercises/generate', 'Générer des exercices'],
       ],
     },
     {
@@ -28,9 +30,8 @@ export function AdminNavigation({
       links: [
         ['/admin/chapters', 'Chapitres'],
         ['/admin/competences', 'Compétences'],
-        ...(catalogueSyncEnabled
-          ? [['/admin/catalogue-sync', 'Synchronisation']]
-          : []),
+        ['/admin/exercises', 'Exercices'],
+        ['/admin/flashcards', 'Flashcards'],
       ],
     },
     {
@@ -62,7 +63,8 @@ export function AdminNavigation({
                 path === href ||
                 (href === '/admin/exercises' &&
                   path.startsWith(href + '/') &&
-                  path !== '/admin/exercises/new');
+                  path !== '/admin/exercises/new' &&
+                  path !== '/admin/exercises/generate');
               return (
                 <Link
                   key={href}

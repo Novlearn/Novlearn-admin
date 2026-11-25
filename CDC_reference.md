@@ -1190,3 +1190,35 @@ L’accès utilise le compte Admin Staging. Les secrets PostgreSQL du journal
 Staging et de la cible Production sont réservés au serveur de cet environnement.
 La mise en service dépend des fonctions SQL et de leurs permissions sur les
 deux projets. Les lots restent soumis à l’aperçu et à la confirmation Admin.
+
+**Décision fonctionnelle explicite du responsable - 25 novembre 2026 :**
+ajouter dans Novlearn Admin une page de préparation de prompts pour la génération
+d'exercices par un agent local (Claude Code ou Codex). L'administrateur choisit
+manuellement un chapitre, les compétences, le format, le nombre et la difficulté
+des exercices, l'usage de la calculatrice et ses consignes. La page affiche la
+couverture du catalogue Staging par difficulté et fournit des exemples de titres
+et compétences déjà présents pour guider le prompt. Elle n'appelle aucun modèle,
+n'exporte aucun secret et ne crée pas d'exercice.
+
+**Décision fonctionnelle complémentaire du responsable - 25 novembre 2026 :**
+l'agent local doit pouvoir importer automatiquement les définitions canoniques
+générées dans le catalogue standard de Supabase Staging, sous forme de brouillons
+à relire dans Admin. L'import passe par une commande du dépôt Admin et une route
+serveur protégée qui vérifie l'accès Admin, les références et le contrat Engine,
+puis réutilise l'opération de sauvegarde brouillon existante. L'agent ne reçoit
+ni accès SQL direct ni secret privilégié. L'import doit être limité à Staging,
+reprenable sans doublons, et retourner un résultat par exercice. L'approbation
+et la synchronisation vers Production restent des actions séparées. Cette
+fonctionnalité n'est activée qu'après qualification des permissions et de
+l'idempotence.
+
+**Décision fonctionnelle complémentaire du responsable - 25 novembre 2026, remplaçant la procédure d'import locale ci-dessus :**
+le lot généré doit pouvoir être importé depuis la page web Admin, en collant
+le JSON ou en sélectionnant son fichier. Le téléchargement d'une autorisation,
+le fichier local de jeton et la commande d'import ne sont plus requis. La route
+serveur utilise la session Admin Staging du navigateur, contrôle l'origine,
+la session et le rôle Admin, valide les références et exécute les vérifications
+Engine avant de créer les brouillons via la RPC transactionnelle Staging. La
+reprise conserve le batchId et les sourceKey ; les réussites et leurs liens sont
+affichés dans l'interface. Aucune écriture Production n'est autorisée par ce
+parcours.

@@ -25,6 +25,14 @@ Les scripts `predev` et `prebuild` préparent les ressources MathLive locales.
 `npm.cmd run build` produit une sortie autonome et `postbuild` y copie les
 ressources nécessaires. `npm.cmd start` sert ce build.
 
+## Import des exercices générés
+
+La RPC Staging est définie dans [le contrat SQL](../proposals/admin-import-exercise-draft.sql). L'Admin doit disposer d'un [transport Engine](admin-engine-transport.md).
+
+Dans **Exercices → Générer avec l'IA**, demander à l'agent le lot complet dans un bloc de code JSON, copier le bloc et le coller dans Admin, puis choisir **Importer les brouillons dans Staging**. Le champ accepte aussi le JSON brut. L'import réutilise la session Admin déjà ouverte dans le navigateur : aucun jeton ou fichier d'autorisation séparé n'est nécessaire. La route vérifie l'origine, la session et le rôle Admin, valide les références, appelle Engine pour la validation et l'instanciation sur les seeds 0, 1 et 42, puis crée chaque brouillon avec la RPC transactionnelle Staging.
+
+Un lot accepte au plus 20 exercices. En cas de reprise, conserver le même batchId et les mêmes sourceKey. L'interface conserve les imports confirmés et ignore ces éléments lors d'une nouvelle tentative ; les liens des brouillons sont affichés directement.
+
 ## Lanceur local Staging
 
 `start-staging.cmd` lance [run-staging-admin.mjs](../../scripts/run-staging-admin.mjs)

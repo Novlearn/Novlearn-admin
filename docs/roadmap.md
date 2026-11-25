@@ -29,6 +29,18 @@ limite de date dans le [CDC, section 15.2](../CDC_reference.md#152-consultation-
 
 ## État actuel
 
+- **Préparation des prompts IA :** page Admin ajoutée pour choisir un chapitre,
+  des compétences, une répartition de difficultés, le format et la calculatrice.
+  La couverture et des exemples sont lus depuis le catalogue Staging. Le prompt
+  exige un tirage Engine qui modifie les données à traiter dans chaque modèle,
+  avec des réponses cohérentes pour chaque variante. Le lot JSON
+  peut être collé ou téléversé dans cette même page ; l'import réutilise la
+  session Admin existante, valide et instancie les définitions avec Engine, puis
+  crée les brouillons avec la RPC transactionnelle Staging. Les réussites et
+  leurs liens restent visibles lors d'une reprise. Les permissions et la reprise
+  ont été qualifiées sur Staging dans une transaction annulée. Voir le
+  [guide de développement](guides/development.md#import-des-exercices-générés).
+
 - **Synchronisation catalogue PR #25 — 24 novembre 2026 :** le parcours Staging → Production est prévu sur Vercel Production avec deux connexions SQL dédiées. Il exige le marqueur SQL `atomic-catalogue-target-v1` avant de préparer ou confirmer un lot. La réception sur l’hôte réel attend les secrets serveur et l’installation du contrat sur la cible Production. Voir le [guide Vercel](guides/vercel.md#synchronisation-du-catalogue-en-production-vercel).
 
 - **Périmètre statistique appliqué le 8 novembre :** à la demande du responsable, la migration `20261108145047` exclut les comptes invités des statistiques et de la liste des utilisateurs, avec filtrage SQL avant calcul et pagination. La règle est inscrite au CDC, section 6.3 ; seuls les comptes Auth non invités encore présents et leur activité alimentent les indicateurs. Les duels terminés exigent deux inscrits. Les comparaisons des totaux, volumes, taux et statistiques pédagogiques passent en base, sans export de lignes personnelles. Les 1 643 tests, types, lint, build et smoke tests passent ; le serveur sur le port 3000 a été relancé. Cette évolution ne supprime aucune donnée et ne modifie aucun droit RLS.
