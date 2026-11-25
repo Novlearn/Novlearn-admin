@@ -45,7 +45,6 @@ DECLARE
   actor uuid := auth.uid();
   next_status text;
   old_status text;
-  updated_status text;
 BEGIN
   IF actor IS NULL
      OR coalesce((auth.jwt()->>'is_anonymous')::boolean, false)
@@ -57,21 +56,28 @@ BEGIN
   END IF;
   next_status := CASE p_action WHEN 'approve' THEN 'approved' ELSE 'rejected' END;
 
-  UPDATE public.feedbacks
-     SET status = next_status
+  SELECT status INTO old_status
+    FROM public.feedbacks
    WHERE id = p_feedback_id
-     AND (status = 'pending' OR status IS NULL)
-   RETURNING coalesce(status, 'pending') INTO updated_status;
+   FOR UPDATE;
   IF NOT FOUND THEN
-    IF EXISTS (SELECT 1 FROM public.feedbacks WHERE id = p_feedback_id) THEN
-      RAISE EXCEPTION 'Feedback was already reviewed' USING ERRCODE='40001';
-    END IF;
     RAISE EXCEPTION 'Feedback not found' USING ERRCODE='P0002';
   END IF;
-  old_status := 'pending';
+
+  -- Make network/client retries safe: a replay of the same decision is a no-op.
+  IF old_status = next_status THEN
+    RETURN jsonb_build_object('feedbackId', p_feedback_id, 'status', next_status);
+  END IF;
+  IF old_status IS NOT NULL AND old_status <> 'pending' THEN
+    RAISE EXCEPTION 'Feedback was already reviewed' USING ERRCODE='PT409';
+  END IF;
+
+  UPDATE public.feedbacks
+     SET status = next_status
+   WHERE id = p_feedback_id;
   INSERT INTO novlearn_admin_api.feedback_review_audit
     (feedback_id, actor_id, previous_status, new_status)
-  VALUES (p_feedback_id, actor, old_status, next_status);
+  VALUES (p_feedback_id, actor, coalesce(old_status, 'pending'), next_status);
   RETURN jsonb_build_object('feedbackId', p_feedback_id, 'status', next_status);
 END
 $function$;

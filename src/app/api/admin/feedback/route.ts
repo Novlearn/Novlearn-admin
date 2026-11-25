@@ -132,10 +132,19 @@ export async function POST(request: NextRequest) {
     !['approve', 'reject'].includes(String(input.action))
   )
     return access.finish({ error: 'Action invalide.' }, 400);
+
+  const requestedStatus: FeedbackStatus =
+    input.action === 'approve' ? 'approved' : 'rejected';
+  const success = (status: FeedbackStatus) =>
+    access.finish({
+      environment: 'production',
+      result: { feedbackId: input.feedbackId as string, status },
+    });
+
   try {
     const { data: feedback, error: lookupError } = await access.client
       .from('feedbacks')
-      .select('category')
+      .select('category,status')
       .eq('id', input.feedbackId)
       .abortSignal(AbortSignal.timeout(12000))
       .maybeSingle();
@@ -148,6 +157,24 @@ export async function POST(request: NextRequest) {
         { error: 'Les feedbacks de difficulté ne sont pas à valider ici.' },
         403,
       );
+
+    // A replay of the same decision is a successful no-op. Avoid invoking the
+    // privileged RPC again for a feedback that is already in a terminal state.
+    if (feedback.status === requestedStatus) return success(requestedStatus);
+    if (feedback.status !== 'pending' && feedback.status !== null) {
+      const terminalStatus: FeedbackStatus | null =
+        feedback.status === 'approved' || feedback.status === 'rejected'
+          ? feedback.status
+          : null;
+      return access.finish(
+        {
+          error: 'Ce feedback a déjà reçu une décision différente.',
+          ...(terminalStatus ? { status: terminalStatus } : {}),
+        },
+        409,
+      );
+    }
+
     const { data, error } = await access.client.rpc('admin_review_feedback', {
       p_feedback_id: input.feedbackId,
       p_action: input.action,
@@ -171,16 +198,10 @@ export async function POST(request: NextRequest) {
     if (
       !data ||
       data.feedbackId !== input.feedbackId ||
-      data.status !== (input.action === 'approve' ? 'approved' : 'rejected')
+      data.status !== requestedStatus
     )
       return access.finish({ error: 'Décision non confirmée.' }, 503);
-    return access.finish({
-      environment: 'production',
-      result: {
-        feedbackId: data.feedbackId,
-        status: data.status as FeedbackStatus,
-      },
-    });
+    return success(data.status as FeedbackStatus);
   } catch {
     return access.finish({ error: 'Validation indisponible.' }, 503);
   }

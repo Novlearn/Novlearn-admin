@@ -30,13 +30,21 @@ Pour une installation dans un autre environnement, appliquer et qualifier
 selon la procédure autorisée. Dans le Dashboard Supabase, sélectionner le projet
 cible puis ouvrir **SQL Editor** et exécuter le script avec le rôle propriétaire
 `postgres`. Ce script ajoute un endpoint `SECURITY INVOKER` et un historique
-privé. La fonction interne ne permet qu’une transition atomique de `pending` (ou
-`NULL`) vers `approved` ou `rejected`, vérifie à nouveau l’Admin Production et
-conserve l’acteur et la date. Chaque feedback ne peut être décidé qu’une fois ;
-les conflits sont signalés.
+privé. La fonction vérifie à nouveau l’Admin Production, verrouille la ligne
+concernée et n’enregistre l’audit que lors du premier passage de `pending` (ou
+`NULL`) à `approved` ou `rejected`. Une répétition de la même décision est un
+succès sans nouvelle écriture d’audit. Une décision opposée renvoie le conflit
+PostgREST `PT409`, qui n’est pas un code d’erreur de sérialisation réessayable.
 
-Le code seul n’applique pas le script et ne change aucune ligne Production.
-Les boutons sont visibles sans indicateur d’activation ; avant installation du
-script, une décision échoue car le RPC Production n’existe pas. Les permissions
-de session, le rôle Admin Production et les règles de mutation côté serveur
-restent vérifiés à chaque décision.
+### Projet Production où l’ancienne fonction est déjà installée
+
+Après revue et autorisation de l’opérateur, appliquer le script de mise à niveau
+[`production-feedback-review-idempotency.sql`](../../scripts/production-feedback-review-idempotency.sql)
+avec le rôle propriétaire `postgres`. Il remplace uniquement le corps de la
+fonction interne existante et vérifie la présence du schéma, de l’endpoint et de
+la table d’audit attendus. Il ne traite ni ne supprime de feedback. Le code Admin
+évite aussi d’appeler le RPC quand le statut terminal est déjà connu.
+
+Le code seul n’applique aucun script et ne change aucune ligne Production.
+Les permissions de session, le rôle Admin Production et les règles de mutation
+côté serveur restent vérifiés à chaque décision.

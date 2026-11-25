@@ -35,7 +35,7 @@ beforeEach(() => {
     error: null,
   });
   fake.lookup.mockResolvedValue({
-    data: { category: 'suggestion' },
+    data: { category: 'suggestion', status: 'pending' },
     error: null,
   });
   fake.from.mockImplementation(() => ({
@@ -99,6 +99,36 @@ it('valide strictement l’action, ne passe que l’identifiant et l’action au
   });
 });
 
+it('traite une répétition comme un succès et refuse une décision opposée sans RPC', async () => {
+  fake.lookup.mockResolvedValueOnce({
+    data: { category: 'suggestion', status: 'approved' },
+    error: null,
+  });
+  const repeated = await POST(
+    makeRequest({ feedbackId: id, action: 'approve' }),
+  );
+  expect(repeated.status).toBe(200);
+  expect(await repeated.json()).toEqual({
+    environment: 'production',
+    result: { feedbackId: id, status: 'approved' },
+  });
+  expect(fake.rpc).not.toHaveBeenCalled();
+
+  fake.lookup.mockResolvedValueOnce({
+    data: { category: 'suggestion', status: 'approved' },
+    error: null,
+  });
+  const conflict = await POST(
+    makeRequest({ feedbackId: id, action: 'reject' }),
+  );
+  expect(conflict.status).toBe(409);
+  expect(await conflict.json()).toEqual({
+    error: 'Ce feedback a déjà reçu une décision différente.',
+    status: 'approved',
+  });
+  expect(fake.rpc).not.toHaveBeenCalled();
+});
+
 it('refuse les actions fabriquées, les décisions concurrentes et les confirmations mal formées', async () => {
   expect(
     (
@@ -108,6 +138,10 @@ it('refuse les actions fabriquées, les décisions concurrentes et les confirmat
     ).status,
   ).toBe(400);
   expect(fake.rpc).not.toHaveBeenCalled();
+  fake.rpc.mockResolvedValueOnce({ data: null, error: { code: 'PT409' } });
+  expect(
+    (await POST(makeRequest({ feedbackId: id, action: 'reject' }))).status,
+  ).toBe(409);
   fake.rpc.mockResolvedValueOnce({ data: null, error: { code: '40001' } });
   expect(
     (await POST(makeRequest({ feedbackId: id, action: 'reject' }))).status,
