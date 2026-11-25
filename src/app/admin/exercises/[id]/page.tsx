@@ -4,9 +4,6 @@ import type { ExerciseDefinition } from 'novlearn-exercise-engine';
 import { CatalogueAction } from '@/components/catalogue-action';
 import { DraftMetadataForm } from '@/components/draft-metadata-form';
 import { ExercisePreview } from '@/components/exercise-preview';
-import { PublicationPanel } from '@/components/publication-panel';
-import { readPublicationPgConfiguration } from '@/lib/publication-pg';
-import { readPublicationConfirmationKey } from '@/lib/publication-service';
 import { EditorialBadge } from '@/components/catalogue-list';
 import {
   draftEnvelope,
@@ -16,7 +13,6 @@ import {
   type EditorialStatus,
 } from '@/lib/catalogue';
 import { requireCatalogueClient, versionColumns } from '@/lib/catalogue-server';
-import { readTestSigningConfiguration } from '@/lib/test-receipt';
 import { isEngineEnabled } from '@/lib/engine-identity';
 import {
   ActiveVersionCard,
@@ -40,16 +36,7 @@ export default async function ExercisePage({
   // The local dev router can resolve the literal creation slug through this route.
   if (id === 'new') return NewExercisePage();
   const client = await requireCatalogueClient();
-  const canRecordTests = !!readTestSigningConfiguration(process.env);
   const engineEnabled = isEngineEnabled(process.env);
-  const publicationConfig = readPublicationPgConfiguration(process.env);
-  const publicationEnabled =
-    !!publicationConfig &&
-    !!readPublicationConfirmationKey(
-      process.env,
-      publicationConfig.localFixture,
-    ) &&
-    engineEnabled;
   const query = await searchParams;
   if (!isExerciseId(id)) notFound();
   const { data: parent, error: parentError } = await client
@@ -134,13 +121,11 @@ export default async function ExercisePage({
           {title} · Brouillon à partir de la version {version.revision}
         </p>
         <DraftMetadataForm
-          key={`new-${version.id}:${version.approval_fingerprint_sha256}:${version.test_epoch}`}
+          key={`new-${version.id}:${version.approval_fingerprint_sha256}`}
           engineEnabled={engineEnabled}
-          canRecordTests={canRecordTests}
           exerciseId={id}
           versionId={version.id}
           fingerprint={version.approval_fingerprint_sha256}
-          testEpoch={version.test_epoch}
           definition={version.definition}
           newRevision
         />
@@ -257,17 +242,10 @@ export default async function ExercisePage({
           ) : editable ? (
             <DraftMetadataForm
               engineEnabled={engineEnabled}
-              canRecordTests={canRecordTests}
-              key={
-                version.id +
-                version.approval_fingerprint_sha256 +
-                ':' +
-                version.test_epoch
-              }
+              key={version.id + version.approval_fingerprint_sha256}
               exerciseId={id}
               versionId={version.id}
               fingerprint={version.approval_fingerprint_sha256}
-              testEpoch={version.test_epoch}
               definition={version.definition as ExerciseDefinition}
             />
           ) : parent.admin_archived_at ? (
@@ -278,42 +256,10 @@ export default async function ExercisePage({
           {version && canonical && !editable && (
             <ExercisePreview
               engineEnabled={engineEnabled}
-              canRecordTests={canRecordTests}
               key={version.id + version.approval_fingerprint_sha256}
               definition={version.definition}
-              saved={{
-                id: version.id,
-                fingerprint: version.approval_fingerprint_sha256,
-                epoch: version.test_epoch,
-              }}
             />
           )}
-          {publicationEnabled &&
-            version &&
-            canonical &&
-            Number.isSafeInteger(version.test_epoch) &&
-            version.test_epoch >= 0 && (
-              <PublicationPanel
-                key={
-                  'publication-' +
-                  version.id +
-                  '-' +
-                  version.approval_fingerprint_sha256 +
-                  '-' +
-                  version.test_epoch
-                }
-                versionId={version.id}
-                fingerprint={version.approval_fingerprint_sha256}
-                epoch={String(version.test_epoch)}
-                revision={version.revision}
-                status={version.editorial_status}
-                archived={!!parent.admin_archived_at}
-                localFixture={
-                  process.env.ADMIN_LOCAL_PUBLICATION_FIXTURE_ENABLED === 'true'
-                }
-                enabled
-              />
-            )}
         </div>
         <aside className="space-y-5">
           {targetObservation.kind !== 'disabled' && (

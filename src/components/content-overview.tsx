@@ -48,26 +48,7 @@ export function ContentOverview({ data }: { data: Overview | null }) {
                 </div>
               ))}
             </dl>
-            <div className="mt-6 grid gap-4 lg:grid-cols-2">
-              <section className="card" aria-labelledby="failed-title">
-                <h3 id="failed-title" className="font-semibold">
-                  Tests en échec
-                </h3>
-                <p className="mt-3 text-3xl font-semibold tabular-nums">
-                  {formatCount(data.tests.failed)}
-                </p>
-                <p className="mt-3 text-sm leading-6 text-slate-600">
-                  Dernier reçu enregistré pour le contenu et l’état actuels de
-                  la dernière révision, hors archives. Un ancien échec remplacé
-                  par un succès ou invalidé par une édition n’est pas compté.
-                </p>
-                <Link
-                  href="/admin/exercises"
-                  className="mt-4 inline-block text-sm font-semibold text-brand-700 underline"
-                >
-                  Consulter les exercices et leurs tests
-                </Link>
-              </section>
+            <div className="mt-6">
               <section className="card" aria-labelledby="active-title">
                 <h3 id="active-title" className="font-semibold">
                   Versions actives dans Staging

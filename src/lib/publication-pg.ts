@@ -1,7 +1,14 @@
 import 'server-only';
 import { Pool, type PoolClient } from 'pg';
 import { readAuthConfiguration, STAGING_PROJECT_REF } from './auth/config';
-import type { PublicationConnection } from './publication-journal-server';
+
+export type PublicationConnection = {
+  query(
+    sql: string,
+    values?: unknown[],
+  ): Promise<{ rows: Record<string, unknown>[]; command?: string }>;
+  release(destroy?: boolean): void;
+};
 
 const sourceRole = 'novlearn_publication_journal_executor';
 const targetRole = 'novlearn_publication_executor';

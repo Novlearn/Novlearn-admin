@@ -6,13 +6,11 @@ export function AdminNavigation({
   statisticsEnabled = false,
   usersEnabled = false,
   feedbackEnabled = false,
-  publicationEnabled = true,
   catalogueSyncEnabled = false,
 }: {
   statisticsEnabled?: boolean;
   usersEnabled?: boolean;
   feedbackEnabled?: boolean;
-  publicationEnabled?: boolean;
   catalogueSyncEnabled?: boolean;
 }) {
   const path = usePathname();
@@ -30,7 +28,6 @@ export function AdminNavigation({
       links: [
         ['/admin/chapters', 'Chapitres'],
         ['/admin/competences', 'Compétences'],
-        ...(publicationEnabled ? [['/admin/publication', 'Publications']] : []),
         ...(catalogueSyncEnabled
           ? [['/admin/catalogue-sync', 'Synchronisation']]
           : []),

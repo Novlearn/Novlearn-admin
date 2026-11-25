@@ -15,10 +15,8 @@ type Props = {
   exerciseId?: string;
   versionId?: string;
   fingerprint?: string;
-  testEpoch?: number;
   definition?: ExerciseDefinition;
   newRevision?: boolean;
-  canRecordTests?: boolean;
   engineEnabled?: boolean;
 };
 export function DraftMetadataForm(props: Props) {
@@ -48,9 +46,8 @@ export function DraftMetadataForm(props: Props) {
   const recoveryBase = useMemo(
     () => ({
       fingerprint: props.fingerprint ?? null,
-      epoch: props.testEpoch ?? null,
     }),
-    [props.fingerprint, props.testEpoch],
+    [props.fingerprint],
   );
   const recovery = useCreatorRecovery({
     resource: recoveryResource(
@@ -263,22 +260,8 @@ export function DraftMetadataForm(props: Props) {
       </fieldset>
       <ExercisePreview
         engineEnabled={props.engineEnabled}
-        canRecordTests={props.canRecordTests}
         definition={prepared}
         disabled={busy || recovery.awaitingChoice}
-        saved={
-          !dirty &&
-          !newRevision &&
-          props.versionId &&
-          props.fingerprint &&
-          typeof props.testEpoch === 'number'
-            ? {
-                id: props.versionId,
-                fingerprint: props.fingerprint,
-                epoch: props.testEpoch,
-              }
-            : undefined
-        }
       />
       <div className="editor-save flex flex-wrap items-center gap-4">
         <button

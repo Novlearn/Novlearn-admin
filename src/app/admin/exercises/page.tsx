@@ -8,7 +8,6 @@ import {
   type CataloguePage,
 } from '@/lib/catalogue';
 import { loadCatalogue, requireCatalogueClient } from '@/lib/catalogue-server';
-import { readAuthConfiguration } from '@/lib/auth/config';
 
 async function loadChapterNames(
   client: Awaited<ReturnType<typeof requireCatalogueClient>>,
@@ -108,7 +107,6 @@ export default async function ExercisesPage({
   for (const [key, value] of Object.entries(values))
     if (typeof value === 'string') params.set(key, value);
   const filter = catalogueFilter(params);
-  const auth = readAuthConfiguration(process.env);
   const [catalogue, chapterNames] = await Promise.all([
     loadCatalogue(client, filter),
     loadChapterNames(client),
@@ -131,10 +129,6 @@ export default async function ExercisesPage({
     <CatalogueList
       data={presentation(catalogueWithChapterNames)}
       filter={filter}
-      publicationEnabled={
-        !!auth?.localPublicationFixture ||
-        process.env.ADMIN_PUBLICATION_ENABLED === 'true'
-      }
     />
   );
 }

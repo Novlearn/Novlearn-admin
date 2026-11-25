@@ -34,11 +34,11 @@ const fixture = () => ({
     draft: '2',
     in_review: '1',
     approved: '1',
+    ready: '0',
     published: '1',
     legacy: '1',
     archived: '1',
   },
-  tests: { failed: '1' },
   content: { chapters: '9', competences: '45', flashcards: '81' },
   activeVersions: '1',
   recentActiveVersions: [
@@ -87,15 +87,12 @@ describe('Dashboard : intégrité et minimisation des agrégats', () => {
       expect(contentOverview(data)).toBeNull();
     },
   );
-  it('rejects inconsistent totals and failures beyond non-archived catalogue', () => {
+  it('rejects inconsistent totals and active versions beyond the catalogue', () => {
     expect(
       contentOverview({
         ...fixture(),
         catalogue: { ...fixture().catalogue, total: '8' },
       }),
-    ).toBeNull();
-    expect(
-      contentOverview({ ...fixture(), tests: { failed: '7' } }),
     ).toBeNull();
     expect(contentOverview({ ...fixture(), activeVersions: '7' })).toBeNull();
   });
@@ -201,7 +198,6 @@ describe('Dashboard : rendu serveur', () => {
     const empty = fixture();
     for (const key of Object.keys(empty.catalogue))
       Object.assign(empty.catalogue, { [key]: '0' });
-    empty.tests.failed = '0';
     empty.activeVersions = '0';
     empty.recentActiveVersions = [];
     const html = renderToStaticMarkup(

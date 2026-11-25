@@ -42,10 +42,6 @@ export default async function AdminLayout({
             <Brand />
           </Link>
           <AdminNavigation
-            publicationEnabled={
-              !!authConfig?.localPublicationFixture ||
-              process.env.ADMIN_PUBLICATION_ENABLED === 'true'
-            }
             catalogueSyncEnabled={
               (process.env.VERCEL === '1' &&
                 process.env.VERCEL_ENV === 'production') ||

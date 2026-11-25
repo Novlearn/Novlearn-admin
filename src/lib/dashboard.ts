@@ -4,6 +4,7 @@ export const dashboardStatuses = [
   'draft',
   'in_review',
   'approved',
+  'ready',
   'published',
   'legacy',
   'archived',
@@ -13,7 +14,6 @@ export type ContentOverview = {
   environment: 'staging';
   asOf: string;
   catalogue: Record<Status | 'total', string>;
-  tests: { failed: string };
   content: { chapters: string; competences: string; flashcards: string };
   activeVersions: string;
   recentActiveVersions: {
@@ -42,10 +42,8 @@ export function contentOverview(value: unknown): ContentOverview | null {
     value.environment !== 'staging' ||
     !timestamp(value.asOf) ||
     !record(value.catalogue) ||
-    !record(value.tests) ||
     !record(value.content) ||
     !count(value.activeVersions) ||
-    !count(value.tests.failed) ||
     !Array.isArray(value.recentActiveVersions) ||
     value.recentActiveVersions.length > 5
   )
@@ -63,11 +61,9 @@ export function contentOverview(value: unknown): ContentOverview | null {
     ) !== BigInt(catalogue.total)
   )
     return null;
-  const available =
-    BigInt(catalogue.total) - BigInt(catalogue.archived as string);
   if (
-    BigInt(value.tests.failed) > available ||
-    BigInt(value.activeVersions) > available
+    BigInt(value.activeVersions) >
+    BigInt(catalogue.total) - BigInt(catalogue.archived as string)
   )
     return null;
   if (
@@ -115,7 +111,6 @@ export function contentOverview(value: unknown): ContentOverview | null {
     catalogue: Object.fromEntries(
       ['total', ...dashboardStatuses].map((s) => [s, catalogue[s]]),
     ) as ContentOverview['catalogue'],
-    tests: { failed: value.tests.failed },
     content: {
       chapters: value.content.chapters,
       competences: value.content.competences,

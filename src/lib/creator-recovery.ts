@@ -9,7 +9,7 @@ export type RecoveryStorage = Pick<
   Storage,
   'getItem' | 'setItem' | 'removeItem' | 'key' | 'length'
 >;
-export type RecoveryBase = { fingerprint: string | null; epoch: number | null };
+export type RecoveryBase = { fingerprint: string | null };
 export type RecoveryCopy = {
   schema: 1;
   resource: string;
@@ -108,10 +108,6 @@ function parse(raw: string, resource: string, now: number): RecoveryRead {
     !(
       value.base.fingerprint === null || isFingerprint(value.base.fingerprint)
     ) ||
-    !(
-      value.base.epoch === null ||
-      (Number.isSafeInteger(value.base.epoch) && Number(value.base.epoch) >= 0)
-    ) ||
     !Number.isSafeInteger(value.updatedAt) ||
     Number(value.updatedAt) > now ||
     typeof value.skills !== 'string' ||
@@ -198,7 +194,5 @@ export function clearRecoveries(
   }
 }
 export function recoveryBaseChanged(copy: RecoveryCopy, base: RecoveryBase) {
-  return (
-    copy.base.fingerprint !== base.fingerprint || copy.base.epoch !== base.epoch
-  );
+  return copy.base.fingerprint !== base.fingerprint;
 }

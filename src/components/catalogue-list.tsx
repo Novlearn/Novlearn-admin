@@ -1,7 +1,5 @@
 'use client';
 import Link from 'next/link';
-import { useState } from 'react';
-import { MAX_PUBLICATION_BATCH } from '@/lib/publication-batch';
 import { difficultyLabel } from '@/lib/exercise-metadata';
 import {
   catalogueStatusOptions,
@@ -34,24 +32,10 @@ export function EditorialBadge({
 export function CatalogueList({
   data,
   filter,
-  publicationEnabled = false,
 }: {
   data: CataloguePage | null;
   filter: CatalogueFilter;
-  publicationEnabled?: boolean;
 }) {
-  const [selection, setSelected] = useState<string[]>([]);
-  const admissible = new Set(
-    data?.items
-      .filter(
-        (item) =>
-          item.versionId &&
-          !item.archived &&
-          ['approved', 'published'].includes(item.status),
-      )
-      .map((item) => item.versionId),
-  );
-  const selected = selection.filter((id) => admissible.has(id));
   const pageLink = (page: number) =>
     `/admin/exercises?${new URLSearchParams({ q: filter.query, status: filter.status, sort: filter.sort, page: String(page) })}`;
   return (
@@ -126,32 +110,13 @@ export function CatalogueList({
           className="mt-6 overflow-hidden rounded-2xl border border-slate-200 bg-white"
           aria-label="Catalogue Préproduction"
         >
-          <form
-            action={publicationEnabled ? '/admin/publication/batch' : undefined}
-            method="get"
-          >
+          <div>
             <div className="flex items-center justify-between border-b border-slate-200 px-6 py-4">
               <p className="text-sm font-medium text-slate-600">
                 {data.total} exercice{data.total > 1 ? 's' : ''}
               </p>
               <span className="badge">Préproduction</span>
             </div>
-            {publicationEnabled && (
-              <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 px-6 py-4">
-                <p className="text-sm text-slate-600">
-                  {selected.length} sélectionné{selected.length > 1 ? 's' : ''}{' '}
-                  · {MAX_PUBLICATION_BATCH} maximum sur cette page. Sélectionnez
-                  les révisions éligibles au lot de publication.
-                </p>
-                <button
-                  type="submit"
-                  className="button"
-                  disabled={!selected.length}
-                >
-                  Préparer un lot
-                </button>
-              </div>
-            )}
             {data.items.length === 0 ? (
               <div className="px-6 py-14 text-center">
                 <h2 className="text-lg font-semibold">
@@ -175,11 +140,6 @@ export function CatalogueList({
                   </caption>
                   <thead className="bg-slate-50 text-xs text-slate-500">
                     <tr>
-                      {publicationEnabled && (
-                        <th scope="col" className="px-4 py-3 font-semibold">
-                          <span className="sr-only">Sélection</span>
-                        </th>
-                      )}
                       {[
                         'Exercice',
                         'Chapitre · niveau',
@@ -206,50 +166,6 @@ export function CatalogueList({
                       );
                       return (
                         <tr key={item.id} className="hover:bg-slate-50/70">
-                          {publicationEnabled && (
-                            <td className="px-4 py-5">
-                              <input
-                                type="checkbox"
-                                name="version"
-                                value={item.versionId ?? ''}
-                                aria-label={`Sélectionner ${title}`}
-                                checked={
-                                  !!item.versionId &&
-                                  selected.includes(item.versionId)
-                                }
-                                disabled={
-                                  !item.versionId ||
-                                  item.archived ||
-                                  !['approved', 'published'].includes(
-                                    item.status,
-                                  ) ||
-                                  (selected.length >= MAX_PUBLICATION_BATCH &&
-                                    !selected.includes(item.versionId))
-                                }
-                                onChange={(event) => {
-                                  const versionId = item.versionId;
-                                  const checked = event.target.checked;
-                                  if (!versionId) return;
-                                  setSelected((values) =>
-                                    checked
-                                      ? [
-                                          ...new Set([
-                                            ...values.filter((id) =>
-                                              admissible.has(id),
-                                            ),
-                                            versionId,
-                                          ]),
-                                        ].slice(0, MAX_PUBLICATION_BATCH)
-                                      : values.filter(
-                                          (id) =>
-                                            id !== versionId &&
-                                            admissible.has(id),
-                                        ),
-                                  );
-                                }}
-                              />
-                            </td>
-                          )}
                           <td className="min-w-64 px-6 py-5">
                             <Link
                               href={`/admin/exercises/${item.id}`}
@@ -338,7 +254,7 @@ export function CatalogueList({
                 )}
               </div>
             </nav>
-          </form>
+          </div>
         </section>
       )}
     </>

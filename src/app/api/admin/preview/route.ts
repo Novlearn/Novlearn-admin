@@ -16,12 +16,7 @@ import {
 } from '@/lib/preview-server';
 import type { JsonValue } from 'novlearn-exercise-engine';
 import type { PreviewCase } from '@/lib/preview';
-import { isUuid, isFingerprint } from '@/lib/catalogue';
 import { DatabasePreviewStore } from '@/lib/preview-database-store';
-import {
-  readTestSigningConfiguration,
-  signTestReceipt,
-} from '@/lib/test-receipt';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -68,14 +63,6 @@ export async function POST(request: NextRequest) {
     inspect: ['action', 'previewId'],
     grade: ['action', 'previewId', 'questionId', 'answer'],
     test: ['action', 'definition', 'seeds', 'cases'],
-    test_saved: [
-      'action',
-      'versionId',
-      'fingerprint',
-      'epoch',
-      'seeds',
-      'cases',
-    ],
   };
   const allowed = Object.hasOwn(fields, input.action)
     ? fields[input.action]
@@ -104,8 +91,8 @@ export async function POST(request: NextRequest) {
   )
     return finish({ error: 'Réponse invalide.' }, 400);
   if (
-    ['test', 'test_saved'].includes(input.action) &&
-    ((input.action === 'test' && !object(input.definition)) ||
+    input.action === 'test' &&
+    (!object(input.definition) ||
       !Array.isArray(input.seeds) ||
       !input.seeds.length ||
       input.seeds.length > 5 ||
@@ -134,20 +121,11 @@ export async function POST(request: NextRequest) {
       400,
     );
   let release: (() => void) | undefined;
-  if (
-    input.action === 'test_saved' &&
-    (!isUuid(input.versionId) ||
-      !isFingerprint(input.fingerprint) ||
-      typeof input.epoch !== 'number' ||
-      !Number.isSafeInteger(input.epoch) ||
-      input.epoch < 0)
-  )
-    return finish({ error: 'Révision ou état de test invalide.' }, 400);
   try {
     const signal = AbortSignal.any([
       request.signal,
       AbortSignal.timeout(
-        ['test', 'test_saved'].includes(input.action) ? 120000 : 20000,
+        input.action === 'test' ? 120000 : 20000,
       ),
     ]);
     release = acquirePreviewJob(access.userId);
@@ -179,79 +157,7 @@ export async function POST(request: NextRequest) {
         signal,
         repository,
       );
-    else if (input.action === 'test_saved') {
-      const signing = readTestSigningConfiguration(process.env);
-      if (!signing)
-        return finish(
-          { error: 'La signature serveur des rapports n’est pas configurée.' },
-          503,
-        );
-      const { data: version, error: loadError } = await client
-        .from('exercise_versions')
-        .select('id,definition,approval_fingerprint_sha256,test_epoch')
-        .eq('id', input.versionId)
-        .maybeSingle();
-      if (loadError) return finish({ error: 'Révision indisponible.' }, 503);
-      if (!version) return finish({ error: 'Révision introuvable.' }, 404);
-      if (
-        version.approval_fingerprint_sha256 !== input.fingerprint ||
-        version.test_epoch !== input.epoch
-      )
-        return finish(
-          { error: 'La révision a changé. Rechargez avant de tester.' },
-          409,
-        );
-      if (Buffer.byteLength(JSON.stringify(version.definition)) > 262144)
-        return finish(
-          { error: 'Définition trop volumineuse pour ce banc.' },
-          413,
-        );
-      const report = await testPreview(
-        version.definition,
-        input.seeds as number[],
-        input.cases as PreviewCase[],
-        signal,
-      );
-      signal.throwIfAborted();
-      const fresh = await authorizeAdmin(gateway);
-      if (!fresh.allowed || fresh.userId !== access.userId)
-        return finish({ error: 'Accès révoqué pendant les tests.' }, 403);
-      signal.throwIfAborted();
-      const receipt = signTestReceipt(signing, {
-        actorId: access.userId,
-        versionId: version.id,
-        fingerprint: input.fingerprint as string,
-        epoch: input.epoch as number,
-        report,
-        cases: input.cases as PreviewCase[],
-      });
-      const { data: record, error: recordError } = await client.rpc(
-        'admin_record_exercise_test',
-        { p_payload: receipt.payload, p_signature: receipt.signature },
-      );
-      if (recordError)
-        return finish(
-          {
-            error:
-              recordError.code === '40001' || recordError.code === 'PT409'
-                ? 'La révision a changé pendant les tests. Le rapport n’est pas enregistré.'
-                : 'Rapport non enregistré. Vérifiez la configuration de signature.',
-          },
-          recordError.code === '40001' || recordError.code === 'PT409'
-            ? 409
-            : 503,
-        );
-      if (
-        !record ||
-        record.recorded !== true ||
-        record.passed !== report.passed
-      )
-        return finish(
-          { error: 'Enregistrement du rapport non confirmé.' },
-          503,
-        );
-      result = { receiptId: record.receiptId, report };
-    } else
+    else
       result = await testPreview(
         input.definition,
         input.seeds as number[],

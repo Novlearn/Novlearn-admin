@@ -138,7 +138,6 @@ function withRevision(status: string, archived = false) {
       catalogue: { appTitle: 'Calculer une dérivée' },
     },
     approval_fingerprint_sha256: 'a'.repeat(64),
-    test_epoch: 0,
   };
   const filtered = vi.fn().mockReturnThis();
   const latest = vi
@@ -181,8 +180,6 @@ it.each(['ready', 'published'])(
     expect(details).not.toContain('Enregistrer et approuver');
     expect(details).not.toContain('Consulter le format canonique');
     expect(details).not.toContain('Relecture humaine');
-    expect(fake.from).not.toHaveBeenCalledWith('admin_exercise_test_runs');
-    expect(fake.from).not.toHaveBeenCalledWith('admin_exercise_reviews');
     const edit = renderToStaticMarkup(
       await page({ version: versionId, edit: 'revision' }),
     );

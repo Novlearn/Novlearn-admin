@@ -6,8 +6,6 @@ export const workspaceLinks = [
   ['Creator et tests', 'creator.html'],
   ['Figures et vecteurs', 'coordinates.html'],
   ['Statistiques de démonstration', 'statistics.html'],
-  ['Publication simulée', 'publication.html'],
-  ['Lots simulés', 'publication-batch.html'],
   ['Chapitres et compétences', 'taxonomy.html'],
   ['Flashcards', 'flashcards.html'],
   ['Saisie mathématique', 'math-input.html'],
